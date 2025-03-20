@@ -12,7 +12,7 @@ class OnboardingController extends GetxController {
     if (selectedOption.value == 'user') {
       Get.toNamed(AppRoutes.userSigninScreen);
     } else {
-      // Get.to(() => BusinessScreen());
+      Get.toNamed(AppRoutes.businessSignInScreen);
     }
   }
 }

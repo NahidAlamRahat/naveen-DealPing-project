@@ -37,5 +37,4 @@ class AppStrings {
   static const String businessName = "Business Name";
   static const String eiinNumber = "EIIN Number";
   static const String licenceNumber = "Licence Number";
-  static const String confirmPassword = "Confirm Password";
 }

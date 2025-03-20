@@ -5,4 +5,6 @@ class AppRoutes {
   static const onboardingScreen = '/onboardingScreen';
   static const userSigninScreen = '/userSigninScreen';
   static const userSignUpScreen = '/userSignUpScreen';
+  static const businessSignInScreen = '/businessSignInScreen';
+  static const businessSignUpScreen = '/businessSignUpScreen';
 }

@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../screens/business_screens/business_auth_screens/business_sign_in_screen/business_sign_in_screen.dart';
+import '../screens/business_screens/business_auth_screens/business_sign_up_screen/business_sign_up_screen.dart';
 import '../screens/onboarding_screen/onboarding_screen.dart';
 import '../screens/splash_screen/splash_screen.dart';
 import '../screens/user_screens/user_auth_screens/user_sign_in_screen/user_sign_in_screen.dart';
@@ -32,6 +34,16 @@ class RouteManager {
       GetPage(
         name: AppRoutes.userSignUpScreen,
         page: () => UserSignUpScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.businessSignInScreen,
+        page: () => BusinessSignInScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.businessSignUpScreen,
+        page: () => BusinessSignUpScreen(),
         // binding: GeneralBindings(),
       ),
       // GetPage(

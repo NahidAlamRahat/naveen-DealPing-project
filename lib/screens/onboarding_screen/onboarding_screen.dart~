@@ -129,7 +129,7 @@ class OnboardingScreen extends StatelessWidget {
               backgroundColor: AppColors.green500,
               buttonRadius: const BorderRadius.all(Radius.circular(8)),
             ),
-            const SpaceWidget(spaceHeight: 32),
+            const SpaceWidget(spaceHeight: 24),
           ],
         ),
       ),
