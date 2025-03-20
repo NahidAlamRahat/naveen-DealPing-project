@@ -14,5 +14,22 @@ class AppStrings {
   static const String alreadyHaveAccount = "Already have account? ";
   static const String signIn = "Sign in";
 
-// Login Screen
+  // Login Screen
+  static const String signInTitle = "Sign In";
+  static const String signInDescription = "Hello, Welcome back to our account!";
+  static const String email = "Email";
+  static const String password = "Password";
+  static const String forgetPassword = "Forget Password?";
+  static const String orLogInWith = "Or Log in With";
+  static const String signInWithApple = "Sign In With Apple";
+  static const String signInWithGoogle = "Sign In With Google";
+  static const String dontHaveAnAccount = "Don’t Have An Account?";
+  static const String signUp = "Sign Up";
+  static const String signUpDescription =
+      "Fill in the blank to create your account";
+
+  // Sign Up Screen
+  static const String fullName = "Full Name";
+  static const String createYourAccount = "Create Your Account";
+  static const String alreadyHaveAnAccount = "Already Have An Account?";
 }

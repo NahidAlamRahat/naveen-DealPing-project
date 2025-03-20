@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../screens/onboarding_screen/onboarding_screen.dart';
 import '../screens/splash_screen/splash_screen.dart';
+import '../screens/user_screens/user_auth_screens/user_sign_in_screen/user_sign_in_screen.dart';
+import '../screens/user_screens/user_auth_screens/user_sign_up_screen/user_sign_up_screen.dart';
 import 'app_routes.dart';
 
 class RouteManager {
@@ -22,16 +24,16 @@ class RouteManager {
         page: () => OnboardingScreen(),
         // binding: GeneralBindings(),
       ),
-      // GetPage(
-      //   name: AppRoutes.loginScreen,
-      //   page: () => LoginScreen(),
-      //   // binding: GeneralBindings(),
-      // ),
-      // GetPage(
-      //   name: AppRoutes.registrationScreen,
-      //   page: () => RegistrationScreen(),
-      //   // binding: GeneralBindings(),
-      // ),
+      GetPage(
+        name: AppRoutes.userSigninScreen,
+        page: () => UserSignInScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.userSignUpScreen,
+        page: () => UserSignUpScreen(),
+        // binding: GeneralBindings(),
+      ),
       // GetPage(
       //   name: AppRoutes.emailVerificationScreen,
       //   page: () => EmailVerificationScreen(),
