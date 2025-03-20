@@ -1,0 +1,73 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:land_london/widgets/icon_widget/icon_widget.dart';
+
+import '../../constants/app_colors.dart';
+import '../../constants/app_icons_path.dart';
+import '../../utils/app_size.dart';
+
+class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
+  final String text;
+  final Widget? action;
+  final PreferredSizeWidget? bottom;
+  final bool? centerTitle; // Add centerTitle property
+  final Color? backgroundColor;
+  final Widget? leading;
+  final bool showLeading;
+
+  const AppbarWidget({
+    super.key,
+    required this.text,
+    this.action,
+    this.bottom,
+    this.centerTitle, // Add centerTitle to constructor
+    this.backgroundColor,
+    this.leading,
+    this.showLeading = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    ResponsiveUtils.initialize(context);
+    return AppBar(
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      flexibleSpace: Container(color: backgroundColor ?? AppColors.white),
+      titleSpacing: showLeading ? 1 : -35,
+      leading: showLeading
+          ? (leading ??
+              IconButton(
+                onPressed: () => Get.back(),
+                icon: const IconWidget(
+                  icon: AppIconsPath.backIcon,
+                  width: 22,
+                  height: 22,
+                  color: AppColors.black,
+                ),
+              ))
+          : Container(),
+
+      actions: action != null ? [action!] : null,
+      title: SizedBox(
+        width: ResponsiveUtils.width(250),
+        child: Text(
+          text,
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: ResponsiveUtils.width(19),
+            fontWeight: FontWeight.w600,
+            color: AppColors.black,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+      bottom: bottom,
+      // Add bottom to AppBar
+      centerTitle: centerTitle, // Set centerTitle in AppBar
+    );
+  }
+
+  @override
+  Size get preferredSize =>
+      Size.fromHeight(kToolbarHeight + (bottom?.preferredSize.height ?? 0.0));
+}

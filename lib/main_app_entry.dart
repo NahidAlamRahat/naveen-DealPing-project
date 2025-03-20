@@ -1,5 +1,10 @@
+import 'package:deal_ping/routes/route_manager.dart';
+import 'package:deal_ping/utils/app_size.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'constants/app_colors.dart';
+import 'constants/app_strings.dart';
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
