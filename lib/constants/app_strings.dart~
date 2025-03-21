@@ -62,7 +62,4 @@ class AppStrings {
 
   // User Bottom Nav
   static const String home = "Home";
-  static const String chat = "Chat";
-  static const String bookings = "Bookings";
-  static const String profile = "Profile";
 }

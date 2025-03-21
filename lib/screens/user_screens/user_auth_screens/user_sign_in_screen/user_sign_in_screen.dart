@@ -131,7 +131,7 @@ class UserSignInScreen extends StatelessWidget {
                   imagePath: AppImagePath.appleIcon,
                   text: AppStrings.signInWithApple,
                   onTap: () {
-                    // Handle Apple Sign-In
+                    Get.offAllNamed(AppRoutes.userBottomNav);
                   },
                 ),
                 const SpaceWidget(spaceHeight: 12),
@@ -139,7 +139,7 @@ class UserSignInScreen extends StatelessWidget {
                   imagePath: AppImagePath.googleIcon,
                   text: AppStrings.signInWithGoogle,
                   onTap: () {
-                    // Handle Google Sign-In
+                    Get.offAllNamed(AppRoutes.userBottomNav);
                   },
                 ),
               ],

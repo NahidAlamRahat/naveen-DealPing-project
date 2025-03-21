@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../routes/app_routes.dart';
+
 class UserSignInController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
@@ -36,6 +38,8 @@ class UserSignInController extends GetxController {
       // Perform login logic (e.g., API call)
       Get.snackbar("Success", "Login Successful",
           snackPosition: SnackPosition.BOTTOM);
+
+      Get.offAllNamed(AppRoutes.userBottomNav);
     } else {
       Get.snackbar("Error", "Please fill in all required fields.",
           snackPosition: SnackPosition.BOTTOM);
