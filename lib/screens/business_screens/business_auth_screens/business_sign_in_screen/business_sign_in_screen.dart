@@ -88,7 +88,7 @@ class BusinessSignInScreen extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: TextButtonWidget(
                     onPressed: () {
-                      // Handle Forgot Password
+                      Get.toNamed(AppRoutes.businessForgotPasswordScreen);
                     },
                     text: AppStrings.forgetPassword,
                     textColor: AppColors.grey700,

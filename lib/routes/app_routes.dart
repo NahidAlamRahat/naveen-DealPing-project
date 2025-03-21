@@ -16,4 +16,8 @@ class AppRoutes {
   // Business Screens
   static const businessSignInScreen = '/businessSignInScreen';
   static const businessSignUpScreen = '/businessSignUpScreen';
+  static const businessSignupVerifyOtpScreen = '/businessSignupVerifyOtpScreen';
+  static const businessForgotPasswordScreen = '/businessForgotPasswordScreen';
+  static const businessForgotVerifyOtpScreen = '/businessForgotVerifyOtpScreen';
+  static const businessResetPasswordScreen = '/businessResetPasswordScreen';
 }

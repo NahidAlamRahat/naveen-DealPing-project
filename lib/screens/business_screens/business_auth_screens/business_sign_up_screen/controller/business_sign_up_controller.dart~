@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../../routes/app_routes.dart';
-
 class BusinessSignUpController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController businessNameController = TextEditingController();
@@ -85,10 +83,6 @@ class BusinessSignUpController extends GetxController {
       // Perform login logic (e.g., API call)
       Get.snackbar("Success", "Signup Successful",
           snackPosition: SnackPosition.BOTTOM);
-      Get.toNamed(
-        AppRoutes.businessSignupVerifyOtpScreen,
-        arguments: {'email': emailController.text},
-      );
     } else {
       Get.snackbar("Error", "Please fill in all required fields.",
           snackPosition: SnackPosition.BOTTOM);

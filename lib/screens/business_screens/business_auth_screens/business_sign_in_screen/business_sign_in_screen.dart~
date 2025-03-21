@@ -162,7 +162,7 @@ class BusinessSignInScreen extends StatelessWidget {
             const SpaceWidget(spaceWidth: 4),
             TextButtonWidget(
               onPressed: () {
-                Get.toNamed(AppRoutes.userSignUpScreen);
+                Get.toNamed(AppRoutes.businessSignUpScreen);
               },
               text: AppStrings.signUp,
               textColor: AppColors.grey700,

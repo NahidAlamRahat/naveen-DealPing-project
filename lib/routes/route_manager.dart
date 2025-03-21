@@ -1,8 +1,12 @@
 import 'package:deal_ping/screens/user_screens/user_auth_screens/user_signup_verify_otp_screen/user_signup_verify_otp_screen.dart';
 import 'package:get/get.dart';
 
+import '../screens/business_screens/business_auth_screens/business_forgot_password_screen/business_forgot_password_screen.dart';
+import '../screens/business_screens/business_auth_screens/business_forgot_verify_otp_screen/business_forgot_verify_otp_screen.dart';
+import '../screens/business_screens/business_auth_screens/business_reset_password_screen/business_reset_password_screen.dart';
 import '../screens/business_screens/business_auth_screens/business_sign_in_screen/business_sign_in_screen.dart';
 import '../screens/business_screens/business_auth_screens/business_sign_up_screen/business_sign_up_screen.dart';
+import '../screens/business_screens/business_auth_screens/business_signup_verify_otp_screen/business_signup_verify_otp_screen.dart';
 import '../screens/onboarding_screen/onboarding_screen.dart';
 import '../screens/splash_screen/splash_screen.dart';
 import '../screens/user_screens/user_auth_screens/user_forgot_password_screen/user_forgot_password_screen.dart';
@@ -67,6 +71,28 @@ class RouteManager {
       GetPage(
         name: AppRoutes.userResetPasswordScreen,
         page: () => UserResetPasswordScreen(),
+        // binding: GeneralBindings(),
+      ),
+
+      // Business Screens
+      GetPage(
+        name: AppRoutes.businessSignupVerifyOtpScreen,
+        page: () => BusinessSignupVerifyOtpScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.businessForgotPasswordScreen,
+        page: () => BusinessForgotPasswordScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.businessForgotVerifyOtpScreen,
+        page: () => BusinessForgotVerifyOtpScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.businessResetPasswordScreen,
+        page: () => BusinessResetPasswordScreen(),
         // binding: GeneralBindings(),
       ),
     ];
