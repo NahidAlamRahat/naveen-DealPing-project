@@ -87,7 +87,7 @@ class UserSignInScreen extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: TextButtonWidget(
                     onPressed: () {
-                      // Handle Forgot Password
+                      Get.toNamed(AppRoutes.userForgotPasswordScreen);
                     },
                     text: AppStrings.forgetPassword,
                     textColor: AppColors.grey700,

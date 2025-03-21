@@ -5,6 +5,9 @@ import '../screens/business_screens/business_auth_screens/business_sign_in_scree
 import '../screens/business_screens/business_auth_screens/business_sign_up_screen/business_sign_up_screen.dart';
 import '../screens/onboarding_screen/onboarding_screen.dart';
 import '../screens/splash_screen/splash_screen.dart';
+import '../screens/user_screens/user_auth_screens/user_forgot_password_screen/user_forgot_password_screen.dart';
+import '../screens/user_screens/user_auth_screens/user_forgot_verify_otp_screen/user_forgot_verify_otp_screen.dart';
+import '../screens/user_screens/user_auth_screens/user_reset_password_screen/user_reset_password_screen.dart';
 import '../screens/user_screens/user_auth_screens/user_sign_in_screen/user_sign_in_screen.dart';
 import '../screens/user_screens/user_auth_screens/user_sign_up_screen/user_sign_up_screen.dart';
 import 'app_routes.dart';
@@ -21,7 +24,6 @@ class RouteManager {
         page: () => const SplashScreen(),
         // binding: GeneralBindings(),
       ),
-
       GetPage(
         name: AppRoutes.onboardingScreen,
         page: () => OnboardingScreen(),
@@ -52,21 +54,21 @@ class RouteManager {
         page: () => UserSignupVerifyOtpScreen(),
         // binding: GeneralBindings(),
       ),
-      // GetPage(
-      //   name: AppRoutes.forgotPasswordScreen,
-      //   page: () => ForgotPasswordScreen(),
-      //   // binding: GeneralBindings(),
-      // ),
-      // GetPage(
-      //   name: AppRoutes.otpVerificationScreen,
-      //   page: () => OtpVerificationScreen(),
-      //   // binding: GeneralBindings(),
-      // ),
-      // GetPage(
-      //   name: AppRoutes.resetPasswordScreen,
-      //   page: () => ResetPasswordScreen(),
-      //   // binding: GeneralBindings(),
-      // ),
+      GetPage(
+        name: AppRoutes.userForgotPasswordScreen,
+        page: () => UserForgotPasswordScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.userForgotVerifyOtpScreen,
+        page: () => UserForgotVerifyOtpScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.userResetPasswordScreen,
+        page: () => UserResetPasswordScreen(),
+        // binding: GeneralBindings(),
+      ),
     ];
   }
 }

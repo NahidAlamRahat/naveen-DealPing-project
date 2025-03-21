@@ -48,4 +48,15 @@ class AppStrings {
   static const String verify = "Verify";
   static const String didntReceiveCode = "Didn't receive code?";
   static const String resend = "Resend";
+
+  // Forgot Password Screen
+  static const String forgotPasswordDesc =
+      "Enter your email below to reset your password";
+  static const String submit = "Submit";
+
+  // Reset Password Screen
+  static const String createNewPassword = "Create New Password";
+  static const String passwordMustBeDifferent =
+      "Your new password must be different from previous passwords.";
+  static const String resetPassword = "Reset Password";
 }
