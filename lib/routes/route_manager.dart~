@@ -25,6 +25,7 @@ class RouteManager {
 
   static List<GetPage> getPages() {
     return [
+
       // General Screens
       GetPage(
         name: AppRoutes.splashScreen,
@@ -79,6 +80,7 @@ class RouteManager {
         page: () => const UserHomeScreen(),
         // binding: GeneralBindings(),
       ),
+
 
       // Business Screens
       GetPage(
