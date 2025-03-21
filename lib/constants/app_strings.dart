@@ -38,4 +38,14 @@ class AppStrings {
   static const String eiinNumber = "EIIN Number";
   static const String licenceNumber = "Licence Number";
   static const String confirmPassword = "Confirm Password";
+
+  // Verify OTP Screen
+  static const String verifyYourAccount = "Please verify your account";
+  static const String verifyYourAccountDescription =
+      "You're almost there! We’ve sent a 6-digit code to your email. Please enter the code to verify your email address ";
+  static const String remainingTime = "Remaining Time 00.00";
+  static const String resendCodeIn = "Send code again in";
+  static const String verify = "Verify";
+  static const String didntReceiveCode = "Didn't receive code?";
+  static const String resend = "Resend";
 }

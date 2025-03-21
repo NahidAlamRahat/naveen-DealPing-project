@@ -1,3 +1,4 @@
+import 'package:deal_ping/screens/user_screens/user_auth_screens/user_signup_verify_otp_screen/user_signup_verify_otp_screen.dart';
 import 'package:get/get.dart';
 
 import '../screens/business_screens/business_auth_screens/business_sign_in_screen/business_sign_in_screen.dart';
@@ -46,11 +47,11 @@ class RouteManager {
         page: () => BusinessSignUpScreen(),
         // binding: GeneralBindings(),
       ),
-      // GetPage(
-      //   name: AppRoutes.emailVerificationScreen,
-      //   page: () => EmailVerificationScreen(),
-      //   // binding: GeneralBindings(),
-      // ),
+      GetPage(
+        name: AppRoutes.userSignupVerifyOtpScreen,
+        page: () => UserSignupVerifyOtpScreen(),
+        // binding: GeneralBindings(),
+      ),
       // GetPage(
       //   name: AppRoutes.forgotPasswordScreen,
       //   page: () => ForgotPasswordScreen(),

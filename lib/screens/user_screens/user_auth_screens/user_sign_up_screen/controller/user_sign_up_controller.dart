@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../routes/app_routes.dart';
+
 class UserSignUpController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
@@ -58,8 +60,12 @@ class UserSignUpController extends GetxController {
   void signUp() {
     if (formKey.currentState!.validate()) {
       // Perform login logic (e.g., API call)
-      Get.snackbar("Success", "Login Successful",
+      Get.snackbar("Success", "Signup Successful",
           snackPosition: SnackPosition.BOTTOM);
+      Get.toNamed(
+        AppRoutes.userSignupVerifyOtpScreen,
+        arguments: {'email': emailController.text},
+      );
     } else {
       Get.snackbar("Error", "Please fill in all required fields.",
           snackPosition: SnackPosition.BOTTOM);
