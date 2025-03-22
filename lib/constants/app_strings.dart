@@ -78,4 +78,7 @@ class AppStrings {
   // User Notification Screen
   static const String notification = "Notification";
   static const String viewMore = "View More";
+
+  // User Chat List Screen
+  static const String chatList = "Chat List";
 }

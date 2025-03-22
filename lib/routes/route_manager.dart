@@ -15,6 +15,7 @@ import '../screens/user_screens/user_auth_screens/user_reset_password_screen/use
 import '../screens/user_screens/user_auth_screens/user_sign_in_screen/user_sign_in_screen.dart';
 import '../screens/user_screens/user_auth_screens/user_sign_up_screen/user_sign_up_screen.dart';
 import '../screens/user_screens/user_bottom_nav/user_bottom_nav.dart';
+import '../screens/user_screens/user_chat_list_screen/user_chat_list_screen.dart';
 import '../screens/user_screens/user_home_screen/user_home_screen.dart';
 import '../screens/user_screens/user_location_screen/user_location_screen.dart';
 import '../screens/user_screens/user_notification_screen/user_notification_screen.dart';
@@ -89,6 +90,11 @@ class RouteManager {
       GetPage(
         name: AppRoutes.userNotificationScreen,
         page: () => UserNotificationScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.userChatListScreen,
+        page: () => UserChatListScreen(),
         // binding: GeneralBindings(),
       ),
 
