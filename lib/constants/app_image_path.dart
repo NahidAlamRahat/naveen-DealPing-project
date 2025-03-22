@@ -12,6 +12,5 @@ class AppImagePath {
   static const String googleIcon = "assets/images/google_icon.png";
 
   // Dev Images
-  static const String creatorBriefImage1 =
-      "assets/dev_images/creatorBriefImage1.png";
+  static const String mapImage = "assets/dev_images/map_image.png";
 }

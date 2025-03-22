@@ -64,7 +64,7 @@ class UserBottomNav extends StatelessWidget {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             child: Obx(
               () => GNav(
                 rippleColor: Colors.grey[300]!,

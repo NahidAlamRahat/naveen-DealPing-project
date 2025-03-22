@@ -16,6 +16,7 @@ import '../screens/user_screens/user_auth_screens/user_sign_in_screen/user_sign_
 import '../screens/user_screens/user_auth_screens/user_sign_up_screen/user_sign_up_screen.dart';
 import '../screens/user_screens/user_bottom_nav/user_bottom_nav.dart';
 import '../screens/user_screens/user_home_screen/user_home_screen.dart';
+import '../screens/user_screens/user_location_screen/user_location_screen.dart';
 import 'app_routes.dart';
 
 class RouteManager {
@@ -76,7 +77,12 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.userHomeScreen,
-        page: () => const UserHomeScreen(),
+        page: () => UserHomeScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.userLocationScreen,
+        page: () => UserLocationScreen(),
         // binding: GeneralBindings(),
       ),
 

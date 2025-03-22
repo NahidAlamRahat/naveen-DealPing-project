@@ -65,4 +65,13 @@ class AppStrings {
   static const String chat = "Chat";
   static const String bookings = "Bookings";
   static const String profile = "Profile";
+
+  // User Home Screen
+  static const String welcome = "Hello, John!";
+  static const String findDeals =
+      "Are you ready to find amazing last-minute deals today?";
+  static const String send = "Send";
+
+  // User Location Screen
+  static const String trackMyLocation = "Track My Location";
 }

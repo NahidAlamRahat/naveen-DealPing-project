@@ -10,5 +10,4 @@ class AppIconsPath {
   static const String chatIcon = "assets/icons/chat.svg";
   static const String bookingsIcon = "assets/icons/bookings.svg";
   static const String profileIcon = "assets/icons/profile.svg";
-  static const String locationIcon = "assets/icons/location.svg";
 }
