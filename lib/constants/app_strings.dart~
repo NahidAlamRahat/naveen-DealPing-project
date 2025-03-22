@@ -77,5 +77,4 @@ class AppStrings {
 
   // User Notification Screen
   static const String notification = "Notification";
-  static const String viewMore = "View More";
 }

@@ -1,5 +1,5 @@
 import 'package:deal_ping/constants/app_colors.dart';
-import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/location_input_widget.dart';
+import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/home_screen_input_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -15,6 +15,7 @@ class AppRoutes {
   static const userBottomNav = '/userBottomNav';
   static const userHomeScreen = '/userHomeScreen';
   static const userLocationScreen = '/userLocationScreen';
+  static const userNotificationScreen = '/userNotificationScreen';
 
   // Business Screens
   static const businessSignInScreen = '/businessSignInScreen';

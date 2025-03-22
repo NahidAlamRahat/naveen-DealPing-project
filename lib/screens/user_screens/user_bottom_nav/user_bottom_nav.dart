@@ -1,4 +1,5 @@
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -35,7 +36,9 @@ class UserBottomNav extends StatelessWidget {
         actions: [
           IconButton(
             tooltip: "Notifications",
-            onPressed: () {},
+            onPressed: () {
+              Get.toNamed(AppRoutes.userNotificationScreen);
+            },
             icon: const Badge(
               isLabelVisible: true,
               label: Text("3"),
