@@ -13,4 +13,5 @@ class AppImagePath {
 
   // Dev Images
   static const String mapImage = "assets/dev_images/map_image.png";
+  static const String bookingsImage = "assets/dev_images/bookings_image.png";
 }

@@ -81,4 +81,8 @@ class AppStrings {
 
   // User Chat List Screen
   static const String chatList = "Chat List";
+
+  // User Bookings Screen
+  static const String ongoingBookings = "Ongoing Bookings";
+  static const String pastBookings = "Past Bookings";
 }
