@@ -24,85 +24,88 @@ class UserNotificationScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          // Search Bar
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            child: TextFormField(
-              onChanged: controller.filterNotifications,
-              style: const TextStyle(color: AppColors.grey700, fontSize: 14),
-              decoration: InputDecoration(
-                hintText: "Search Your Message",
-                hintStyle: const TextStyle(color: AppColors.grey200),
-                suffixIcon: const Icon(Icons.search, color: AppColors.grey300),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: AppColors.grey300),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Search Bar
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              child: TextFormField(
+                onChanged: controller.filterNotifications,
+                style: const TextStyle(color: AppColors.grey700, fontSize: 14),
+                decoration: InputDecoration(
+                  hintText: "Search Your Message",
+                  hintStyle: const TextStyle(color: AppColors.grey200),
+                  suffixIcon:
+                      const Icon(Icons.search, color: AppColors.grey300),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: AppColors.grey300),
+                  ),
                 ),
               ),
             ),
-          ),
 
-          // Dropdown Filter
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Obx(
-                  () => DropdownButton<String>(
-                    value: controller.filterType.value,
-                    underline: const SizedBox(),
-                    icon: const Icon(Icons.keyboard_arrow_down_rounded,
-                        color: AppColors.green500),
-                    items: ["Weekly", "Monthly"]
-                        .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(
-                                e,
-                                style: const TextStyle(
-                                  color: AppColors.grey300,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
+            // Dropdown Filter
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Obx(
+                    () => DropdownButton<String>(
+                      value: controller.filterType.value,
+                      underline: const SizedBox(),
+                      icon: const Icon(Icons.keyboard_arrow_down_rounded,
+                          color: AppColors.green500),
+                      items: ["Weekly", "Monthly"]
+                          .map((e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(
+                                  e,
+                                  style: const TextStyle(
+                                    color: AppColors.grey300,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
-                              ),
-                            ))
-                        .toList(),
-                    onChanged: controller.changeFilterType,
+                              ))
+                          .toList(),
+                      onChanged: controller.changeFilterType,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          // Notification List
-          Obx(() => Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                child: Column(
-                  children: [
-                    ...List.generate(controller.filteredNotifications.length,
-                        (index) {
-                      final notification =
-                          controller.filteredNotifications[index];
-                      return NotificationItem(
-                          notification: notification, isNew: index == 0);
-                    }),
-                  ],
-                ),
-              )),
-          // View More Button
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: ButtonWidget(
-              onPressed: () {},
-              label: AppStrings.viewMore,
-              buttonHeight: 36,
-              buttonWidth: 100,
-              fontSize: 12,
+            // Notification List
+            Obx(() => Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  child: Column(
+                    children: [
+                      ...List.generate(controller.filteredNotifications.length,
+                          (index) {
+                        final notification =
+                            controller.filteredNotifications[index];
+                        return NotificationItem(
+                            notification: notification, isNew: index == 0);
+                      }),
+                    ],
+                  ),
+                )),
+            // View More Button
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: ButtonWidget(
+                onPressed: () {},
+                label: AppStrings.viewMore,
+                buttonHeight: 36,
+                buttonWidth: 100,
+                fontSize: 12,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

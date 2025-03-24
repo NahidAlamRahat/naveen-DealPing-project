@@ -85,4 +85,5 @@ class AppStrings {
   // User Bookings Screen
   static const String ongoingBookings = "Ongoing Bookings";
   static const String pastBookings = "Past Bookings";
+  static const String view = "View";
 }
