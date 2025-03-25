@@ -21,14 +21,13 @@ class _UserChatListProposalScreenState
     extends State<UserChatListProposalScreen> {
   List<Map<String, dynamic>> messages = List.generate(
       5,
-          (index) =>
-      {
-        "name": "Mirchi Dance Bar",
-        "message": "Hello! Thanks for reaching out. Yes....",
-        "time": "01:42",
-        "unread": 2,
-        "image": AppImagePath.bookingsImage,
-      });
+      (index) => {
+            "name": "Mirchi Dance Bar",
+            "message": "Hello! Thanks for reaching out. Yes....",
+            "time": "01:42",
+            "unread": 2,
+            "image": AppImagePath.bookingsImage,
+          });
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +61,7 @@ class _UserChatListProposalScreenState
               return InkWell(
                 onTap: () {
                   Get.toNamed(AppRoutes.userChatScreen);
+
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),

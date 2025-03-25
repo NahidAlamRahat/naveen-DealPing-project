@@ -6,12 +6,14 @@ class ImageWidget extends StatelessWidget {
   final double height;
   final double width;
   final String imagePath;
+  final BoxFit fit;
 
   const ImageWidget({
     super.key,
     required this.height,
     required this.width,
     required this.imagePath,
+    this.fit = BoxFit.cover,
   });
 
   @override
@@ -21,7 +23,7 @@ class ImageWidget extends StatelessWidget {
       imagePath,
       height: ResponsiveUtils.width(height),
       width: ResponsiveUtils.width(width),
-      fit: BoxFit.cover,
+      fit: fit,
     );
   }
 }

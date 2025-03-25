@@ -18,7 +18,6 @@ class AppRoutes {
   static const userNotificationScreen = '/userNotificationScreen';
   static const userChatListScreen = '/userChatListScreen';
   static const userChatListProposalScreen = '/userChatListProposalScreen';
-  static const userChatScreen = '/userChatScreen';
   static const userBookingsScreen = '/userBookingsScreen';
 
   // Business Screens

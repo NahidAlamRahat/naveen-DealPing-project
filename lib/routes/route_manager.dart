@@ -18,6 +18,7 @@ import '../screens/user_screens/user_bookings_screen/user_bookings_screen.dart';
 import '../screens/user_screens/user_bottom_nav/user_bottom_nav.dart';
 import '../screens/user_screens/user_chat_list_proposal_screen/user_chat_list_proposal_screen.dart';
 import '../screens/user_screens/user_chat_list_screen/user_chat_list_screen.dart';
+import '../screens/user_screens/user_chat_screen/user_chat_screen.dart';
 import '../screens/user_screens/user_home_screen/user_home_screen.dart';
 import '../screens/user_screens/user_location_screen/user_location_screen.dart';
 import '../screens/user_screens/user_notification_screen/user_notification_screen.dart';
@@ -102,6 +103,11 @@ class RouteManager {
       GetPage(
         name: AppRoutes.userChatListProposalScreen,
         page: () => UserChatListProposalScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.userChatScreen,
+        page: () => UserChatScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
