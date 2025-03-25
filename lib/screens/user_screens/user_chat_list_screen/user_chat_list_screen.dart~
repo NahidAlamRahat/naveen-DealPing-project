@@ -81,10 +81,10 @@ class UserChatListScreen extends StatelessWidget {
                 ),
                 child: ListTile(
                   onTap: () {
-                    Get.toNamed(
-                      AppRoutes.userChatListProposalScreen,
-                      arguments: chatItems[index],
-                    );
+                    Get.toNamed(AppRoutes.userChatListProposalScreen,
+
+
+                      arguments: chatItems[index],);
                   },
                   title: TextWidget(
                     text: chatItems[index],

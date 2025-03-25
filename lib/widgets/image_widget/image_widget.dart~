@@ -21,7 +21,7 @@ class ImageWidget extends StatelessWidget {
       imagePath,
       height: ResponsiveUtils.width(height),
       width: ResponsiveUtils.width(width),
-      fit: BoxFit.cover,
+      fit: BoxFit.contain,
     );
   }
 }

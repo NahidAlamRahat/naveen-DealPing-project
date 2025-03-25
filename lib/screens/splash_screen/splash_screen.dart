@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_image_path.dart';
-import '../../widgets/image_widget/image_widget.dart';
 import 'controller/splash_controller.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -13,17 +12,18 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final splashController = Get.put(SplashController());
-    return const AnnotatedRegion(
-      value: SystemUiOverlayStyle(
+    return AnnotatedRegion(
+      value: const SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.dark,
       ),
       child: Scaffold(
         backgroundColor: AppColors.green500,
         body: Center(
-          child: ImageWidget(
-            imagePath: AppImagePath.appLogoWhite,
+          child: Image.asset(
+            AppImagePath.appLogoWhite,
             height: 180,
             width: 180,
+            fit: BoxFit.contain,
           ),
         ),
       ),

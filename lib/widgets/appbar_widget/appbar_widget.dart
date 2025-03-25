@@ -43,7 +43,7 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ))
           : Container(),
-
+      titleSpacing: -4,
       actions: action != null ? [action!] : null,
       title: Text(
         text,
