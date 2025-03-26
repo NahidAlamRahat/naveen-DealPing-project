@@ -95,4 +95,15 @@ class AppStrings {
   static const String selectADate = "Select A Date";
   static const String selectATime = "Select A Time";
   static const String confirmYourBooking = "Confirm Your Booking";
+
+  // User Booking Successful Screen
+  static const String bookingSuccessful =
+      "Successfully\nReserved Your Service!";
+  static const String bookingId = "Booking ID : ";
+  static const String viewBarcode = "View Barcode";
+  static const String viewBookings = "View Bookings";
+
+  // User Barcode Screen
+  static const String barcode = "Barcode";
+  static const String cancelBooking = "Cancel Booking";
 }

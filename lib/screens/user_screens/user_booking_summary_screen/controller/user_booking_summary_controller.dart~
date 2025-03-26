@@ -71,7 +71,7 @@ class UserBookingSummaryController extends GetxController {
   void confirmBooking() {
     // Here you would typically add booking logic
     // For now, we'll just print the booking details
-    Get.toNamed(AppRoutes.userBookingSuccessfullScreen);
+      Get.toNamed(AppRoutes.userBookingSuccessfullScreen);
     print('Booking Confirmed:');
     print('Date: ${DateFormat('dd MMM yyyy').format(selectedDate.value)}');
     print('Time: ${selectedTime.value.format(Get.context!)}');

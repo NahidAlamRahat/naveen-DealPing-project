@@ -46,7 +46,9 @@ class ButtonWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor ?? AppColors.green500,
         borderRadius: buttonRadius,
-        // border: Border.all(color: borderColor ?? AppColors.black, width: 1),
+        border: borderColor != null
+            ? Border.all(color: borderColor!, width: 1)
+            : null,
       ),
       child: MaterialButton(
         onPressed: onPressed,
