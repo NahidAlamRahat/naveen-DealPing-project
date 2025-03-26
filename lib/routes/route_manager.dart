@@ -1,6 +1,7 @@
 import 'package:deal_ping/screens/user_screens/user_auth_screens/user_signup_verify_otp_screen/user_signup_verify_otp_screen.dart';
 import 'package:get/get.dart';
 
+import '../screens/about_us_screen/about_us_screen.dart';
 import '../screens/business_screens/business_auth_screens/business_forgot_password_screen/business_forgot_password_screen.dart';
 import '../screens/business_screens/business_auth_screens/business_forgot_verify_otp_screen/business_forgot_verify_otp_screen.dart';
 import '../screens/business_screens/business_auth_screens/business_reset_password_screen/business_reset_password_screen.dart';
@@ -9,6 +10,7 @@ import '../screens/business_screens/business_auth_screens/business_sign_up_scree
 import '../screens/business_screens/business_auth_screens/business_signup_verify_otp_screen/business_signup_verify_otp_screen.dart';
 import '../screens/onboarding_screen/onboarding_screen.dart';
 import '../screens/splash_screen/splash_screen.dart';
+import '../screens/terms_condition_screen/terms_condition_screen.dart';
 import '../screens/user_screens/user_auth_screens/user_forgot_password_screen/user_forgot_password_screen.dart';
 import '../screens/user_screens/user_auth_screens/user_forgot_verify_otp_screen/user_forgot_verify_otp_screen.dart';
 import '../screens/user_screens/user_auth_screens/user_reset_password_screen/user_reset_password_screen.dart';
@@ -22,6 +24,7 @@ import '../screens/user_screens/user_bottom_nav/user_bottom_nav.dart';
 import '../screens/user_screens/user_chat_list_proposal_screen/user_chat_list_proposal_screen.dart';
 import '../screens/user_screens/user_chat_list_screen/user_chat_list_screen.dart';
 import '../screens/user_screens/user_chat_screen/user_chat_screen.dart';
+import '../screens/user_screens/user_edit_profile_screen/user_edit_profile_screen.dart';
 import '../screens/user_screens/user_home_screen/user_home_screen.dart';
 import '../screens/user_screens/user_location_screen/user_location_screen.dart';
 import '../screens/user_screens/user_notification_screen/user_notification_screen.dart';
@@ -46,6 +49,16 @@ class RouteManager {
         page: () => OnboardingScreen(),
         // binding: GeneralBindings(),
       ),
+      GetPage(
+        name: AppRoutes.aboutUsScreen,
+        page: () => const AboutUsScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.termsAndConditionsScreen,
+        page: () => const TermsAndConditionsScreen(),
+        // binding: GeneralBindings(),
+      ),
 
       // User Screens
       GetPage(
@@ -58,7 +71,6 @@ class RouteManager {
         page: () => UserSignUpScreen(),
         // binding: GeneralBindings(),
       ),
-
       GetPage(
         name: AppRoutes.userSignupVerifyOtpScreen,
         page: () => const UserSignupVerifyOtpScreen(),
@@ -137,6 +149,11 @@ class RouteManager {
       GetPage(
         name: AppRoutes.userProfileScreen,
         page: () => UserProfileScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.userEditProfileScreen,
+        page: () => UserEditProfileScreen(),
         // binding: GeneralBindings(),
       ),
 

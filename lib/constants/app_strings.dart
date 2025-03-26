@@ -113,5 +113,10 @@ class AppStrings {
   // User Profile Screen
   static const String myProfile = "My Profile";
   static const String editProfile = "Edit Profile";
+  static const String saveAndChange = "Save & Change";
+  static const String aboutUs = "About Us";
+  static const String termsCondition = "Terms and Conditions";
+  static const String faq = "FAQ";
+  static const String logout = "Log Out";
   static const String wantToLogout = "Are You Sure you want to\nlog out?";
 }

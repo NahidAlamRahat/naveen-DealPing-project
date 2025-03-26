@@ -4,6 +4,8 @@ class AppRoutes {
   // General Screens
   static const splashScreen = '/splashScreen';
   static const onboardingScreen = '/onboardingScreen';
+  static const aboutUsScreen = '/aboutUsScreen';
+  static const termsAndConditionsScreen = '/termsAndConditionsScreen';
 
   // User Screens
   static const userSigninScreen = '/userSigninScreen';
@@ -24,6 +26,7 @@ class AppRoutes {
   static const userBarcodeScreen = '/userBarcodeScreen';
   static const userBookingsScreen = '/userBookingsScreen';
   static const userProfileScreen = '/userProfileScreen';
+  static const userEditProfileScreen = '/userEditProfileScreen';
 
   // Business Screens
   static const businessSignInScreen = '/businessSignInScreen';
