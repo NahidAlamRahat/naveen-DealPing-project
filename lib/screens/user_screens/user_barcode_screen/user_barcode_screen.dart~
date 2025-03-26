@@ -7,6 +7,7 @@ import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import 'controller/user_barcode_controller.dart';
 
@@ -121,7 +122,48 @@ class UserBarcodeScreen extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: ButtonWidget(
-          onPressed: () => Get.back(),
+          onPressed: () {
+            showCustomPopup(
+              context,
+              [
+                const SpaceWidget(spaceHeight: 34),
+                const TextWidget(
+                  text: AppStrings.areYouSure,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  fontColor: AppColors.grey700,
+                  textAlignment: TextAlign.center,
+                ),
+                const SpaceWidget(spaceHeight: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ButtonWidget(
+                      label: AppStrings.no,
+                      onPressed: () => Navigator.pop(context),
+                      buttonHeight: 36,
+                      buttonWidth: 71,
+                      backgroundColor: AppColors.white,
+                      borderColor: AppColors.red,
+                      textColor: AppColors.red,
+                      fontSize: 12,
+                    ),
+                    const SizedBox(width: 8),
+                    ButtonWidget(
+                      label: AppStrings.yes,
+                      onPressed: () => Navigator.pop(context),
+                      buttonHeight: 36,
+                      buttonWidth: 71,
+                      backgroundColor: AppColors.red,
+                      textColor: AppColors.white,
+                      fontSize: 12,
+                    ),
+                  ],
+                ),
+                const SpaceWidget(spaceHeight: 24),
+              ],
+            );
+          },
           backgroundColor: AppColors.red.withAlpha(70),
           label: AppStrings.cancelBooking,
           buttonHeight: 52,

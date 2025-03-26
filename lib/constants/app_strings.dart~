@@ -113,5 +113,5 @@ class AppStrings {
   // User Profile Screen
   static const String myProfile = "My Profile";
   static const String editProfile = "Edit Profile";
-  static const String wantToLogout = "Are You Sure you want to\nlog out?";
+  static const String wantToLogout = "Are You Sure you want to log out?";
 }

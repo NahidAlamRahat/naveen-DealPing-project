@@ -25,6 +25,7 @@ import '../screens/user_screens/user_chat_screen/user_chat_screen.dart';
 import '../screens/user_screens/user_home_screen/user_home_screen.dart';
 import '../screens/user_screens/user_location_screen/user_location_screen.dart';
 import '../screens/user_screens/user_notification_screen/user_notification_screen.dart';
+import '../screens/user_screens/user_profile_screen/user_profile_screen.dart';
 import 'app_routes.dart';
 
 class RouteManager {
@@ -131,6 +132,11 @@ class RouteManager {
       GetPage(
         name: AppRoutes.userBookingsScreen,
         page: () => UserBookingsScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.userProfileScreen,
+        page: () => UserProfileScreen(),
         // binding: GeneralBindings(),
       ),
 

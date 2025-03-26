@@ -14,4 +14,10 @@ class AppIconsPath {
   static const String locationIcon2 = "assets/icons/location_icon.svg";
   static const String locationIconWhite =
       "assets/icons/location_icon_white.svg";
+  static const String aboutUsIcon = "assets/icons/about_us_icon.svg";
+  static const String termsConditionIcon =
+      "assets/icons/terms_condition_icon.svg";
+  static const String passwordIcon = "assets/icons/password_icon.svg";
+  static const String faqIcon = "assets/icons/faq_icon.svg";
+  static const String logoutIcon = "assets/icons/logout_icon.svg";
 }
