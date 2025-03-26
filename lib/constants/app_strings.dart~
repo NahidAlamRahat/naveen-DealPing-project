@@ -94,5 +94,4 @@ class AppStrings {
   static const String summary = "Summary";
   static const String selectADate = "Select A Date";
   static const String selectATime = "Select A Time";
-  static const String confirmYourBooking = "Confirm Your Booking";
 }

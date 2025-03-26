@@ -1,10 +1,17 @@
+import 'dart:io';
+
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_image_path.dart';
+import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/widgets/image_widget/image_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../constants/app_icons_path.dart';
+import '../../../routes/app_routes.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
+import '../../../widgets/button_widget/button_widget.dart';
 import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
@@ -18,6 +25,7 @@ class UserChatScreen extends StatefulWidget {
 
 class _UserChatScreenState extends State<UserChatScreen> {
   final TextEditingController _controller = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
   final List<Map<String, dynamic>> _messages = [
     {
       'text':
@@ -62,16 +70,24 @@ class _UserChatScreenState extends State<UserChatScreen> {
     },
   ];
 
-  void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
+  void _sendMessage({File? image}) {
+    if (image != null || _controller.text.isNotEmpty) {
       setState(() {
         _messages.add({
-          'text': _controller.text,
+          if (image != null) 'image': image,
+          if (_controller.text.isNotEmpty) 'text': _controller.text,
           'isSent': true,
           'time': '16:38', // You can use DateTime.now() for real-time
         });
         _controller.clear();
       });
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      _sendMessage(image: File(image.path));
     }
   }
 
@@ -97,9 +113,11 @@ class _UserChatScreenState extends State<UserChatScreen> {
               itemBuilder: (context, index) {
                 final message = _messages[index];
                 return ChatMessage(
-                  text: message['text'],
-                  isSent: message['isSent'],
-                  time: message['time'],
+                  text: message['text'] as String?,
+                  // Cast as nullable String
+                  image: message['image'] as File?,
+                  isSent: message['isSent'] as bool,
+                  time: message['time'] as String,
                   showButton: message['button'] == true,
                 );
               },
@@ -109,24 +127,39 @@ class _UserChatScreenState extends State<UserChatScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
+                IconButton(
+                  icon: const Icon(Icons.image, color: Colors.green, size: 32),
+                  onPressed: _pickImage,
+                ),
                 Expanded(
                   child: TextField(
                     controller: _controller,
                     decoration: InputDecoration(
                       hintText: 'Type a message...',
+                      hintStyle: const TextStyle(
+                          color: AppColors.grey300,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: AppColors.grey300),
                       ),
                       filled: true,
-                      fillColor: Colors.grey[200],
+                      fillColor: AppColors.white,
                     ),
                   ),
                 ),
                 const SizedBox(width: 8.0),
-                FloatingActionButton(
-                  onPressed: _sendMessage,
-                  backgroundColor: Colors.green,
-                  child: const Icon(Icons.send),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: FloatingActionButton(
+                    onPressed: () => _sendMessage(),
+                    backgroundColor: AppColors.green500,
+                    child: const Icon(
+                      Icons.send_rounded,
+                      color: AppColors.white,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -138,14 +171,16 @@ class _UserChatScreenState extends State<UserChatScreen> {
 }
 
 class ChatMessage extends StatelessWidget {
-  final String text;
+  final String? text; // Changed to nullable
+  final File? image;
   final bool isSent;
   final String time;
   final bool showButton;
 
   const ChatMessage({
     super.key,
-    required this.text,
+    this.text, // Changed to optional
+    this.image,
     required this.isSent,
     required this.time,
     this.showButton = false,
@@ -172,13 +207,24 @@ class ChatMessage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextWidget(
-                  text: text,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  fontColor: isSent ? AppColors.white : AppColors.grey700,
-                  textAlignment: TextAlign.start,
-                ),
+                if (image != null)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.file(
+                      image!,
+                      width: 200,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                if (image != null && text != null) const SizedBox(height: 8),
+                if (text != null) // Only show text widget if text exists
+                  TextWidget(
+                    text: text!,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    fontColor: isSent ? AppColors.white : AppColors.grey700,
+                    textAlignment: TextAlign.start,
+                  ),
                 if (showButton) ...[
                   const SizedBox(height: 10.0),
                   Container(
@@ -192,7 +238,6 @@ class ChatMessage extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Placeholder for the image (you can add an actual image here)
                             ClipRRect(
                               borderRadius: BorderRadius.circular(6),
                               child: const ImageWidget(
@@ -213,7 +258,6 @@ class ChatMessage extends StatelessWidget {
                                     fontWeight: FontWeight.w500,
                                     fontColor: AppColors.white,
                                   ),
-                                  // const SpaceWidget(spaceHeight: 2),
                                   Row(
                                     children: List.generate(
                                       5,
@@ -230,14 +274,14 @@ class ChatMessage extends StatelessWidget {
                                     fontWeight: FontWeight.w400,
                                     fontColor: AppColors.white,
                                   ),
-                                  Row(
+                                  const Row(
                                     children: [
-                                      const IconWidget(
+                                      IconWidget(
                                         icon: AppIconsPath.locationIconWhite,
                                         width: 12,
                                         height: 12,
                                       ),
-                                      const SpaceWidget(spaceWidth: 4),
+                                      SpaceWidget(spaceWidth: 4),
                                       TextWidget(
                                         text: "2.3 miles",
                                         fontSize: 10,
@@ -252,24 +296,21 @@ class ChatMessage extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 10.0),
-                        ElevatedButton(
+                        ButtonWidget(
                           onPressed: () {
-                            // Handle booking confirmation
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Table booked successfully!')),
-                            );
+                            Get.toNamed(AppRoutes.userBookingSummaryScreen);
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //   const SnackBar(
+                            //       content: Text('Table booked successfully!')),
+                            // );
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          child: const Text(
-                            'Book Your Table',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                          backgroundColor: AppColors.white,
+                          label: AppStrings.bookYourTable,
+                          buttonHeight: 36,
+                          buttonWidth: double.infinity,
+                          fontSize: 12,
+                          textColor: AppColors.grey700,
+                          fontWeight: FontWeight.w500,
                         ),
                       ],
                     ),

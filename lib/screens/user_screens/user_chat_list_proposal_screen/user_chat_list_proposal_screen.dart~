@@ -43,7 +43,11 @@ class _UserChatListProposalScreenState
             TextField(
               decoration: InputDecoration(
                 hintText: "Search Your message",
-                hintStyle: const TextStyle(color: AppColors.grey300),
+                hintStyle: const TextStyle(
+                  color: AppColors.grey200,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
                 suffixIcon: const Icon(
                   Icons.search,
                   color: AppColors.grey300,
@@ -61,7 +65,6 @@ class _UserChatListProposalScreenState
               return InkWell(
                 onTap: () {
                   Get.toNamed(AppRoutes.userChatScreen);
-
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),

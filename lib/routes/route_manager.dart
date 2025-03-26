@@ -14,6 +14,7 @@ import '../screens/user_screens/user_auth_screens/user_forgot_verify_otp_screen/
 import '../screens/user_screens/user_auth_screens/user_reset_password_screen/user_reset_password_screen.dart';
 import '../screens/user_screens/user_auth_screens/user_sign_in_screen/user_sign_in_screen.dart';
 import '../screens/user_screens/user_auth_screens/user_sign_up_screen/user_sign_up_screen.dart';
+import '../screens/user_screens/user_booking_summary_screen/user_booking_summary_screen.dart';
 import '../screens/user_screens/user_bookings_screen/user_bookings_screen.dart';
 import '../screens/user_screens/user_bottom_nav/user_bottom_nav.dart';
 import '../screens/user_screens/user_chat_list_proposal_screen/user_chat_list_proposal_screen.dart';
@@ -108,6 +109,11 @@ class RouteManager {
       GetPage(
         name: AppRoutes.userChatScreen,
         page: () => UserChatScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.userBookingSummaryScreen,
+        page: () => UserBookingSummaryScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(

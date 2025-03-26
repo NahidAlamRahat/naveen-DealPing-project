@@ -12,6 +12,8 @@ import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
 
 class UserChatListProposalScreen extends StatefulWidget {
+  const UserChatListProposalScreen({super.key});
+
   @override
   _UserChatListProposalScreenState createState() =>
       _UserChatListProposalScreenState();
@@ -21,14 +23,13 @@ class _UserChatListProposalScreenState
     extends State<UserChatListProposalScreen> {
   List<Map<String, dynamic>> messages = List.generate(
       5,
-          (index) =>
-      {
-        "name": "Mirchi Dance Bar",
-        "message": "Hello! Thanks for reaching out. Yes....",
-        "time": "01:42",
-        "unread": 2,
-        "image": AppImagePath.bookingsImage,
-      });
+      (index) => {
+            "name": "Mirchi Dance Bar",
+            "message": "Hello! Thanks for reaching out. Yes....",
+            "time": "01:42",
+            "unread": 2,
+            "image": AppImagePath.bookingsImage,
+          });
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,11 @@ class _UserChatListProposalScreenState
             TextField(
               decoration: InputDecoration(
                 hintText: "Search Your message",
-                hintStyle: const TextStyle(color: AppColors.grey300),
+                hintStyle: const TextStyle(
+                  color: AppColors.grey200,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
                 suffixIcon: const Icon(
                   Icons.search,
                   color: AppColors.grey300,
