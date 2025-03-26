@@ -27,6 +27,7 @@ class AppRoutes {
   static const userBookingsScreen = '/userBookingsScreen';
   static const userProfileScreen = '/userProfileScreen';
   static const userEditProfileScreen = '/userEditProfileScreen';
+  static const userChangePasswordScreen = '/userChangePasswordScreen';
 
   // Business Screens
   static const businessSignInScreen = '/businessSignInScreen';

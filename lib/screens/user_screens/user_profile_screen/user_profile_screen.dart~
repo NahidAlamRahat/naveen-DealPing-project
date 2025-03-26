@@ -94,7 +94,9 @@ class UserProfileScreen extends StatelessWidget {
               context,
               icon: AppIconsPath.termsConditionIcon,
               title: AppStrings.termsCondition,
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(AppRoutes.termsAndConditionsScreen);
+              },
             ),
             const SpaceWidget(spaceHeight: 16),
             _buildMenuItem(

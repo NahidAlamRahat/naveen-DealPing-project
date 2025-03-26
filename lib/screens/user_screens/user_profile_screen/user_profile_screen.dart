@@ -103,7 +103,9 @@ class UserProfileScreen extends StatelessWidget {
               context,
               icon: AppIconsPath.passwordIcon,
               title: AppStrings.password,
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(AppRoutes.userChangePasswordScreen);
+              },
             ),
             const SpaceWidget(spaceHeight: 16),
             _buildMenuItem(

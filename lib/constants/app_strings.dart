@@ -119,4 +119,9 @@ class AppStrings {
   static const String faq = "FAQ";
   static const String logout = "Log Out";
   static const String wantToLogout = "Are You Sure you want to\nlog out?";
+
+  // Change Password Screen
+  static const String currentPassword = "Current Password";
+  static const String newPassword = "New Password";
+  static const String update = "Update";
 }
