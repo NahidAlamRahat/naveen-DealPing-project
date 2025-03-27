@@ -22,6 +22,4 @@ class AppIconsPath {
   static const String logoutIcon = "assets/icons/logout_icon.svg";
   static const String presetIcon = "assets/icons/preset_icon.svg";
   static const String myReportIcon = "assets/icons/my_report_icon.svg";
-  static const String editIcon = "assets/icons/edit_icon.svg";
-  static const String deleteIcon = "assets/icons/delete_icon.svg";
 }

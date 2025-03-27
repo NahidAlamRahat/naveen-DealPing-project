@@ -33,7 +33,7 @@ class AppStrings {
   static const String createYourAccount = "Create Your Account";
   static const String alreadyHaveAnAccount = "Already Have An Account?";
 
-// Business Sign Up Screen
+  // Business Sign Up Screen
   static const String businessName = "Business Name";
   static const String eiinNumber = "EIIN Number";
   static const String licenceNumber = "Licence Number";
@@ -124,4 +124,16 @@ class AppStrings {
   static const String currentPassword = "Current Password";
   static const String newPassword = "New Password";
   static const String update = "Update";
+
+  // Business Bottom Nav
+  static const String preset = "Preset";
+
+  // Business Profile Screen
+  static const String myReport = "My report";
+
+  // Business Bookings Screen
+  static const String checkIn = "Check In";
+
+  // Business Preset Screen
+  static const String addMore = "+ Add More";
 }

@@ -8,6 +8,12 @@ import '../screens/business_screens/business_auth_screens/business_reset_passwor
 import '../screens/business_screens/business_auth_screens/business_sign_in_screen/business_sign_in_screen.dart';
 import '../screens/business_screens/business_auth_screens/business_sign_up_screen/business_sign_up_screen.dart';
 import '../screens/business_screens/business_auth_screens/business_signup_verify_otp_screen/business_signup_verify_otp_screen.dart';
+import '../screens/business_screens/business_bookings_screen/business_bookings_screen.dart';
+import '../screens/business_screens/business_bottom_nav/business_bottom_nav.dart';
+import '../screens/business_screens/business_edit_profile_screen/business_edit_profile_screen.dart';
+import '../screens/business_screens/business_notification_screen/business_notification_screen.dart';
+import '../screens/business_screens/business_preset_screen/business_preset_screen.dart';
+import '../screens/business_screens/business_profile_screen/business_profile_screen.dart';
 import '../screens/faq_screen/faq_screen.dart';
 import '../screens/onboarding_screen/onboarding_screen.dart';
 import '../screens/splash_screen/splash_screen.dart';
@@ -198,6 +204,36 @@ class RouteManager {
       GetPage(
         name: AppRoutes.businessResetPasswordScreen,
         page: () => const BusinessResetPasswordScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.businessBottomNav,
+        page: () => BusinessBottomNav(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.businessProfileScreen,
+        page: () => BusinessProfileScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.businessEditProfileScreen,
+        page: () => BusinessEditProfileScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.businessBookingsScreen,
+        page: () => BusinessBookingsScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.businessNotificationScreen,
+        page: () => BusinessNotificationScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.businessPresetScreen,
+        page: () => BusinessPresetScreen(),
         // binding: GeneralBindings(),
       ),
     ];

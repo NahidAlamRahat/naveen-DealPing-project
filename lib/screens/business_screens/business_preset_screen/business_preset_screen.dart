@@ -1,0 +1,221 @@
+import 'package:deal_ping/constants/app_icons_path.dart';
+import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/widgets/button_widget/button_widget.dart';
+import 'package:deal_ping/widgets/icon_button_widget/icon_button_widget.dart';
+import 'package:flutter/material.dart';
+
+import '../../../constants/app_colors.dart';
+import '../../../widgets/space_widget/space_widget.dart';
+import '../../../widgets/text_widget/text_widgets.dart';
+
+class BusinessPresetScreen extends StatefulWidget {
+  const BusinessPresetScreen({super.key});
+
+  @override
+  _BusinessPresetScreenState createState() => _BusinessPresetScreenState();
+}
+
+class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
+  // List to store the preset offers
+  List<Map<String, String>> offers = [
+    {
+      'title': 'You\'ll get 20% offer on your first...',
+      'description':
+          'This offer applies to your first booking with us. Enjoy a 20% discount on any service you choose, including spa, salon, or fitness classes. Terms and conditions apply.'
+    },
+    {
+      'title': 'You\'ll get 20% offer on your first...',
+      'description':
+          'This offer applies to your first booking with us. Enjoy a 20% discount on any service you choose, including spa, salon, or fitness classes. Terms and conditions apply.'
+    },
+    {
+      'title': 'You\'ll get 20% offer on your first...',
+      'description':
+          'This offer applies to your first booking with us. Enjoy a 20% discount on any service you choose, including spa, salon, or fitness classes. Terms and conditions apply.'
+    },
+    {
+      'title': 'You\'ll get 20% offer on your first...',
+      'description':
+          'This offer applies to your first booking with us. Enjoy a 20% discount on any service you choose, including spa, salon, or fitness classes. Terms and conditions apply.'
+    },
+  ];
+
+  // Function to add a new offer
+  void _addNewOffer() {
+    setState(() {
+      offers.add({
+        'title': 'You\'ll get 20% offer on your first...',
+        'description':
+            'This offer applies to your first booking with us. Enjoy a 20% discount on any service you choose, including spa, salon, or fitness classes. Terms and conditions apply.'
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Preset Offer',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.grey700,
+                    ),
+                  ),
+                  PopupMenuButton<int>(
+                    onSelected: (value) {
+                      if (value == 1) {}
+                    },
+
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: 1,
+                        child: Text(
+                          "Set Default",
+                          style:
+                              TextStyle(fontSize: 14, color: AppColors.grey300),
+                        ),
+                      ),
+                      const PopupMenuDivider(height: 0.5),
+                      const PopupMenuItem(
+                        value: 2,
+                        child: Text(
+                          "Delete all Messages",
+                          style:
+                              TextStyle(fontSize: 14, color: AppColors.grey300),
+                        ),
+                      ),
+                    ],
+                    // offset: Offset(0, 100),
+                    color: AppColors.white,
+                    elevation: 2,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            ...List.generate(offers.length, (index) {
+              return OfferItem(
+                title: offers[index]['title']!,
+                description: offers[index]['description']!,
+              );
+            }),
+            const SizedBox(height: 16),
+            Center(
+              child: ButtonWidget(
+                onPressed: () {},
+                label: AppStrings.addMore,
+                buttonHeight: 36,
+                buttonWidth: 110,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class OfferItem extends StatefulWidget {
+  final String title;
+  final String description;
+
+  const OfferItem({
+    super.key,
+    required this.title,
+    required this.description,
+  });
+
+  @override
+  _OfferItemState createState() => _OfferItemState();
+}
+
+class _OfferItemState extends State<OfferItem> {
+  bool _isExpanded = false; // Track the expansion state
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4, left: 16, right: 16),
+      child: Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: BorderSide(
+            color: _isExpanded ? AppColors.green50 : AppColors.grey50,
+          ),
+        ),
+        color: _isExpanded ? AppColors.green50 : AppColors.white,
+        child: ExpansionTile(
+          shape: Border.all(color: Colors.transparent),
+          title: TextWidget(
+            text: widget.title,
+            fontWeight: FontWeight.w500,
+            fontColor: _isExpanded ? AppColors.green500 : AppColors.grey700,
+            fontSize: 14,
+            textAlignment: TextAlign.start,
+          ),
+          trailing: _isExpanded
+              ? SizedBox(
+                  width: 50, // Constrain the width of the trailing widget
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButtonWidget(
+                        onTap: () {
+                          // Handle edit action
+                        },
+                        icon: AppIconsPath.editIcon,
+                        color: AppColors.green500,
+                        size: 16,
+                      ),
+                      const SpaceWidget(spaceWidth: 4),
+                      IconButtonWidget(
+                        onTap: () {
+                          // Handle delete action
+                        },
+                        icon: AppIconsPath.deleteIcon,
+                        color: AppColors.grey300,
+                        size: 16,
+                      ),
+                    ],
+                  ),
+                )
+              : const Icon(
+                  Icons.arrow_forward_ios,
+                  color: AppColors.grey700,
+                  size: 16,
+                ),
+          onExpansionChanged: (bool expanded) {
+            setState(() {
+              _isExpanded = expanded; // Update the expansion state
+            });
+          },
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+              child: TextWidget(
+                text: widget.description,
+                fontColor: AppColors.green400,
+                fontSize: 12,
+                textAlignment: TextAlign.start,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

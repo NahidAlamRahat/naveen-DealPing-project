@@ -22,6 +22,6 @@ class AppImagePath {
   static const String profileImage = "assets/dev_images/profile_image.png";
   static const String businessProfileImage =
       "assets/dev_images/business_profile_image.png";
-  static const String businessNotificationImage =
-      "assets/dev_images/business_notification_image.png";
+  static const String businessProfileImage =
+      "assets/dev_images/business_profile_image.png";
 }

@@ -132,7 +132,7 @@ class BusinessSignInScreen extends StatelessWidget {
                   imagePath: AppImagePath.appleIcon,
                   text: AppStrings.signInWithApple,
                   onTap: () {
-                    // Handle Apple Sign-In
+                    Get.offAllNamed(AppRoutes.businessBottomNav);
                   },
                 ),
                 const SpaceWidget(spaceHeight: 12),
@@ -140,7 +140,7 @@ class BusinessSignInScreen extends StatelessWidget {
                   imagePath: AppImagePath.googleIcon,
                   text: AppStrings.signInWithGoogle,
                   onTap: () {
-                    // Handle Google Sign-In
+                    Get.offAllNamed(AppRoutes.businessBottomNav);
                   },
                 ),
               ],

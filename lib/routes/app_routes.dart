@@ -37,4 +37,10 @@ class AppRoutes {
   static const businessForgotPasswordScreen = '/businessForgotPasswordScreen';
   static const businessForgotVerifyOtpScreen = '/businessForgotVerifyOtpScreen';
   static const businessResetPasswordScreen = '/businessResetPasswordScreen';
+  static const businessBottomNav = '/businessBottomNav';
+  static const businessProfileScreen = '/businessProfileScreen';
+  static const businessEditProfileScreen = '/businessEditProfileScreen';
+  static const businessBookingsScreen = '/businessBookingsScreen';
+  static const businessNotificationScreen = '/businessNotificationScreen';
+  static const businessPresetScreen = '/businessPresetScreen';
 }
