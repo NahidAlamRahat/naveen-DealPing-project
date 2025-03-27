@@ -43,5 +43,4 @@ class AppRoutes {
   static const businessBookingsScreen = '/businessBookingsScreen';
   static const businessNotificationScreen = '/businessNotificationScreen';
   static const businessPresetScreen = '/businessPresetScreen';
-  static const businessHomeScreen = '/businessHomeScreen';
 }

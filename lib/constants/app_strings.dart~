@@ -137,5 +137,4 @@ class AppStrings {
   // Business Preset Screen
   static const String addMore = "+ Add More";
   static const String setDefault = "Set Default";
-  static const String save = "Save";
 }

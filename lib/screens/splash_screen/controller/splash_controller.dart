@@ -12,7 +12,7 @@ class SplashController extends GetxController {
     // Wait for 3 seconds before navigating to the HomeScreen
     Future.delayed(const Duration(seconds: 3)).then((_) {
       Get.offAllNamed(AppRoutes.onboardingScreen);
-      //Get.to(() => BottomNavBar());
+      // Get.to(() => BusinessBottomNav());
     });
   }
 

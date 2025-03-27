@@ -11,6 +11,7 @@ import '../screens/business_screens/business_auth_screens/business_signup_verify
 import '../screens/business_screens/business_bookings_screen/business_bookings_screen.dart';
 import '../screens/business_screens/business_bottom_nav/business_bottom_nav.dart';
 import '../screens/business_screens/business_edit_profile_screen/business_edit_profile_screen.dart';
+import '../screens/business_screens/business_home_screen/business_home_screen.dart';
 import '../screens/business_screens/business_notification_screen/business_notification_screen.dart';
 import '../screens/business_screens/business_preset_screen/business_preset_screen.dart';
 import '../screens/business_screens/business_profile_screen/business_profile_screen.dart';
@@ -234,6 +235,11 @@ class RouteManager {
       GetPage(
         name: AppRoutes.businessPresetScreen,
         page: () => BusinessPresetScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.businessHomeScreen,
+        page: () => BusinessHomeScreen(),
         // binding: GeneralBindings(),
       ),
     ];
