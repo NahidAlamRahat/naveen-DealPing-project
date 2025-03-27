@@ -60,10 +60,9 @@ class RouteManager {
         name: AppRoutes.termsAndConditionsScreen,
         page: () => const TermsAndConditionsScreen(),
         // binding: GeneralBindings(),
-      ),
-      GetPage(
+      ), GetPage(
         name: AppRoutes.faqScreen,
-        page: () => FAQScreen(),
+        page: () =>  FAQScreen(),
         // binding: GeneralBindings(),
       ),
 

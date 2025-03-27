@@ -6,6 +6,7 @@ class AppRoutes {
   static const onboardingScreen = '/onboardingScreen';
   static const aboutUsScreen = '/aboutUsScreen';
   static const termsAndConditionsScreen = '/termsAndConditionsScreen';
+  static const faqScreen = '/faqScreen';
 
   // User Screens
   static const userSigninScreen = '/userSigninScreen';
