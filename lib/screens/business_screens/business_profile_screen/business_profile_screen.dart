@@ -86,7 +86,7 @@ class BusinessProfileScreen extends StatelessWidget {
               icon: AppIconsPath.myReportIcon,
               title: AppStrings.myReport,
               onTap: () {
-                // Get.toNamed(AppRoutes.aboutUsScreen);
+                Get.toNamed(AppRoutes.businessMyReportScreen);
               },
             ),
             const SpaceWidget(spaceHeight: 16),

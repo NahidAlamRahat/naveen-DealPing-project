@@ -13,6 +13,7 @@ import '../screens/business_screens/business_bottom_nav/business_bottom_nav.dart
 import '../screens/business_screens/business_chat_screen/business_chat_screen.dart';
 import '../screens/business_screens/business_edit_profile_screen/business_edit_profile_screen.dart';
 import '../screens/business_screens/business_home_screen/business_home_screen.dart';
+import '../screens/business_screens/business_my_report_screen/business_my_report_screen.dart';
 import '../screens/business_screens/business_notification_screen/business_notification_screen.dart';
 import '../screens/business_screens/business_preset_screen/business_preset_screen.dart';
 import '../screens/business_screens/business_profile_screen/business_profile_screen.dart';
@@ -246,6 +247,11 @@ class RouteManager {
       GetPage(
         name: AppRoutes.businessChatScreen,
         page: () => BusinessChatScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.businessMyReportScreen,
+        page: () => BusinessMyReportScreen(),
         // binding: GeneralBindings(),
       ),
     ];

@@ -1,0 +1,455 @@
+import 'package:deal_ping/constants/app_colors.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../constants/app_strings.dart';
+import '../../../widgets/appbar_widget/appbar_widget.dart';
+import '../../../widgets/space_widget/space_widget.dart';
+import '../../../widgets/text_widget/text_widgets.dart';
+import 'controller/business_my_report_controller.dart';
+
+class BusinessMyReportScreen extends StatefulWidget {
+  const BusinessMyReportScreen({super.key});
+
+  @override
+  State<BusinessMyReportScreen> createState() => _BusinessMyReportScreenState();
+}
+
+class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
+  // Line Chart Gradient Colors
+  List<Color> gradientColors = [
+    AppColors.green500,
+    AppColors.green50,
+  ];
+
+  // Bar Chart Colors for two items
+  final List<Color> barColors = [
+    AppColors.green500, // Color for first item (e.g., active calories)
+    AppColors.grey50, // Color for second item (e.g., passive calories)
+  ];
+
+  int touchedIndex = 2; // Highlighting Wednesday by default
+  final ReportController controller = Get.put(ReportController());
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      appBar: const AppbarWidget(
+        text: AppStrings.myReport,
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Line Chart Section (unchanged)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: TextWidget(
+                      text: 'User Growth',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      fontColor: AppColors.green500,
+                    ),
+                  ),
+                  const SpaceWidget(spaceHeight: 12),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 6,
+                          backgroundColor: AppColors.green50,
+                        ),
+                        SpaceWidget(spaceWidth: 8),
+                        TextWidget(
+                          text: 'Received Request',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.grey700,
+                        ),
+                        SpaceWidget(spaceWidth: 20),
+                      ],
+                    ),
+                  ),
+                  const SpaceWidget(spaceHeight: 2),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 6,
+                              backgroundColor: AppColors.green500,
+                            ),
+                            SpaceWidget(spaceWidth: 8),
+                            TextWidget(
+                              text: 'Responded Request',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              fontColor: AppColors.grey700,
+                            ),
+                          ],
+                        ),
+                        Obx(
+                          () => DropdownButton<String>(
+                            value: controller.filterType.value,
+                            underline: const SizedBox(),
+                            // Removes the default underline
+                            icon: const Icon(Icons.keyboard_arrow_down_rounded,
+                                color: AppColors.green500),
+                            items: ["Weekly", "Monthly"]
+                                .map((e) => DropdownMenuItem(
+                                      value: e,
+                                      child: Text(
+                                        e,
+                                        style: const TextStyle(
+                                          color: AppColors.grey300,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                            onChanged: controller.changeFilterType,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  AspectRatio(
+                    aspectRatio: 1.70,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 20,
+                        left: 20,
+                        top: 24,
+                        bottom: 12,
+                      ),
+                      child: LineChart(mainData()),
+                    ),
+                  ),
+                ],
+              ),
+              const SpaceWidget(spaceHeight: 26),
+              // Bar Chart Section
+              AspectRatio(
+                aspectRatio: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const TextWidget(
+                        text: 'Booking Ratio',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.green500,
+                      ),
+                      const SpaceWidget(spaceHeight: 12),
+                      const Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 6,
+                            backgroundColor: AppColors.green50,
+                          ),
+                          SpaceWidget(spaceWidth: 8),
+                          TextWidget(
+                            text: 'Booking Confirmation',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            fontColor: AppColors.grey700,
+                          ),
+                          SpaceWidget(spaceWidth: 20),
+                        ],
+                      ),
+                      const SpaceWidget(spaceHeight: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 6,
+                                backgroundColor: AppColors.green500,
+                              ),
+                              SpaceWidget(spaceWidth: 8),
+                              TextWidget(
+                                text: 'Checked In Confirmation',
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                fontColor: AppColors.grey700,
+                              ),
+                            ],
+                          ),
+                          Obx(
+                            () => DropdownButton<String>(
+                              value: controller.filterType.value,
+                              underline: const SizedBox(),
+                              // Removes the default underline
+                              icon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: AppColors.green500),
+                              items: ["Weekly", "Monthly"]
+                                  .map((e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(
+                                          e,
+                                          style: const TextStyle(
+                                            color: AppColors.grey300,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
+                              onChanged: controller.changeFilterType,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SpaceWidget(spaceHeight: 12),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: BarChart(mainBarData()),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Line Chart Methods (unchanged)
+  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(
+      fontWeight: FontWeight.w400,
+      fontSize: 14,
+      color: AppColors.grey700,
+    );
+    Widget text;
+    switch (value.toInt()) {
+      case 2:
+        text = const Text('MAR', style: style);
+        break;
+      case 5:
+        text = const Text('JUN', style: style);
+        break;
+      case 8:
+        text = const Text('SEP', style: style);
+        break;
+      default:
+        text = const Text('', style: style);
+        break;
+    }
+    return SideTitleWidget(axisSide: meta.axisSide, child: text);
+  }
+
+  Widget leftTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(
+      fontWeight: FontWeight.w400,
+      fontSize: 14,
+      color: AppColors.grey700,
+    );
+    String text;
+    switch (value.toInt()) {
+      case 1:
+        text = '10K';
+        break;
+      case 3:
+        text = '30k';
+        break;
+      case 5:
+        text = '50k';
+        break;
+      default:
+        return Container();
+    }
+    return Text(text, style: style, textAlign: TextAlign.left);
+  }
+
+  LineChartData mainData() {
+    return LineChartData(
+      gridData: const FlGridData(show: false),
+      titlesData: FlTitlesData(
+        show: true,
+        rightTitles:
+            const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 30,
+            interval: 1,
+            getTitlesWidget: bottomTitleWidgets,
+          ),
+        ),
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            interval: 1,
+            getTitlesWidget: leftTitleWidgets,
+            reservedSize: 42,
+          ),
+        ),
+      ),
+      borderData: FlBorderData(show: false),
+      minX: 0,
+      maxX: 11,
+      minY: 0,
+      maxY: 6,
+      lineBarsData: [
+        LineChartBarData(
+          spots: const [
+            FlSpot(0, 3),
+            FlSpot(2.6, 2),
+            FlSpot(4.9, 5),
+            FlSpot(6.8, 3.1),
+            FlSpot(8, 4),
+            FlSpot(9.5, 3),
+            FlSpot(11, 4),
+          ],
+          isCurved: true,
+          gradient: LinearGradient(colors: gradientColors),
+          barWidth: 5,
+          isStrokeCapRound: true,
+          dotData: const FlDotData(show: false),
+          belowBarData: BarAreaData(
+            show: true,
+            gradient: LinearGradient(
+              colors: gradientColors
+                  .map((color) => color.withOpacity(0.3))
+                  .toList(),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Bar Chart Helper Methods
+  BarChartGroupData _makeGroupData(
+      int x,
+      double y1, // First value (e.g., active calories)
+      double y2, // Second value (e.g., passive calories)
+      {bool isTouched = false}) {
+    return BarChartGroupData(
+      x: x,
+      barRods: [
+        BarChartRodData(
+          toY: y1 + y2, // Total height of the bar (stacked)
+          rodStackItems: [
+            BarChartRodStackItem(0, y1,
+                isTouched ? barColors[0].withOpacity(0.8) : barColors[0]),
+            // First segment
+            BarChartRodStackItem(y1, y1 + y2,
+                isTouched ? barColors[1].withOpacity(0.8) : barColors[1]),
+            // Second segment
+          ],
+          width: 20,
+          borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(100), bottom: Radius.circular(100)),
+        ),
+      ],
+    );
+  }
+
+  List<BarChartGroupData> _generateBarData() {
+    // Example data: two values per day
+    final List<List<double>> values = [
+      [400.0, 200.0], // Sunday: 400 (green), 200 (blue)
+      [1000.0, 300.0], // Monday
+      [1000.0, 450.0], // Tuesday
+      [650.0, 350.0], // Wednesday
+      [800.0, 400.0], // Thursday
+      [500.0, 250.0], // Friday
+      [600.0, 300.0], // Saturday
+    ];
+
+    return List.generate(7, (i) {
+      return _makeGroupData(i, values[i][0], values[i][1],
+          isTouched: i == touchedIndex);
+    });
+  }
+
+  BarChartData mainBarData() {
+    return BarChartData(
+      alignment: BarChartAlignment.center,
+      barTouchData: BarTouchData(
+        enabled: true, // Enable touch interactions
+        touchCallback: (FlTouchEvent event, barTouchResponse) {
+          if (!event.isInterestedForInteractions ||
+              barTouchResponse == null ||
+              barTouchResponse.spot == null) {
+            setState(() {
+              touchedIndex = -1;
+            });
+            return;
+          }
+          setState(() {
+            touchedIndex = barTouchResponse.spot!.touchedBarGroupIndex;
+          });
+        },
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: _getBottomTitles,
+            reservedSize: 38,
+          ),
+        ),
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 40,
+            getTitlesWidget: (value, meta) {
+              const style = TextStyle(color: AppColors.grey700, fontSize: 14);
+              return Text('${value.toInt()}', style: style);
+            },
+          ),
+        ),
+        rightTitles:
+            const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+      ),
+      borderData: FlBorderData(show: false),
+      barGroups: _generateBarData(),
+      gridData: const FlGridData(show: true, drawVerticalLine: false),
+      maxY: 1500, // Adjust based on your max stacked value
+    );
+  }
+
+  // Bottom Titles for Bar Chart
+  Widget _getBottomTitles(double value, TitleMeta meta) {
+    const style = TextStyle(
+      color: AppColors.grey700,
+      fontWeight: FontWeight.w500,
+      fontSize: 14,
+    );
+    final titles = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    final index = value.toInt();
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text(
+        index < titles.length ? titles[index] : '',
+        style: style,
+      ),
+    );
+  }
+}

@@ -67,7 +67,7 @@ class BusinessProfileScreen extends StatelessWidget {
             Center(
               child: ButtonWidget(
                 onPressed: () {
-                  Get.toNamed(AppRoutes.userEditProfileScreen);
+                  Get.toNamed(AppRoutes.businessEditProfileScreen);
                 },
                 backgroundColor: AppColors.green500,
                 label: AppStrings.editProfile,
