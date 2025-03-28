@@ -24,4 +24,5 @@ class AppIconsPath {
   static const String myReportIcon = "assets/icons/my_report_icon.svg";
   static const String editIcon = "assets/icons/edit_icon.svg";
   static const String deleteIcon = "assets/icons/delete_icon.svg";
+  static const String saveIcon = "assets/icons/save.svg";
 }

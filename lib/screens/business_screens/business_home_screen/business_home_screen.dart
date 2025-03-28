@@ -176,7 +176,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
 
                           return InkWell(
                             onTap: () {
-                              Get.toNamed(AppRoutes.userChatScreen);
+                              Get.toNamed(AppRoutes.businessChatScreen);
                             },
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,
@@ -260,7 +260,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
 
                           return InkWell(
                             onTap: () {
-                              Get.toNamed(AppRoutes.userChatScreen);
+                              Get.toNamed(AppRoutes.businessChatScreen);
                             },
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,
@@ -344,7 +344,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
 
                           return InkWell(
                             onTap: () {
-                              Get.toNamed(AppRoutes.userChatScreen);
+                              Get.toNamed(AppRoutes.businessChatScreen);
                             },
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,

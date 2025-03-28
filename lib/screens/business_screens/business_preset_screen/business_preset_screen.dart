@@ -138,7 +138,7 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                             ),
                             const SizedBox(height: 8),
                             TextField(
-                              controller: titleController,
+                              controller: descriptionController,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
@@ -312,6 +312,50 @@ class OfferItem extends StatefulWidget {
 
 class _OfferItemState extends State<OfferItem> {
   bool _isExpanded = false; // Track the expansion state
+  final editTitleController = TextEditingController();
+  final editDescriptionController = TextEditingController();
+
+  Widget _buildOfferButtonsRow() {
+    return SizedBox(
+      height: 30,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: List.generate(
+          10, // Number of steps from 5% to 50% (5, 10, ..., 50)
+          (index) {
+            int percentage = 5 * (index + 1); // 5%, 10%, ..., 50%
+            return _buildOfferButton(percentage);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOfferButton(int percentage) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      margin: const EdgeInsets.only(right: 8),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '$percentage% offer',
+            style: const TextStyle(fontSize: 10, color: AppColors.grey300),
+          ),
+          const SizedBox(width: 5),
+          const Icon(
+            Icons.close,
+            size: 16,
+            color: Colors.black,
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -344,7 +388,103 @@ class _OfferItemState extends State<OfferItem> {
                     children: [
                       IconButtonWidget(
                         onTap: () {
-                          // Handle edit action
+                          showCustomPopup(
+                            context,
+                            [
+                              const Center(
+                                child: TextWidget(
+                                  text: AppStrings.editMessage,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  fontColor: AppColors.grey700,
+                                  textAlignment: TextAlign.center,
+                                ),
+                              ),
+                              const SpaceWidget(spaceHeight: 11),
+                              const Align(
+                                alignment: Alignment.centerLeft,
+                                child: TextWidget(
+                                  text: 'Title',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  fontColor: AppColors.green500,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              TextField(
+                                controller: editTitleController,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.grey300),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.grey300),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.green500),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 12),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              const Align(
+                                alignment: Alignment.centerLeft,
+                                child: TextWidget(
+                                  text: 'Description',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  fontColor: AppColors.green500,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              TextField(
+                                controller: editDescriptionController,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.grey300),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.grey300),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.green500),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 12),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              _buildOfferButtonsRow(),
+                              const SizedBox(height: 18),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: ButtonWidget(
+                                  label: AppStrings.update,
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  buttonHeight: 36,
+                                  buttonWidth: 90,
+                                  backgroundColor: AppColors.green500,
+                                  textColor: AppColors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          );
                         },
                         icon: AppIconsPath.editIcon,
                         color: AppColors.green500,

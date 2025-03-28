@@ -45,7 +45,6 @@ class IconTextButton extends StatelessWidget {
               fontSize: ResponsiveUtils.width(fontSize),
             ),
           ),
-          const SizedBox(width: 5),
           Icon(
             icon,
             color: iconColor,

@@ -138,4 +138,9 @@ class AppStrings {
   static const String addMore = "+ Add More";
   static const String setDefault = "Set Default";
   static const String save = "Save";
+  static const String editMessage = "Edit Message";
+
+  // Business Home Screen
+  static const String bookingRequest = "Booking Request";
+  static const String sendRequest = "Send a Request";
 }
