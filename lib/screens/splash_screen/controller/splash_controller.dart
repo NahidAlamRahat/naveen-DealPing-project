@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import '../../business_screens/business_bottom_nav/business_bottom_nav.dart';
+import '../../../routes/app_routes.dart';
 
 class SplashController extends GetxController {
   final GetStorage _storage = GetStorage();
@@ -11,8 +11,8 @@ class SplashController extends GetxController {
     super.onInit();
     // Wait for 3 seconds before navigating to the HomeScreen
     Future.delayed(const Duration(seconds: 3)).then((_) {
-      // Get.offAllNamed(AppRoutes.onboardingScreen);
-      Get.to(() => BusinessBottomNav());
+      Get.offAllNamed(AppRoutes.onboardingScreen);
+      //Get.to(() => UserBottomNav());
     });
   }
 

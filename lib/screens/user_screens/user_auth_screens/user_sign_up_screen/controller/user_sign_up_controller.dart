@@ -5,7 +5,8 @@ import '../../../../../routes/app_routes.dart';
 
 class UserSignUpController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController rePasswordController = TextEditingController();
@@ -13,7 +14,18 @@ class UserSignUpController extends GetxController {
   final RxBool isChecked2 = false.obs;
 
   // Validate Name
-  String? validateName(String? value) {
+  String? validateFirstName(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Enter Name";
+    } else if (value.length < 3) {
+      return "Name should be at least 3 characters long";
+    } else if (!RegExp(r"^[a-zA-Z\s]+$").hasMatch(value)) {
+      return "Enter a valid name (letters and spaces only)";
+    }
+    return null;
+  }
+
+  String? validateLastName(String? value) {
     if (value == null || value.isEmpty) {
       return "Enter Name";
     } else if (value.length < 3) {
@@ -74,7 +86,8 @@ class UserSignUpController extends GetxController {
 
   @override
   void onClose() {
-    nameController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     rePasswordController.dispose();

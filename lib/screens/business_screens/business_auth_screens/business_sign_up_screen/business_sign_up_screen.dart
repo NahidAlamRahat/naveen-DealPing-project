@@ -37,6 +37,7 @@ class BusinessSignUpScreen extends StatelessWidget {
                   height: 60,
                   width: 60,
                   imagePath: AppImagePath.appLogoGreen,
+                  fit: BoxFit.contain,
                 ),
                 const SpaceWidget(spaceHeight: 30),
                 const TextWidget(
@@ -56,18 +57,50 @@ class BusinessSignUpScreen extends StatelessWidget {
                 const SpaceWidget(spaceHeight: 12),
 
                 // Business Name
-                const TextWidget(
-                  text: AppStrings.businessName,
-                  fontColor: AppColors.green500,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-                const SpaceWidget(spaceHeight: 4),
-                TextFieldWidget(
-                  controller: controller.businessNameController,
-                  hintText: 'Enter Your Full Name',
-                  maxLines: 1,
-                  validator: controller.validateName,
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TextWidget(
+                            text: "First Name",
+                            fontColor: AppColors.green500,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          const SpaceWidget(spaceHeight: 4),
+                          TextFieldWidget(
+                            controller: controller.businessFirstNameController,
+                            hintText: 'Enter First Name',
+                            maxLines: 1,
+                            validator: controller.validateFirstName,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SpaceWidget(spaceWidth: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TextWidget(
+                            text: "Last Name",
+                            fontColor: AppColors.green500,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          const SpaceWidget(spaceHeight: 4),
+                          TextFieldWidget(
+                            controller: controller.businessLastNameController,
+                            hintText: 'Enter Last Name',
+                            maxLines: 1,
+                            validator: controller.validateLastName,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 const SpaceWidget(spaceHeight: 12),
 

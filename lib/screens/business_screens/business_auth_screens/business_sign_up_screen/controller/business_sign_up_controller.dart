@@ -5,7 +5,10 @@ import '../../../../../routes/app_routes.dart';
 
 class BusinessSignUpController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController businessNameController = TextEditingController();
+  final TextEditingController businessFirstNameController =
+      TextEditingController();
+  final TextEditingController businessLastNameController =
+      TextEditingController();
   final TextEditingController eiinNumberController = TextEditingController();
   final TextEditingController licenceNumberController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -16,7 +19,18 @@ class BusinessSignUpController extends GetxController {
   final RxBool isChecked2 = false.obs;
 
   // Validate Name
-  String? validateName(String? value) {
+  String? validateFirstName(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Enter Name";
+    } else if (value.length < 3) {
+      return "Name should be at least 3 characters long";
+    } else if (!RegExp(r"^[a-zA-Z\s]+$").hasMatch(value)) {
+      return "Enter a valid name (letters and spaces only)";
+    }
+    return null;
+  } // Validate Name
+
+  String? validateLastName(String? value) {
     if (value == null || value.isEmpty) {
       return "Enter Name";
     } else if (value.length < 3) {
@@ -97,7 +111,8 @@ class BusinessSignUpController extends GetxController {
 
   @override
   void onClose() {
-    businessNameController.dispose();
+    businessFirstNameController.dispose();
+    businessLastNameController.dispose();
     eiinNumberController.dispose();
     licenceNumberController.dispose();
     emailController.dispose();

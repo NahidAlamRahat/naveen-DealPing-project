@@ -11,10 +11,10 @@ import '../../../../widgets/image_widget/image_widget.dart';
 import '../../../../widgets/space_widget/space_widget.dart';
 import '../../../../widgets/text_button_widget/text_button_widget.dart';
 import '../../../../widgets/text_widget/text_widgets.dart';
-import 'controller/user_signup_verify_otp_controller.dart';
+import 'controller/business_signup_verify_otp_controller.dart';
 
-class UserSignupVerifyOtpScreen extends StatelessWidget {
-  const UserSignupVerifyOtpScreen({super.key});
+class BusinessSignupVerifyOtpScreen extends StatelessWidget {
+  const BusinessSignupVerifyOtpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,8 @@ class UserSignupVerifyOtpScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.white,
         body: SafeArea(
-          child: GetBuilder<UserSignupVerifyAccountController>(
-              init: UserSignupVerifyAccountController(),
+          child: GetBuilder<BusinessSignupVerifyAccountController>(
+              init: BusinessSignupVerifyAccountController(),
               builder: (controller) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),

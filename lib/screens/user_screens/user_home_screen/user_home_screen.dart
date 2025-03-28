@@ -9,10 +9,16 @@ import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller/user_home_controller.dart';
 
-class UserHomeScreen extends StatelessWidget {
-  final UserHomeController _controller = Get.put(UserHomeController());
-
+class UserHomeScreen extends StatefulWidget {
   UserHomeScreen({super.key});
+
+  @override
+  State<UserHomeScreen> createState() => _UserHomeScreenState();
+}
+
+class _UserHomeScreenState extends State<UserHomeScreen> {
+  final UserHomeController _controller = Get.put(UserHomeController());
+  double _currentValue = 5.0;
 
   @override
   Widget build(BuildContext context) {
@@ -87,26 +93,56 @@ class UserHomeScreen extends StatelessWidget {
             const SpaceWidget(spaceHeight: 12),
 
             // **Location and Distance Input**
+            HomeScreenInputWidget(
+              controller: _controller.locationController,
+              hintText: "Location",
+              onLocationTap: _controller.navigateToLocationScreen,
+            ),
+            const SpaceWidget(spaceHeight: 12),
+            const Text(
+              "Distance",
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: AppColors.grey200,
+              ),
+            ),
+            const SpaceWidget(spaceHeight: 10),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: HomeScreenInputWidget(
-                    controller: _controller.locationController,
-                    hintText: "Location",
-                    onLocationTap: _controller.navigateToLocationScreen,
+                  flex: 1,
+                  child: SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                        overlayShape: SliderComponentShape.noOverlay,
+                        trackHeight: 5),
+                    child: Slider(
+                      value: _currentValue,
+                      min: 0,
+                      max: 50,
+                      divisions: 50,
+                      inactiveColor: AppColors.white,
+                      activeColor: AppColors.green500,
+                      onChanged: (value) {
+                        setState(() {
+                          _currentValue = value;
+                        });
+                      },
+                    ),
                   ),
                 ),
-                const SpaceWidget(spaceWidth: 12),
-                Expanded(
-                  child: HomeScreenInputWidget(
-                    controller: _controller.distanceController,
-                    hintText: "Distance",
-                  ),
+                const SpaceWidget(spaceWidth: 24),
+                Text(
+                  '${_currentValue.round()} ${"mile".tr}',
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12),
                 ),
               ],
             ),
-            const SpaceWidget(spaceHeight: 12),
-
+            const SpaceWidget(spaceHeight: 16),
             // **Message Input**
             HomeScreenInputWidget(
               controller: _controller.messageController,
@@ -150,45 +186,41 @@ class UserHomeScreen extends StatelessWidget {
   // **Category Expanded View**
   Widget _buildCategoryExpandedView() {
     return SizedBox(
-      height: 150,
-      child: Scrollbar(
-        thumbVisibility: true,
-        radius: const Radius.circular(100),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: _controller.subCategories.keys.map((category) {
-              return GestureDetector(
-                onTap: () => _controller.selectCategory(category),
-                child: Obx(() => Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      decoration: BoxDecoration(
-                        color: _controller.selectedCategory.value == category
-                            ? Colors.green.withOpacity(0.2)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: Text(
-                          category,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight:
-                                _controller.selectedCategory.value == category
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
-                            color:
-                                _controller.selectedCategory.value == category
-                                    ? Colors.green
-                                    : Colors.grey,
-                          ),
+      height: 40,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: _controller.subCategories.keys.map((category) {
+            return GestureDetector(
+              onTap: () => _controller.selectCategory(category),
+              child: Obx(() => Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: _controller.selectedCategory.value == category
+                          ? Colors.green.withOpacity(0.2)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Center(
+                      child: Text(
+                        category,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight:
+                              _controller.selectedCategory.value == category
+                                  ? FontWeight.w500
+                                  : FontWeight.normal,
+                          color: _controller.selectedCategory.value == category
+                              ? Colors.green
+                              : Colors.grey,
                         ),
                       ),
-                    )),
-              );
-            }).toList(),
-          ),
+                    ),
+                  )),
+            );
+          }).toList(),
         ),
       ),
     );
@@ -210,48 +242,45 @@ class UserHomeScreen extends StatelessWidget {
   // **Sub-Category Expanded View**
   Widget _buildSubCategoryExpandedView() {
     return SizedBox(
-      height: 150,
-      child: Scrollbar(
-        thumbVisibility: true,
-        radius: const Radius.circular(100),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: _controller
-                .subCategories[_controller.selectedCategory.value]!
-                .map((subCategory) {
-              return GestureDetector(
-                onTap: () => _controller.selectSubCategory(subCategory),
-                child: Obx(() => Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      decoration: BoxDecoration(
-                        color:
-                            _controller.selectedSubCategory.value == subCategory
-                                ? Colors.green.withOpacity(0.2)
-                                : Colors.transparent,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: Text(
-                          subCategory,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: _controller.selectedSubCategory.value ==
-                                    subCategory
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            color: _controller.selectedSubCategory.value ==
-                                    subCategory
-                                ? Colors.green
-                                : Colors.grey,
-                          ),
+      height: 40,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: _controller
+              .subCategories[_controller.selectedCategory.value]!
+              .map((subCategory) {
+            return GestureDetector(
+              onTap: () => _controller.selectSubCategory(subCategory),
+              child: Obx(() => Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      color:
+                          _controller.selectedSubCategory.value == subCategory
+                              ? Colors.green.withOpacity(0.2)
+                              : Colors.transparent,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Center(
+                      child: Text(
+                        subCategory,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: _controller.selectedSubCategory.value ==
+                                  subCategory
+                              ? FontWeight.w500
+                              : FontWeight.normal,
+                          color: _controller.selectedSubCategory.value ==
+                                  subCategory
+                              ? Colors.green
+                              : Colors.grey,
                         ),
                       ),
-                    )),
-              );
-            }).toList(),
-          ),
+                    ),
+                  )),
+            );
+          }).toList(),
         ),
       ),
     );

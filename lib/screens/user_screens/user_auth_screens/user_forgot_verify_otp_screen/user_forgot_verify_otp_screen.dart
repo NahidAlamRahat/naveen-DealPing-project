@@ -40,6 +40,7 @@ class UserForgotVerifyOtpScreen extends StatelessWidget {
                           height: 60,
                           width: 60,
                           imagePath: AppImagePath.appLogoGreen,
+                          fit: BoxFit.contain,
                         ),
                         const SpaceWidget(spaceHeight: 125),
                         const Center(
