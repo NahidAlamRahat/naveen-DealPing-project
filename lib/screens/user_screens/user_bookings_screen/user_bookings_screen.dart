@@ -2,8 +2,10 @@ import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_icons_path.dart';
 import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/routes/app_routes.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/image_widget/image_widget.dart';
@@ -221,7 +223,10 @@ class BookingCard extends StatelessWidget {
                   color: AppColors.green500,
                 )
               : ButtonWidget(
-                  onPressed: () {},
+                  onPressed: () {
+                    // View Booking
+                    Get.toNamed(AppRoutes.userBarcodeScreen);
+                  },
                   label: AppStrings.view,
                   buttonHeight: 36,
                   buttonWidth: 72,
