@@ -97,11 +97,30 @@ class _UserChatScreenState extends State<UserChatScreen> {
       backgroundColor: AppColors.white,
       appBar: AppbarWidget(
         text: 'Mirchi Dance',
-        action: IconButton(
-          icon: const Icon(Icons.more_vert),
-          onPressed: () {
-            // Handle more options
+        action: PopupMenuButton<int>(
+          onSelected: (value) {
+            if (value == 1) {}
           },
+          itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 1,
+              child: Text(
+                "Report",
+                style: TextStyle(fontSize: 14, color: AppColors.grey300),
+              ),
+            ),
+            const PopupMenuDivider(height: 0.2),
+            const PopupMenuItem(
+              value: 1,
+              child: Text(
+                "Delete Chat",
+                style: TextStyle(fontSize: 14, color: AppColors.grey300),
+              ),
+            ),
+          ],
+          // offset: Offset(0, 100),
+          color: AppColors.white,
+          elevation: 2,
         ),
       ),
       body: Column(
