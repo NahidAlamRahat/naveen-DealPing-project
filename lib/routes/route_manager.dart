@@ -72,7 +72,7 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.faqScreen,
-        page: () => FAQScreen(),
+        page: () => const FAQScreen(),
         // binding: GeneralBindings(),
       ),
 
@@ -114,12 +114,12 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.userHomeScreen,
-        page: () => UserHomeScreen(),
+        page: () => const UserHomeScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
         name: AppRoutes.userLocationScreen,
-        page: () => UserLocationScreen(),
+        page: () => const UserLocationScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
@@ -134,12 +134,12 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.userChatListProposalScreen,
-        page: () => UserChatListProposalScreen(),
+        page: () => const UserChatListProposalScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
         name: AppRoutes.userChatScreen,
-        page: () => UserChatScreen(),
+        page: () => const UserChatScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
@@ -149,7 +149,7 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.userBookingSuccessfullScreen,
-        page: () => UserBookingSuccessfullScreen(),
+        page: () => const UserBookingSuccessfullScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
@@ -164,12 +164,12 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.userProfileScreen,
-        page: () => UserProfileScreen(),
+        page: () => const UserProfileScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
         name: AppRoutes.userEditProfileScreen,
-        page: () => UserEditProfileScreen(),
+        page: () => const UserEditProfileScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
@@ -216,12 +216,12 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.businessProfileScreen,
-        page: () => BusinessProfileScreen(),
+        page: () => const BusinessProfileScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
         name: AppRoutes.businessEditProfileScreen,
-        page: () => BusinessEditProfileScreen(),
+        page: () => const BusinessEditProfileScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
@@ -236,22 +236,22 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.businessPresetScreen,
-        page: () => BusinessPresetScreen(),
+        page: () => const BusinessPresetScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
         name: AppRoutes.businessHomeScreen,
-        page: () => BusinessHomeScreen(),
+        page: () => const BusinessHomeScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
         name: AppRoutes.businessChatScreen,
-        page: () => BusinessChatScreen(),
+        page: () => const BusinessChatScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
         name: AppRoutes.businessMyReportScreen,
-        page: () => BusinessMyReportScreen(),
+        page: () => const BusinessMyReportScreen(),
         // binding: GeneralBindings(),
       ),
     ];
