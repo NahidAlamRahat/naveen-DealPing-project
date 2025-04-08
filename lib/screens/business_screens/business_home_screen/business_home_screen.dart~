@@ -20,6 +20,7 @@ class BusinessHomeScreen extends StatefulWidget {
 }
 
 class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
+
   List<Map<String, dynamic>> messages = List.generate(
       5,
       (index) => {
@@ -63,6 +64,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
               ),
             ),
             const SpaceWidget(spaceHeight: 10),
+
             const SpaceWidget(spaceHeight: 16),
             Container(
               height: 50,
