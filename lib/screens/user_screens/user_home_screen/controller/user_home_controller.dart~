@@ -9,8 +9,7 @@ class UserHomeController extends GetxController {
 
   // Selected Values
   var selectedCategory = "Bar".obs; // Default to a valid category
-  var selectedSubCategory =
-      "".obs; // Default to empty string instead of "Sub-Category"
+  var selectedSubCategory = "".obs; // Default to empty string instead of "Sub-Category"
 
   // Sub-Categories Map
   final Map<String, List<String>> subCategories = {
@@ -42,8 +41,7 @@ class UserHomeController extends GetxController {
   void onInit() {
     super.onInit();
     selectedCategory.value = subCategories.keys.first; // Set default category
-    selectedSubCategory.value =
-        subCategories[selectedCategory.value]!.first; // Set default subcategory
+    selectedSubCategory.value = subCategories[selectedCategory.value]!.first; // Set default subcategory
   }
 
   // Select Category
