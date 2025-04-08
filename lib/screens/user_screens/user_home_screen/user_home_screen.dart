@@ -1,5 +1,6 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/home_screen_input_widget.dart';
+import 'package:deal_ping/widgets/image_widget/image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,7 +11,7 @@ import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller/user_home_controller.dart';
 
 class UserHomeScreen extends StatefulWidget {
-  UserHomeScreen({super.key});
+  const UserHomeScreen({super.key});
 
   @override
   State<UserHomeScreen> createState() => _UserHomeScreenState();
@@ -55,24 +56,34 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             // **Category Section**
             const TextWidget(
               text: "Category",
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              fontColor: AppColors.grey700,
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              fontColor: AppColors.grey200,
             ),
             const SpaceWidget(spaceHeight: 8),
-            _buildCategoryView(), // Directly show categories
+            _buildCategoryView(),
             const SpaceWidget(spaceHeight: 12),
 
-            // **Sub-Category Section**
-            const TextWidget(
-              text: "Sub-Category",
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              fontColor: AppColors.grey700,
-            ),
-            const SpaceWidget(spaceHeight: 8),
-            _buildSubCategoryView(), // Directly show subcategories
-            const SpaceWidget(spaceHeight: 12),
+            // **Sub-Category Section (Conditional)**
+            Obx(() {
+              if (_controller.selectedCategory.value.isNotEmpty) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const TextWidget(
+                      text: "Sub-Category",
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontColor: AppColors.grey200,
+                    ),
+                    const SpaceWidget(spaceHeight: 8),
+                    _buildSubCategoryView(),
+                    const SpaceWidget(spaceHeight: 12),
+                  ],
+                );
+              }
+              return const SizedBox.shrink(); // Hide if no category selected
+            }),
 
             // **Location and Distance Input**
             HomeScreenInputWidget(
@@ -155,7 +166,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   // **Category View**
   Widget _buildCategoryView() {
     return SizedBox(
-      height: 80, // Increased height to accommodate icons and text
+      height: 80,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -176,16 +187,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             shape: BoxShape.circle,
                             color:
                                 _controller.selectedCategory.value == category
-                                    ? Colors.green.withOpacity(0.2)
-                                    : Colors.grey.withOpacity(0.2),
+                                    ? AppColors.white
+                                    : Colors.transparent,
                           ),
-                          child: Icon(
-                            _controller.categoryIcons[category],
-                            color:
-                                _controller.selectedCategory.value == category
-                                    ? Colors.green
-                                    : Colors.grey,
-                            size: 24,
+                          child: ImageWidget(
+                            imagePath: _controller.categoryIcons[category]!,
+                            height: 28,
+                            width: 28,
                           ),
                         ),
                         const SizedBox(height: 5),
@@ -195,12 +203,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             fontSize: 12,
                             fontWeight:
                                 _controller.selectedCategory.value == category
-                                    ? FontWeight.w500
-                                    : FontWeight.normal,
-                            color:
-                                _controller.selectedCategory.value == category
-                                    ? Colors.green
-                                    : Colors.grey,
+                                    ? FontWeight.w600
+                                    : FontWeight.w400,
+                            color: AppColors.contentColorBlack,
                           ),
                         ),
                       ],
@@ -214,61 +219,51 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   // **Sub-Category View**
-  // **Sub-Category View**
   Widget _buildSubCategoryView() {
     return SizedBox(
       height: 40,
-      child: Obx(() {
-        // Wrap with Obx to make it reactive
-        final subCategoryList =
-            _controller.subCategories[_controller.selectedCategory.value] ?? [];
-        if (subCategoryList.isEmpty) {
-          return const Text(
-            "No subcategories available",
-            style: TextStyle(color: AppColors.grey700, fontSize: 14),
-          );
-        }
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: subCategoryList.map((subCategory) {
-              return GestureDetector(
-                onTap: () => _controller.selectSubCategory(subCategory),
-                child: Obx(() => Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        color:
-                            _controller.selectedSubCategory.value == subCategory
-                                ? Colors.black
-                                : Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey.shade300),
-                      ),
-                      child: Center(
-                        child: Text(
-                          subCategory,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: _controller.selectedSubCategory.value ==
-                                    subCategory
-                                ? FontWeight.w500
-                                : FontWeight.normal,
-                            color: _controller.selectedSubCategory.value ==
-                                    subCategory
-                                ? Colors.white
-                                : Colors.grey,
-                          ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: _controller
+              .subCategories[_controller.selectedCategory.value]!
+              .map((subCategory) {
+            return GestureDetector(
+              onTap: () => _controller.selectSubCategory(subCategory),
+              child: Obx(() => Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    margin: const EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                      color:
+                          _controller.selectedSubCategory.value == subCategory
+                              ? Colors.black
+                              : Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: AppColors.green200, width: 0.5),
+                    ),
+                    child: Center(
+                      child: Text(
+                        subCategory,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: _controller.selectedSubCategory.value ==
+                                  subCategory
+                              ? FontWeight.w500
+                              : FontWeight.normal,
+                          color: _controller.selectedSubCategory.value ==
+                                  subCategory
+                              ? Colors.white
+                              : Colors.grey,
                         ),
                       ),
-                    )),
-              );
-            }).toList(),
-          ),
-        );
-      }),
+                    ),
+                  )),
+            );
+          }).toList(),
+        ),
+      ),
     );
   }
 }

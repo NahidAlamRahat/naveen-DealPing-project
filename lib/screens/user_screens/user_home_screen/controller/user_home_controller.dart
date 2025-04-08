@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../constants/app_image_path.dart';
+
 class UserHomeController extends GetxController {
   // Text Controllers
   final locationController = TextEditingController();
@@ -8,56 +10,45 @@ class UserHomeController extends GetxController {
   final messageController = TextEditingController();
 
   // Selected Values
-  var selectedCategory = "Bar".obs; // Default to a valid category
-  var selectedSubCategory =
-      "".obs; // Default to empty string instead of "Sub-Category"
+  var selectedCategory = "".obs; // Initially empty (no selection)
+  var selectedSubCategory = "".obs; // Initially empty (no selection)
 
   // Sub-Categories Map
   final Map<String, List<String>> subCategories = {
     "Bar": ["Cocktail Bar", "Sports Bar", "Nightclub"],
     "Restaurant": ["Italian", "Chinese", "Mexican", "Indian"],
     "Salon": ["Hair Salon", "Nail Salon", "Spa"],
-    "Cafe": ["Coffee Shop", "Bakery", "Tea House"],
-    "Gym": ["Yoga", "CrossFit", "Cardio"],
-    "Hotel": ["Luxury", "Budget", "Resort"],
-    "Club": ["Dance Club", "Jazz Club", "Comedy Club"],
-    "Library": ["Public Library", "University Library", "Digital Library"],
-    "Mall": ["Shopping Mall", "Outlet Mall", "Plaza"],
+    "Paint": ["Building", "Mall", "Stadium"],
+    "Spa": ["Massage", "Facial", "Therapy"],
   };
 
   // Category Icons Map
-  final Map<String, IconData> categoryIcons = {
-    "Bar": Icons.local_bar,
-    "Restaurant": Icons.restaurant,
-    "Salon": Icons.spa,
-    "Cafe": Icons.local_cafe,
-    "Gym": Icons.fitness_center,
-    "Hotel": Icons.hotel,
-    "Club": Icons.nightlife,
-    "Library": Icons.local_library,
-    "Mall": Icons.store,
+  final Map<String, String> categoryIcons = {
+    "Bar": AppImagePath.barIcon,
+    "Restaurant": AppImagePath.restaurantIcon,
+    "Salon": AppImagePath.salonIcon,
+    "Paint": AppImagePath.paintIcon,
+    "Spa": AppImagePath.spaIcon,
   };
 
   @override
   void onInit() {
     super.onInit();
-    selectedCategory.value = subCategories.keys.first; // Set default category
-    selectedSubCategory.value =
-        subCategories[selectedCategory.value]!.first; // Set default subcategory
+    // No default selection
   }
 
   // Select Category
   void selectCategory(String category) {
     selectedCategory.value = category;
-    // Reset subcategory to the first item in the new category's list
-    selectedSubCategory.value = subCategories[category]!.isNotEmpty
-        ? subCategories[category]!.first
-        : "";
+    selectedSubCategory.value = ""; // Reset subcategory when category changes
   }
 
   // Select Sub-Category
   void selectSubCategory(String subCategory) {
-    selectedSubCategory.value = subCategory;
+    if (selectedCategory.value.isNotEmpty) {
+      // Only allow if a category is selected
+      selectedSubCategory.value = subCategory;
+    }
   }
 
   // Navigate to Location Screen

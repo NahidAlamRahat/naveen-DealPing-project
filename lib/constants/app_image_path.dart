@@ -15,6 +15,12 @@ class AppImagePath {
   static const String bookingSuccessfulImage =
       "assets/images/booking_successfull_image.png";
 
+  static const String restaurantIcon = "assets/images/restaurant_icon.png";
+  static const String paintIcon = "assets/images/paint_icon.png";
+  static const String barIcon = "assets/images/bar_icon.png";
+  static const String spaIcon = "assets/images/spa_icon.png";
+  static const String salonIcon = "assets/images/salon_icon.png";
+
   // Dev Images
   static const String mapImage = "assets/dev_images/map_image.png";
   static const String bookingsImage = "assets/dev_images/bookings_image.png";
