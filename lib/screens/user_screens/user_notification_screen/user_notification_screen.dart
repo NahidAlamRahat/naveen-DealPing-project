@@ -1,12 +1,12 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/widgets/appbar_widget/appbar_widget.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
+import 'package:deal_ping/widgets/space_widget/space_widget.dart';
+import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../widgets/appbar_widget/appbar_widget.dart';
-import '../../../widgets/space_widget/space_widget.dart';
-import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller/user_notification_controller.dart';
 
 class UserNotificationScreen extends StatelessWidget {
@@ -25,9 +25,7 @@ class UserNotificationScreen extends StatelessWidget {
         centerTitle: true,
         action: PopupMenuButton<int>(
           constraints: const BoxConstraints.expand(width: 150, height: 60),
-          onSelected: (value) {
-            if (value == 1) {}
-          },
+          onSelected: controller.onMarkAllRead,
           itemBuilder: (context) => [
             const PopupMenuItem(
               value: 1,
@@ -37,7 +35,6 @@ class UserNotificationScreen extends StatelessWidget {
               ),
             ),
           ],
-          // offset: Offset(0, 100),
           color: AppColors.white,
           elevation: 2,
         ),
@@ -63,7 +60,6 @@ class UserNotificationScreen extends StatelessWidget {
                 ),
               ),
             ),
-
             // Dropdown Filter
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -76,7 +72,7 @@ class UserNotificationScreen extends StatelessWidget {
                       underline: const SizedBox(),
                       icon: const Icon(Icons.keyboard_arrow_down_rounded,
                           color: AppColors.green500),
-                      items: ["Weekly", "Monthly"]
+                      items: controller.filterOptions
                           .map((e) => DropdownMenuItem(
                                 value: e,
                                 child: Text(
@@ -96,26 +92,27 @@ class UserNotificationScreen extends StatelessWidget {
               ),
             ),
             // Notification List
-            Obx(() => Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  child: Column(
-                    children: [
-                      ...List.generate(controller.filteredNotifications.length,
-                          (index) {
-                        final notification =
-                            controller.filteredNotifications[index];
-                        return NotificationItem(
-                            notification: notification, isNew: index == 0);
-                      }),
-                    ],
-                  ),
-                )),
+            Obx(
+              () => Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                child: Column(
+                  children: controller.filteredNotifications
+                      .asMap()
+                      .entries
+                      .map((entry) => NotificationItem(
+                            notification: entry.value,
+                            isNew: entry.key == 0,
+                          ))
+                      .toList(),
+                ),
+              ),
+            ),
             // View More Button
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: ButtonWidget(
-                onPressed: () {},
+                onPressed: controller.onViewMore,
                 label: AppStrings.viewMore,
                 buttonHeight: 36,
                 buttonWidth: 100,
@@ -131,7 +128,7 @@ class UserNotificationScreen extends StatelessWidget {
 
 // Notification Item Widget
 class NotificationItem extends StatelessWidget {
-  final NotificationModel notification;
+  final Map<String, String> notification;
   final bool isNew;
 
   const NotificationItem({
@@ -165,21 +162,21 @@ class NotificationItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextWidget(
-                  text: notification.title,
+                  text: notification['title'] ?? '',
                   fontWeight: FontWeight.w500,
                   fontColor: AppColors.green500,
                   fontSize: 14,
                 ),
                 const SpaceWidget(spaceHeight: 4),
                 TextWidget(
-                  text: notification.subtitle,
+                  text: notification['subtitle'] ?? '',
                   fontColor: AppColors.grey300,
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
                 ),
                 const SpaceWidget(spaceHeight: 4),
                 TextWidget(
-                  text: notification.date,
+                  text: notification['date'] ?? '',
                   fontColor: AppColors.grey200,
                   fontSize: 12,
                   fontWeight: FontWeight.w400,

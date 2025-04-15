@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
 
 class UserNotificationController extends GetxController {
-  var notifications = <NotificationModel>[].obs;
-  var filteredNotifications = <NotificationModel>[].obs;
+  var notifications = <Map<String, String>>[].obs;
+  var filteredNotifications = <Map<String, String>>[].obs;
   var searchQuery = ''.obs;
   var filterType = 'Weekly'.obs;
+  final filterOptions = ['Weekly', 'Monthly'];
 
   @override
   void onInit() {
@@ -15,11 +16,11 @@ class UserNotificationController extends GetxController {
   void fetchNotifications() {
     notifications.value = List.generate(
       5,
-      (index) => NotificationModel(
-        title: "Your Booking has been confirmed!",
-        subtitle: "In Mirchi Bar - 04 People - 04:00 PM",
-        date: "20-Jan-2025, 3:00 PM",
-      ),
+      (index) => {
+        'title': 'Your Booking has been confirmed!',
+        'subtitle': 'In Mirchi Bar - 04 People - 04:00 PM',
+        'date': '20-Jan-2025, 3:00 PM',
+      },
     );
     filteredNotifications.assignAll(notifications);
   }
@@ -30,26 +31,36 @@ class UserNotificationController extends GetxController {
       filteredNotifications.assignAll(notifications);
     } else {
       filteredNotifications.assignAll(
-        notifications.where((item) =>
-            item.title.toLowerCase().contains(query.toLowerCase()) ||
-            item.subtitle.toLowerCase().contains(query.toLowerCase())),
+        notifications.where(
+          (item) =>
+              (item['title']?.toLowerCase().contains(query.toLowerCase()) ??
+                  false) ||
+              (item['subtitle']?.toLowerCase().contains(query.toLowerCase()) ??
+                  false),
+        ),
       );
     }
   }
 
-  // Update this method to accept String?
   void changeFilterType(String? type) {
     if (type != null) {
       filterType.value = type;
+      // Add logic to filter notifications based on type, e.g., weekly or monthly
+      // For now, we'll just update the filter type
+      filteredNotifications.assignAll(notifications);
     }
   }
-}
 
-class NotificationModel {
-  final String title;
-  final String subtitle;
-  final String date;
+  void onMarkAllRead(int value) {
+    if (value == 1) {
+      // Logic for marking all notifications as read
+      // For demo, we can clear the "new" status or update UI state
+      Get.snackbar('Notifications', 'All marked as read');
+    }
+  }
 
-  NotificationModel(
-      {required this.title, required this.subtitle, required this.date});
+  void onViewMore() {
+    // Logic for loading more notifications
+    Get.snackbar('View More', 'Loading more notifications...');
+  }
 }
