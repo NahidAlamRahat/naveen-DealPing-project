@@ -6,16 +6,16 @@ import 'package:image_picker/image_picker.dart';
 
 class UserEditProfileController extends GetxController {
   final RxString name = ''.obs;
-  final RxString email = ''.obs;
-  final RxString address = ''.obs;
+  final RxString zipCode = ''.obs;
+  final RxString city = ''.obs;
 
   // Reactive variable for profile image
   final Rx<File?> profileImage = Rx<File?>(null);
 
   // TextEditingControllers for the text fields
   late TextEditingController nameController;
-  late TextEditingController emailController;
-  late TextEditingController addressController;
+  late TextEditingController zipCodeController;
+  late TextEditingController cityController;
 
   // Image Picker
   final ImagePicker _picker = ImagePicker();
@@ -26,18 +26,18 @@ class UserEditProfileController extends GetxController {
 
     // Initialize the controllers with empty strings
     nameController = TextEditingController(text: name.value);
-    emailController = TextEditingController(text: email.value);
-    addressController = TextEditingController(text: address.value);
+    zipCodeController = TextEditingController(text: zipCode.value);
+    cityController = TextEditingController(text: city.value);
 
     // Sync the TextEditingControllers with the reactive variables
     nameController.addListener(() {
       name.value = nameController.text;
     });
-    emailController.addListener(() {
-      email.value = emailController.text;
+    zipCodeController.addListener(() {
+      zipCode.value = zipCodeController.text;
     });
-    addressController.addListener(() {
-      address.value = addressController.text;
+    cityController.addListener(() {
+      city.value = cityController.text;
     });
   }
 
@@ -45,8 +45,8 @@ class UserEditProfileController extends GetxController {
   void onClose() {
     // Dispose of the controllers to free up resources
     nameController.dispose();
-    emailController.dispose();
-    addressController.dispose();
+    zipCodeController.dispose();
+    cityController.dispose();
     super.onClose();
   }
 
@@ -95,20 +95,6 @@ class UserEditProfileController extends GetxController {
   }
 
   void saveChanges() {
-    // Validate the inputs
-    if (name.value.isEmpty) {
-      Get.snackbar('Error', 'Name cannot be empty');
-      return;
-    }
-    if (email.value.isEmpty || !email.value.contains('@')) {
-      Get.snackbar('Error', 'Please enter a valid email');
-      return;
-    }
-    if (address.value.isEmpty) {
-      Get.snackbar('Error', 'Address cannot be empty');
-      return;
-    }
-
     // Save the changes (e.g., update user profile in backend or local storage)
     // For now, we'll just show a success message and navigate back
     Get.snackbar('Success', 'Profile updated successfully');
@@ -116,8 +102,8 @@ class UserEditProfileController extends GetxController {
     // Navigate back with updated values
     Get.back(result: {
       'name': name.value,
-      'email': email.value,
-      'address': address.value,
+      'email': zipCode.value,
+      'address': city.value,
       'profileImage': profileImage.value,
     });
   }

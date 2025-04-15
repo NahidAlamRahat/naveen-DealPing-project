@@ -19,10 +19,28 @@ class UserNotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: const AppbarWidget(
+      appBar: AppbarWidget(
         text: AppStrings.notification,
         backgroundColor: Colors.white,
         centerTitle: true,
+        action: PopupMenuButton<int>(
+          constraints: const BoxConstraints.expand(width: 150, height: 60),
+          onSelected: (value) {
+            if (value == 1) {}
+          },
+          itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 1,
+              child: Text(
+                "Mark All As Read",
+                style: TextStyle(fontSize: 14, color: AppColors.grey300),
+              ),
+            ),
+          ],
+          // offset: Offset(0, 100),
+          color: AppColors.white,
+          elevation: 2,
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -160,7 +160,7 @@ class UserEditProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               TextField(
-                controller: controller.zipCodeController,
+                controller: controller.emailController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -192,7 +192,7 @@ class UserEditProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               TextField(
-                controller: controller.cityController,
+                controller: controller.addressController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
