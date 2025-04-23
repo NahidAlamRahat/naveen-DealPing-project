@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import '../../../constants/app_strings.dart';
 import '../../../widgets/button_widget/button_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
-import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller/user_home_controller.dart';
 
 class UserHomeScreen extends StatefulWidget {
@@ -23,142 +22,120 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      alignment: Alignment.topCenter,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      margin: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.green50,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SpaceWidget(spaceHeight: 54),
-            const TextWidget(
-              text: AppStrings.welcome,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              fontColor: AppColors.grey700,
-            ),
-            const SpaceWidget(spaceHeight: 4),
-            const TextWidget(
-              text: AppStrings.findDeals,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              fontColor: AppColors.grey300,
-              textAlignment: TextAlign.start,
-            ),
-            const SpaceWidget(spaceHeight: 12),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              width: double.infinity,
+              alignment: Alignment.topCenter,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              margin: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: AppColors.green50,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SpaceWidget(spaceHeight: 24),
 
-            // **Category Section**
-            const TextWidget(
-              text: "Category",
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              fontColor: AppColors.grey200,
-            ),
-            const SpaceWidget(spaceHeight: 8),
-            _buildCategoryView(),
-            const SpaceWidget(spaceHeight: 12),
+                  _buildCategoryView(),
+                  const SpaceWidget(spaceHeight: 12),
 
-            // **Sub-Category Section (Conditional)**
-            Obx(() {
-              if (_controller.selectedCategory.value.isNotEmpty) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const TextWidget(
-                      text: "Sub-Category",
+                  // **Sub-Category Section (Conditional)**
+                  Obx(() {
+                    if (_controller.selectedCategory.value.isNotEmpty) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildSubCategoryView(),
+                          const SpaceWidget(spaceHeight: 12),
+                        ],
+                      );
+                    }
+                    return const SizedBox
+                        .shrink(); // Hide if no category selected
+                  }),
+
+                  // **Location and Distance Input**
+                  HomeScreenInputWidget(
+                    controller: _controller.locationController,
+                    hintText: "Location",
+                    onLocationTap: _controller.navigateToLocationScreen,
+                  ),
+                  const SpaceWidget(spaceHeight: 12),
+                  const Text(
+                    "Distance",
+                    style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
-                      fontColor: AppColors.grey200,
-                    ),
-                    const SpaceWidget(spaceHeight: 8),
-                    _buildSubCategoryView(),
-                    const SpaceWidget(spaceHeight: 12),
-                  ],
-                );
-              }
-              return const SizedBox.shrink(); // Hide if no category selected
-            }),
-
-            // **Location and Distance Input**
-            HomeScreenInputWidget(
-              controller: _controller.locationController,
-              hintText: "Location",
-              onLocationTap: _controller.navigateToLocationScreen,
-            ),
-            const SpaceWidget(spaceHeight: 12),
-            const Text(
-              "Distance",
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: AppColors.grey200,
-              ),
-            ),
-            const SpaceWidget(spaceHeight: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: SliderTheme(
-                    data: SliderTheme.of(context).copyWith(
-                        overlayShape: SliderComponentShape.noOverlay,
-                        trackHeight: 5),
-                    child: Slider(
-                      value: _currentValue,
-                      min: 0,
-                      max: 50,
-                      divisions: 50,
-                      inactiveColor: AppColors.white,
-                      activeColor: AppColors.green500,
-                      onChanged: (value) {
-                        setState(() {
-                          _currentValue = value;
-                        });
-                      },
+                      color: AppColors.grey200,
                     ),
                   ),
-                ),
-                const SpaceWidget(spaceWidth: 24),
-                Text(
-                  '${_currentValue.round()} ${"mile".tr}',
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12),
-                ),
-              ],
-            ),
-            const SpaceWidget(spaceHeight: 16),
-            // **Message Input**
-            HomeScreenInputWidget(
-              controller: _controller.messageController,
-              hintText: "Write down your message",
-              maxLines: 8,
-              showCharacterCounter: true,
-            ),
+                  const SpaceWidget(spaceHeight: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                              overlayShape: SliderComponentShape.noOverlay,
+                              trackHeight: 5),
+                          child: Slider(
+                            value: _currentValue,
+                            min: 0,
+                            max: 50,
+                            divisions: 50,
+                            inactiveColor: AppColors.white,
+                            activeColor: AppColors.green500,
+                            onChanged: (value) {
+                              setState(() {
+                                _currentValue = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      const SpaceWidget(spaceWidth: 24),
+                      Text(
+                        '${_currentValue.round()} ${"mile".tr}',
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12),
+                      ),
+                    ],
+                  ),
+                  const SpaceWidget(spaceHeight: 16),
+                  // **Message Input**
+                  HomeScreenInputWidget(
+                    controller: _controller.messageController,
+                    hintText: "Write down your message",
+                    maxLines: 8,
+                    showCharacterCounter: true,
+                  ),
 
-            // **Send Button**
-            Align(
-              alignment: Alignment.centerRight,
-              child: ButtonWidget(
-                onPressed: () {},
-                buttonWidth: 80,
-                buttonHeight: 36,
-                label: AppStrings.send,
-                fontSize: 14,
-                buttonRadius: BorderRadius.circular(8),
+                  // **Send Button**
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ButtonWidget(
+                      onPressed: () {},
+                      buttonWidth: 80,
+                      buttonHeight: 36,
+                      label: AppStrings.send,
+                      fontSize: 14,
+                      buttonRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  const SpaceWidget(spaceHeight: 24),
+                ],
               ),
             ),
-            const SpaceWidget(spaceHeight: 54),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -88,7 +88,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                   Tab(
                     // text: "New\nmessage",
                     child: Text(
-                      "New\nmessage",
+                      "New",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 14),
                     ),
@@ -96,7 +96,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                   Tab(
                     // text: "New\nmessage",
                     child: Text(
-                      "Ongoing\nmessage",
+                      "Ongoing",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 14),
                     ),
@@ -104,7 +104,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                   Tab(
                     // text: "New\nmessage",
                     child: Text(
-                      "Confirmed\nmessage",
+                      "Confirmed",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 14),
                     ),

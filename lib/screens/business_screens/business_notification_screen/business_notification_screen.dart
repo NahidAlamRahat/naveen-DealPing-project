@@ -47,25 +47,6 @@ class BusinessNotificationScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Search Bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: TextFormField(
-                onChanged: controller.filterNotifications,
-                style: const TextStyle(color: AppColors.grey700, fontSize: 14),
-                decoration: InputDecoration(
-                  hintText: "Search Your Message",
-                  hintStyle: const TextStyle(color: AppColors.grey200),
-                  suffixIcon:
-                      const Icon(Icons.search, color: AppColors.grey300),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: AppColors.grey300),
-                  ),
-                ),
-              ),
-            ),
-
             // Dropdown Filter
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),

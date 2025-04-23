@@ -17,6 +17,7 @@ class UserChatListScreen extends StatelessWidget {
     "Sanitary-related problems in Rajsthan",
     "Sanitary-related problems in Rajsthan",
   ];
+  final searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,23 @@ class UserChatListScreen extends StatelessWidget {
         child: Column(
           children: [
             const SpaceWidget(spaceHeight: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              child: TextFormField(
+                controller: searchController,
+                style: const TextStyle(color: AppColors.grey700, fontSize: 14),
+                decoration: InputDecoration(
+                  hintText: "Search Your Message",
+                  hintStyle: const TextStyle(color: AppColors.grey200),
+                  suffixIcon:
+                      const Icon(Icons.search, color: AppColors.grey300),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: AppColors.grey300),
+                  ),
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Row(

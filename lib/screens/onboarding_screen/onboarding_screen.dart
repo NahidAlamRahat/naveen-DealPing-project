@@ -26,9 +26,10 @@ class OnboardingScreen extends StatelessWidget {
           children: [
             const Center(
               child: ImageWidget(
-                imagePath: AppImagePath.onboardingImage,
+                imagePath: AppImagePath.appLogoGreen,
                 height: 226,
                 width: 226,
+                fit: BoxFit.contain,
               ),
             ),
             const SpaceWidget(spaceHeight: 20),
