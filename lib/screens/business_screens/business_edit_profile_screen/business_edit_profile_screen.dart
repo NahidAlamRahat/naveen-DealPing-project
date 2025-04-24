@@ -147,69 +147,6 @@ class BusinessEditProfileScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Email Field
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: TextWidget(
-                  text: 'Zip Code',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  fontColor: AppColors.green500,
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: controller.zipcodeController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.grey300),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.grey300),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.green500),
-                  ),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Address Field
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: TextWidget(
-                  text: 'City',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  fontColor: AppColors.green500,
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: controller.cityController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.grey300),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.grey300),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.green500),
-                  ),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                ),
-              ),
             ],
           ),
         ),
