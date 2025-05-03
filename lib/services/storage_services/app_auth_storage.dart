@@ -49,4 +49,21 @@ class AppAuthStorage {
       errorLog("logout", e);
     }
   }
+
+  Future<void> setRole(String value) async {
+    try {
+      await box.write(StorageKey.role, value);
+    } catch (e) {
+      errorLog("set role", e);
+    }
+  }
+
+  String? getRole() {
+    try {
+      return box.read(StorageKey.role);
+    } catch (e) {
+      errorLog("get role", e);
+      return null;
+    }
+  }
 }

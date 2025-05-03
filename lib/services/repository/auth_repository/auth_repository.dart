@@ -6,36 +6,34 @@ import '../../api/api_post_services.dart';
 import '../../storage_services/app_auth_storage.dart';
 
 class AuthRepository {
-  ////////////  object
   ApiPostServices apiPostServices = ApiPostServices();
   AppAuthStorage appAuthStorage = AppAuthStorage();
 
-  // Future<bool> signIn({
-  //   required String email,
-  //   required String password,
-  //   required bool remember,
-  // }) async {
-  //   try {
-  //     var response = await apiPostServices.apiPostServices(
-  //         url: ApiUrls.signIn, body: {"email": email, "password": password});
-  //     if (response != null) {
-  //       if (response["data"]["accessToken"].runtimeType != Null &&
-  //           response["data"]["refreshToken"].runtimeType != Null) {
-  //         await appAuthStorage
-  //             .setToken(response["data"]["accessToken"].toString());
-  //         if (remember) {
-  //           await appAuthStorage
-  //               .setRefreshToken(response["data"]["refreshToken"].toString());
-  //         }
-  //         return true;
-  //       }
-  //     }
-  //     return false;
-  //   } catch (e) {
-  //     errorLog("sign in repo  function ", e);
-  //     return false;
-  //   }
-  // }
+  Future<bool> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      var response = await apiPostServices.apiPostServices(
+        url: ApiUrls.login,
+        body: {"email": email, "password": password},
+      );
+      if (response != null) {
+        if (response["data"]["accessToken"].runtimeType != Null &&
+            response["data"]["refreshToken"].runtimeType != Null) {
+          await appAuthStorage
+              .setToken(response["data"]["accessToken"].toString());
+          await appAuthStorage
+              .setRefreshToken(response["data"]["refreshToken"].toString());
+          return true;
+        }
+      }
+      return false;
+    } catch (e) {
+      errorLog("login repo function", e);
+      return false;
+    }
+  }
 
   // Future<bool> googleAndAppleLogin({
   //   required String userId,
