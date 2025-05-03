@@ -97,20 +97,6 @@ class AuthRepository {
     }
   }
 
-  // Future<bool> resentOtp({required String email}) async {
-  //   try {
-  //     var response = await apiPostServices
-  //         .apiPostServices(url: ApiUrls.resentOtp, body: {"email": email});
-  //     if (response != null) {
-  //       return true;
-  //     }
-  //     return false;
-  //   } catch (e) {
-  //     errorLog("resent otp repo", e);
-  //     return false;
-  //   }
-  // }
-
   Future<bool> verifySignup({
     required String email,
     required String otp,
@@ -129,6 +115,25 @@ class AuthRepository {
       return false;
     } catch (e) {
       errorLog("verify signup repo function", e);
+      return false;
+    }
+  }
+
+  Future<bool> resendOtp({required String email}) async {
+    try {
+      var response = await apiPostServices.apiPostServices(
+        url: ApiUrls.resendOtp,
+        body: {"email": email},
+      );
+      if (response != null) {
+        if (response["message"].runtimeType != Null) {
+          AppSnackBar.message(response["message"].toString());
+        }
+        return true;
+      }
+      return false;
+    } catch (e) {
+      errorLog("resend otp repo function", e);
       return false;
     }
   }

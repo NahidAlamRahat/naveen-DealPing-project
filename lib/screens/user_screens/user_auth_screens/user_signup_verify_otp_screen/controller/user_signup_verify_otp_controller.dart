@@ -61,16 +61,20 @@ class UserSignupVerifyAccountController extends GetxController {
     });
   }
 
-  void resendCode() {
-    remainingSeconds.value = 180;
-    canResend.value = false;
-    startTimer();
-    // Simulate sending the code
-    Get.snackbar(
-      "Code Sent",
-      "A new verification code has been sent to your email.",
-      snackPosition: SnackPosition.BOTTOM,
-    );
+  void resendCode() async {
+    try {
+      bool isSuccess = await AuthRepository().resendOtp(email: email);
+      if (isSuccess) {
+        AppSnackBar.success("A new OTP has been sent to your email.");
+        remainingSeconds.value = 180; // Reset the timer
+        canResend.value = false;
+        startTimer(); // Restart the timer
+      } else {
+        AppSnackBar.error("Failed to resend OTP. Please try again.");
+      }
+    } catch (e) {
+      AppSnackBar.error("An error occurred. Please try again.");
+    }
   }
 
   String formatTime() {
