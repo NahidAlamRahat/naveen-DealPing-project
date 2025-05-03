@@ -100,7 +100,6 @@ class AuthRepository {
     required String password,
     required String confirmPassword,
     required String firstName,
-    required String lastName,
     required String role,
   }) async {
     try {
