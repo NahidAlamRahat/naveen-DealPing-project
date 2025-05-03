@@ -31,7 +31,7 @@ class ApiUrls {
   static const String resendOtp = "/auth/resend-otp";
   static const String login = "/auth/login";
   static const String refreshToken = "/auth/refresh-token";
-  static const String forgotPassword = "/auth/forgot-password";
+  static const String forgotPassword = "/auth/forget-password";
   static const String resetPassword = "/auth/reset-password";
   static const String profile = "/user/influencer-profile";
   static const String profileUpdate = "/user";

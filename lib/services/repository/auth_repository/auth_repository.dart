@@ -95,6 +95,39 @@ class AuthRepository {
     }
   }
 
+  Future<bool> createBusiness({
+    required String email,
+    required String password,
+    required String confirmPassword,
+    required String firstName,
+    required String lastName,
+    required String role,
+  }) async {
+    try {
+      var response = await apiPostServices.apiPostServices(
+        url: ApiUrls.createUserAccount,
+        body: {
+          "name": firstName,
+          //"lastName": lastName,
+          "email": email,
+          "password": password,
+          "confirmPassword": confirmPassword,
+          "role": "business",
+        },
+      );
+      if (response != null) {
+        if (response["message"].runtimeType != Null) {
+          AppSnackBar.message(response["message"].toString());
+        }
+        return true;
+      }
+      return false;
+    } catch (e) {
+      errorLog("sign up repo provider  function ", e);
+      return false;
+    }
+  }
+
   Future<bool> verifySignup({
     required String email,
     required String otp,
@@ -136,6 +169,20 @@ class AuthRepository {
     }
   }
 
+  Future<bool> forgotPassword({required String email}) async {
+    try {
+      var response = await apiPostServices
+          .apiPostServices(url: ApiUrls.forgotPassword, body: {"email": email});
+      if (response != null) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      errorLog("forgot password repo", e);
+      return false;
+    }
+  }
+
   Future<String?> forgotVerifyEmail({
     required String email,
     required String otp,
@@ -153,20 +200,6 @@ class AuthRepository {
     } catch (e) {
       errorLog("forgot verify email repo", e);
       return null;
-    }
-  }
-
-  Future<bool> forgotPassword({required String email}) async {
-    try {
-      var response = await apiPostServices
-          .apiPostServices(url: ApiUrls.forgotPassword, body: {"email": email});
-      if (response != null) {
-        return true;
-      }
-      return false;
-    } catch (e) {
-      errorLog("forgot password repo", e);
-      return false;
     }
   }
 
