@@ -67,19 +67,21 @@ class AuthRepository {
   Future<bool> createUser({
     required String email,
     required String password,
+    required String confirmPassword,
     required String firstName,
     required String lastName,
-    required String contactNumber,
+    required String role,
   }) async {
     try {
       var response = await apiPostServices.apiPostServices(
         url: ApiUrls.createUserAccount,
         body: {
-          "firstName": firstName,
-          "lastName": lastName,
+          "name": firstName,
+          //"lastName": lastName,
           "email": email,
           "password": password,
-          "contact": contactNumber
+          "confirmPassword": confirmPassword,
+          "role": "user",
         },
       );
       if (response != null) {
@@ -109,20 +111,24 @@ class AuthRepository {
   //   }
   // }
 
-  Future<bool> verifyEmail({
+  Future<bool> verifySignup({
     required String email,
     required String otp,
   }) async {
     try {
       var response = await apiPostServices.apiPostServices(
-          url: ApiUrls.verifyEmail,
-          body: {"email": email, "oneTimeCode": int.parse(otp)});
+        url: ApiUrls.verifyEmail,
+        body: {"email": email, "oneTimeCode": otp}, // Send OTP as a string
+      );
       if (response != null) {
+        if (response["message"].runtimeType != Null) {
+          AppSnackBar.message(response["message"].toString());
+        }
         return true;
       }
       return false;
     } catch (e) {
-      errorLog("verify email repo", e);
+      errorLog("verify signup repo function", e);
       return false;
     }
   }

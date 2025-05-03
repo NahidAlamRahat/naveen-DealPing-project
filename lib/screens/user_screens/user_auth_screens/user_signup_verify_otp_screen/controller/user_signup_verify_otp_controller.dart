@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../routes/app_routes.dart';
+import '../../../../../services/repository/auth_repository/auth_repository.dart';
+import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserSignupVerifyAccountController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -15,7 +17,7 @@ class UserSignupVerifyAccountController extends GetxController {
   var otpTextEditingController5 = TextEditingController();
   var otpTextEditingController6 = TextEditingController();
 
-  var remainingSeconds = 10.obs; // 2.5 minutes
+  var remainingSeconds = 180.obs; // 2.5 minutes
   var canResend = false.obs;
   late String email;
   late Timer _timer;
@@ -60,7 +62,7 @@ class UserSignupVerifyAccountController extends GetxController {
   }
 
   void resendCode() {
-    remainingSeconds.value = 10;
+    remainingSeconds.value = 180;
     canResend.value = false;
     startTimer();
     // Simulate sending the code
@@ -77,8 +79,30 @@ class UserSignupVerifyAccountController extends GetxController {
     return '${minutes.toString().padLeft(2, '0')}:${remainingSec.toString().padLeft(2, '0')}';
   }
 
-  void verifyOTP() {
-    // Assuming OTP verification is successful
-    Get.offAllNamed(AppRoutes.userSigninScreen);
+  void verifyOTP() async {
+    if (formKey.currentState!.validate()) {
+      try {
+        bool isSuccess = await AuthRepository().verifySignup(
+          email: email,
+          otp: otpTextEditingController1.text +
+              otpTextEditingController2.text +
+              otpTextEditingController3.text +
+              otpTextEditingController4.text +
+              otpTextEditingController5.text +
+              otpTextEditingController6.text,
+        );
+
+        if (isSuccess) {
+          AppSnackBar.success("Verification Successful");
+          Get.offAllNamed(AppRoutes.userSigninScreen);
+        } else {
+          AppSnackBar.error("Verification Failed. Please try again.");
+        }
+      } catch (e) {
+        AppSnackBar.error("An error occurred. Please try again.");
+      }
+    } else {
+      AppSnackBar.error("Please fill in all required fields.");
+    }
   }
 }

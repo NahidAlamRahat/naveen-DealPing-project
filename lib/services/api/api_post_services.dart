@@ -28,7 +28,7 @@ class ApiPostServices {
         response = await AppApi().sendRequest.post(url, data: body);
       }
 
-      if (response.statusCode == statusCode) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         return response.data;
       } else {
         return null;
@@ -38,7 +38,6 @@ class ApiPostServices {
       AppSnackBar.error("Check Your Internet Connection");
       return null;
     } on TimeoutException catch (e) {
-      // AppSnackBar.error("Something Went Wrong");
       errorLog('api time out exception', e);
       return null;
     } on DioException catch (e) {
@@ -49,18 +48,13 @@ class ApiPostServices {
           }
           return null;
         } else if (e.response?.statusCode == 401) {
-          // AppSnackBar.error("Your login section has time out ");
           await AppAuthStorage().storageClear();
           Get.offAllNamed(AppRoutes.onboardingScreen);
-          // AppSnackBar.message("Sign-in again with your credential");
         }
-      } else {
-        // AppSnackBar.error("Something Went Wrong");
       }
       errorLog('api dio exception', e);
       return null;
     } catch (e) {
-      // AppSnackBar.error("Something Went Wrong");
       errorLog('api exception', e);
       return null;
     }

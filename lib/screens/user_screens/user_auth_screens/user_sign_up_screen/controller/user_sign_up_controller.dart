@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../routes/app_routes.dart';
+import '../../../../../services/repository/auth_repository/auth_repository.dart';
+import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserSignUpController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -10,8 +12,10 @@ class UserSignUpController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController rePasswordController = TextEditingController();
-  final RxBool isChecked = false.obs;
-  final RxBool isChecked2 = false.obs;
+
+  final RxBool isLoading = false.obs;
+
+  final AuthRepository authRepository = AuthRepository();
 
   // Validate Name
   String? validateFirstName(String? value) {
@@ -69,18 +73,36 @@ class UserSignUpController extends GetxController {
   }
 
   // Sign Up Action
-  void signUp() {
+
+  Future<void> signUp() async {
     if (formKey.currentState!.validate()) {
-      // Perform login logic (e.g., API call)
-      Get.snackbar("Success", "Signup Successful",
-          snackPosition: SnackPosition.BOTTOM);
-      Get.toNamed(
-        AppRoutes.userSignupVerifyOtpScreen,
-        arguments: {'email': emailController.text},
-      );
+      isLoading.value = true;
+      try {
+        bool isSuccess = await authRepository.createUser(
+          email: emailController.text,
+          password: passwordController.text,
+          confirmPassword: rePasswordController.text,
+          firstName: firstNameController.text,
+          lastName: lastNameController.text,
+          role: "user",
+        );
+
+        if (isSuccess) {
+          AppSnackBar.success("Signup Successful");
+          Get.toNamed(
+            AppRoutes.userSignupVerifyOtpScreen,
+            arguments: {'email': emailController.text},
+          );
+        } else {
+          AppSnackBar.error("Signup Failed. Please try again.");
+        }
+      } catch (e) {
+        AppSnackBar.error("An error occurred. Please try again.");
+      } finally {
+        isLoading.value = false;
+      }
     } else {
-      Get.snackbar("Error", "Please fill in all required fields.",
-          snackPosition: SnackPosition.BOTTOM);
+      AppSnackBar.error("Please fill in all required fields.");
     }
   }
 

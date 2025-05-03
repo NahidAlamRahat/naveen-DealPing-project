@@ -27,7 +27,7 @@ class ApiUrls {
 
   // auth urls
   static const String createUserAccount = "/user/create-user";
-  static const String verifyEmail = "/auth/verify-email";
+  static const String verifyEmail = "/auth/verify-account/";
   static const String resendOtp = "/auth/resend-otp";
   static const String login = "/auth/login";
   static const String refreshToken = "/auth/refresh-token";
