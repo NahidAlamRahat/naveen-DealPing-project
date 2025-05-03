@@ -26,7 +26,7 @@ class ApiUrls {
   static final String baseUrl = "$domain/api/v1";
 
   // auth urls
-  static const String createUserAccount = "/user/create-user";
+  static const String register = "/user/create-user";
   static const String verifyEmail = "/auth/verify-email";
   static const String resendOtp = "/auth/resend-otp";
   static const String login = "/auth/login";

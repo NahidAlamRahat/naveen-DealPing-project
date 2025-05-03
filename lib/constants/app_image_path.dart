@@ -20,6 +20,7 @@ class AppImagePath {
   static const String barIcon = "assets/images/bar_icon.png";
   static const String spaIcon = "assets/images/spa_icon.png";
   static const String salonIcon = "assets/images/salon_icon.png";
+  static const String placeholderImage = "assets/images/placeholder_image.jpg";
 
   // Dev Images
   static const String mapImage = "assets/dev_images/map_image.png";
