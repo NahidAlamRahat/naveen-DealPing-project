@@ -182,47 +182,51 @@ class AuthRepository {
     }
   }
 
-  Future<bool> forgotVerifyEmail({
+  Future<Map<String, dynamic>?> forgotVerifyEmail({
     required String email,
     required String otp,
   }) async {
     try {
       var response = await apiPostServices.apiPostServices(
         url: ApiUrls.verifyEmail,
-
         body: {"email": email, "oneTimeCode": otp}, // Send OTP as a string
       );
       if (response != null) {
-        if (response["message"].runtimeType != Null) {
+        if (response["message"] != null) {
+          AppSnackBar.message(response["message"].toString());
+        }
+        return response; // Return the full response
+      }
+      return null; // Return null if the response is null
+    } catch (e) {
+      errorLog("forgotVerifyEmail repo function", e);
+      return null; // Return null in case of an exception
+    }
+  }
+
+  Future<bool> resetPassword({
+    required String newPassword,
+    required String confirmPassword,
+    required String token,
+  }) async {
+    try {
+      var response = await apiPostServices.apiPostServices(
+        url: ApiUrls.resetPassword,
+        token: token,
+        body: {
+          "newPassword": newPassword,
+          "confirmPassword": confirmPassword,
+        },
+      );
+      if (response != null) {
+        if (response["message"] != null) {
           AppSnackBar.message(response["message"].toString());
         }
         return true;
       }
       return false;
     } catch (e) {
-      errorLog("verify signup repo function", e);
-      return false;
-    }
-  }
-
-  Future<bool> resetPassword(
-      {required String newPassword,
-      required String confirmPassword,
-      required String token}) async {
-    try {
-      var response = await apiPostServices.apiPostServices(
-          url: ApiUrls.resetPassword,
-          token: token,
-          body: {
-            "newPassword": newPassword,
-            "confirmPassword": confirmPassword
-          });
-      if (response != null) {
-        return true;
-      }
-      return false;
-    } catch (e) {
-      errorLog("reset password repo", e);
+      errorLog("resetPassword repo function", e);
       return false;
     }
   }

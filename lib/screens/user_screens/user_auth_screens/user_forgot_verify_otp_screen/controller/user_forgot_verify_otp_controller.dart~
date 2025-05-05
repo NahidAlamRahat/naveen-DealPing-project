@@ -86,19 +86,30 @@ class UserForgotVerifyAccountController extends GetxController {
   void verifyOTP() async {
     if (formKey.currentState!.validate()) {
       try {
-        bool isSuccess = await AuthRepository().verifySignup(
+        // Combine the OTP from the text controllers
+        String otp = otpTextEditingController1.text +
+            otpTextEditingController2.text +
+            otpTextEditingController3.text +
+            otpTextEditingController4.text +
+            otpTextEditingController5.text +
+            otpTextEditingController6.text;
+
+        // Create an instance of AuthRepository
+        final authRepository = AuthRepository();
+
+        // Call the forgotVerifyEmail method
+        bool isSuccess = await authRepository.forgotVerifyEmail(
           email: email,
-          otp: otpTextEditingController1.text +
-              otpTextEditingController2.text +
-              otpTextEditingController3.text +
-              otpTextEditingController4.text +
-              otpTextEditingController5.text +
-              otpTextEditingController6.text,
+          otp: otp,
         );
+
+        print('Email: $email');
+        print('OTP: $otp');
+        print('OTP Length: ${otp.length}');
 
         if (isSuccess) {
           AppSnackBar.success("Verification Successful");
-          Get.offAllNamed(AppRoutes.userSigninScreen);
+          Get.offAllNamed(AppRoutes.userResetPasswordScreen);
         } else {
           AppSnackBar.error("Verification Failed. Please try again.");
         }
