@@ -83,30 +83,8 @@ class BusinessSignupVerifyAccountController extends GetxController {
     return '${minutes.toString().padLeft(2, '0')}:${remainingSec.toString().padLeft(2, '0')}';
   }
 
-  void verifyOTP() async {
-    if (formKey.currentState!.validate()) {
-      try {
-        bool isSuccess = await AuthRepository().verifySignup(
-          email: email,
-          otp: otpTextEditingController1.text +
-              otpTextEditingController2.text +
-              otpTextEditingController3.text +
-              otpTextEditingController4.text +
-              otpTextEditingController5.text +
-              otpTextEditingController6.text,
-        );
-
-        if (isSuccess) {
-          AppSnackBar.success("Verification Successful");
-          Get.offAllNamed(AppRoutes.businessSignInScreen);
-        } else {
-          AppSnackBar.error("Verification Failed. Please try again.");
-        }
-      } catch (e) {
-        AppSnackBar.error("An error occurred. Please try again.");
-      }
-    } else {
-      AppSnackBar.error("Please fill in all required fields.");
-    }
+  void verifyOTP() {
+    // Assuming OTP verification is successful
+    Get.offAllNamed(AppRoutes.businessSignInScreen);
   }
 }

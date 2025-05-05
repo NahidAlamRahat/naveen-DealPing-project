@@ -96,19 +96,22 @@ class AuthRepository {
   }
 
   Future<bool> createBusiness({
+    required String businessName,
     required String email,
+    required String eiinNumber,
+    required String licenseNumber,
     required String password,
     required String confirmPassword,
-    required String firstName,
     required String role,
   }) async {
     try {
       var response = await apiPostServices.apiPostServices(
         url: ApiUrls.createUserAccount,
         body: {
-          "name": firstName,
-          //"lastName": lastName,
+          "businessName": businessName,
           "email": email,
+          "eiin": eiinNumber,
+          "license": licenseNumber,
           "password": password,
           "confirmPassword": confirmPassword,
           "role": "business",

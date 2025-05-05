@@ -66,7 +66,7 @@ class BusinessSignUpScreen extends StatelessWidget {
                 const SpaceWidget(spaceHeight: 4),
                 TextFieldWidget(
                   controller: controller.businessNameController,
-                  hintText: 'Enter Your Full Name',
+                  hintText: 'Enter Business Name',
                   maxLines: 1,
                   validator: controller.validateBusinessName,
                 ),
