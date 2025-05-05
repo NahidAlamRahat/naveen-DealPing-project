@@ -9,7 +9,6 @@ class UserSignInController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final RxBool isChecked = false.obs;
 
   // Validate Email
   String? validateEmail(String? value) {

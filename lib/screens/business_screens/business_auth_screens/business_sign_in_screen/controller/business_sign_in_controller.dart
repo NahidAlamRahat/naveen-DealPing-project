@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../routes/app_routes.dart';
+import '../../../../../services/repository/auth_repository/auth_repository.dart';
+import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class BusinessSignInController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final RxBool isChecked = false.obs;
 
   // Validate Email
   String? validateEmail(String? value) {
@@ -33,15 +34,25 @@ class BusinessSignInController extends GetxController {
   }
 
   // Sign In Action
-  void signIn() {
+  void signIn() async {
     if (formKey.currentState!.validate()) {
-      // Perform login logic (e.g., API call)
-      Get.snackbar("Success", "Login Successful",
-          snackPosition: SnackPosition.BOTTOM);
-      Get.offAllNamed(AppRoutes.businessBottomNav);
+      try {
+        bool isSuccess = await AuthRepository().login(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+
+        if (isSuccess) {
+          AppSnackBar.success("Login Successful");
+          Get.offAllNamed(AppRoutes.businessBottomNav);
+        } else {
+          AppSnackBar.error("Login Failed. Please check your credentials.");
+        }
+      } catch (e) {
+        AppSnackBar.error("An error occurred. Please try again.");
+      }
     } else {
-      Get.snackbar("Error", "Please fill in all required fields.",
-          snackPosition: SnackPosition.BOTTOM);
+      AppSnackBar.error("Please fill in all required fields.");
     }
   }
 

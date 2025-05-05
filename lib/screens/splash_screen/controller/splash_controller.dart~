@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-
 import '../../../routes/app_routes.dart';
 import '../../../services/storage_services/app_auth_storage.dart';
 
@@ -14,10 +13,8 @@ class SplashController extends GetxController {
       String? accessToken = _authStorage.getToken();
       String? role = _authStorage.getRole();
 
-      if (accessToken != null &&
-          accessToken.isNotEmpty &&
-          role != null &&
-          role.isNotEmpty) {
+      if (accessToken != null && accessToken.isNotEmpty &&
+          role != null && role.isNotEmpty) {
         if (role == "user") {
           Get.offAllNamed(AppRoutes.userBottomNav);
         } else if (role == "business") {

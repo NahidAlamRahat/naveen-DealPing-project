@@ -19,12 +19,13 @@ class AuthRepository {
         body: {"email": email, "password": password},
       );
       if (response != null) {
-        if (response["data"]["accessToken"].runtimeType != Null &&
-            response["data"]["refreshToken"].runtimeType != Null) {
+        if (response["data"]["accessToken"] != null &&
+            response["data"]["refreshToken"] != null) {
+          await appAuthStorage.setToken(response["data"]["accessToken"]);
           await appAuthStorage
-              .setToken(response["data"]["accessToken"].toString());
-          await appAuthStorage
-              .setRefreshToken(response["data"]["refreshToken"].toString());
+              .setRefreshToken(response["data"]["refreshToken"]);
+          // Use the AppAuthStorage to save role instead of direct GetStorage
+          await appAuthStorage.setRole(response["data"]["role"]);
           return true;
         }
       }
