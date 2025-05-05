@@ -61,6 +61,7 @@ class BusinessSignUpController extends GetxController {
     } else if (!emailValid) {
       return "Enter a valid Email";
     }
+
     return null;
   }
 

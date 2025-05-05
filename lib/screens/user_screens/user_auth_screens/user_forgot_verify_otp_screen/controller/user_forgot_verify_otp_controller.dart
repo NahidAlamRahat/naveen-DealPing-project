@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../routes/app_routes.dart';
+import '../../../../../services/repository/auth_repository/auth_repository.dart';
+import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserForgotVerifyAccountController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -15,7 +17,7 @@ class UserForgotVerifyAccountController extends GetxController {
   var otpTextEditingController5 = TextEditingController();
   var otpTextEditingController6 = TextEditingController();
 
-  var remainingSeconds = 10.obs; // 2.5 minutes
+  var remainingSeconds = 180.obs; // 2.5 minutes
   var canResend = false.obs;
   late String email;
   late Timer _timer;
@@ -59,16 +61,20 @@ class UserForgotVerifyAccountController extends GetxController {
     });
   }
 
-  void resendCode() {
-    remainingSeconds.value = 10;
-    canResend.value = false;
-    startTimer();
-    // Simulate sending the code
-    Get.snackbar(
-      "Code Sent",
-      "A new verification code has been sent to your email.",
-      snackPosition: SnackPosition.BOTTOM,
-    );
+  void resendCode() async {
+    try {
+      bool isSuccess = await AuthRepository().resendOtp(email: email);
+      if (isSuccess) {
+        AppSnackBar.success("A new OTP has been sent to your email.");
+        remainingSeconds.value = 180; // Reset the timer
+        canResend.value = false;
+        startTimer(); // Restart the timer
+      } else {
+        AppSnackBar.error("Failed to resend OTP. Please try again.");
+      }
+    } catch (e) {
+      AppSnackBar.error("An error occurred. Please try again.");
+    }
   }
 
   String formatTime() {

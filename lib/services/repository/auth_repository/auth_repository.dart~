@@ -188,9 +188,9 @@ class AuthRepository {
   }) async {
     try {
       var response = await apiPostServices.apiPostServices(
-        url: ApiUrls.verifyEmail,
+          url: ApiUrls.verifyEmail,
 
-        body: {"email": email, "oneTimeCode": otp}, // Send OTP as a string
+          body: {"email": email, "oneTimeCode": otp}, // Send OTP as a string
       );
       if (response != null) {
         if (response["message"].runtimeType != Null) {
