@@ -35,4 +35,7 @@ class ApiUrls {
   static const String resetPassword = "/auth/reset-password";
   static const String profile = "/user/profile";
   static const String updateProfile = "/user/profile";
+
+  // category urls
+  static const String categories = "/category/";
 }
