@@ -235,24 +235,24 @@ class AuthRepository {
     }
   }
 
-// Future<bool> changePassword(
-//     {required String newPassword,
-//     required String confirmPassword,
-//     required String currentPassword}) async {
-//   try {
-//     var response = await apiPostServices
-//         .apiPostServices(url: ApiUrls.changePassword, body: {
-//       "currentPassword": currentPassword,
-//       "newPassword": newPassword,
-//       "confirmPassword": confirmPassword
-//     });
-//     if (response != null) {
-//       return true;
-//     }
-//     return false;
-//   } catch (e) {
-//     errorLog("change password password repo", e);
-//     return false;
-//   }
-// }
+  Future<bool> changePassword(
+      {required String newPassword,
+      required String confirmPassword,
+      required String currentPassword}) async {
+    try {
+      var response = await apiPostServices
+          .apiPostServices(url: ApiUrls.changePassword, body: {
+        "currentPassword": currentPassword,
+        "newPassword": newPassword,
+        "confirmPassword": confirmPassword
+      });
+      if (response != null) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      errorLog("change password password repo", e);
+      return false;
+    }
+  }
 }

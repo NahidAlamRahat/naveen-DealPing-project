@@ -33,6 +33,7 @@ class ApiUrls {
   static const String refreshToken = "/auth/refresh-token";
   static const String forgotPassword = "/auth/forget-password";
   static const String resetPassword = "/auth/reset-password";
+  static const String changePassword = "/auth/change-password";
   static const String profile = "/user/profile";
   static const String updateProfile = "/user/profile";
 
