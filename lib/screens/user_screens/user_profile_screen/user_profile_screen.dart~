@@ -68,7 +68,7 @@ class UserProfileScreen extends StatelessWidget {
                   fontColor: AppColors.green500,
                 ),
               ),
-               Center(
+              Center(
                 child: TextWidget(
                   text: profileData?.email ?? "",
                   fontSize: 14,
@@ -80,7 +80,13 @@ class UserProfileScreen extends StatelessWidget {
               Center(
                 child: ButtonWidget(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.userEditProfileScreen);
+                    Get.toNamed(
+                      AppRoutes.userEditProfileScreen,
+                      arguments: {
+                        'name': profileData?.name ?? "",
+                        'profileImage': profileData?.profile ?? "",
+                      },
+                    );
                   },
                   backgroundColor: AppColors.green500,
                   label: AppStrings.editProfile,
@@ -166,7 +172,7 @@ class UserProfileScreen extends StatelessWidget {
                           ButtonWidget(
                             label: AppStrings.yes,
                             onPressed: () =>
-                                Get.offAllNamed(AppRoutes.userSigninScreen),
+                                controller.logout(),
                             buttonHeight: 36,
                             buttonWidth: 71,
                             backgroundColor: AppColors.green500,

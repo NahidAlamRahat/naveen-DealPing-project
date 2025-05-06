@@ -4,107 +4,138 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../services/repository/profile_repository/profile_repository.dart';
+import '../../../../utils/app_all_log/error_log.dart';
+import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
+
 class UserEditProfileController extends GetxController {
+  final ProfileRepository _profileRepository = ProfileRepository();
+
+  // Reactive variables
   final RxString name = ''.obs;
-  final RxString zipCode = ''.obs;
-  final RxString city = ''.obs;
-
-  // Reactive variable for profile image
   final Rx<File?> profileImage = Rx<File?>(null);
+  final RxString profileImageUrl = ''.obs; // For network image URL
+  final RxBool isLocalImage = false.obs; // Flag to track image type
+  final RxBool isLoading = false.obs;
+  final RxList<double> userLocation = <double>[].obs;
 
-  // TextEditingControllers for the text fields
+  // TextEditingController for the name field
   late TextEditingController nameController;
-  late TextEditingController zipCodeController;
-  late TextEditingController cityController;
-
-  // Image Picker
-  final ImagePicker _picker = ImagePicker();
 
   @override
   void onInit() {
     super.onInit();
 
-    // Initialize the controllers with empty strings
-    nameController = TextEditingController(text: name.value);
-    zipCodeController = TextEditingController(text: zipCode.value);
-    cityController = TextEditingController(text: city.value);
+    // Initialize with arguments from the previous screen
+    final arguments = Get.arguments ?? {};
 
-    // Sync the TextEditingControllers with the reactive variables
+    // Handle name
+    name.value = arguments['name'] ?? '';
+    nameController = TextEditingController(text: name.value);
+
+    // Sync the TextEditingController with the reactive variable
     nameController.addListener(() {
       name.value = nameController.text;
     });
-    zipCodeController.addListener(() {
-      zipCode.value = zipCodeController.text;
-    });
-    cityController.addListener(() {
-      city.value = cityController.text;
-    });
+
+    // Handle location data if available
+    if (arguments['location'] != null) {
+      if (arguments['location'] is List) {
+        userLocation.value = List<double>.from(arguments['location']);
+      }
+    }
+
+    // Handle profile image if passed
+    if (arguments['profileImage'] != null) {
+      if (arguments['profileImage'] is File) {
+        // If it's already a File object
+        profileImage.value = arguments['profileImage'];
+        isLocalImage.value = true;
+      } else if (arguments['profileImage'] is String) {
+        // If it's a URL string
+        profileImageUrl.value = arguments['profileImage'];
+        isLocalImage.value = false;
+      }
+    }
   }
 
   @override
   void onClose() {
-    // Dispose of the controllers to free up resources
+    // Dispose of the controller to free up resources
     nameController.dispose();
-    zipCodeController.dispose();
-    cityController.dispose();
     super.onClose();
   }
 
-  // Method to pick image from gallery
+  // Method to pick an image from the gallery or camera
   Future<void> pickImage() async {
     try {
-      final XFile? pickedFile = await _picker.pickImage(
+      final pickedFile = await ImagePicker().pickImage(
         source: ImageSource.gallery,
         maxWidth: 1800,
         maxHeight: 1800,
         imageQuality: 80,
       );
-
       if (pickedFile != null) {
         profileImage.value = File(pickedFile.path);
+        isLocalImage.value = true;
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to pick image',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      errorLog("pickImage error", e);
+      AppSnackBar.error("Failed to pick image.");
     }
   }
 
-  // Method to take photo from camera
+  // Method to take a photo from the camera
   Future<void> takePhoto() async {
     try {
-      final XFile? pickedFile = await _picker.pickImage(
+      final pickedFile = await ImagePicker().pickImage(
         source: ImageSource.camera,
         maxWidth: 1800,
         maxHeight: 1800,
         imageQuality: 80,
       );
-
       if (pickedFile != null) {
         profileImage.value = File(pickedFile.path);
+        isLocalImage.value = true;
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to take photo',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      errorLog("takePhoto error", e);
+      AppSnackBar.error("Failed to take photo.");
     }
   }
 
-  void saveChanges() {
-    // Save the changes (e.g., update user profile in backend or local storage)
-    // For now, we'll just show a success message and navigate back
-    Get.snackbar('Success', 'Profile updated successfully');
+  // Method to update the profile
+  Future<void> updateProfile() async {
+    if (nameController.text.trim().isEmpty) {
+      AppSnackBar.error("Please enter your name.");
+      return;
+    }
 
-    // Navigate back with updated values
-    Get.back(result: {
-      'name': name.value,
-      'email': zipCode.value,
-      'address': city.value,
-      'profileImage': profileImage.value,
-    });
+    isLoading.value = true;
+    try {
+      // Debugging
+      errorLog("Starting profile update", {
+        "name": name.value,
+        "hasLocation": userLocation.isNotEmpty,
+        "locationValues": userLocation,
+        "hasLocalImage": isLocalImage.value,
+      });
+
+      // Send existing location data if available, otherwise omit it
+      bool success = await _profileRepository.updateProfile(
+        name: name.value,
+        location: userLocation.isNotEmpty ? userLocation : null,
+        imageFile: isLocalImage.value ? profileImage.value : null,
+      );
+
+      if (success) {
+        Get.back(result: {'updated': true}); // Navigate back with result
+      }
+    } catch (e) {
+      errorLog("updateProfile controller error", e);
+      AppSnackBar.error("An error occurred while updating the profile.");
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

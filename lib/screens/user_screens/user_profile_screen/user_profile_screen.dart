@@ -80,7 +80,13 @@ class UserProfileScreen extends StatelessWidget {
               Center(
                 child: ButtonWidget(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.userEditProfileScreen);
+                    Get.toNamed(
+                      AppRoutes.userEditProfileScreen,
+                      arguments: {
+                        'name': profileData?.name ?? "",
+                        'profileImage': profileData?.profile ?? "",
+                      },
+                    );
                   },
                   backgroundColor: AppColors.green500,
                   label: AppStrings.editProfile,
@@ -165,8 +171,7 @@ class UserProfileScreen extends StatelessWidget {
                           const SpaceWidget(spaceWidth: 24),
                           ButtonWidget(
                             label: AppStrings.yes,
-                            onPressed: () =>
-                                Get.offAllNamed(AppRoutes.userSigninScreen),
+                            onPressed: () => controller.logout(),
                             buttonHeight: 36,
                             buttonWidth: 71,
                             backgroundColor: AppColors.green500,

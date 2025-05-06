@@ -33,5 +33,5 @@ class ApiUrls {
   static const String refreshToken = "/auth/refresh-token";
   static const String forgotPassword = "/auth/forget-password";
   static const String resetPassword = "/auth/reset-password";
-  static const String profile = "/user/influencer-profile";
+  static const String profile = "/user/profile";
 }

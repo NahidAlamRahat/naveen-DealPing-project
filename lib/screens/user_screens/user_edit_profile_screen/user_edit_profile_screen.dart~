@@ -39,29 +39,28 @@ class UserEditProfileScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border:
-                              Border.all(color: AppColors.green500, width: 2),
+                          Border.all(color: AppColors.green500, width: 2),
                         ),
-                        child: controller.isLocalImage.value &&
-                                controller.profileImage.value != null
+                        child: controller.isLocalImage.value && controller.profileImage.value != null
                             ? CircleAvatar(
-                                radius: 60,
-                                backgroundImage:
-                                    FileImage(controller.profileImage.value!),
-                              )
+                          radius: 60,
+                          backgroundImage:
+                          FileImage(controller.profileImage.value!),
+                        )
                             : controller.profileImageUrl.value.isNotEmpty
-                                ? ClipOval(
-                                    child: AppImage(
-                                      height: 120,
-                                      width: 120,
-                                      url: controller.profileImageUrl.value,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : AppImage(
-                                    height: 120,
-                                    width: 120,
-                                    url: AppImagePath.profileImage,
-                                  ),
+                            ? ClipOval(
+                          child: AppImage(
+                            height: 120,
+                            width: 120,
+                            url: controller.profileImageUrl.value,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                            : AppImage(
+                          height: 120,
+                          width: 120,
+                          url: AppImagePath.profileImage,
+                        ),
                       ),
                       Positioned(
                         bottom: 0,
