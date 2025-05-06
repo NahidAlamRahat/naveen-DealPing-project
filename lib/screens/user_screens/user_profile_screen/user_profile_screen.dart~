@@ -68,7 +68,7 @@ class UserProfileScreen extends StatelessWidget {
                   fontColor: AppColors.green500,
                 ),
               ),
-              Center(
+               Center(
                 child: TextWidget(
                   text: profileData?.email ?? "",
                   fontSize: 14,
