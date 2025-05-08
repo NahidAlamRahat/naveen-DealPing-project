@@ -193,7 +193,8 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                                                   "Please select a discount percentage.");
                                               return;
                                             }
-                                            controller.postOffer();
+                                            controller
+                                                .postOffer(); 
                                             Get.back();
                                           },
                                           buttonHeight: 36,
