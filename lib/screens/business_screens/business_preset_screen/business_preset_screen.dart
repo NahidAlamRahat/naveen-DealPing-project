@@ -3,6 +3,7 @@ import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:deal_ping/widgets/icon_button_widget/icon_button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../constants/app_colors.dart';
@@ -24,239 +25,247 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
       Get.put(BusinessPresetScreenController());
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+
   bool _switchValue = false;
   int? _selectedPercentage;
 
-  // List to store the preset offers
-  List<Map<String, String>> offers = [
-    {
-      'title': 'You\'ll get 20% offer on your first...',
-      'description':
-          'This offer applies to your first booking with us. Enjoy a 20% discount on any service you choose, including spa, salon, or fitness classes. Terms and conditions apply.'
-    },
-    {
-      'title': 'You\'ll get 20% offer on your first...',
-      'description':
-          'This offer applies to your first booking with us. Enjoy a 20% discount on any service you choose, including spa, salon, or fitness classes. Terms and conditions apply.'
-    },
-    {
-      'title': 'You\'ll get 20% offer on your first...',
-      'description':
-          'This offer applies to your first booking with us. Enjoy a 20% discount on any service you choose, including spa, salon, or fitness classes. Terms and conditions apply.'
-    },
-    {
-      'title': 'You\'ll get 20% offer on your first...',
-      'description':
-          'This offer applies to your first booking with us. Enjoy a 20% discount on any service you choose, including spa, salon, or fitness classes. Terms and conditions apply.'
-    },
-  ];
-
-  // Function to add a new offer
-  void _addNewOffer() {
-    setState(() {
-      offers.add({
-        'title': 'You\'ll get 20% offer on your first...',
-        'description':
-            'This offer applies to your first booking with us. Enjoy a 20% discount on any service you choose, including spa, salon, or fitness classes. Terms and conditions apply.'
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Preset Offer',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.grey700,
-                    ),
-                  ),
-                  PopupMenuButton<int>(
-                    onSelected: (value) {
-                      if (value == 1) {
-                        showCustomPopup(
-                          context,
-                          [
-                            const Center(
-                              child: TextWidget(
-                                text: AppStrings.setDefault,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                fontColor: AppColors.grey700,
-                                textAlignment: TextAlign.center,
-                              ),
-                            ),
-                            const SpaceWidget(spaceHeight: 11),
-                            const Align(
-                              alignment: Alignment.centerLeft,
-                              child: TextWidget(
-                                text: 'Title',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                fontColor: AppColors.green500,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            TextField(
-                              controller: controller.titleController,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(
-                                      color: AppColors.grey300),
+    return AnnotatedRegion(
+      value:
+          const SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark),
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await controller.fetchAllOffers();
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Preset Offer',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.grey700,
+                        ),
+                      ),
+                      PopupMenuButton<int>(
+                        onSelected: (value) {
+                          if (value == 1) {
+                            showCustomPopup(
+                              context,
+                              [
+                                const Center(
+                                  child: TextWidget(
+                                    text: AppStrings.setDefault,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    fontColor: AppColors.grey700,
+                                    textAlignment: TextAlign.center,
+                                  ),
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(
-                                      color: AppColors.grey300),
+                                const SpaceWidget(spaceHeight: 11),
+                                const Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: TextWidget(
+                                    text: 'Title',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    fontColor: AppColors.green500,
+                                  ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(
-                                      color: AppColors.green500),
+                                const SizedBox(height: 8),
+                                TextField(
+                                  controller: controller.titleController,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.grey300),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.grey300),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.green500),
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 12),
+                                  ),
                                 ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 12),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            const Align(
-                              alignment: Alignment.centerLeft,
-                              child: TextWidget(
-                                text: 'Description',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                fontColor: AppColors.green500,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            TextField(
-                              controller: controller.descriptionController,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(
-                                      color: AppColors.grey300),
+                                const SizedBox(height: 8),
+                                const Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: TextWidget(
+                                    text: 'Description',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    fontColor: AppColors.green500,
+                                  ),
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(
-                                      color: AppColors.grey300),
+                                const SizedBox(height: 8),
+                                TextField(
+                                  controller: controller.descriptionController,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.grey300),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.grey300),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: const BorderSide(
+                                          color: AppColors.green500),
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 12),
+                                  ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(
-                                      color: AppColors.green500),
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 12),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            StatefulBuilder(
-                              builder:
-                                  (BuildContext context, StateSetter setState) {
-                                return Column(
-                                  children: [
-                                    _buildOfferButtonsRow((selectedPercentage) {
-                                      setState(() {
-                                        _selectedPercentage =
-                                            selectedPercentage;
-                                        controller.discount.value =
-                                            selectedPercentage; // Update the controller's discount
-                                      });
-                                    }),
-                                    const SizedBox(height: 18),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                const SizedBox(height: 16),
+                                StatefulBuilder(
+                                  builder: (BuildContext context,
+                                      StateSetter setState) {
+                                    return Column(
                                       children: [
-                                        const SizedBox(),
-                                        ButtonWidget(
-                                          label: AppStrings.add,
-                                          onPressed: () {
-                                            if (controller.discount.value ==
-                                                0) {
-                                              AppSnackBar.error(
-                                                  "Please select a discount percentage.");
-                                              return;
-                                            }
-                                            controller.postOffer();
-                                            Get.back();
-                                          },
-                                          buttonHeight: 36,
-                                          buttonWidth: 90,
-                                          backgroundColor: AppColors.green500,
-                                          textColor: AppColors.white,
-                                          fontSize: 12,
+                                        _buildOfferButtonsRow(
+                                            (selectedPercentage) {
+                                          setState(() {
+                                            _selectedPercentage =
+                                                selectedPercentage;
+                                            controller.discount.value =
+                                                selectedPercentage; // Update the controller's discount
+                                          });
+                                        }),
+                                        const SizedBox(height: 18),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const SizedBox(),
+                                            ButtonWidget(
+                                              label: AppStrings.add,
+                                              onPressed: () {
+                                                if (controller.discount.value ==
+                                                    0) {
+                                                  AppSnackBar.error(
+                                                      "Please select a discount percentage.");
+                                                  return;
+                                                }
+                                                controller.postOffer();
+                                                Get.back();
+                                              },
+                                              buttonHeight: 36,
+                                              buttonWidth: 90,
+                                              backgroundColor:
+                                                  AppColors.green500,
+                                              textColor: AppColors.white,
+                                              fontSize: 12,
+                                            ),
+                                          ],
                                         ),
                                       ],
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                          ],
-                        );
-                      } else if (value == 2) {}
-                    },
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          } else if (value == 2) {}
+                        },
 
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 1,
-                        child: Text(
-                          "Set New Offer",
-                          style:
-                              TextStyle(fontSize: 14, color: AppColors.grey300),
-                        ),
-                      ),
-                      const PopupMenuDivider(height: 0.5),
-                      const PopupMenuItem(
-                        value: 2,
-                        child: Text(
-                          "Delete all Messages",
-                          style:
-                              TextStyle(fontSize: 14, color: AppColors.grey300),
-                        ),
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            value: 1,
+                            child: Text(
+                              "Set New Offer",
+                              style: TextStyle(
+                                  fontSize: 14, color: AppColors.grey300),
+                            ),
+                          ),
+                          const PopupMenuDivider(height: 0.5),
+                          const PopupMenuItem(
+                            value: 2,
+                            child: Text(
+                              "Delete all Messages",
+                              style: TextStyle(
+                                  fontSize: 14, color: AppColors.grey300),
+                            ),
+                          ),
+                        ],
+                        // offset: Offset(0, 100),
+                        color: AppColors.white,
+                        elevation: 2,
                       ),
                     ],
-                    // offset: Offset(0, 100),
-                    color: AppColors.white,
-                    elevation: 2,
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 16),
+                Obx(() {
+                  if (controller.isLoadingOffers.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (controller.offers.isEmpty) {
+                    return const Center(
+                      child: TextWidget(
+                        text: "No offers available.",
+                        fontSize: 16,
+                        fontColor: AppColors.grey700,
+                      ),
+                    );
+                  }
+
+                  return Column(
+                    children: [
+                      ...List.generate(controller.offers.length, (index) {
+                        final offer = controller.offers[index];
+                        return OfferItem(
+                          title: offer.title ?? "No Title",
+                          description: offer.description ?? "No Description",
+                          isDefault: offer.datumDefault ?? false,
+                          // Pass the default status
+                          onToggleDefault: (value) {
+                            // Handle the toggle action here
+                            if (value) {
+                              AppSnackBar.success("Offer set as default.");
+                            } else {
+                              AppSnackBar.message("Offer unset as default.");
+                            }
+                          },
+                        );
+                      }),
+                    ],
+                  );
+                }),
+                const SizedBox(height: 16),
+                Center(
+                  child: ButtonWidget(
+                    onPressed: () {},
+                    label: AppStrings.viewMore,
+                    buttonHeight: 36,
+                    buttonWidth: 110,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            ...List.generate(offers.length, (index) {
-              return OfferItem(
-                title: offers[index]['title']!,
-                description: offers[index]['description']!,
-              );
-            }),
-            const SizedBox(height: 16),
-            Center(
-              child: ButtonWidget(
-                onPressed: () {},
-                label: AppStrings.viewMore,
-                buttonHeight: 36,
-                buttonWidth: 110,
-                fontSize: 12,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -319,10 +328,15 @@ class OfferItem extends StatefulWidget {
   final String title;
   final String description;
 
+  final bool isDefault;
+  final ValueChanged<bool> onToggleDefault;
+
   const OfferItem({
     super.key,
     required this.title,
     required this.description,
+    required this.isDefault,
+    required this.onToggleDefault,
   });
 
   @override
@@ -334,6 +348,14 @@ class _OfferItemState extends State<OfferItem> {
   final editTitleController = TextEditingController();
   final editDescriptionController = TextEditingController();
   bool _switchValue = false;
+
+  late bool _isDefault;
+
+  @override
+  void initState() {
+    super.initState();
+    _isDefault = widget.isDefault;
+  }
 
   Widget _buildOfferButtonsRow() {
     return SizedBox(
@@ -557,11 +579,12 @@ class _OfferItemState extends State<OfferItem> {
                   Transform.scale(
                     scale: 0.8,
                     child: Switch(
-                      value: _switchValue,
+                      value: _isDefault,
                       onChanged: (value) {
                         setState(() {
-                          _switchValue = value;
+                          _isDefault = value;
                         });
+                        widget.onToggleDefault(value);
                       },
                       activeColor: AppColors.green500,
                       activeTrackColor: AppColors.green100,

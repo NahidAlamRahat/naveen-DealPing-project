@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../models/all_offers_model.dart';
 import '../../../../services/repository/business_offer_repository/business_offer_repository.dart';
 import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
@@ -12,6 +13,9 @@ class BusinessPresetScreenController extends GetxController {
   final TextEditingController descriptionController = TextEditingController();
   final RxInt discount = 0.obs; // To track the selected discount percentage
   final RxBool isLoading = false.obs;
+
+  final RxList<AllOffers> offers = <AllOffers>[].obs;
+  final RxBool isLoadingOffers = false.obs;
 
   // Post Offer
   Future<void> postOffer() async {
@@ -41,5 +45,27 @@ class BusinessPresetScreenController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  // Fetch All Offers
+  Future<void> fetchAllOffers() async {
+    isLoadingOffers.value = true;
+    try {
+      List<AllOffers>? fetchedOffers =
+          await _businessOfferRepository.fetchAllOffers();
+      if (fetchedOffers != null) {
+        offers.assignAll(fetchedOffers);
+      }
+    } catch (e) {
+      AppSnackBar.error("An unexpected error occurred while fetching offers.");
+    } finally {
+      isLoadingOffers.value = false;
+    }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchAllOffers(); // Fetch offers when the controller is initialized
   }
 }
