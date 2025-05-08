@@ -13,6 +13,8 @@ import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller/business_present_screen_controller.dart';
 
+
+
 class BusinessPresetScreen extends StatefulWidget {
   const BusinessPresetScreen({super.key});
 
@@ -22,7 +24,7 @@ class BusinessPresetScreen extends StatefulWidget {
 
 class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
   final BusinessPresetScreenController controller =
-      Get.put(BusinessPresetScreenController());
+  Get.put(BusinessPresetScreenController());
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
@@ -30,10 +32,17 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
   int? _selectedPercentage;
 
   @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnnotatedRegion(
       value:
-          const SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark),
+      const SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark),
       child: Scaffold(
         backgroundColor: AppColors.white,
         body: RefreshIndicator(
@@ -46,7 +55,7 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 20, top: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -85,7 +94,7 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                                 ),
                                 const SizedBox(height: 8),
                                 TextField(
-                                  controller: controller.titleController,
+                                  controller: titleController,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
@@ -118,7 +127,7 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                                 ),
                                 const SizedBox(height: 8),
                                 TextField(
-                                  controller: controller.descriptionController,
+                                  controller: descriptionController,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
@@ -146,18 +155,18 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                                     return Column(
                                       children: [
                                         _buildOfferButtonsRow(
-                                            (selectedPercentage) {
-                                          setState(() {
-                                            _selectedPercentage =
-                                                selectedPercentage;
-                                            controller.discount.value =
-                                                selectedPercentage; // Update the controller's discount
-                                          });
-                                        }),
+                                                (selectedPercentage) {
+                                              setState(() {
+                                                _selectedPercentage =
+                                                    selectedPercentage;
+                                                controller.discount.value =
+                                                    selectedPercentage;
+                                              });
+                                            }),
                                         const SizedBox(height: 18),
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                           children: [
                                             const SizedBox(),
                                             ButtonWidget(
@@ -169,13 +178,21 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                                                       "Please select a discount percentage.");
                                                   return;
                                                 }
-                                                controller.postOffer();
+                                                controller.postOffer(
+                                                  title: titleController.text
+                                                      .trim(),
+                                                  description:
+                                                  descriptionController.text
+                                                      .trim(),
+                                                  discount:
+                                                  controller.discount.value,
+                                                );
                                                 Get.back();
                                               },
                                               buttonHeight: 36,
                                               buttonWidth: 90,
                                               backgroundColor:
-                                                  AppColors.green500,
+                                              AppColors.green500,
                                               textColor: AppColors.white,
                                               fontSize: 12,
                                             ),
@@ -187,29 +204,31 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                                 ),
                               ],
                             );
-                          } else if (value == 2) {}
+                          } else if (value == 2) {
+                            // Implement delete all offers
+                            //controller.deleteAllOffers();
+                          }
                         },
-
                         itemBuilder: (context) => [
                           const PopupMenuItem(
                             value: 1,
                             child: Text(
                               "Set New Offer",
                               style: TextStyle(
-                                  fontSize: 14, color: AppColors.grey300),
+                                  fontSize: 14, color: AppColors.grey700),
                             ),
                           ),
                           const PopupMenuDivider(height: 0.5),
                           const PopupMenuItem(
                             value: 2,
                             child: Text(
-                              "Delete all Messages",
+                              "Delete all Offers",
                               style: TextStyle(
-                                  fontSize: 14, color: AppColors.grey300),
+                                  fontSize: 14, color: AppColors.grey700),
                             ),
                           ),
                         ],
-                        // offset: Offset(0, 100),
+                        offset: const Offset(0, 40),
                         color: AppColors.white,
                         elevation: 2,
                       ),
@@ -235,17 +254,14 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                     children: [
                       ...List.generate(controller.offers.length, (index) {
                         final offer = controller.offers[index];
-                        return  OfferItem(
+                        return OfferItem(
+                          offerId: offer.id ?? '',
                           title: offer.title ?? "No Title",
                           description: offer.description ?? "No Description",
-                          isDefault: offer.datumDefault ?? false, // Pass the default status
+                          discount: offer.discount ?? 0,
+                          isDefault: offer.datumDefault ?? false,
                           onToggleDefault: (value) {
-                            // Handle the toggle action here
-                            if (value) {
-                              AppSnackBar.success("Offer set as default.");
-                            } else {
-                              AppSnackBar.message("Offer unset as default.");
-                            }
+                            controller.setDefaultOffer(offer.id ?? '', value);
                           },
                         );
                       }),
@@ -255,7 +271,9 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                 const SizedBox(height: 16),
                 Center(
                   child: ButtonWidget(
-                    onPressed: () {},
+                    onPressed: () {
+                      // Implement view more functionality
+                    },
                     label: AppStrings.viewMore,
                     buttonHeight: 36,
                     buttonWidth: 110,
@@ -274,7 +292,7 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
     bool isSelected = _selectedPercentage == percentage;
     return GestureDetector(
       onTap: () {
-        onSelected(percentage); // Call the callback to update the state
+        onSelected(percentage);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -312,9 +330,9 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: List.generate(
-          10, // Number of steps from 5% to 50% (5, 10, ..., 50)
-          (index) {
-            int percentage = 5 * (index + 1); // 5%, 10%, ..., 50%
+          10,
+              (index) {
+            int percentage = 5 * (index + 1);
             return _buildOfferButton(percentage, onSelected);
           },
         ),
@@ -324,16 +342,19 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
 }
 
 class OfferItem extends StatefulWidget {
+  final String offerId;
   final String title;
   final String description;
-
+  final int discount;
   final bool isDefault;
   final ValueChanged<bool> onToggleDefault;
 
   const OfferItem({
     super.key,
+    required this.offerId,
     required this.title,
     required this.description,
+    required this.discount,
     required this.isDefault,
     required this.onToggleDefault,
   });
@@ -343,57 +364,79 @@ class OfferItem extends StatefulWidget {
 }
 
 class _OfferItemState extends State<OfferItem> {
-  bool _isExpanded = false; // Track the expansion state
+  bool _isExpanded = false;
   final editTitleController = TextEditingController();
   final editDescriptionController = TextEditingController();
-  bool _switchValue = false;
-
   late bool _isDefault;
+  int? _selectedPercentage;
+
+  final BusinessPresetScreenController controller =
+      Get.find<BusinessPresetScreenController>();
 
   @override
   void initState() {
     super.initState();
     _isDefault = widget.isDefault;
+    editTitleController.text = widget.title;
+    editDescriptionController.text = widget.description;
+    _selectedPercentage = widget.discount;
   }
 
-  Widget _buildOfferButtonsRow() {
-    return SizedBox(
-      height: 30,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: List.generate(
-          10, // Number of steps from 5% to 50% (5, 10, ..., 50)
-          (index) {
-            int percentage = 5 * (index + 1); // 5%, 10%, ..., 50%
-            return _buildOfferButton(percentage);
-          },
+  @override
+  void dispose() {
+    editTitleController.dispose();
+    editDescriptionController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildOfferButton(int percentage, Function(int) onSelected) {
+    bool isSelected = _selectedPercentage == percentage;
+    return GestureDetector(
+      onTap: () {
+        onSelected(percentage);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        margin: const EdgeInsets.only(right: 8),
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(
+            color: isSelected ? AppColors.green500 : Colors.transparent,
+            width: 2,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '$percentage% offer',
+              style: const TextStyle(fontSize: 10, color: AppColors.grey700),
+            ),
+            const SizedBox(width: 5),
+            const Icon(
+              Icons.close,
+              size: 16,
+              color: Colors.black,
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildOfferButton(int percentage) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      margin: const EdgeInsets.only(right: 8),
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            '$percentage% offer',
-            style: const TextStyle(fontSize: 10, color: AppColors.grey300),
-          ),
-          const SizedBox(width: 5),
-          const Icon(
-            Icons.close,
-            size: 16,
-            color: Colors.black,
-          ),
-        ],
+  Widget _buildOfferButtonsRow(Function(int) onSelected) {
+    return SizedBox(
+      height: 30,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: List.generate(
+          10,
+          (index) {
+            int percentage = 5 * (index + 1);
+            return _buildOfferButton(percentage, onSelected);
+          },
+        ),
       ),
     );
   }
@@ -422,7 +465,7 @@ class _OfferItemState extends State<OfferItem> {
           ),
           trailing: _isExpanded
               ? SizedBox(
-                  width: 50, // Constrain the width of the trailing widget
+                  width: 80,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -508,21 +551,50 @@ class _OfferItemState extends State<OfferItem> {
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              _buildOfferButtonsRow(),
-                              const SizedBox(height: 18),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: ButtonWidget(
-                                  label: AppStrings.update,
-                                  onPressed: () {
-                                    Get.back();
-                                  },
-                                  buttonHeight: 36,
-                                  buttonWidth: 90,
-                                  backgroundColor: AppColors.green500,
-                                  textColor: AppColors.white,
-                                  fontSize: 12,
-                                ),
+                              StatefulBuilder(
+                                builder: (BuildContext context,
+                                    StateSetter setState) {
+                                  return Column(
+                                    children: [
+                                      _buildOfferButtonsRow(
+                                          (selectedPercentage) {
+                                        setState(() {
+                                          _selectedPercentage =
+                                              selectedPercentage;
+                                        });
+                                      }),
+                                      const SizedBox(height: 18),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: ButtonWidget(
+                                          label: AppStrings.update,
+                                          onPressed: () {
+                                            if (_selectedPercentage == null) {
+                                              AppSnackBar.error(
+                                                  "Please select a discount percentage.");
+                                              return;
+                                            }
+                                            controller.updateOffer(
+                                              offerId: widget.offerId,
+                                              title: editTitleController.text
+                                                  .trim(),
+                                              description:
+                                                  editDescriptionController.text
+                                                      .trim(),
+                                              discount: _selectedPercentage!,
+                                            );
+                                            Get.back();
+                                          },
+                                          buttonHeight: 36,
+                                          buttonWidth: 90,
+                                          backgroundColor: AppColors.green500,
+                                          textColor: AppColors.white,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
                               ),
                             ],
                           );
@@ -534,7 +606,7 @@ class _OfferItemState extends State<OfferItem> {
                       const SpaceWidget(spaceWidth: 4),
                       IconButtonWidget(
                         onTap: () {
-                          // Handle delete action
+                          controller.deleteOffer(widget.offerId);
                         },
                         icon: AppIconsPath.deleteIcon,
                         color: AppColors.grey300,
@@ -550,7 +622,7 @@ class _OfferItemState extends State<OfferItem> {
                 ),
           onExpansionChanged: (bool expanded) {
             setState(() {
-              _isExpanded = expanded; // Update the expansion state
+              _isExpanded = expanded;
             });
           },
           children: [

@@ -41,4 +41,6 @@ class ApiUrls {
   static const String categories = "/category/";
   static const String createOffer = "/offer/";
   static const String getAllOffer = "/offer/";
+  static const String updateOffer = "/offer/";
+  static const String deleteOffer = "/offer/";
 }
