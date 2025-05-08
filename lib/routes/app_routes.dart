@@ -46,4 +46,5 @@ class AppRoutes {
   static const businessHomeScreen = '/businessHomeScreen';
   static const businessChatScreen = '/businessChatScreen';
   static const businessMyReportScreen = '/businessMyReportScreen';
+  static const businessChangePasswordScreen = '/businessChangePasswordScreen';
 }

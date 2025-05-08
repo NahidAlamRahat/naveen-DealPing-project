@@ -1,3 +1,4 @@
+import 'package:deal_ping/screens/business_screens/business_change_password_screen/business_change_password_screen.dart';
 import 'package:deal_ping/screens/user_screens/user_auth_screens/user_signup_verify_otp_screen/user_signup_verify_otp_screen.dart';
 import 'package:get/get.dart';
 
@@ -252,6 +253,11 @@ class RouteManager {
       GetPage(
         name: AppRoutes.businessMyReportScreen,
         page: () => const BusinessMyReportScreen(),
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.businessChangePasswordScreen,
+        page: () => BusinessChangePasswordScreen(),
         // binding: GeneralBindings(),
       ),
     ];

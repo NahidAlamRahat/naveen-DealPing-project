@@ -129,7 +129,7 @@ class BusinessProfileScreen extends StatelessWidget {
                 icon: AppIconsPath.passwordIcon,
                 title: AppStrings.password,
                 onTap: () {
-                  Get.toNamed(AppRoutes.userChangePasswordScreen);
+                  Get.toNamed(AppRoutes.businessChangePasswordScreen);
                 },
               ),
               const SpaceWidget(spaceHeight: 16),
