@@ -30,6 +30,7 @@ class Data {
   int? reportCount;
   String? sId;
   String? name;
+  String? businessName;
   String? email;
   String? status;
   bool? verified;
@@ -44,6 +45,7 @@ class Data {
       this.reportCount,
       this.sId,
       this.name,
+      this.businessName,
       this.email,
       this.status,
       this.verified,
@@ -59,6 +61,7 @@ class Data {
     reportCount = json['reportCount'];
     sId = json['_id'];
     name = json['name'];
+    businessName = json['businessName'];
     email = json['email'];
     status = json['status'];
     verified = json['verified'];
@@ -77,6 +80,7 @@ class Data {
     data['reportCount'] = reportCount;
     data['_id'] = sId;
     data['name'] = name;
+    data['businessName'] = businessName;
     data['email'] = email;
     data['status'] = status;
     data['verified'] = verified;
