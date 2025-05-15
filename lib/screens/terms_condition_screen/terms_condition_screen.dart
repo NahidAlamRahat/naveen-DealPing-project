@@ -1,148 +1,41 @@
 import 'package:deal_ping/constants/app_colors.dart';
-import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:get/get.dart';
 
 import '../../constants/app_strings.dart';
 import '../../widgets/appbar_widget/appbar_widget.dart';
+import 'controller/terms_and_conditions_controller.dart';
 
 class TermsAndConditionsScreen extends StatelessWidget {
   const TermsAndConditionsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final TermsAndConditionsController controller =
+        Get.put(TermsAndConditionsController());
+    return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: AppbarWidget(
+      appBar: const AppbarWidget(
         text: AppStrings.termsCondition,
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextWidget(
-                text:
-                    'By using DealPing, you agree to comply with these Terms and Conditions.',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontColor: AppColors.grey300,
-                textAlignment: TextAlign.start,
-              ),
-              SizedBox(height: 8),
-              TextWidget(
-                text: '1. Services',
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                fontColor: AppColors.grey700,
-                textAlignment: TextAlign.start,
-              ),
-              SizedBox(height: 8),
-              TextWidget(
-                text:
-                    'We offer services including restaurant reservation, spa bookings, salon appointments, and more. ALL services are provided by third-party vendors.',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontColor: AppColors.grey300,
-                textAlignment: TextAlign.start,
-              ),
-              SizedBox(height: 8),
-              TextWidget(
-                text: '2. Account',
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                fontColor: AppColors.grey700,
-                textAlignment: TextAlign.start,
-              ),
-              SizedBox(height: 8),
-              TextWidget(
-                text:
-                    'You may need to create an account to use certain features. You are responsible for keeping your account details confidential.',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontColor: AppColors.grey300,
-                textAlignment: TextAlign.start,
-              ),
-              SizedBox(height: 8),
-              TextWidget(
-                text: '3. Bookings and Payments',
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                fontColor: AppColors.grey700,
-                textAlignment: TextAlign.start,
-              ),
-              SizedBox(height: 8),
-              TextWidget(
-                text:
-                    'When you book services, payment will be processed via our secure platform. Service providers may charge additional fees for changes or cancellations.',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontColor: AppColors.grey300,
-                textAlignment: TextAlign.start,
-              ),
-              SizedBox(height: 8),
-              TextWidget(
-                text: '6. Privacy Policy',
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                fontColor: AppColors.grey700,
-                textAlignment: TextAlign.start,
-              ),
-              SizedBox(height: 8),
-              TextWidget(
-                text:
-                    'Your use of the App is governed by our Privacy Policy. Please review it for information on how we handle your data.',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontColor: AppColors.grey300,
-                textAlignment: TextAlign.start,
-              ),
-              SizedBox(height: 8),
-              TextWidget(
-                text: '7. Changes to Terms',
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                fontColor: AppColors.grey700,
-                textAlignment: TextAlign.start,
-              ),
-              SizedBox(height: 8),
-              TextWidget(
-                text:
-                    'We may update these terms at any time. Your continued use of the App means you accept the changes.',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontColor: AppColors.grey300,
-                textAlignment: TextAlign.start,
-              ),
-              SizedBox(height: 8),
-              TextWidget(
-                text: '9. Contact Us',
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                fontColor: AppColors.grey700,
-                textAlignment: TextAlign.start,
-              ),
-              SizedBox(height: 8),
-              TextWidget(
-                text: 'For questions, contact us at:\ndealping123@gmail.com',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontColor: AppColors.grey300,
-                textAlignment: TextAlign.start,
-              ),
-              SizedBox(height: 8),
-              TextWidget(
-                text: 'By using the App, you accept these terms.',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontColor: AppColors.grey300,
-                textAlignment: TextAlign.start,
-              ),
-            ],
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (controller.termsConditions.value.data == null) {
+          return const Center(child: Text('No terms and conditions available'));
+        }
+        final termsContent =
+            controller.termsConditions.value.data!.content ?? '';
+        return SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: HtmlWidget(
+            termsContent,
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

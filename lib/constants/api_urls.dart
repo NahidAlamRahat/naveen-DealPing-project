@@ -43,4 +43,8 @@ class ApiUrls {
   static const String getAllOffer = "/offer/";
   static const String updateOffer = "/offer/";
   static const String deleteOffer = "/offer/";
+
+  // Common urls
+  static const String faq = "/public/faq/all";
+  static const String termsAndCondition = "/public/terms-and-condition";
 }
