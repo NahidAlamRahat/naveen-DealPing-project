@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../services/repository/profile_repository/profile_repository.dart';
 import '../../../../utils/app_all_log/error_log.dart';
+import '../../../../utils/app_log/error_log.dart';
 import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserEditProfileController extends GetxController {
@@ -80,7 +81,9 @@ class UserEditProfileController extends GetxController {
         isLocalImage.value = true;
       }
     } catch (e) {
-      errorLog("pickImage error", e);
+      errorLog(
+        "pickImage error",
+      );
       AppSnackBar.error("Failed to pick image.");
     }
   }
@@ -99,7 +102,9 @@ class UserEditProfileController extends GetxController {
         isLocalImage.value = true;
       }
     } catch (e) {
-      errorLog("takePhoto error", e);
+      errorLog(
+        "takePhoto error",
+      );
       AppSnackBar.error("Failed to take photo.");
     }
   }
@@ -114,12 +119,9 @@ class UserEditProfileController extends GetxController {
     isLoading.value = true;
     try {
       // Debugging
-      errorLog("Starting profile update", {
-        "name": name.value,
-        "hasLocation": userLocation.isNotEmpty,
-        "locationValues": userLocation,
-        "hasLocalImage": isLocalImage.value,
-      });
+      errorLog(
+        "Starting profile update",
+      );
 
       // Send existing location data if available, otherwise omit it
       bool success = await _profileRepository.updateProfile(
@@ -132,7 +134,9 @@ class UserEditProfileController extends GetxController {
         Get.back(result: {'updated': true}); // Navigate back with result
       }
     } catch (e) {
-      errorLog("updateProfile controller error", e);
+      errorLog(
+        "updateProfile controller error",
+      );
       AppSnackBar.error("An error occurred while updating the profile.");
     } finally {
       isLoading.value = false;

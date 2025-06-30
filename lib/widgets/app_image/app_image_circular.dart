@@ -6,6 +6,7 @@ import '../../constants/api_urls.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_image_path.dart';
 import '../../utils/app_all_log/error_log.dart';
+import '../../utils/app_log/error_log.dart';
 
 class AppImageCircular extends StatelessWidget {
   const AppImageCircular({
@@ -73,7 +74,7 @@ class AppImageCircular extends StatelessWidget {
       height: height,
       fit: fit,
       errorBuilder: (context, error, stackTrace) {
-        errorLog("Error loading file image:", error);
+        errorLog(error, source: "Error loading file image:");
         return _buildPlaceholder();
       },
     );
@@ -93,7 +94,10 @@ class AppImageCircular extends StatelessWidget {
         height: height,
         fit: fit,
         errorBuilder: (context, error, stackTrace) {
-          errorLog("Error loading asset image:", error);
+          errorLog(
+            error,
+            source: "Error loading asset image:",
+          );
           return _buildPlaceholder();
         },
       ),
@@ -149,11 +153,14 @@ class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> {
           widget.imageUrl.startsWith("https")) {
         imageUrl = widget.imageUrl;
       } else {
-        imageUrl = "${ApiUrls.domain}${widget.imageUrl}";
+        imageUrl = "${ApiUrls.baseUrl}${widget.imageUrl}";
       }
     } catch (e) {
       imageUrl = "";
-      errorLog("Error setting image URL:", e);
+      errorLog(
+        e,
+        source: "Error setting image URL:",
+      );
     }
   }
 
@@ -177,7 +184,7 @@ class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> {
             fadeInDuration: const Duration(milliseconds: 300),
             fadeOutDuration: const Duration(milliseconds: 300),
             imageErrorBuilder: (context, error, stackTrace) {
-              errorLog("Error loading network image:", error);
+              errorLog(error, source: "Error loading network image:");
               return GestureDetector(
                 onTap: _retry,
                 child: _buildErrorPlaceholder(),

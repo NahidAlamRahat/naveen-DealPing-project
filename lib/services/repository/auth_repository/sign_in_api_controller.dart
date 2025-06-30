@@ -1,10 +1,12 @@
 import 'package:deal_ping/constants/api_urls.dart';
+import 'package:deal_ping/models/sign_in_model.dart';
+import 'package:deal_ping/services/api/api_services.dart';
 import 'package:get/get.dart';
 
-import '../../../models/sign_in_model.dart';
-import '../../api/networkCallerHttp.dart';
+import '../../storage/storage_key.dart';
+import '../../storage/storage_service.dart';
 
-class SignInController extends GetxController {
+class SignInApiController extends GetxController {
   late bool _inProgress = false;
 
   bool get inProgress => _inProgress;
@@ -17,26 +19,39 @@ class SignInController extends GetxController {
 
   String? get successfullyMessage => _successfullyMessage;
 
-  Future<bool> signIn(SignInModel signInModel) async {
+  Future<bool> signInApiCall({required SignInModel signInModel}) async {
     _inProgress = true;
     _errorMessage = null;
     _successfullyMessage = null;
     update();
 
-    final NetworkResponse response =
-        await Get.find<NetworkCaller>().postRequest(
-      url: ApiUrls.login,
-      body: signInModel.toJson(),
+    final response = await ApiService.postApi(
+      ApiUrls.login,
+      signInModel,
     );
 
     _inProgress = false;
 
-    if (response.isSuccess) {
-      _successfullyMessage = response.successfullyMessage;
+    if (response.statusCode == 200) {
+      String accessToken = response.body['data']?['accessToken'] ?? "";
+      String refreshToken = response.body['data']?['refreshToken'] ?? "";
+
+      LocalStorage.token = accessToken;
+      LocalStorage.refreshToken = refreshToken;
+
+      LocalStorage.setString(LocalStorageKeys.token, LocalStorage.token);
+      LocalStorage.setString(
+          LocalStorageKeys.refreshToken, LocalStorage.refreshToken);
+
+      print('Token ====> ${response.body['data']?['accessToken']}');
+      print('refresh Token ====> ${response.body['data']?['refreshToken']}');
+
+      _successfullyMessage = response.message;
       update();
       return true;
     } else {
-      _errorMessage = response.errorMessage;
+      print('Error message => ${response.message}');
+      _errorMessage = response.message;
       update();
       return false;
     }

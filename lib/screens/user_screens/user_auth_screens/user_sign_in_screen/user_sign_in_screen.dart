@@ -1,6 +1,7 @@
 import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/routes/app_routes.dart';
 import 'package:deal_ping/screens/user_screens/user_auth_screens/user_sign_in_screen/widgets/social_login_widget.dart';
+import 'package:deal_ping/services/repository/auth_repository/sign_in_api_controller.dart';
 import 'package:deal_ping/widgets/image_widget/image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,8 @@ import 'controller/user_sign_in_controller.dart';
 class UserSignInScreen extends StatelessWidget {
   UserSignInScreen({super.key});
 
-  final UserSignInController controller = Get.put(UserSignInController());
+  final UserSignInController _userSignInController =
+      Get.put(UserSignInController());
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class UserSignInScreen extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Form(
-            key: controller.formKey,
+            key: _userSignInController.formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -63,10 +65,10 @@ class UserSignInScreen extends StatelessWidget {
                 ),
                 const SpaceWidget(spaceHeight: 4),
                 TextFieldWidget(
-                  controller: controller.emailController,
+                  controller: _userSignInController.emailController,
                   hintText: 'Enter Your E-Mail',
                   maxLines: 1,
-                  validator: controller.validateEmail,
+                  validator: _userSignInController.validateEmail,
                 ),
                 const SpaceWidget(spaceHeight: 12),
                 const TextWidget(
@@ -77,10 +79,10 @@ class UserSignInScreen extends StatelessWidget {
                 ),
                 const SpaceWidget(spaceHeight: 4),
                 TextFieldWidget(
-                  controller: controller.passwordController,
+                  controller: _userSignInController.passwordController,
                   hintText: 'Enter Your Password',
                   maxLines: 1,
-                  validator: controller.validatePassword,
+                  validator: _userSignInController.validatePassword,
                   suffixIcon: AppIconsPath.visibilityOff,
                 ),
                 const SpaceWidget(spaceHeight: 4),
@@ -97,12 +99,19 @@ class UserSignInScreen extends StatelessWidget {
                   ),
                 ),
                 const SpaceWidget(spaceHeight: 12),
-                ButtonWidget(
-                  onPressed: controller.signIn,
-                  label: AppStrings.signInTitle,
-                  buttonWidth: double.infinity,
-                  buttonRadius: const BorderRadius.all(Radius.circular(8)),
-                ),
+                GetBuilder<SignInApiController>(builder: (controllers) {
+                  return Visibility(
+                    visible: controllers.inProgress == false,
+                    replacement:
+                        const Center(child: CircularProgressIndicator()),
+                    child: ButtonWidget(
+                      onPressed: _userSignInController.onTapSignInButton,
+                      label: AppStrings.signInTitle,
+                      buttonWidth: double.infinity,
+                      buttonRadius: const BorderRadius.all(Radius.circular(8)),
+                    ),
+                  );
+                }),
                 const SpaceWidget(spaceHeight: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

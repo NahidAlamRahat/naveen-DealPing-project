@@ -113,30 +113,7 @@ class UserForgotVerifyOtpScreen extends StatelessWidget {
                         }),
                         const SpaceWidget(spaceHeight: 12),
                         ButtonWidget(
-                          onPressed: () {
-                            if (controller.formKey.currentState!.validate()) {
-                              controller.verifyOTP();
-                              controller.otpTextEditingController1.clear();
-                              controller.otpTextEditingController2.clear();
-                              controller.otpTextEditingController3.clear();
-                              controller.otpTextEditingController4.clear();
-                              controller.otpTextEditingController5.clear();
-                              controller.otpTextEditingController6.clear();
-                            } else if (controller
-                                    .otpTextEditingController1.text.isEmpty ||
-                                controller
-                                    .otpTextEditingController2.text.isEmpty ||
-                                controller
-                                    .otpTextEditingController3.text.isEmpty ||
-                                controller
-                                    .otpTextEditingController4.text.isEmpty ||
-                                controller
-                                    .otpTextEditingController5.text.isEmpty ||
-                                controller
-                                    .otpTextEditingController6.text.isEmpty) {
-                              // CustomToast.showToast("Please fill all fields");
-                            }
-                          },
+                          onPressed: controller.onTapForgotPassVerifyButton,
                           label: AppStrings.verify,
                           buttonWidth: double.infinity,
                           buttonHeight: 56,

@@ -6,7 +6,7 @@ class TermsAndConditions {
 
   TermsAndConditions({this.statusCode, this.success, this.message, this.data});
 
-  TermsAndConditions.fromJson(Map<String, dynamic> json) {
+  TermsAndConditions.fromJson(Map json) {
     statusCode = json['statusCode'];
     success = json['success'];
     message = json['message'];

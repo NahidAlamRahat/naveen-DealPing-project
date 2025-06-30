@@ -10,7 +10,7 @@ class OnboardingController extends GetxController {
 
   void navigateToNextScreen() {
     if (selectedOption.value == 'user') {
-      Get.toNamed(AppRoutes.userSigninScreen);
+      Get.toNamed(AppRoutes.userSignInScreen);
     } else {
       Get.toNamed(AppRoutes.businessSignInScreen);
     }

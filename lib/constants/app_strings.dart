@@ -1,6 +1,4 @@
 class AppStrings {
-  AppStrings._();
-
   static const String appName = "Deal Ping";
   static const String fontFamilyName = "Poppins";
 
@@ -144,4 +142,9 @@ class AppStrings {
   // Business Home Screen
   static const String bookingRequest = "Booking Request";
   static const String sendRequest = "Send a Request";
+  static const String startServer = "Start Server";
+  static const String someThingWrong = "Some Thing Wrong"; //
+  static const String requestTimeOut = "Request Time Out";
+  static const String noInternetConnection = "No Internet Connection";
+  static const String badResponseRequest = "Bad Response Request";
 }

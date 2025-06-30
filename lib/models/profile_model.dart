@@ -6,7 +6,7 @@ class Profile {
 
   Profile({this.statusCode, this.success, this.message, this.data});
 
-  Profile.fromJson(Map<String, dynamic> json) {
+  Profile.fromJson(Map json) {
     statusCode = json['statusCode'];
     success = json['success'];
     message = json['message'];

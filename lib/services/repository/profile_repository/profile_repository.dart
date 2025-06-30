@@ -1,28 +1,27 @@
 import 'dart:io';
 
 import 'package:deal_ping/constants/api_urls.dart';
+import 'package:deal_ping/services/api/api_services.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 
 import '../../../models/profile_model.dart';
-import '../../../utils/app_all_log/error_log.dart';
+import '../../../utils/app_log/error_log.dart';
 import '../../../widgets/app_snack_bar/app_snack_bar.dart';
-import '../../api/api_get_services.dart';
-import '../../api/api_patch_services.dart';
 
 class ProfileRepository {
-  final ApiGetServices _apiGetServices = ApiGetServices();
-  final ApiPatchServices _apiPatchServices = ApiPatchServices();
-
   Future<Profile?> fetchProfile() async {
     try {
-      var response = await _apiGetServices.apiGetServices(ApiUrls.profile);
+      var response = await ApiService.getApi(ApiUrls.profile);
       if (response != null) {
-        return Profile.fromJson(response);
+        return Profile.fromJson(response.body);
       }
       return null;
     } catch (e) {
-      errorLog("fetchProfile repo function", e);
+      errorLog(
+        e,
+        source: "fetchProfile repo function",
+      );
       return null;
     }
   }
@@ -52,15 +51,15 @@ class ProfileRepository {
       FormData formData = FormData.fromMap(data);
 
       // Log FormData for debugging
-      errorLog("FormData being sent", formData.fields);
+      errorLog(
+        formData.fields,
+        source: "FormData being sent",
+      );
 
       // Send the PATCH request
-      var response = await _apiPatchServices.apiPatchServices(
-        url: ApiUrls.updateProfile,
+      var response = await ApiService.patchApi(
+        ApiUrls.updateProfile,
         body: formData,
-        options: Options(
-          contentType: 'multipart/form-data',
-        ),
       );
 
       if (response != null) {
@@ -71,7 +70,10 @@ class ProfileRepository {
         return false;
       }
     } catch (e) {
-      errorLog("updateProfile error", e);
+      errorLog(
+        e,
+        source: "updateProfile error",
+      );
       AppSnackBar.error("An error occurred while updating the profile.");
       return false;
     }

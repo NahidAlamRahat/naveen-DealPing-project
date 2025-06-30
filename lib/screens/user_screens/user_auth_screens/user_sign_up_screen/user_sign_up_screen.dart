@@ -154,7 +154,7 @@ class UserSignUpScreen extends StatelessWidget {
 
                 const SpaceWidget(spaceHeight: 24),
                 ButtonWidget(
-                  onPressed: controller.signUp,
+                  onPressed: controller.onTapSignUpButton,
                   label: AppStrings.createYourAccount,
                   buttonWidth: double.infinity,
                   buttonRadius: const BorderRadius.all(Radius.circular(8)),
@@ -178,7 +178,7 @@ class UserSignUpScreen extends StatelessWidget {
             const SpaceWidget(spaceWidth: 4),
             TextButtonWidget(
               onPressed: () {
-                Get.offAllNamed(AppRoutes.userSigninScreen);
+                Get.offAllNamed(AppRoutes.userSignInScreen);
               },
               text: AppStrings.signInTitle,
               textColor: AppColors.grey700,

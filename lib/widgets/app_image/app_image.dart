@@ -6,6 +6,7 @@ import '../../constants/api_urls.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_image_path.dart';
 import '../../utils/app_all_log/error_log.dart';
+import '../../utils/app_log/error_log.dart';
 
 class AppImage extends StatelessWidget {
   const AppImage({
@@ -51,7 +52,7 @@ class AppImage extends StatelessWidget {
         height: height,
         fit: fit,
         errorBuilder: (context, error, stackTrace) {
-          errorLog("Error loading file image:", error);
+          errorLog(error, source: "Error loading file image:");
           return _buildPlaceholder();
         },
       );
@@ -77,7 +78,10 @@ class AppImage extends StatelessWidget {
         fit: fit,
         color: iconColor,
         errorBuilder: (context, error, stackTrace) {
-          errorLog("Error loading asset image:", error);
+          errorLog(
+            error,
+            source: "Error loading asset image:",
+          );
           return _buildPlaceholder();
         },
       );
@@ -130,11 +134,14 @@ class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> {
       if (uri != null && (uri.isScheme('http') || uri.isScheme('https'))) {
         _image = widget.imageUrl;
       } else {
-        _image = "${ApiUrls.domain}${widget.imageUrl}";
+        _image = "${ApiUrls.baseUrl}${widget.imageUrl}";
       }
     } catch (e) {
       _image = widget.imageUrl;
-      errorLog("Error setting image:", e);
+      errorLog(
+        e,
+        source: "Error setting image:",
+      );
     }
   }
 
@@ -157,7 +164,10 @@ class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> {
       width: widget.width,
       fit: widget.fit,
       imageErrorBuilder: (context, error, stackTrace) {
-        errorLog("Error loading network image:", stackTrace);
+        errorLog(
+          stackTrace,
+          source: "Error loading network image:",
+        );
         return GestureDetector(
           onTap: _retry,
           child: Container(

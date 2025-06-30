@@ -1,14 +1,19 @@
 import 'dart:async';
 
+import 'package:deal_ping/constants/api_urls.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../models/verify_otp_model.dart';
 import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/auth_repository.dart';
+import '../../../../../services/repository/auth_repository/common_repository_controller/verify_otp_controller.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserSignupVerifyAccountController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final VerifyOtpController _verifyOtpController =
+      Get.find<VerifyOtpController>();
 
   var otpTextEditingController1 = TextEditingController();
   var otpTextEditingController2 = TextEditingController();
@@ -51,8 +56,8 @@ class UserSignupVerifyAccountController extends GetxController {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (remainingSeconds.value > 0) {
         remainingSeconds.value--;
-        print(
-            "Timer: ${remainingSeconds.value} seconds remaining"); // Debugging
+        /*  print(
+            "Timer: ${remainingSeconds.value} seconds remaining");*/ // Debugging
       } else {
         canResend.value = true;
         print("Timer completed. You can resend the code now."); // Debugging
@@ -83,7 +88,7 @@ class UserSignupVerifyAccountController extends GetxController {
     return '${minutes.toString().padLeft(2, '0')}:${remainingSec.toString().padLeft(2, '0')}';
   }
 
-  void verifyOTP() async {
+  /* void verifyOTP() async {
     if (formKey.currentState!.validate()) {
       try {
         bool isSuccess = await AuthRepository().verifySignup(
@@ -96,9 +101,9 @@ class UserSignupVerifyAccountController extends GetxController {
               otpTextEditingController6.text,
         );
 
-        if (isSuccess) {
+        if (!isSuccess) {
           AppSnackBar.success("Verification Successful");
-          Get.offAllNamed(AppRoutes.userSigninScreen);
+          Get.offAllNamed(AppRoutes.userSignInScreen);
         } else {
           AppSnackBar.error("Verification Failed. Please try again.");
         }
@@ -107,6 +112,38 @@ class UserSignupVerifyAccountController extends GetxController {
       }
     } else {
       AppSnackBar.error("Please fill in all required fields.");
+    }
+  }*/
+
+  Future<void> onTapVerifyButton() async {
+    String otp = otpTextEditingController1.text +
+        otpTextEditingController2.text +
+        otpTextEditingController3.text +
+        otpTextEditingController4.text +
+        otpTextEditingController5.text +
+        otpTextEditingController6.text;
+
+    VerifyOtpModel _verifyOtpModel = VerifyOtpModel(
+      email: email,
+      otp: otp,
+    );
+    print(email);
+
+    bool isSuccess = await _verifyOtpController.verifyOtp(
+        verifyOtpModel: _verifyOtpModel, url: ApiUrls.verifyEmail);
+    print("isSuccess $isSuccess");
+
+    if (isSuccess) {
+      print('success message => ${_verifyOtpController.errorMessage}');
+
+      AppSnackBar.success('${_verifyOtpController.successfullyMessage}');
+
+      ///Go to signUp screen
+      ///
+      Get.offAllNamed(AppRoutes.userSignInScreen);
+    } else {
+      AppSnackBar.message('${_verifyOtpController.errorMessage}');
+      print('error message => ${_verifyOtpController.errorMessage}');
     }
   }
 }

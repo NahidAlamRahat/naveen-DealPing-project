@@ -6,7 +6,7 @@ class Category {
 
   Category({this.statusCode, this.success, this.message, this.data});
 
-  Category.fromJson(Map<String, dynamic> json) {
+  Category.fromJson(Map json) {
     statusCode = json['statusCode'];
     success = json['success'];
     message = json['message'];

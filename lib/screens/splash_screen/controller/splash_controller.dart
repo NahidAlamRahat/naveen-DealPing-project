@@ -1,23 +1,18 @@
+import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_routes.dart';
-import '../../../services/storage_services/app_auth_storage.dart';
 
 class SplashController extends GetxController {
-  final AppAuthStorage _authStorage = AppAuthStorage();
-
   @override
   void onInit() {
     super.onInit();
     Future.delayed(const Duration(seconds: 3)).then((_) {
       // Use AppAuthStorage methods instead of direct GetStorage
-      String? accessToken = _authStorage.getToken();
-      String? role = _authStorage.getRole();
+      String? accessToken = LocalStorage.token;
+      String? role = LocalStorage.myRole;
 
-      if (accessToken != null &&
-          accessToken.isNotEmpty &&
-          role != null &&
-          role.isNotEmpty) {
+      if (accessToken.isNotEmpty && role.isNotEmpty) {
         if (role == "user") {
           Get.offAllNamed(AppRoutes.userBottomNav);
         } else if (role == "business") {

@@ -1,10 +1,9 @@
 import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/models/user_sign_up_model.dart';
+import 'package:deal_ping/services/api/api_services.dart';
 import 'package:get/get.dart';
 
-import '../../api/networkCallerHttp.dart';
-
-class SignUpController extends GetxController {
+class UserSignUpApiController extends GetxController {
   late bool _signUpInProgress = false;
 
   bool get signUpInProgress => _signUpInProgress;
@@ -22,18 +21,18 @@ class SignUpController extends GetxController {
     _signUpInProgress = true;
     update();
 
-    final NetworkResponse response =
-        await Get.find<NetworkCaller>().postRequest(
-      url: ApiUrls.createUserAccount,
-      body: userSignUpModel.toJson(),
+    var response = await ApiService.postApi(
+      ///Url
+      ApiUrls.createUserAccount,
+      userSignUpModel.toJson(),
     );
-    if (response.isSuccess) {
-      _successfullyMessage = response.successfullyMessage;
+    if (response.statusCode == 200) {
+      _successfullyMessage = response.message;
       _signUpInProgress = false;
       isSuccess = true;
       update();
     } else {
-      _errorMessage = response.errorMessage;
+      _errorMessage = response.message;
     }
 
     signUpInProgress == false;

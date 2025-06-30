@@ -1,16 +1,14 @@
-class SignInModel {
-  final String email;
-  final String password;
+class ResetPasswordModel {
+  final String newPassword;
+  final String confirmPassword;
 
-  SignInModel({
-    required this.email,
-    required this.password,
-  });
+  ResetPasswordModel(
+      {required this.newPassword, required this.confirmPassword});
 
   Map<String, dynamic> toJson() {
     return {
-      "email": email,
-      "password": password,
+      "newPassword": newPassword,
+      "confirmPassword": confirmPassword,
     };
   }
 }

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../models/sign_in_model.dart';
 import '../../../../../routes/app_routes.dart';
-import '../../../../../services/repository/auth_repository/auth_repository.dart';
+import '../../../../../services/repository/auth_repository/sign_in_api_controller.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserSignInController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final SignInApiController _signInController = Get.find<SignInApiController>();
 
   // Validate Email
   String? validateEmail(String? value) {
@@ -27,14 +29,14 @@ class UserSignInController extends GetxController {
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return "Enter Password";
-    } else if (value.length < 6) {
-      return "Password length should be more than 6 characters";
+    } else if (value.length < 8) {
+      return "Password length should be more than 8 characters";
     }
     return null;
   }
 
   // Sign In Action
-  void signIn() async {
+/*  void signIn() async {
     if (formKey.currentState!.validate()) {
       try {
         bool isSuccess = await AuthRepository().login(
@@ -54,12 +56,32 @@ class UserSignInController extends GetxController {
     } else {
       AppSnackBar.error("Please fill in all required fields.");
     }
-  }
+  }*/
 
-  @override
-  void onClose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.onClose();
+  Future<void> onTapSignInButton() async {
+    if (formKey.currentState!.validate()) {
+      SignInModel signInModel = SignInModel(
+          email: emailController.text.trim(),
+          password: passwordController.text);
+
+      final bool isSuccess =
+          await _signInController.signInApiCall(signInModel: signInModel);
+      _signInController.inProgress == true;
+
+      if (isSuccess) {
+        _signInController.inProgress == false;
+
+        AppSnackBar.success(
+            _signInController.successfullyMessage ?? 'Login Successful!');
+        print('success message => ${_signInController.errorMessage}');
+
+        Get.offAllNamed(AppRoutes.userBottomNav);
+      } else {
+        _signInController.inProgress == false;
+        // error message
+        AppSnackBar.message('${_signInController.errorMessage}');
+        debugPrint('error message => ${_signInController.errorMessage}');
+      }
+    }
   }
 }

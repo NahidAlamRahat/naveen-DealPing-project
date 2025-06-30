@@ -11,7 +11,7 @@ import '../../../../widgets/image_widget/image_widget.dart';
 import '../../../../widgets/space_widget/space_widget.dart';
 import '../../../../widgets/text_field_widget/text_field_widget.dart';
 import '../../../../widgets/text_widget/text_widgets.dart';
-import 'controller/user_forgot_password_controller.dart';
+import 'controller/user_forgot_password_onTap_controller.dart';
 
 class UserForgotPasswordScreen extends StatelessWidget {
   final emailController = TextEditingController();
@@ -20,8 +20,8 @@ class UserForgotPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final UserForgotPasswordController controller =
-        Get.put(UserForgotPasswordController());
+    final UserForgotPasswordOnTapController controller =
+        Get.put(UserForgotPasswordOnTapController());
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SingleChildScrollView(
@@ -76,7 +76,7 @@ class UserForgotPasswordScreen extends StatelessWidget {
               ),
               const SpaceWidget(spaceHeight: 16),
               ButtonWidget(
-                onPressed: controller.getOtp,
+                onPressed: controller.onTapSentEmailButton,
                 label: AppStrings.submit,
                 buttonWidth: double.infinity,
                 buttonHeight: 56,

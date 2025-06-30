@@ -116,6 +116,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             ),
           ),
         ),
+        autovalidateMode: AutovalidateMode.onUserInteraction,
       ),
     );
   }

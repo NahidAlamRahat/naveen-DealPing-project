@@ -16,6 +16,7 @@ class BusinessResetPasswordController extends GetxController {
     super.onInit();
     if (Get.arguments != null && Get.arguments is Map<String, dynamic>) {
       token = Get.arguments['token'] ?? '';
+      print(token);
     } else {
       token = '';
     }
@@ -44,7 +45,7 @@ class BusinessResetPasswordController extends GetxController {
       bool isSuccess = await AuthRepository().resetPassword(
         newPassword: newPasswordController.text,
         confirmPassword: confirmPasswordController.text,
-        token: token,
+        resetToken: token,
       );
 
       if (isSuccess) {

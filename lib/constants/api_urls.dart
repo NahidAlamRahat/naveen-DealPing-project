@@ -1,10 +1,7 @@
-import 'package:flutter/foundation.dart';
-
-import '../utils/app_all_log/error_log.dart';
-
+/*
 String _getDomain() {
   String serverDomain =
-      "https://www.api.914unplugged.com"; //////////// live server
+      "https://asad.binarybards.online"; //////////// live server
   String localDomain = "http://10.0.80.49:5010"; ///////// local server
   try {
     if (kReleaseMode) {
@@ -17,22 +14,24 @@ String _getDomain() {
     return serverDomain;
   }
 }
+*/
 
 class ApiUrls {
   ApiUrls._();
 
   // base url
-  static final String domain = _getDomain();
-  static final String baseUrl = "$domain/api/v1";
+  // static final String domain = _getDomain();
+  static const String baseUrl = "https://asad.binarybards.online/api/v1";
 
   // auth urls
-  static const String createUserAccount = "/user/create-user";
-  static const String verifyEmail = "/auth/verify-account/";
-  static const String resendOtp = "/auth/resend-otp";
-  static const String login = "/auth/login";
-  static const String refreshToken = "/auth/refresh-token";
-  static const String forgotPassword = "/auth/forget-password";
-  static const String resetPassword = "/auth/reset-password";
+  static String login = "$baseUrl/auth/login";
+
+  static const String createUserAccount = "$baseUrl/user/create-user";
+  static const String verifyEmail = "$baseUrl/auth/verify-account";
+  static const String resendOtp = "$baseUrl/auth/resend-otp";
+  static const String refreshToken = "$baseUrl/auth/refresh-token";
+  static const String forgotPassword = "$baseUrl/auth/forget-password";
+  static const String resetPassword = "$baseUrl/auth/reset-password";
   static const String changePassword = "/auth/change-password";
   static const String profile = "/user/profile";
   static const String updateProfile = "/user/profile";

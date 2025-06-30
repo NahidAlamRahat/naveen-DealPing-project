@@ -79,7 +79,7 @@ class RouteManager {
 
       // User Screens
       GetPage(
-        name: AppRoutes.userSigninScreen,
+        name: AppRoutes.userSignInScreen,
         page: () => UserSignInScreen(),
         // binding: GeneralBindings(),
       ),

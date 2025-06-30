@@ -1,28 +1,19 @@
-import 'package:deal_ping/services/api/api_delete_services.dart';
-import 'package:deal_ping/services/api/api_patch_services.dart';
-
 import '../../../constants/api_urls.dart';
 import '../../../models/all_offers_model.dart';
-import '../../../utils/app_all_log/error_log.dart';
+import '../../../utils/app_log/error_log.dart';
 import '../../../widgets/app_snack_bar/app_snack_bar.dart';
-import '../../api/api_get_services.dart';
-import '../../api/api_post_services.dart';
+import '../../api/api_services.dart';
 
 class BusinessOfferRepository {
-  final ApiPostServices _apiPostServices = ApiPostServices();
-  final ApiGetServices _apiGetServices = ApiGetServices();
-  final ApiPatchServices _apiPatchServices = ApiPatchServices();
-  final ApiDeleteServices _apiDeleteServices = ApiDeleteServices();
-
   Future<bool> postOffer({
     required String title,
     required String description,
     required int discount,
   }) async {
     try {
-      var response = await _apiPostServices.apiPostServices(
-        url: ApiUrls.createOffer,
-        body: {
+      var response = await ApiService.postApi(
+        ApiUrls.createOffer,
+        {
           "title": title,
           "description": description,
           "discount": discount,
@@ -37,7 +28,7 @@ class BusinessOfferRepository {
         return false;
       }
     } catch (e) {
-      errorLog("postOffer error", e);
+      errorLog(e);
       AppSnackBar.error("An error occurred while posting the offer.");
       return false;
     }
@@ -45,16 +36,16 @@ class BusinessOfferRepository {
 
   Future<List<AllOffers>?> fetchAllOffers() async {
     try {
-      var response = await _apiGetServices.apiGetServices(ApiUrls.getAllOffer);
+      var response = await ApiService.getApi(ApiUrls.getAllOffer);
       if (response != null) {
-        Welcome offersData = Welcome.fromJson(response);
+        Welcome offersData = Welcome.fromJson(response.body['data']);
         return offersData.data;
       } else {
         AppSnackBar.error("Failed to fetch offers.");
         return null;
       }
     } catch (e) {
-      errorLog("fetchAllOffers error", e);
+      errorLog(e);
       AppSnackBar.error("An error occurred while fetching offers.");
       return null;
     }
@@ -67,8 +58,8 @@ class BusinessOfferRepository {
     required int discount,
   }) async {
     try {
-      var response = await _apiPatchServices.apiPatchServices(
-        url: "${ApiUrls.updateOffer}$offerId",
+      var response = await ApiService.patchApi(
+        "${ApiUrls.updateOffer}$offerId",
         body: {
           "title": title,
           "description": description,
@@ -84,7 +75,7 @@ class BusinessOfferRepository {
         return false;
       }
     } catch (e) {
-      errorLog("updateOffer error", e);
+      errorLog(e);
       AppSnackBar.error("An error occurred while updating the offer.");
       return false;
     }
@@ -92,9 +83,8 @@ class BusinessOfferRepository {
 
   Future<bool> deleteOffer(String offerId) async {
     try {
-      var response = await _apiDeleteServices.apiDeleteServices(
+      var response = await ApiService.deleteApi(
         "${ApiUrls.deleteOffer}$offerId",
-        statusCode: 200, // or 204, depending on your API
       );
 
       if (response != null) {
@@ -105,7 +95,7 @@ class BusinessOfferRepository {
         return false;
       }
     } catch (e) {
-      errorLog("deleteOffer error", e);
+      errorLog(e);
       AppSnackBar.error("An error occurred while deleting the offer.");
       return false;
     }
@@ -134,8 +124,8 @@ class BusinessOfferRepository {
 
   Future<bool> setDefaultOffer(String offerId, bool isDefault) async {
     try {
-      var response = await _apiPatchServices.apiPatchServices(
-        url: "${ApiUrls.updateOffer}$offerId",
+      var response = await ApiService.patchApi(
+        "${ApiUrls.updateOffer}$offerId",
         body: {
           "default": isDefault,
         },
@@ -150,7 +140,7 @@ class BusinessOfferRepository {
         return false;
       }
     } catch (e) {
-      errorLog("setDefaultOffer error", e);
+      errorLog(e);
       AppSnackBar.error("An error occurred while setting the default offer.");
       return false;
     }

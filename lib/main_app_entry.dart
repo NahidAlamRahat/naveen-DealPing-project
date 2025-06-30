@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import 'constants/app_colors.dart';
 import 'constants/app_strings.dart';
+import 'controller_binders.dart';
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -15,6 +16,7 @@ class MainApp extends StatelessWidget {
       AppSize.size =
           MediaQueryData.fromView(WidgetsBinding.instance.window).size;
       return GetMaterialApp(
+        initialBinding: ControllerBinders(),
         debugShowCheckedModeBanner: false,
         title: AppStrings.appName,
         theme: ThemeData(

@@ -1,37 +1,37 @@
 import 'package:deal_ping/constants/api_urls.dart';
+import 'package:deal_ping/services/api/api_services.dart';
+import 'package:deal_ping/services/storage/storage_key.dart';
+import 'package:deal_ping/services/storage/storage_service.dart';
 
-import '../../../utils/app_all_log/error_log.dart';
+import '../../../utils/app_log/error_log.dart';
 import '../../../widgets/app_snack_bar/app_snack_bar.dart';
-import '../../api/api_post_services.dart';
-import '../../storage_services/app_auth_storage.dart';
 
 class AuthRepository {
-  ApiPostServices apiPostServices = ApiPostServices();
-  AppAuthStorage appAuthStorage = AppAuthStorage();
-
   Future<bool> login({
     required String email,
     required String password,
   }) async {
     try {
-      var response = await apiPostServices.apiPostServices(
-        url: ApiUrls.login,
-        body: {"email": email, "password": password},
+      var response = await ApiService.postApi(
+        ApiUrls.login,
+        {"email": email, "password": password},
       );
-      if (response != null) {
-        if (response["data"]["accessToken"] != null &&
-            response["data"]["refreshToken"] != null) {
-          await appAuthStorage.setToken(response["data"]["accessToken"]);
-          await appAuthStorage
-              .setRefreshToken(response["data"]["refreshToken"]);
-          // Use the AppAuthStorage to save role instead of direct GetStorage
-          await appAuthStorage.setRole(response["data"]["role"]);
-          return true;
-        }
+
+      if (response.statusCode == 200) {
+        String accessToken = response.body['data']?['accessToken'] ?? "";
+        String refreshToken = response.body['data']?['refreshToken'] ?? "";
+
+        LocalStorage.token = accessToken;
+        LocalStorage.refreshToken = refreshToken;
+
+        LocalStorage.setString(LocalStorageKeys.token, LocalStorage.token);
+        LocalStorage.setString(
+            LocalStorageKeys.refreshToken, LocalStorage.refreshToken);
       }
+
       return false;
     } catch (e) {
-      errorLog("login repo function", e);
+      errorLog("login repo function");
       return false;
     }
   }
@@ -63,38 +63,7 @@ class AuthRepository {
   //   }
   // }
 
-  Future<bool> createUser({
-    required String email,
-    required String password,
-    required String confirmPassword,
-    required String firstName,
-    required String lastName,
-    required String role,
-  }) async {
-    try {
-      var response = await apiPostServices.apiPostServices(
-        url: ApiUrls.createUserAccount,
-        body: {
-          "name": firstName,
-          //"lastName": lastName,
-          "email": email,
-          "password": password,
-          "confirmPassword": confirmPassword,
-          "role": "user",
-        },
-      );
-      if (response != null) {
-        if (response["message"].runtimeType != Null) {
-          AppSnackBar.message(response["message"].toString());
-        }
-        return true;
-      }
-      return false;
-    } catch (e) {
-      errorLog("sign up repo provider  function ", e);
-      return false;
-    }
-  }
+  ///chanage korte hobe
 
   Future<bool> createBusiness({
     required String businessName,
@@ -106,9 +75,9 @@ class AuthRepository {
     required String role,
   }) async {
     try {
-      var response = await apiPostServices.apiPostServices(
-        url: ApiUrls.createUserAccount,
-        body: {
+      var response = await ApiService.postApi(
+        ApiUrls.createUserAccount,
+        {
           "businessName": businessName,
           "email": email,
           "eiin": eiinNumber,
@@ -119,118 +88,119 @@ class AuthRepository {
         },
       );
       if (response != null) {
-        if (response["message"].runtimeType != Null) {
-          AppSnackBar.message(response["message"].toString());
+        if (response.message.runtimeType != Null) {
+          AppSnackBar.message(response.message.toString());
         }
         return true;
       }
       return false;
     } catch (e) {
-      errorLog("sign up repo provider  function ", e);
+      errorLog(e, source: "sign up repo provider  function ");
       return false;
     }
   }
 
+/*
   Future<bool> verifySignup({
+
     required String email,
     required String otp,
   }) async {
     try {
-      var response = await apiPostServices.apiPostServices(
-        url: ApiUrls.verifyEmail,
-        body: {"email": email, "oneTimeCode": otp}, // Send OTP as a string
+      var response = await ApiService.postApi(
+        ApiUrls.verifyEmail,
+        {"email": email, "oneTimeCode": otp}, // Send OTP as a string
       );
       if (response != null) {
-        if (response["message"].runtimeType != Null) {
-          AppSnackBar.message(response["message"].toString());
+        if (response.message.runtimeType != Null) {
+          AppSnackBar.message(response.message.toString());
         }
         return true;
       }
       return false;
     } catch (e) {
-      errorLog("verify signup repo function", e);
+      errorLog(e);
       return false;
     }
-  }
+  }*/
 
   Future<bool> resendOtp({required String email}) async {
     try {
-      var response = await apiPostServices.apiPostServices(
-        url: ApiUrls.resendOtp,
-        body: {"email": email},
+      var response = await ApiService.postApi(
+        ApiUrls.resendOtp,
+        {"email": email},
       );
-      if (response != null) {
-        if (response["message"].runtimeType != Null) {
-          AppSnackBar.message(response["message"].toString());
+      if (response.statusCode == 200) {
+        if (response.message.runtimeType != Null) {
+          AppSnackBar.message(response.message.toString());
         }
         return true;
       }
       return false;
     } catch (e) {
-      errorLog("resend otp repo function", e);
+      errorLog(
+        "resend otp repo function",
+      );
       return false;
     }
   }
 
   Future<bool> forgotPassword({required String email}) async {
     try {
-      var response = await apiPostServices
-          .apiPostServices(url: ApiUrls.forgotPassword, body: {"email": email});
-      if (response != null) {
+      var response =
+          await ApiService.postApi(ApiUrls.forgotPassword, {"email": email});
+      if (response.statusCode == 200) {
         return true;
       }
       return false;
     } catch (e) {
-      errorLog("forgot password repo", e);
+      errorLog("forgot password repo");
       return false;
     }
   }
 
-  Future<Map<String, dynamic>?> forgotVerifyEmail({
-    required String email,
-    required String otp,
-  }) async {
-    try {
-      var response = await apiPostServices.apiPostServices(
-        url: ApiUrls.verifyEmail,
-        body: {"email": email, "oneTimeCode": otp}, // Send OTP as a string
-      );
-      if (response != null) {
-        if (response["message"] != null) {
-          AppSnackBar.message(response["message"].toString());
-        }
-        return response; // Return the full response
-      }
-      return null; // Return null if the response is null
-    } catch (e) {
-      errorLog("forgotVerifyEmail repo function", e);
-      return null; // Return null in case of an exception
-    }
-  }
+  // Future forgotVerifyEmail({
+  //   required String email,
+  //   required String otp,
+  // }) async {
+  //   try {
+  //     var response = await ApiService.postApi(
+  //       ApiUrls.verifyEmail,
+  //       {"email": email, "oneTimeCode": otp}, // Send OTP as a string
+  //     );
+  //     if (response.statusCode == 200) {
+  //       AppSnackBar.message(response.message.toString());
+  //       return response.body; // Return the full response
+  //     }
+  //     return null; // Return null if the response is null
+  //   } catch (e) {
+  //     errorLog(e);
+  //     return null; // Return null in case of an exception
+  //   }
+  // }
 
   Future<bool> resetPassword({
     required String newPassword,
     required String confirmPassword,
-    required String token,
+    required String resetToken,
   }) async {
     try {
-      var response = await apiPostServices.apiPostServices(
-        url: ApiUrls.resetPassword,
-        token: token,
-        body: {
+      var response = await ApiService.postApi(
+        ApiUrls.resetPassword,
+        {
           "newPassword": newPassword,
           "confirmPassword": confirmPassword,
         },
       );
       if (response != null) {
-        if (response["message"] != null) {
-          AppSnackBar.message(response["message"].toString());
+        if (response.message != null) {
+          AppSnackBar.message(response.message.toString());
         }
         return true;
       }
       return false;
     } catch (e) {
-      errorLog("resetPassword repo function", e);
+      errorLog(e);
       return false;
     }
   }
@@ -240,8 +210,7 @@ class AuthRepository {
       required String confirmPassword,
       required String currentPassword}) async {
     try {
-      var response = await apiPostServices
-          .apiPostServices(url: ApiUrls.changePassword, body: {
+      var response = await ApiService.postApi(ApiUrls.changePassword, {
         "currentPassword": currentPassword,
         "newPassword": newPassword,
         "confirmPassword": confirmPassword
@@ -251,8 +220,41 @@ class AuthRepository {
       }
       return false;
     } catch (e) {
-      errorLog("change password password repo", e);
+      errorLog(e);
       return false;
     }
   }
+
+/* Future<bool> createUser({
+    required String email,
+    required String password,
+    required String confirmPassword,
+    required String firstName,
+    required String lastName,
+    required String role,
+  }) async {
+    try {
+      var response = await ApiService.postApi(
+        ApiUrls.createUserAccount,
+        {
+          "name": firstName,
+          //"lastName": lastName,
+          "email": email,
+          "password": password,
+          "confirmPassword": confirmPassword,
+          "role": "user",
+        },
+      );
+      if (response != null) {
+        if (response.message.runtimeType != Null) {
+          AppSnackBar.message(response.message.toString());
+        }
+        return true;
+      }
+      return false;
+    } catch (e) {
+      errorLog(e);
+      return false;
+    }
+  }*/
 }

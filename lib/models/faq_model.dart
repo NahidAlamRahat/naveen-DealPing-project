@@ -6,7 +6,7 @@ class FAQ {
 
   FAQ({this.statusCode, this.success, this.message, this.data});
 
-  FAQ.fromJson(Map<String, dynamic> json) {
+  FAQ.fromJson(Map json) {
     statusCode = json['statusCode'];
     success = json['success'];
     message = json['message'];

@@ -19,6 +19,8 @@ class UserResetPasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final UserResetPasswordController controller =
         Get.put(UserResetPasswordController());
+
+    print("object");
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SingleChildScrollView(
@@ -68,7 +70,7 @@ class UserResetPasswordScreen extends StatelessWidget {
             ),
             const SpaceWidget(spaceHeight: 24),
             ButtonWidget(
-              onPressed: controller.reset,
+              onPressed: () => controller.onTapResetButton(),
               label: AppStrings.resetPassword,
               buttonWidth: double.infinity,
               buttonHeight: 56,

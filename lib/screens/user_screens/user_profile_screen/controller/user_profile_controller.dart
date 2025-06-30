@@ -3,11 +3,9 @@ import 'package:get/get.dart';
 import '../../../../models/profile_model.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../services/repository/profile_repository/profile_repository.dart';
-import '../../../../services/storage_services/app_auth_storage.dart';
 import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserProfileController extends GetxController {
-  AppAuthStorage appAuthStorage = AppAuthStorage();
   final ProfileRepository _profileRepository = ProfileRepository();
   var profile = Rxn<Profile>();
   var isLoading = false.obs;
@@ -36,9 +34,8 @@ class UserProfileController extends GetxController {
 
   Future<void> logout() async {
     try {
-      await appAuthStorage.storageClear();
       AppSnackBar.success("Logged out successfully!");
-      Get.offAllNamed(AppRoutes.userSigninScreen);
+      Get.offAllNamed(AppRoutes.userSignInScreen);
     } catch (e) {
       AppSnackBar.error("Failed to log out. Please try again.");
     }

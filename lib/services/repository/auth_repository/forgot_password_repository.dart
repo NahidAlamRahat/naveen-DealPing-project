@@ -1,9 +1,8 @@
-import 'package:deal_ping/models/verify_otp_model.dart';
+import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/services/api/api_services.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class VerifyOtpController extends GetxController {
+class ForgotPasswordRepository extends GetxController {
   late bool _inProgress = false;
 
   bool get inProgress => _inProgress;
@@ -16,29 +15,23 @@ class VerifyOtpController extends GetxController {
 
   String? get successfullyMessage => _successfullyMessage;
 
-  Future<Object> verifyOtp(
-      {required VerifyOtpModel verifyOtpModel, required url}) async {
+  Future<bool> forgotPasswordApiCall({required String email}) async {
     _inProgress = true;
     _errorMessage = null;
     _successfullyMessage = null;
     update();
 
-    var response = await ApiService.postApi(
-      url,
-      verifyOtpModel,
-    );
-    debugPrint("response $response");
-    debugPrint('url => $url');
+    var response =
+        await ApiService.postApi(ApiUrls.forgotPassword, {"email": email});
 
     _inProgress = false;
 
     if (response.statusCode == 200) {
-      print('message => ${response.body}');
+      print('message => ${response.message}');
 
       _successfullyMessage = response.message;
       update();
-      print("response ${response.statusCode}");
-      return response.body;
+      return true;
     } else {
       print('Error message => ${response.message}');
       _errorMessage = response.message;
