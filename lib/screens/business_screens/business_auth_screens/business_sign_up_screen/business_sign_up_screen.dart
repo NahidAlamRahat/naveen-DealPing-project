@@ -156,7 +156,7 @@ class BusinessSignUpScreen extends StatelessWidget {
 
                 const SpaceWidget(spaceHeight: 24),
                 ButtonWidget(
-                  onPressed: controller.signUp,
+                  onPressed: controller.onTapBusinessSignUpButton,
                   label: AppStrings.createYourAccount,
                   buttonWidth: double.infinity,
                   buttonRadius: const BorderRadius.all(Radius.circular(8)),

@@ -1,5 +1,4 @@
 import 'package:deal_ping/constants/api_urls.dart';
-import 'package:deal_ping/models/sign_in_model.dart';
 import 'package:deal_ping/services/api/api_services.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +18,7 @@ class SignInApiController extends GetxController {
 
   String? get successfullyMessage => _successfullyMessage;
 
-  Future<bool> signInApiCall({required SignInModel signInModel}) async {
+  Future<bool> signInApiCall({required signInModel}) async {
     _inProgress = true;
     _errorMessage = null;
     _successfullyMessage = null;

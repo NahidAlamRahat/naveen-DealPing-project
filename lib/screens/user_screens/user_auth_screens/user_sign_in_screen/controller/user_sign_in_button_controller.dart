@@ -6,7 +6,7 @@ import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/sign_in_api_controller.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
-class UserSignInController extends GetxController {
+class UserSignInButtonController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -34,29 +34,6 @@ class UserSignInController extends GetxController {
     }
     return null;
   }
-
-  // Sign In Action
-/*  void signIn() async {
-    if (formKey.currentState!.validate()) {
-      try {
-        bool isSuccess = await AuthRepository().login(
-          email: emailController.text,
-          password: passwordController.text,
-        );
-
-        if (isSuccess) {
-          AppSnackBar.success("Login Successful");
-          Get.offAllNamed(AppRoutes.userBottomNav);
-        } else {
-          AppSnackBar.error("Login Failed. Please check your credentials.");
-        }
-      } catch (e) {
-        AppSnackBar.error("An error occurred. Please try again.");
-      }
-    } else {
-      AppSnackBar.error("Please fill in all required fields.");
-    }
-  }*/
 
   Future<void> onTapSignInButton() async {
     if (formKey.currentState!.validate()) {

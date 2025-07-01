@@ -12,6 +12,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final splashController = Get.put(SplashController());
+
     return AnnotatedRegion(
       value: const SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.dark,

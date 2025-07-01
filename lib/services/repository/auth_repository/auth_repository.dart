@@ -100,9 +100,7 @@ class AuthRepository {
     }
   }
 
-/*
   Future<bool> verifySignup({
-
     required String email,
     required String otp,
   }) async {
@@ -122,7 +120,7 @@ class AuthRepository {
       errorLog(e);
       return false;
     }
-  }*/
+  }
 
   Future<bool> resendOtp({required String email}) async {
     try {
@@ -159,25 +157,26 @@ class AuthRepository {
     }
   }
 
-  // Future forgotVerifyEmail({
-  //   required String email,
-  //   required String otp,
-  // }) async {
-  //   try {
-  //     var response = await ApiService.postApi(
-  //       ApiUrls.verifyEmail,
-  //       {"email": email, "oneTimeCode": otp}, // Send OTP as a string
-  //     );
-  //     if (response.statusCode == 200) {
-  //       AppSnackBar.message(response.message.toString());
-  //       return response.body; // Return the full response
-  //     }
-  //     return null; // Return null if the response is null
-  //   } catch (e) {
-  //     errorLog(e);
-  //     return null; // Return null in case of an exception
-  //   }
-  // }
+  ///
+  Future forgotVerifyEmail({
+    required String email,
+    required String otp,
+  }) async {
+    try {
+      var response = await ApiService.postApi(
+        ApiUrls.verifyEmail,
+        {"email": email, "oneTimeCode": otp}, // Send OTP as a string
+      );
+      if (response.statusCode == 200) {
+        AppSnackBar.message(response.message.toString());
+        return response.body; // Return the full response
+      }
+      return null; // Return null if the response is null
+    } catch (e) {
+      errorLog(e);
+      return null; // Return null in case of an exception
+    }
+  }
 
   Future<bool> resetPassword({
     required String newPassword,

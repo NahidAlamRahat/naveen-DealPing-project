@@ -88,7 +88,7 @@ class UserForgotVerifyAccountController extends GetxController {
     return '${minutes.toString().padLeft(2, '0')}:${remainingSec.toString().padLeft(2, '0')}';
   }
 
-  /*void verifyOTP() async {
+  Future<void> onTapForgotPassVerifyButton() async {
     if (formKey.currentState!.validate()) {
       try {
         String otp = otpTextEditingController1.text +
@@ -98,71 +98,36 @@ class UserForgotVerifyAccountController extends GetxController {
             otpTextEditingController5.text +
             otpTextEditingController6.text;
 
-        final authRepository = AuthRepository();
-        var response = await authRepository.forgotVerifyEmail(
+        VerifyOtpModel _verifyOtpModel = VerifyOtpModel(
           email: email,
           otp: otp,
         );
+        var response = await _verifyOtpController.verifyOtp(
+            verifyOtpModel: _verifyOtpModel, url: ApiUrls.verifyEmail);
+
+        print("response ==> $response");
 
         if (response != null && response["data"] != null) {
           String token = response["data"]?["resetToken"];
+
+          AppSnackBar.success('${_verifyOtpController.successfullyMessage}');
+          print(
+              'success message => ${_verifyOtpController.successfullyMessage}');
+
           AppSnackBar.success("Verification Successful");
-          print('reset token ===> ${response["data"]?["resetToken"] ?? ""}');
           Get.offAllNamed(
-            AppRoutes.businessResetPasswordScreen,
+            AppRoutes.userResetPasswordScreen,
             arguments: {'token': token},
           );
         } else {
-          AppSnackBar.error("Verification Failed. Please try again.");
+          AppSnackBar.message('${_verifyOtpController.errorMessage}');
+          print('error message => ${_verifyOtpController.errorMessage}');
         }
       } catch (e) {
-        AppSnackBar.error("An error occurred. Please try again.");
+        AppSnackBar.message('${_verifyOtpController.errorMessage}');
       }
     } else {
       AppSnackBar.error("Please fill in all required fields.");
-    }
-  }*/
-
-  Future<void> onTapForgotPassVerifyButton() async {
-    String otp = otpTextEditingController1.text +
-        otpTextEditingController2.text +
-        otpTextEditingController3.text +
-        otpTextEditingController4.text +
-        otpTextEditingController5.text +
-        otpTextEditingController6.text;
-
-    VerifyOtpModel _verifyOtpModel = VerifyOtpModel(
-      email: email,
-      otp: otp,
-    );
-    print(email);
-
-    var response = await _verifyOtpController.verifyOtp(
-        verifyOtpModel: _verifyOtpModel, url: ApiUrls.verifyEmail);
-    print("response $response");
-
-    if (response) {
-      print('success message => ${_verifyOtpController.successfullyMessage}');
-
-      AppSnackBar.success('${_verifyOtpController.successfullyMessage}');
-
-      Get.offAllNamed(
-        AppRoutes.userResetPasswordScreen,
-        // arguments: {'token': token},
-      );
-      // response = true;
-    }
-
-    if (response != null && response["data"] != null) {
-      String token = response["data"]["token"];
-      AppSnackBar.success("Verification Successful");
-      Get.offAllNamed(
-        AppRoutes.businessResetPasswordScreen,
-        arguments: {'token': token},
-      );
-    } else {
-      AppSnackBar.message('${_verifyOtpController.errorMessage}');
-      print('error message => ${_verifyOtpController.errorMessage}');
     }
   }
 }

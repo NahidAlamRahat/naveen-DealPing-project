@@ -1,14 +1,16 @@
-class UserSignUpModel {
-  final String firstName;
-  final String lastName;
+class BusinessSignUpModel {
+  final String businessName;
+  final String eiinNumber;
+  final String licenceNumber;
   final String email;
   final String password;
   final String confirmPassword;
   final String role;
 
-  UserSignUpModel(
-      {required this.firstName,
-      required this.lastName,
+  BusinessSignUpModel(
+      {required this.licenceNumber,
+      required this.businessName,
+      required this.eiinNumber,
       required this.email,
       required this.password,
       required this.confirmPassword,
@@ -16,12 +18,13 @@ class UserSignUpModel {
 
   Map<String, dynamic> toJson() {
     return {
-      "name": firstName,
-      "lastName": lastName,
+      "businessName": businessName,
+      "eiin": eiinNumber,
       "email": email,
       "password": password,
       "confirmPassword": confirmPassword,
-      "role": "user",
+      "license": licenceNumber,
+      "role": "business",
     };
   }
 }

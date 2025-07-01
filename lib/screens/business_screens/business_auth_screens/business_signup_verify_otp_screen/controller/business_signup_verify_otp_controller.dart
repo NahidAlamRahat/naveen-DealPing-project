@@ -3,7 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../constants/api_urls.dart';
+import '../../../../../models/verify_otp_model.dart';
+import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/auth_repository.dart';
+import '../../../../../services/repository/auth_repository/common_repository_controller/verify_otp_controller.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class BusinessSignupVerifyAccountController extends GetxController {
@@ -15,6 +19,9 @@ class BusinessSignupVerifyAccountController extends GetxController {
   var otpTextEditingController4 = TextEditingController();
   var otpTextEditingController5 = TextEditingController();
   var otpTextEditingController6 = TextEditingController();
+
+  final VerifyOtpController _verifyOtpController =
+      Get.find<VerifyOtpController>();
 
   var remainingSeconds = 180.obs; // 2.5 minutes
   var canResend = false.obs;
@@ -50,8 +57,8 @@ class BusinessSignupVerifyAccountController extends GetxController {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (remainingSeconds.value > 0) {
         remainingSeconds.value--;
-        print(
-            "Timer: ${remainingSeconds.value} seconds remaining"); // Debugging
+        /* print(
+            "Timer: ${remainingSeconds.value} seconds remaining");*/ // Debugging
       } else {
         canResend.value = true;
         print("Timer completed. You can resend the code now."); // Debugging
@@ -110,4 +117,30 @@ class BusinessSignupVerifyAccountController extends GetxController {
     }
   }
 */
+
+  Future<void> onTapVerifyButton() async {
+    String otp = otpTextEditingController1.text +
+        otpTextEditingController2.text +
+        otpTextEditingController3.text +
+        otpTextEditingController4.text +
+        otpTextEditingController5.text +
+        otpTextEditingController6.text;
+
+    VerifyOtpModel _verifyOtpModel = VerifyOtpModel(email: email, otp: otp);
+    print(email);
+
+    var response = await _verifyOtpController.verifyOtp(
+      verifyOtpModel: _verifyOtpModel,
+      url: ApiUrls.verifyEmail,
+    );
+
+    if (response != false && response['success'] == true) {
+      AppSnackBar.success('${_verifyOtpController.successfullyMessage}');
+      Get.offAllNamed(AppRoutes.businessSignInScreen);
+      print('success message => ${_verifyOtpController.errorMessage}');
+    } else {
+      AppSnackBar.message('${_verifyOtpController.errorMessage}');
+      print('error message => ${_verifyOtpController.errorMessage}');
+    }
+  }
 }

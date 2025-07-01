@@ -6,15 +6,15 @@ import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/sign_up_api_controller.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
-class UserSignUpController extends GetxController {
+class UserSignUpButtonController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController rePasswordController = TextEditingController();
-  final UserSignUpApiController _userSignUpApiController =
-      Get.find<UserSignUpApiController>();
+  final SignUpApiController _userSignUpApiController =
+      Get.find<SignUpApiController>();
 
   final RxBool isLoading = false.obs;
 
@@ -74,40 +74,6 @@ class UserSignUpController extends GetxController {
     }
     return null;
   }
-
-  // Sign Up Action
-
-/*  Future<void> signUp() async {
-    if (formKey.currentState!.validate()) {
-      isLoading.value = true;
-      try {
-        bool isSuccess = await authRepository.createUser(
-          email: emailController.text,
-          password: passwordController.text,
-          confirmPassword: rePasswordController.text,
-          firstName: firstNameController.text,
-          lastName: lastNameController.text,
-          role: "user",
-        );
-
-        if (isSuccess) {
-          AppSnackBar.success("Signup Successful");
-          Get.toNamed(
-            AppRoutes.userSignupVerifyOtpScreen,
-            arguments: {'email': emailController.text},
-          );
-        } else {
-          AppSnackBar.error("Signup Failed. Please try again.");
-        }
-      } catch (e) {
-        AppSnackBar.error("An error occurred. Please try again.");
-      } finally {
-        isLoading.value = false;
-      }
-    } else {
-      AppSnackBar.error("Please fill in all required fields.");
-    }
-  }*/
 
   Future<void> onTapSignUpButton() async {
     if (formKey.currentState!.validate()) {

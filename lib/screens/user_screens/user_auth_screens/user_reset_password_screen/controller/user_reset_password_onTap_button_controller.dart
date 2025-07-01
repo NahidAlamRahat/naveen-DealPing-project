@@ -1,9 +1,8 @@
-import 'package:deal_ping/services/api/api_services.dart';
+import 'package:deal_ping/models/reset_password_model.dart';
 import 'package:deal_ping/services/repository/auth_repository/user_reset_password_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../../constants/api_urls.dart';
 import '../../../../../routes/app_routes.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
@@ -72,47 +71,27 @@ class UserResetPasswordController extends GetxController {
       return;
     }
 
-    print("tttt");
-    var body = {
-      "newPassword": newPasswordController.text,
-      "confirmPassword": confirmPasswordController.text
-    };
+    var resetToken = {"Authorization": token};
 
-    var headers = {"Authorization": token};
+    ResetPasswordModel _resetPasswordModel = ResetPasswordModel(
+        newPassword: newPasswordController.text,
+        confirmPassword: confirmPasswordController.text);
 
-    var response =
-        await ApiService.postApi(ApiUrls.resetPassword, body, header: headers);
+    final bool isSuccess =
+        await _userResetPasswordRepository.resetPasswordApiCaller(
+            resetPasswordModel: _resetPasswordModel, resetToken: resetToken);
 
-    if (response.statusCode == 200) {
+    if (isSuccess) {
       AppSnackBar.success(
           '${_userResetPasswordRepository.successfullyMessage}');
+
+      print(
+          'success message ===> ${_userResetPasswordRepository.successfullyMessage} <===');
 
       Get.offAllNamed(AppRoutes.userSignInScreen);
     } else {
       AppSnackBar.message('${_userResetPasswordRepository.errorMessage}');
       print('error message => ${_userResetPasswordRepository.errorMessage}');
     }
-
-    // ResetPasswordModel _resetPasswordModel = ResetPasswordModel(
-    //     newPassword: newPasswordController.text,
-    //     confirmPassword: confirmPasswordController.text);
-    //
-    // bool isSuccess = await _userResetPasswordRepository.resetPasswordApiCaller(
-    //     resetPasswordModel: _resetPasswordModel, resetToken: token);
-    //
-    // print('resetToken => $token');
-    //
-    // if (isSuccess) {
-    //   print(
-    //       'success message => ${_userResetPasswordRepository.successfullyMessage}');
-    //
-    //   AppSnackBar.success(
-    //       '${_userResetPasswordRepository.successfullyMessage}');
-    //
-    //   Get.offAllNamed(AppRoutes.userSignInScreen);
-    // } else {
-    //   AppSnackBar.message('${_userResetPasswordRepository.errorMessage}');
-    //   print('error message => ${_userResetPasswordRepository.errorMessage}');
-    // }
   }
 }

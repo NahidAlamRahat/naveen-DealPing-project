@@ -12,12 +12,13 @@ import '../../../../widgets/space_widget/space_widget.dart';
 import '../../../../widgets/text_button_widget/text_button_widget.dart';
 import '../../../../widgets/text_field_widget/text_field_widget.dart';
 import '../../../../widgets/text_widget/text_widgets.dart';
-import 'controller/user_sign_up_controller.dart';
+import 'controller/user_sign_up_button_controller.dart';
 
 class UserSignUpScreen extends StatelessWidget {
   UserSignUpScreen({super.key});
 
-  final UserSignUpController controller = Get.put(UserSignUpController());
+  final UserSignUpButtonController controller =
+      Get.put(UserSignUpButtonController());
 
   @override
   Widget build(BuildContext context) {

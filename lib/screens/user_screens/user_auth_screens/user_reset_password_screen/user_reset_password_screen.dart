@@ -10,7 +10,7 @@ import '../../../../widgets/image_widget/image_widget.dart';
 import '../../../../widgets/space_widget/space_widget.dart';
 import '../../../../widgets/text_field_widget/text_field_widget.dart';
 import '../../../../widgets/text_widget/text_widgets.dart';
-import 'controller/user_reset_password_controller.dart';
+import 'controller/user_reset_password_onTap_button_controller.dart';
 
 class UserResetPasswordScreen extends StatelessWidget {
   const UserResetPasswordScreen({super.key});

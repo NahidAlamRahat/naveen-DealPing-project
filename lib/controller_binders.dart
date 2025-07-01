@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 class ControllerBinders extends Bindings {
   @override
   void dependencies() {
-    Get.put(UserSignUpApiController());
+    Get.put(SignUpApiController());
     Get.put(SignInApiController());
     Get.put(VerifyOtpController());
   }

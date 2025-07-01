@@ -16,8 +16,7 @@ class VerifyOtpController extends GetxController {
 
   String? get successfullyMessage => _successfullyMessage;
 
-  Future<Object> verifyOtp(
-      {required VerifyOtpModel verifyOtpModel, required url}) async {
+  verifyOtp({required VerifyOtpModel verifyOtpModel, required url}) async {
     _inProgress = true;
     _errorMessage = null;
     _successfullyMessage = null;
@@ -27,7 +26,7 @@ class VerifyOtpController extends GetxController {
       url,
       verifyOtpModel,
     );
-    debugPrint("response $response");
+    debugPrint("response == $response");
     debugPrint('url => $url');
 
     _inProgress = false;
@@ -36,12 +35,20 @@ class VerifyOtpController extends GetxController {
       print('message => ${response.body}');
 
       _successfullyMessage = response.message;
+      print('Success message ===> ${response.message} <===');
+      _successfullyMessage = response.message;
+      debugPrint('_successfullyMessage ==> $_successfullyMessage');
+      debugPrint('SuccessMessage ==> $successfullyMessage <==');
+
       update();
       print("response ${response.statusCode}");
       return response.body;
     } else {
-      print('Error message => ${response.message}');
+      print('Error message ===> ${response.message} <===');
       _errorMessage = response.message;
+      debugPrint('_errorMessage ==> $_errorMessage');
+      debugPrint('ErrorMessage ==> $errorMessage <==');
+
       update();
       return false;
     }

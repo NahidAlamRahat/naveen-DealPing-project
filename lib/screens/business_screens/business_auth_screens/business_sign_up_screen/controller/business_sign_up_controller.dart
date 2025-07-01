@@ -1,8 +1,10 @@
+import 'package:deal_ping/models/business_sign_up_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/auth_repository.dart';
+import '../../../../../services/repository/auth_repository/sign_up_api_controller.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class BusinessSignUpController extends GetxController {
@@ -14,6 +16,9 @@ class BusinessSignUpController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+
+  final SignUpApiController _signUpApiController =
+      Get.put(SignUpApiController());
 
   final RxBool isLoading = false.obs;
 
@@ -83,6 +88,7 @@ class BusinessSignUpController extends GetxController {
   }
 
   // Sign Up Action
+/*
   Future<void> signUp() async {
     if (formKey.currentState!.validate()) {
       isLoading.value = true;
@@ -113,6 +119,42 @@ class BusinessSignUpController extends GetxController {
       }
     } else {
       AppSnackBar.error("Please fill in all required fields.");
+    }
+  }
+*/
+
+  Future<void> onTapBusinessSignUpButton() async {
+    if (formKey.currentState!.validate()) {
+      BusinessSignUpModel _businessSignUpModel = BusinessSignUpModel(
+          licenceNumber: licenceNumberController.text.trim(),
+          businessName: businessNameController.text.trim(),
+          eiinNumber: eiinNumberController.text.trim(),
+          email: emailController.text.trim(),
+          password: passwordController.text,
+          confirmPassword: confirmPasswordController.text,
+          role: 'business');
+
+      final bool isSuccess =
+          await _signUpApiController.userSignUp(_businessSignUpModel);
+      _signUpApiController.signUpInProgress == true;
+
+      if (isSuccess) {
+        _signUpApiController.signUpInProgress == false;
+
+        AppSnackBar.success(
+            _signUpApiController.successfullyMessage ?? 'Successful!');
+        print('success message => ${_signUpApiController.successfullyMessage}');
+
+        Get.toNamed(
+          AppRoutes.businessSignupVerifyOtpScreen,
+          arguments: {'email': emailController.text},
+        );
+      } else {
+        _signUpApiController.signUpInProgress == false;
+        // error message
+        AppSnackBar.message('${_signUpApiController.errorMessage}');
+        print('error message => ${_signUpApiController.errorMessage}');
+      }
     }
   }
 

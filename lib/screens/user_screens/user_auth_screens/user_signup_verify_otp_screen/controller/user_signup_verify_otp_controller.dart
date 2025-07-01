@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:deal_ping/constants/api_urls.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../constants/api_urls.dart';
 import '../../../../../models/verify_otp_model.dart';
 import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/auth_repository.dart';
@@ -89,7 +89,7 @@ class UserSignupVerifyAccountController extends GetxController {
   }
 
   /* void verifyOTP() async {
-    if (formKey.currentState!.validate()) {
+   if (formKey.currentState!.validate()) {
       try {
         bool isSuccess = await AuthRepository().verifySignup(
           email: email,
@@ -123,27 +123,52 @@ class UserSignupVerifyAccountController extends GetxController {
         otpTextEditingController5.text +
         otpTextEditingController6.text;
 
-    VerifyOtpModel _verifyOtpModel = VerifyOtpModel(
-      email: email,
-      otp: otp,
-    );
+    VerifyOtpModel _verifyOtpModel = VerifyOtpModel(email: email, otp: otp);
     print(email);
 
-    bool isSuccess = await _verifyOtpController.verifyOtp(
-        verifyOtpModel: _verifyOtpModel, url: ApiUrls.verifyEmail);
-    print("isSuccess $isSuccess");
+    var response = await _verifyOtpController.verifyOtp(
+      verifyOtpModel: _verifyOtpModel,
+      url: ApiUrls.verifyEmail,
+    );
 
-    if (isSuccess) {
-      print('success message => ${_verifyOtpController.errorMessage}');
-
+    if (response != false && response['success'] == true) {
       AppSnackBar.success('${_verifyOtpController.successfullyMessage}');
-
-      ///Go to signUp screen
-      ///
-      Get.offAllNamed(AppRoutes.userSignInScreen);
+      Get.offAllNamed(AppRoutes.userBottomNav);
+      print('success message => ${_verifyOtpController.errorMessage}');
     } else {
       AppSnackBar.message('${_verifyOtpController.errorMessage}');
       print('error message => ${_verifyOtpController.errorMessage}');
     }
   }
+
+/*  Future<void> onTapVerifyButton() async {
+    if (formKey.currentState!.validate()) {
+      try {
+        bool isSuccess = await _verifyOtpController.verifyOtp(
+
+          email: email,
+          otp: otpTextEditingController1.text +
+              otpTextEditingController2.text +
+              otpTextEditingController3.text +
+              otpTextEditingController4.text +
+              otpTextEditingController5.text +
+              otpTextEditingController6.text,
+          veriftextModel: null,
+          url: null, verifyOtpModel: null,
+        );
+
+        if (isSuccess) {
+          AppSnackBar.success("Verification Successful");
+          Get.offAllNamed(AppRoutes.userSignInScreen);
+        } else {
+          AppSnackBar.message('${_verifyOtpController.errorMessage}');
+          print('error message => ${_verifyOtpController.errorMessage}');
+        }
+      } catch (e) {
+        AppSnackBar.message('${_verifyOtpController.errorMessage}');
+      }
+    } else {
+      AppSnackBar.error("Please fill in all required fields.");
+    }
+  }*/
 }

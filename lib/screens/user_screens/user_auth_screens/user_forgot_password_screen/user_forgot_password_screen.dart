@@ -11,7 +11,7 @@ import '../../../../widgets/image_widget/image_widget.dart';
 import '../../../../widgets/space_widget/space_widget.dart';
 import '../../../../widgets/text_field_widget/text_field_widget.dart';
 import '../../../../widgets/text_widget/text_widgets.dart';
-import 'controller/user_forgot_password_onTap_controller.dart';
+import 'controller/user_forgot_password_onTap_button_controller.dart';
 
 class UserForgotPasswordScreen extends StatelessWidget {
   final emailController = TextEditingController();
@@ -20,8 +20,8 @@ class UserForgotPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final UserForgotPasswordOnTapController controller =
-        Get.put(UserForgotPasswordOnTapController());
+    final UserForgotPasswordOnTapButtonController controller =
+        Get.put(UserForgotPasswordOnTapButtonController());
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SingleChildScrollView(

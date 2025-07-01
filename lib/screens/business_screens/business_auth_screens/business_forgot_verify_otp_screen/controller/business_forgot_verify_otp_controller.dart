@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/auth_repository.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
@@ -83,7 +82,7 @@ class BusinessForgotVerifyAccountController extends GetxController {
     return '${minutes.toString().padLeft(2, '0')}:${remainingSec.toString().padLeft(2, '0')}';
   }
 
-  void verifyOTP() async {
+/*  void verifyOTP() async {
     if (formKey.currentState!.validate()) {
       try {
         String otp = otpTextEditingController1.text +
@@ -115,5 +114,5 @@ class BusinessForgotVerifyAccountController extends GetxController {
     } else {
       AppSnackBar.error("Please fill in all required fields.");
     }
-  }
+  }*/
 }
