@@ -126,9 +126,10 @@ class UserSignUpController extends GetxController {
       if (isSuccess) {
         _userSignUpApiController.signUpInProgress == false;
 
-        AppSnackBar.success(_userSignUpApiController.successfullyMessage ??
-            'Login Successful!');
-        print('success message => ${_userSignUpApiController.errorMessage}');
+        AppSnackBar.success(
+            _userSignUpApiController.successfullyMessage ?? 'Successful!');
+        print(
+            'success message => ${_userSignUpApiController.successfullyMessage}');
 
         Get.toNamed(
           AppRoutes.userSignupVerifyOtpScreen,
