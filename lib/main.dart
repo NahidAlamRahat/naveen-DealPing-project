@@ -1,3 +1,4 @@
+import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
@@ -15,11 +16,8 @@ void main() async {
 
   // Initialize GetStorage before running the app
   await GetStorage.init();
+  await LocalStorage.getAllPrefData();
 
   // Run the main app
   runApp(const MainApp());
 }
-
-
-
-

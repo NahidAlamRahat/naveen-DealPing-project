@@ -36,6 +36,7 @@ class UserSignInButtonController extends GetxController {
   }
 
   Future<void> onTapSignInButton() async {
+
     if (formKey.currentState!.validate()) {
       SignInModel signInModel = SignInModel(
           email: emailController.text.trim(),

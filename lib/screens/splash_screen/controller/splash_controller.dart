@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:get/get.dart';
 
@@ -11,8 +13,11 @@ class SplashController extends GetxController {
       // Use AppAuthStorage methods instead of direct GetStorage
       String? accessToken = LocalStorage.token;
       String? role = LocalStorage.myRole;
+      print("$accessToken😊😊😊😊😊😊");
+      print("${LocalStorage.token}😊😊😊😊😊😊");
+      if (accessToken != "") {
 
-      if (accessToken.isNotEmpty && role.isNotEmpty) {
+
         if (role == "user") {
           Get.offAllNamed(AppRoutes.userBottomNav);
         } else if (role == "business") {
@@ -21,6 +26,7 @@ class SplashController extends GetxController {
           Get.offAllNamed(AppRoutes.onboardingScreen);
         }
       } else {
+        // print("dfhdkjfldlfkjdflk😊😊😊😊😊😊");
         Get.offAllNamed(AppRoutes.onboardingScreen);
       }
     });

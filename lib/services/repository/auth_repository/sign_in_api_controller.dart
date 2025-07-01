@@ -34,8 +34,11 @@ class SignInApiController extends GetxController {
     if (response.statusCode == 200) {
       String accessToken = response.body['data']?['accessToken'] ?? "";
       String refreshToken = response.body['data']?['refreshToken'] ?? "";
+      print("$accessToken😊😊😊😊😊😊");
+
 
       LocalStorage.token = accessToken;
+
       LocalStorage.refreshToken = refreshToken;
 
       LocalStorage.setString(LocalStorageKeys.token, LocalStorage.token);

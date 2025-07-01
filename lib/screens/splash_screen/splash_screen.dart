@@ -6,16 +6,24 @@ import '../../constants/app_colors.dart';
 import '../../constants/app_image_path.dart';
 import 'controller/splash_controller.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
   Widget build(BuildContext context) {
-    final splashController = Get.put(SplashController());
+     SplashController splashController = Get.put(SplashController());
+
+
 
     return AnnotatedRegion(
       value: const SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.dark,
+
       ),
       child: Scaffold(
         backgroundColor: AppColors.green500,
