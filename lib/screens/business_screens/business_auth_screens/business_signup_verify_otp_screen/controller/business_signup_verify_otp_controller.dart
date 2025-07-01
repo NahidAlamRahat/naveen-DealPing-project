@@ -136,7 +136,7 @@ class BusinessSignupVerifyAccountController extends GetxController {
 
     if (response != false && response['success'] == true) {
       AppSnackBar.success('${_verifyOtpController.successfullyMessage}');
-      Get.offAllNamed(AppRoutes.businessSignInScreen);
+      Get.offAllNamed(AppRoutes.businessBottomNav);
       print('success message => ${_verifyOtpController.errorMessage}');
     } else {
       AppSnackBar.message('${_verifyOtpController.errorMessage}');
