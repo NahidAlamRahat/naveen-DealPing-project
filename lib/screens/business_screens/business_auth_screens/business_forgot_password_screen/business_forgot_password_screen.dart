@@ -74,7 +74,7 @@ class BusinessForgotPasswordScreen extends StatelessWidget {
               ),
               const SpaceWidget(spaceHeight: 16),
               ButtonWidget(
-                onPressed: controller.getOtp,
+                onPressed: controller.onTapBusinessSentEmailButton,
                 label: AppStrings.submit,
                 buttonWidth: double.infinity,
                 buttonHeight: 56,

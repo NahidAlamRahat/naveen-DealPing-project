@@ -115,7 +115,7 @@ class BusinessForgotVerifyOtpScreen extends StatelessWidget {
                         ButtonWidget(
                           onPressed: () {
                             if (controller.formKey.currentState!.validate()) {
-                              // controller.verifyOTP();
+                              controller.onTapForgotPassVerifyButton();
                               controller.otpTextEditingController1.clear();
                               controller.otpTextEditingController2.clear();
                               controller.otpTextEditingController3.clear();

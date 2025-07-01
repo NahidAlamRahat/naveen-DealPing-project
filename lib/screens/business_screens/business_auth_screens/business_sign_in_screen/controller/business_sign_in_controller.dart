@@ -35,29 +35,6 @@ class BusinessSignInController extends GetxController {
     return null;
   }
 
-  // Sign In Action
-/*  void signIn() async {
-    if (formKey.currentState!.validate()) {
-      try {
-        bool isSuccess = await AuthRepository().login(
-          email: emailController.text,
-          password: passwordController.text,
-        );
-
-        if (isSuccess) {
-          AppSnackBar.success("Login Successful");
-          Get.offAllNamed(AppRoutes.businessBottomNav);
-        } else {
-          AppSnackBar.error("Login Failed. Please check your credentials.");
-        }
-      } catch (e) {
-        AppSnackBar.error("An error occurred. Please try again.");
-      }
-    } else {
-      AppSnackBar.error("Please fill in all required fields.");
-    }
-  }*/
-
   Future<void> onTapBusinessSignInButton() async {
     if (formKey.currentState!.validate()) {
       SignInModel signInModel = SignInModel(

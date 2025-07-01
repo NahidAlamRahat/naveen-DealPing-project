@@ -88,32 +88,7 @@ class UserSignupVerifyAccountController extends GetxController {
     return '${minutes.toString().padLeft(2, '0')}:${remainingSec.toString().padLeft(2, '0')}';
   }
 
-  /* void verifyOTP() async {
-   if (formKey.currentState!.validate()) {
-      try {
-        bool isSuccess = await AuthRepository().verifySignup(
-          email: email,
-          otp: otpTextEditingController1.text +
-              otpTextEditingController2.text +
-              otpTextEditingController3.text +
-              otpTextEditingController4.text +
-              otpTextEditingController5.text +
-              otpTextEditingController6.text,
-        );
 
-        if (!isSuccess) {
-          AppSnackBar.success("Verification Successful");
-          Get.offAllNamed(AppRoutes.userSignInScreen);
-        } else {
-          AppSnackBar.error("Verification Failed. Please try again.");
-        }
-      } catch (e) {
-        AppSnackBar.error("An error occurred. Please try again.");
-      }
-    } else {
-      AppSnackBar.error("Please fill in all required fields.");
-    }
-  }*/
 
   Future<void> onTapVerifyButton() async {
     String otp = otpTextEditingController1.text +
@@ -141,34 +116,4 @@ class UserSignupVerifyAccountController extends GetxController {
     }
   }
 
-/*  Future<void> onTapVerifyButton() async {
-    if (formKey.currentState!.validate()) {
-      try {
-        bool isSuccess = await _verifyOtpController.verifyOtp(
-
-          email: email,
-          otp: otpTextEditingController1.text +
-              otpTextEditingController2.text +
-              otpTextEditingController3.text +
-              otpTextEditingController4.text +
-              otpTextEditingController5.text +
-              otpTextEditingController6.text,
-          veriftextModel: null,
-          url: null, verifyOtpModel: null,
-        );
-
-        if (isSuccess) {
-          AppSnackBar.success("Verification Successful");
-          Get.offAllNamed(AppRoutes.userSignInScreen);
-        } else {
-          AppSnackBar.message('${_verifyOtpController.errorMessage}');
-          print('error message => ${_verifyOtpController.errorMessage}');
-        }
-      } catch (e) {
-        AppSnackBar.message('${_verifyOtpController.errorMessage}');
-      }
-    } else {
-      AppSnackBar.error("Please fill in all required fields.");
-    }
-  }*/
 }

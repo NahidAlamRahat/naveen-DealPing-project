@@ -32,35 +32,6 @@ class UserResetPasswordController extends GetxController {
     super.onClose();
   }
 
-  /* void onTapResetButton() async {
-    if (newPasswordController.text.isEmpty ||
-        confirmPasswordController.text.isEmpty) {
-      AppSnackBar.error("Please fill in all required fields.");
-      return;
-    }
-
-    if (newPasswordController.text != confirmPasswordController.text) {
-      AppSnackBar.error("Passwords do not match.");
-      return;
-    }
-
-    try {
-      bool isSuccess = await AuthRepository().resetPassword(
-        newPassword: newPasswordController.text,
-        confirmPassword: confirmPasswordController.text,
-        token: token,
-      );
-
-      if (isSuccess) {
-        AppSnackBar.success("Password reset successfully.");
-        Get.offAllNamed(AppRoutes.userSignInScreen);
-      } else {
-        AppSnackBar.error("Failed to reset password. Please try again.");
-      }
-    } catch (e) {
-      AppSnackBar.error("An error occurred. Please try again.");
-    }
-  }*/
 
   Future<void> onTapResetButton() async {
     print(newPasswordController.text);

@@ -3,7 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../constants/api_urls.dart';
+import '../../../../../models/verify_otp_model.dart';
+import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/auth_repository.dart';
+import '../../../../../services/repository/auth_repository/common_repository_controller/verify_otp_controller.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class BusinessForgotVerifyAccountController extends GetxController {
@@ -15,6 +19,9 @@ class BusinessForgotVerifyAccountController extends GetxController {
   var otpTextEditingController4 = TextEditingController();
   var otpTextEditingController5 = TextEditingController();
   var otpTextEditingController6 = TextEditingController();
+  final VerifyOtpController _verifyOtpController =
+  Get.find<VerifyOtpController>();
+
 
   var remainingSeconds = 180.obs; // 2.5 minutes
   var canResend = false.obs;
@@ -82,7 +89,8 @@ class BusinessForgotVerifyAccountController extends GetxController {
     return '${minutes.toString().padLeft(2, '0')}:${remainingSec.toString().padLeft(2, '0')}';
   }
 
-/*  void verifyOTP() async {
+
+  Future<void> onTapForgotPassVerifyButton() async {
     if (formKey.currentState!.validate()) {
       try {
         String otp = otpTextEditingController1.text +
@@ -92,27 +100,38 @@ class BusinessForgotVerifyAccountController extends GetxController {
             otpTextEditingController5.text +
             otpTextEditingController6.text;
 
-        final authRepository = AuthRepository();
-        var response = await authRepository.forgotVerifyEmail(
+        VerifyOtpModel _verifyOtpModel = VerifyOtpModel(
           email: email,
           otp: otp,
         );
+        var response = await _verifyOtpController.verifyOtp(
+            verifyOtpModel: _verifyOtpModel, url: ApiUrls.verifyEmail);
+
+        print("response ==> $response");
 
         if (response != null && response["data"] != null) {
-          String token = response["data"]["token"];
+          String token = response["data"]?["resetToken"];
+
+          AppSnackBar.success('${_verifyOtpController.successfullyMessage}');
+          print(
+              'success message => ${_verifyOtpController.successfullyMessage}');
+
           AppSnackBar.success("Verification Successful");
           Get.offAllNamed(
             AppRoutes.businessResetPasswordScreen,
             arguments: {'token': token},
           );
         } else {
-          AppSnackBar.error("Verification Failed. Please try again.");
+          AppSnackBar.message('${_verifyOtpController.errorMessage}');
+          print('error message => ${_verifyOtpController.errorMessage}');
         }
       } catch (e) {
-        AppSnackBar.error("An error occurred. Please try again.");
+        AppSnackBar.message('${_verifyOtpController.errorMessage}');
       }
     } else {
       AppSnackBar.error("Please fill in all required fields.");
     }
-  }*/
+  }
+
+
 }

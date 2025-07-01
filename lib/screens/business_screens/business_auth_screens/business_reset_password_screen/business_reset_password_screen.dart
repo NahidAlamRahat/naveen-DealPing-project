@@ -68,7 +68,7 @@ class BusinessResetPasswordScreen extends StatelessWidget {
             ),
             const SpaceWidget(spaceHeight: 24),
             ButtonWidget(
-              onPressed: controller.reset,
+              onPressed: controller.onTapResetButton,
               label: AppStrings.resetPassword,
               buttonWidth: double.infinity,
               buttonHeight: 56,

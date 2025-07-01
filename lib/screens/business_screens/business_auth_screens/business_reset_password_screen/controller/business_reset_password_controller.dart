@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../models/reset_password_model.dart';
 import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/auth_repository.dart';
+import '../../../../../services/repository/auth_repository/user_reset_password_repository.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class BusinessResetPasswordController extends GetxController {
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+
+  final UserResetPasswordRepository _userResetPasswordRepository =
+  Get.put(UserResetPasswordRepository());
 
   late String token;
 
@@ -29,33 +34,37 @@ class BusinessResetPasswordController extends GetxController {
     super.onClose();
   }
 
-  void reset() async {
+  Future<void> onTapResetButton() async {
+    print(newPasswordController.text);
+    print(confirmPasswordController.text);
     if (newPasswordController.text.isEmpty ||
         confirmPasswordController.text.isEmpty) {
       AppSnackBar.error("Please fill in all required fields.");
       return;
     }
 
-    if (newPasswordController.text != confirmPasswordController.text) {
-      AppSnackBar.error("Passwords do not match.");
-      return;
-    }
+    var resetToken = {"Authorization": token};
 
-    try {
-      bool isSuccess = await AuthRepository().resetPassword(
+    ResetPasswordModel _resetPasswordModel = ResetPasswordModel(
         newPassword: newPasswordController.text,
-        confirmPassword: confirmPasswordController.text,
-        resetToken: token,
-      );
+        confirmPassword: confirmPasswordController.text);
 
-      if (isSuccess) {
-        AppSnackBar.success("Password reset successfully.");
-        Get.offAllNamed(AppRoutes.businessSignInScreen);
-      } else {
-        AppSnackBar.error("Failed to reset password. Please try again.");
-      }
-    } catch (e) {
-      AppSnackBar.error("An error occurred. Please try again.");
+    final bool isSuccess =
+    await _userResetPasswordRepository.resetPasswordApiCaller(
+        resetPasswordModel: _resetPasswordModel, resetToken: resetToken);
+
+    if (isSuccess) {
+      AppSnackBar.success(
+          '${_userResetPasswordRepository.successfullyMessage}');
+
+      print(
+          'success message ===> ${_userResetPasswordRepository.successfullyMessage} <===');
+
+      Get.offAllNamed(AppRoutes.businessSignInScreen);
+    } else {
+      AppSnackBar.message('${_userResetPasswordRepository.errorMessage}');
+      print('error message => ${_userResetPasswordRepository.errorMessage}');
     }
   }
+
 }

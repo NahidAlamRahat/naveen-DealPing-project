@@ -88,40 +88,7 @@ class BusinessSignUpController extends GetxController {
   }
 
   // Sign Up Action
-/*
-  Future<void> signUp() async {
-    if (formKey.currentState!.validate()) {
-      isLoading.value = true;
-      try {
-        bool isSuccess = await authRepository.createBusiness(
-          businessName: businessNameController.text,
-          eiinNumber: eiinNumberController.text,
-          licenseNumber: licenceNumberController.text,
-          email: emailController.text,
-          password: passwordController.text,
-          confirmPassword: confirmPasswordController.text,
-          role: "business",
-        );
 
-        if (isSuccess) {
-          AppSnackBar.success("Signup Successful");
-          Get.toNamed(
-            AppRoutes.businessSignupVerifyOtpScreen,
-            arguments: {'email': emailController.text},
-          );
-        } else {
-          AppSnackBar.error("Signup Failed. Please try again.");
-        }
-      } catch (e) {
-        AppSnackBar.error("An error occurred. Please try again.");
-      } finally {
-        isLoading.value = false;
-      }
-    } else {
-      AppSnackBar.error("Please fill in all required fields.");
-    }
-  }
-*/
 
   Future<void> onTapBusinessSignUpButton() async {
     if (formKey.currentState!.validate()) {

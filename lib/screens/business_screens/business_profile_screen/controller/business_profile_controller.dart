@@ -35,7 +35,7 @@ class BusinessProfileController extends GetxController {
   Future<void> logout() async {
     try {
       AppSnackBar.success("Logged out successfully!");
-      Get.offAllNamed(AppRoutes.userSignInScreen);
+      Get.offAllNamed(AppRoutes.businessSignInScreen);
     } catch (e) {
       AppSnackBar.error("Failed to log out. Please try again.");
     }
