@@ -20,7 +20,7 @@ class UserHomeScreen extends StatefulWidget {
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
   final UserHomeController _controller = Get.put(UserHomeController());
-  double _currentValue = 5.0;
+  double currentValue = 5.0;
 
   @override
   Widget build(BuildContext context) {
@@ -73,23 +73,24 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       overlayShape: SliderComponentShape.noOverlay,
                       trackHeight: 5),
                   child: Slider(
-                    value: _currentValue,
+                    value: currentValue,
                     min: 0,
-                    max: 50,
+                    max: 100,
                     divisions: 50,
                     inactiveColor: AppColors.grey50,
                     activeColor: AppColors.green500,
                     onChanged: (value) {
                       setState(() {
-                        _currentValue = value;
+                        currentValue = value;
                       });
+                      print('currentValue ==>$currentValue');
                     },
                   ),
                 ),
               ),
               const SpaceWidget(spaceWidth: 24),
               Text(
-                '${_currentValue.round()} ${"mile".tr}',
+                '${currentValue.round()} ${"mile".tr}',
                 style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w400,
@@ -110,7 +111,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           Align(
             alignment: Alignment.centerRight,
             child: ButtonWidget(
+              ///call
               onPressed: () {},
+
               buttonWidth: 80,
               buttonHeight: 36,
               label: AppStrings.send,

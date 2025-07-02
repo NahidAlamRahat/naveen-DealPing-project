@@ -47,4 +47,5 @@ class ApiUrls {
   // Common urls
   static const String faq = "/public/faq/all";
   static const String termsAndCondition = "/public/terms-and-condition";
+  static const String createRequest = "$baseUrl/request/create-request";
 }
