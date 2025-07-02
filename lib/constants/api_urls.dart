@@ -38,7 +38,7 @@ class ApiUrls {
   static const String updateProfile = "/user/profile";
 
   // category urls
-  static const String categories = "$baseUrl/category/";
+  static const String categories = "/category/";
   static const String createOffer = "/offer/";
   static const String getAllOffer = "/offer/";
   static const String updateOffer = "/offer/";

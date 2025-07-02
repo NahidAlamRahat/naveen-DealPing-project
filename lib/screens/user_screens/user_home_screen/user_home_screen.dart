@@ -144,7 +144,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   _controller.selectedCategory.value == category.title
                       ? AppColors.green100
                       : Colors.transparent,
-              imagePath: "${ApiUrls.imageUrl}${category.icon}" ?? "",
+              imagePath: '${ApiUrls.imageUrl}${category.icon}' ?? "",
               text: category.title ?? "",
               textWeight: _controller.selectedCategory.value == category.title
                   ? FontWeight.w600

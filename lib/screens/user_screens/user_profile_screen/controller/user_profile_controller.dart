@@ -1,7 +1,7 @@
+import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:get/get.dart';
 
 import '../../../../models/profile_model.dart';
-import '../../../../routes/app_routes.dart';
 import '../../../../services/repository/profile_repository/profile_repository.dart';
 import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
@@ -35,7 +35,7 @@ class UserProfileController extends GetxController {
   Future<void> logout() async {
     try {
       AppSnackBar.success("Logged out successfully!");
-      Get.offAllNamed(AppRoutes.userSignInScreen);
+      LocalStorage.removeAllPrefData();
     } catch (e) {
       AppSnackBar.error("Failed to log out. Please try again.");
     }

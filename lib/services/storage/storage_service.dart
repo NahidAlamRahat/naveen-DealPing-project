@@ -49,7 +49,7 @@ class LocalStorage {
     final localStorage = await _getStorage();
     await localStorage.clear();
     _resetLocalStorageData();
-    Get.offAllNamed(AppRoutes.userSignInScreen);
+    Get.offAllNamed(AppRoutes.onboardingScreen);
     await getAllPrefData();
   }
 
