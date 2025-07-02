@@ -34,16 +34,24 @@ class SignInApiController extends GetxController {
     if (response.statusCode == 200) {
       String accessToken = response.body['data']?['accessToken'] ?? "";
       String refreshToken = response.body['data']?['refreshToken'] ?? "";
-      print("$accessToken😊😊😊😊😊😊");
+      String role = response.body['data']?['role'] ?? "";
 
+      print("Role ==>> $role😊😊😊😊😊😊");
 
       LocalStorage.token = accessToken;
 
       LocalStorage.refreshToken = refreshToken;
+      LocalStorage.myRole = role;
 
-      LocalStorage.setString(LocalStorageKeys.token, LocalStorage.token);
+      print("MyRole ===>> ${LocalStorage.myRole}😊😊😊😊😊😊");
+
+      LocalStorage.setString(
+        LocalStorageKeys.token,
+        LocalStorage.token,
+      );
       LocalStorage.setString(
           LocalStorageKeys.refreshToken, LocalStorage.refreshToken);
+      LocalStorage.setString(LocalStorageKeys.myRole, LocalStorage.myRole);
 
       print('Token ====> ${response.body['data']?['accessToken']}');
       print('refresh Token ====> ${response.body['data']?['refreshToken']}');

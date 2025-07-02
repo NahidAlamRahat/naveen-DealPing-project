@@ -22,6 +22,7 @@ class ApiUrls {
   // base url
   // static final String domain = _getDomain();
   static const String baseUrl = "https://asad.binarybards.online/api/v1";
+  static const String imageUrl = "https://asad.binarybards.online";
 
   // auth urls
   static String login = "$baseUrl/auth/login";
@@ -37,7 +38,7 @@ class ApiUrls {
   static const String updateProfile = "/user/profile";
 
   // category urls
-  static const String categories = "/category/";
+  static const String categories = "$baseUrl/category/";
   static const String createOffer = "/offer/";
   static const String getAllOffer = "/offer/";
   static const String updateOffer = "/offer/";

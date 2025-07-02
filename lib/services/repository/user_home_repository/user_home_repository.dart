@@ -8,7 +8,7 @@ class UserHomeRepository {
   Future<Category?> fetchCategories() async {
     try {
       final response = await ApiService.getApi(
-        ApiUrls.baseUrl + ApiUrls.categories,
+        ApiUrls.categories,
       );
       if (response != null) {
         return Category.fromJson(response.body);

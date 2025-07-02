@@ -1,3 +1,4 @@
+import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/category_widget.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/home_screen_input_widget.dart';
@@ -143,7 +144,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   _controller.selectedCategory.value == category.title
                       ? AppColors.green100
                       : Colors.transparent,
-              imagePath: category.icon ?? "",
+              imagePath: "${ApiUrls.imageUrl}${category.icon}" ?? "",
               text: category.title ?? "",
               textWeight: _controller.selectedCategory.value == category.title
                   ? FontWeight.w600

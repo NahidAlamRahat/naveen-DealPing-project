@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:get/get.dart';
 
@@ -15,9 +13,11 @@ class SplashController extends GetxController {
       String? role = LocalStorage.myRole;
       print("$accessToken😊😊😊😊😊😊");
       print("${LocalStorage.token}😊😊😊😊😊😊");
-      if (accessToken != "") {
+      print("${LocalStorage.myRole}😊😊😊😊😊😊");
 
-
+      if (accessToken.isNotEmpty) {
+        print("accessToken.isNotEmpty : ${accessToken.isNotEmpty}");
+        // Get.offAllNamed(AppRoutes.userBottomNav);
         if (role == "user") {
           Get.offAllNamed(AppRoutes.userBottomNav);
         } else if (role == "business") {

@@ -69,7 +69,10 @@ class LocalStorage {
   }
 
   // Save Data To SharedPreferences
-  static Future<void> setString(String key, String value) async {
+  static Future<void> setString(
+    String key,
+    String value,
+  ) async {
     final localStorage = await _getStorage();
     await localStorage.setString(key, value);
   }
