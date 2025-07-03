@@ -17,7 +17,7 @@ class SentRequestController extends GetxController {
 
   String? get successfullyMessage => _successfullyMessage;
 
-  userSignUp(RequestModel requestModel) async {
+  createRequest(RequestModel requestModel) async {
     bool isSuccess = false;
     _signUpInProgress = true;
     update();
@@ -27,7 +27,7 @@ class SentRequestController extends GetxController {
       ApiUrls.createRequest,
       requestModel,
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       _successfullyMessage = response.message;
 
       print('response message => ${response.message}');

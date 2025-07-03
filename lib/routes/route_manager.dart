@@ -120,7 +120,7 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.userLocationScreen,
-        page: () => const UserLocationScreen(),
+        page: () => UserLocationScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(

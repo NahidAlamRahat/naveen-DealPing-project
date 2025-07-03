@@ -20,7 +20,8 @@ class UserHomeScreen extends StatefulWidget {
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
   final UserHomeController _controller = Get.put(UserHomeController());
-  double currentValue = 5.0;
+
+  // double currentValue = 5.0;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +54,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             hintText: "Location",
             onLocationTap: _controller.navigateToLocationScreen,
           ),
+
           const SpaceWidget(spaceHeight: 12),
           const Text(
             "Distance",
@@ -73,7 +75,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       overlayShape: SliderComponentShape.noOverlay,
                       trackHeight: 5),
                   child: Slider(
-                    value: currentValue,
+                    value: _controller.currentValue,
                     min: 0,
                     max: 100,
                     divisions: 50,
@@ -81,16 +83,16 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     activeColor: AppColors.green500,
                     onChanged: (value) {
                       setState(() {
-                        currentValue = value;
+                        _controller.currentValue = value;
                       });
-                      print('currentValue ==>$currentValue');
+                      print('currentValue ==>${_controller.currentValue}');
                     },
                   ),
                 ),
               ),
               const SpaceWidget(spaceWidth: 24),
               Text(
-                '${currentValue.round()} ${"mile".tr}',
+                '${_controller.currentValue.round()} ${"mile".tr}',
                 style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w400,
@@ -112,7 +114,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             alignment: Alignment.centerRight,
             child: ButtonWidget(
               ///call
-              onPressed: () {},
+              onPressed: _controller.onTapRequestButton,
 
               buttonWidth: 80,
               buttonHeight: 36,

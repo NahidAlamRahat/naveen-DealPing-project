@@ -11,6 +11,7 @@ class UserHomeRepository {
         ApiUrls.categories,
       );
       if (response != null) {
+        print("response ==> ${response.body}");
         return Category.fromJson(response.body);
       } else {
         AppSnackBar.error("Failed to fetch categories.");
