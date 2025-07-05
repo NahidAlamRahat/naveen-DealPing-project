@@ -1,7 +1,6 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
-import 'package:deal_ping/screens/user_screens/user_bottom_nav/user_bottom_nav.dart';
 import 'package:deal_ping/widgets/appbar_widget/appbar_widget.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
@@ -26,7 +25,8 @@ class UserBarcodeScreen extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Get.offAll(UserBottomNav());
+            // Get.offAll(UserBottomNav());
+            Get.back();
           },
           icon: const Icon(Icons.close),
           color: AppColors.green500,

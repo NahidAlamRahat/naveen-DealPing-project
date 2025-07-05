@@ -135,7 +135,7 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.userChatListProposalScreen,
-        page: () => const UserChatListProposalScreen(),
+        page: () => UserChatListProposalScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(

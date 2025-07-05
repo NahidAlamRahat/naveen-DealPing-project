@@ -26,7 +26,6 @@ class ApiUrls {
 
   // auth urls
   static String login = "$baseUrl/auth/login";
-
   static const String createUserAccount = "$baseUrl/user/create-user";
   static const String verifyEmail = "$baseUrl/auth/verify-account/";
   static const String resendOtp = "$baseUrl/auth/resend-otp";
@@ -48,4 +47,5 @@ class ApiUrls {
   static const String faq = "/public/faq/all";
   static const String termsAndCondition = "/public/terms-and-condition";
   static const String createRequest = "$baseUrl/request/create-request";
+  static const String chatListUrl = "$baseUrl/request";
 }

@@ -21,9 +21,17 @@ class ApiService {
     return requestApi(url, "POST", body: body, header: header);
   }
 
-  static Future<ApiResponseModel> getApi(String url,
+/*  static Future<ApiResponseModel> getApi(String url,
       {Map<String, String>? header}) async {
     return requestApi(url, "GET", header: header);
+  }*/
+
+  static Future<ApiResponseModel> getApi(
+    String url, {
+    Map<String, String>? header,
+    Map<String, dynamic>? queryParams,
+  }) async {
+    return requestApi(url, "GET", header: header, queryParams: queryParams);
   }
 
   static Future<ApiResponseModel> putApi(String url,
@@ -46,12 +54,14 @@ class ApiService {
     String method, {
     dynamic body,
     Map<String, String>? header,
+    Map<String, dynamic>? queryParams,
   }) async {
     try {
       Response response = await _dio.request(
         url,
         data: body,
         options: Options(method: method, headers: header),
+        queryParameters: queryParams,
       );
 
       return handleResponse(response);
