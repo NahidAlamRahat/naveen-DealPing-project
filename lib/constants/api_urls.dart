@@ -32,7 +32,7 @@ class ApiUrls {
   static const String refreshToken = "$baseUrl/auth/refresh-token";
   static const String forgotPassword = "$baseUrl/auth/forget-password";
   static const String resetPassword = "$baseUrl/auth/reset-password";
-  static const String changePassword = "/auth/change-password";
+  static const String changePassword = "$baseUrl/auth/change-password";
   static const String profile = "/user/profile";
   static const String updateProfile = "/user/profile";
 
@@ -48,4 +48,5 @@ class ApiUrls {
   static const String termsAndCondition = "/public/terms-and-condition";
   static const String createRequest = "$baseUrl/request/create-request";
   static const String chatListUrl = "$baseUrl/request";
+  static const String bookingListUrl = "$baseUrl/booking/?status=upcoming";
 }
