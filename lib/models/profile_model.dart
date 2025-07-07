@@ -1,31 +1,6 @@
+
+
 class Profile {
-  int? statusCode;
-  bool? success;
-  String? message;
-  Data? data;
-
-  Profile({this.statusCode, this.success, this.message, this.data});
-
-  Profile.fromJson(Map json) {
-    statusCode = json['statusCode'];
-    success = json['success'];
-    message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['statusCode'] = statusCode;
-    data['success'] = success;
-    data['message'] = message;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    return data;
-  }
-}
-
-class Data {
   Location? location;
   int? reportCount;
   String? sId;
@@ -40,7 +15,7 @@ class Data {
   int? iV;
   String? profile;
 
-  Data(
+  Profile(
       {this.location,
         this.reportCount,
         this.sId,
@@ -55,7 +30,7 @@ class Data {
         this.iV,
         this.profile});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  Profile.fromJson(Map<String, dynamic> json) {
     location =
     json['location'] != null ? Location.fromJson(json['location']) : null;
     reportCount = json['reportCount'];

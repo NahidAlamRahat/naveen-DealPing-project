@@ -1,6 +1,7 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_icons_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class UserProfileScreen extends StatelessWidget {
           return const Center(child: Text("No profile data available."));
         }
 
-        final profileData = controller.profile.value!.data;
+        final profileData = controller.profile.value!;
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -123,7 +124,13 @@ class UserProfileScreen extends StatelessWidget {
                 icon: AppIconsPath.passwordIcon,
                 title: AppStrings.password,
                 onTap: () {
-                  Get.toNamed(AppRoutes.userChangePasswordScreen);
+                  // Get.toNamed(AppRoutes.userChangePasswordScreen);
+
+                  Get.toNamed(AppRoutes.userChangePasswordScreen, arguments: {
+                    'token': LocalStorage.token,
+                  });
+
+
                 },
               ),
               const SpaceWidget(spaceHeight: 16),

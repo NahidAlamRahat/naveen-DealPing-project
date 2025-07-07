@@ -33,7 +33,7 @@ class BusinessProfileScreen extends StatelessWidget {
           return const Center(child: Text("No profile data available."));
         }
 
-        final profileData = controller.profile.value!.data;
+        final profileData = controller.profile.value!;
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),

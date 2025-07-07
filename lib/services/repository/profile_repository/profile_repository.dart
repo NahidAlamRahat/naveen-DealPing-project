@@ -13,8 +13,8 @@ class ProfileRepository {
   Future<Profile?> fetchProfile() async {
     try {
       var response = await ApiService.getApi(ApiUrls.profile);
-      if (response != null) {
-        return Profile.fromJson(response.body);
+      if (response.body["data"] != null && response.body["data"] is Map) {
+        return Profile.fromJson(response.body["data"]);
       }
       return null;
     } catch (e) {

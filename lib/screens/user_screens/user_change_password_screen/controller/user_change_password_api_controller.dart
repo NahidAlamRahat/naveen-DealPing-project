@@ -18,36 +18,39 @@ class UserChangePasswordApiCaller extends GetxController {
 
   String? get successfullyMessage => _successfullyMessage;
 
-  changePasswordApiCaller(
-      {required ChangePasswordModel changePasswordModel,  required var resetToken }) async {
+  changePasswordApiCaller({
+    required ChangePasswordModel changePasswordModel,
+    required var resetToken,
+  }) async {
     _inProgress = true;
     _errorMessage = null;
     _successfullyMessage = null;
     update();
 
-    final response = await ApiService.postApi(
-      ApiUrls.changePassword,
-      ChangePasswordModel,
+    try {
+      final response = await ApiService.postApi(
+        ApiUrls.changePassword,
+        changePasswordModel,
         header: resetToken,
-    );
+      );
 
-    _inProgress = false;
+      _inProgress = false;
 
-    if (response.statusCode == 200) {
-      print('response message => ${response.message}');
-
-      _successfullyMessage = response.message;
-
-      print(
-          'Success message *==> ${_successfullyMessage = response.message} <===*');
-      debugPrint('_successfullyMessage ==> $_successfullyMessage');
-      debugPrint('SrrorMessage ==> $successfullyMessage <==');
-
-      update();
-      return true;
-    } else {
-      print('Error message => ${response.message}');
-      _errorMessage = response.message;
+      if (response.statusCode == 200) {
+        _successfullyMessage = response.message;
+        print('Success message => $_successfullyMessage');
+        update();
+        return true;
+      } else {
+        _errorMessage = response.message;
+        print('Error message => $_errorMessage');
+        update();
+        return false;
+      }
+    } catch (e) {
+      _inProgress = false;
+      _errorMessage = "Something went wrong: $e";
+      print('Exception => $e');
       update();
       return false;
     }

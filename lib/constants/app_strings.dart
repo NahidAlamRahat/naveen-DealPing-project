@@ -65,7 +65,7 @@ class AppStrings {
   static const String profile = "Profile";
 
   // User Home Screen
-  static const String welcome = "Hello, John!";
+  static const String welcome = "Hello,";
   static const String findDeals =
       "Are you ready to find amazing last-minute deals today?";
   static const String send = "Send";
