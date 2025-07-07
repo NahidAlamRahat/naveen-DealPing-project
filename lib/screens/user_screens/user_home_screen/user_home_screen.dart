@@ -3,6 +3,7 @@ import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/category_widget.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/home_screen_input_widget.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/sub_category_widget.dart';
+import 'package:deal_ping/utils/app_size.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,106 +26,131 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // **Category Section**
-          _buildCategoryView(),
-          const SpaceWidget(spaceHeight: 12),
+    return Container(
 
-          // **Sub-Category Section (Conditional)**
-          Obx(() {
-            if (_controller.selectedCategory.value.isNotEmpty) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildSubCategoryView(),
-                  const SpaceWidget(spaceHeight: 12),
-                ],
-              );
-            }
-            return const SizedBox.shrink();
-          }),
-
-          // **Location and Distance Input**
-          HomeScreenInputWidget(
-            controller: _controller.locationController,
-            hintText: "Location",
-            onLocationTap: _controller.navigateToLocationScreen,
-          ),
-
-          const SpaceWidget(spaceHeight: 12),
-          const Text(
-            "Distance",
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: AppColors.grey200,
+      margin: EdgeInsets.all(AppSize.width(value: 10)),
+      padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 5),
+      vertical: AppSize.width(value: 10)
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Color(0xffE6F4EC)
+      ),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              AppStrings.welcome,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: AppColors.contentColorBlack,
+              ),
             ),
-          ),
-          const SpaceWidget(spaceHeight: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                flex: 1,
-                child: SliderTheme(
-                  data: SliderTheme.of(context).copyWith(
-                      overlayShape: SliderComponentShape.noOverlay,
-                      trackHeight: 5),
-                  child: Slider(
-                    value: _controller.currentValue,
-                    min: 0,
-                    max: 100,
-                    divisions: 50,
-                    inactiveColor: AppColors.grey50,
-                    activeColor: AppColors.green500,
-                    onChanged: (value) {
-                      setState(() {
-                        _controller.currentValue = value;
-                      });
-                      print('currentValue ==>${_controller.currentValue}');
-                    },
+            const SpaceWidget(spaceHeight: 12),
+
+            const Text(
+              AppStrings.findDeals,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: AppColors.grey200,
+              ),
+            ),
+
+            const SpaceWidget(spaceHeight: 12),
+
+            // **Category Section**
+            _buildCategoryView(),
+            const SpaceWidget(spaceHeight: 12),
+
+            // **Sub-Category Section (Conditional)**
+            Obx(() {
+              if (_controller.selectedCategory.value.isNotEmpty) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSubCategoryView(),
+                    const SpaceWidget(spaceHeight: 12),
+                  ],
+                );
+              }
+              return const SizedBox.shrink();
+            }),
+
+            // **Location and Distance Input**
+            HomeScreenInputWidget(
+              controller: _controller.locationController,
+              hintText: "Location",
+              onLocationTap: _controller.navigateToLocationScreen,
+            ),
+
+            const SpaceWidget(spaceHeight: 12),
+
+            const SpaceWidget(spaceHeight: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                        overlayShape: SliderComponentShape.noOverlay,
+                        trackHeight: 5),
+                    child: Slider(
+                      value: _controller.currentValue,
+                      min: 0,
+                      max: 100,
+                      divisions: 50,
+                      inactiveColor: AppColors.grey50,
+                      activeColor: AppColors.green500,
+                      onChanged: (value) {
+                        setState(() {
+                          _controller.currentValue = value;
+                        });
+                        print('currentValue ==>${_controller.currentValue}');
+                      },
+                    ),
                   ),
                 ),
-              ),
-              const SpaceWidget(spaceWidth: 24),
-              Text(
-                '${_controller.currentValue.round()} ${"mile".tr}',
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12),
-              ),
-            ],
-          ),
-          const SpaceWidget(spaceHeight: 16),
-          // **Message Input**
-          HomeScreenInputWidget(
-            controller: _controller.messageController,
-            hintText: "Write down your message",
-            maxLines: 8,
-            showCharacterCounter: true,
-          ),
-
-          // **Send Button**
-          Align(
-            alignment: Alignment.centerRight,
-            child: ButtonWidget(
-              ///call
-              onPressed: _controller.onTapRequestButton,
-
-              buttonWidth: 80,
-              buttonHeight: 36,
-              label: AppStrings.send,
-              fontSize: 14,
-              buttonRadius: BorderRadius.circular(8),
+                const SpaceWidget(spaceWidth: 24),
+                Text(
+                  '${_controller.currentValue.round()} ${"mile".tr}',
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12),
+                ),
+              ],
             ),
-          ),
-          const SpaceWidget(spaceHeight: 24),
-        ],
+            const SpaceWidget(spaceHeight: 16),
+            // **Message Input**
+            HomeScreenInputWidget(
+              controller: _controller.messageController,
+              hintText: "Write down your message",
+              maxLines: 8,
+              showCharacterCounter: true,
+            ),
+
+            // **Send Button**
+            Align(
+              alignment: Alignment.centerRight,
+              child: ButtonWidget(
+                ///call
+                onPressed: _controller.onTapRequestButton,
+
+                buttonWidth: 80,
+                buttonHeight: 36,
+                label: AppStrings.send,
+                fontSize: 14,
+                buttonRadius: BorderRadius.circular(8),
+              ),
+            ),
+            const SpaceWidget(spaceHeight: 24),
+          ],
+        ),
       ),
     );
   }

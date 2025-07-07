@@ -37,29 +37,29 @@ class UserSignInButtonController extends GetxController {
 
   Future<void> onTapSignInButton() async {
 
-    if (formKey.currentState!.validate()) {
-      SignInModel signInModel = SignInModel(
-          email: emailController.text.trim(),
-          password: passwordController.text);
-
-      final bool isSuccess =
-          await _signInController.signInApiCall(signInModel: signInModel);
-      _signInController.inProgress == true;
-
-      if (isSuccess) {
-        _signInController.inProgress == false;
-
-        AppSnackBar.success(
-            _signInController.successfullyMessage ?? 'Login Successful!');
-        print('success message => ${_signInController.errorMessage}');
-
+    // if (formKey.currentState!.validate()) {
+    //   SignInModel signInModel = SignInModel(
+    //       email: emailController.text.trim(),
+    //       password: passwordController.text);
+    //
+    //   final bool isSuccess =
+    //       await _signInController.signInApiCall(signInModel: signInModel);
+    //   _signInController.inProgress == true;
+    //
+    //   if (isSuccess) {
+    //     _signInController.inProgress == false;
+    //
+    //     AppSnackBar.success(
+    //         _signInController.successfullyMessage ?? 'Login Successful!');
+    //     print('success message => ${_signInController.errorMessage}');
+    //
         Get.offAllNamed(AppRoutes.userBottomNav);
-      } else {
-        _signInController.inProgress == false;
-        // error message
-        AppSnackBar.message('${_signInController.errorMessage}');
-        debugPrint('error message => ${_signInController.errorMessage}');
-      }
-    }
+    //   } else {
+    //     _signInController.inProgress == false;
+    //     // error message
+    //     AppSnackBar.message('${_signInController.errorMessage}');
+    //     debugPrint('error message => ${_signInController.errorMessage}');
+    //   }
+    // }
   }
 }
