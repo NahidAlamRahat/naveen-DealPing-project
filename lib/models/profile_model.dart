@@ -1,90 +1,113 @@
-class UserDataModel {
-  final Location location;
-  final int rating;
-  final int ratingCount;
-  final String profile;
-  final String id;
-  final String name;
-  final String lastName;
-  final String email;
-  final List<dynamic> subCategories;
-  final String address;
-  final String city;
-  final int zipCode;
-  final String status;
-  final bool verified;
-  final int reportCount;
-  final dynamic h3Index;
-  final int h3Res;
-  final String role;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final int v;
+class Profile {
+  int? statusCode;
+  bool? success;
+  String? message;
+  Data? data;
 
-  UserDataModel({
-    required this.location,
-    required this.rating,
-    required this.ratingCount,
-    required this.profile,
-    required this.id,
-    required this.name,
-    required this.lastName,
-    required this.email,
-    required this.subCategories,
-    required this.address,
-    required this.city,
-    required this.zipCode,
-    required this.status,
-    required this.verified,
-    required this.reportCount,
-    this.h3Index,
-    required this.h3Res,
-    required this.role,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.v,
-  });
+  Profile({this.statusCode, this.success, this.message, this.data});
 
-  factory UserDataModel.fromJson(Map<String, dynamic> json) {
-    return UserDataModel(
-      location: Location.fromJson(json['location']),
-      rating: json['rating'],
-      ratingCount: json['ratingCount'],
-      profile: json['profile'],
-      id: json['_id'],
-      name: json['name'],
-      lastName: json['lastName'],
-      email: json['email'],
-      subCategories: json['subCategories'] ?? [],
-      address: json['address'],
-      city: json['city'],
-      zipCode: json['zipCode'],
-      status: json['status'],
-      verified: json['verified'],
-      reportCount: json['reportCount'],
-      h3Index: json['h3Index'],
-      h3Res: json['h3Res'],
-      role: json['role'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-      v: json['__v'],
-    );
+  Profile.fromJson(Map json) {
+    statusCode = json['statusCode'];
+    success = json['success'];
+    message = json['message'];
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['statusCode'] = statusCode;
+    data['success'] = success;
+    data['message'] = message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
+}
+
+class Data {
+  Location? location;
+  int? reportCount;
+  String? sId;
+  String? name;
+  String? businessName;
+  String? email;
+  String? status;
+  bool? verified;
+  String? role;
+  String? createdAt;
+  String? updatedAt;
+  int? iV;
+  String? profile;
+
+  Data(
+      {this.location,
+        this.reportCount,
+        this.sId,
+        this.name,
+        this.businessName,
+        this.email,
+        this.status,
+        this.verified,
+        this.role,
+        this.createdAt,
+        this.updatedAt,
+        this.iV,
+        this.profile});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    location =
+    json['location'] != null ? Location.fromJson(json['location']) : null;
+    reportCount = json['reportCount'];
+    sId = json['_id'];
+    name = json['name'];
+    businessName = json['businessName'];
+    email = json['email'];
+    status = json['status'];
+    verified = json['verified'];
+    role = json['role'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    iV = json['__v'];
+    profile = json['profile'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (location != null) {
+      data['location'] = location!.toJson();
+    }
+    data['reportCount'] = reportCount;
+    data['_id'] = sId;
+    data['name'] = name;
+    data['businessName'] = businessName;
+    data['email'] = email;
+    data['status'] = status;
+    data['verified'] = verified;
+    data['role'] = role;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
+    data['profile'] = profile;
+    return data;
   }
 }
 
 class Location {
-  final String type;
-  final List<double> coordinates;
+  String? type;
+  List<double>? coordinates;
 
-  Location({
-    required this.type,
-    required this.coordinates,
-  });
+  Location({this.type, this.coordinates});
 
-  factory Location.fromJson(Map<String, dynamic> json) {
-    return Location(
-      type: json['type'],
-      coordinates: List<double>.from(json['coordinates']),
-    );
+  Location.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
+    coordinates = json['coordinates'].cast<double>();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['type'] = type;
+    data['coordinates'] = coordinates;
+    return data;
   }
 }

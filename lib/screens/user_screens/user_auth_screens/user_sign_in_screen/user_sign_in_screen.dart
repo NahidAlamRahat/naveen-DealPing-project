@@ -84,6 +84,7 @@ class UserSignInScreen extends StatelessWidget {
                   maxLines: 1,
                   validator: _userSignInController.validatePassword,
                   suffixIcon: AppIconsPath.visibilityOff,
+                  onFieldSubmitted: (submit) =>  _userSignInController.onTapSignInButton() ,
                 ),
                 const SpaceWidget(spaceHeight: 4),
                 Align(

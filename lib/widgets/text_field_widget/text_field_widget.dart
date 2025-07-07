@@ -14,6 +14,8 @@ class TextFieldWidget extends StatefulWidget {
   final int maxLines; // Add maxLines as a parameter
   final VoidCallback? onTapSuffix;
 
+  final Function(String submit)? onFieldSubmitted;
+
   const TextFieldWidget({
     super.key,
     required this.controller,
@@ -23,6 +25,7 @@ class TextFieldWidget extends StatefulWidget {
     this.keyboardType,
     this.maxLines = 1, // Default value is 1
     this.onTapSuffix,
+    this.onFieldSubmitted,
   });
 
   @override
@@ -48,6 +51,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: TextFormField(
+        onFieldSubmitted: widget.onFieldSubmitted ,
         controller: widget.controller,
         validator: widget.validator,
         obscureText: obscureText,

@@ -82,7 +82,7 @@ class UserChangePasswordScreen extends StatelessWidget {
                 const SpaceWidget(spaceHeight: 32),
                 ButtonWidget(
                   onPressed: () {
-                    controller.changePassword();
+                    controller.onTapChangePasswordButton();
                   },
                   label: AppStrings.update,
                   buttonWidth: double.infinity,

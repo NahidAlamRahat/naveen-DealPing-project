@@ -21,7 +21,7 @@ class ApiUrls {
 
   // base url
   // static final String domain = _getDomain();
-  static const String baseUrl = "https://asad.binarybards.online/api/v1";
+  static const String baseUrl = "https://h-conclusion-governor-georgia.trycloudflare.com/api/v1";
   static const String imageUrl = "https://asad.binarybards.online";
 
   // auth urls

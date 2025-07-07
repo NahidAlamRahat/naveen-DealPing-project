@@ -4,9 +4,8 @@ import 'package:deal_ping/services/api/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../models/reset_password_model.dart';
 
-class UserResetPasswordRepository extends GetxController {
+class UserChangePasswordApiCaller extends GetxController {
   late bool _inProgress = false;
 
   bool get inProgress => _inProgress;
@@ -19,9 +18,8 @@ class UserResetPasswordRepository extends GetxController {
 
   String? get successfullyMessage => _successfullyMessage;
 
-  resetPasswordApiCaller(
-      {required ChangePasswordModel changePasswordModel,
-      required var resetToken}) async {
+  changePasswordApiCaller(
+      {required ChangePasswordModel changePasswordModel,  required var resetToken }) async {
     _inProgress = true;
     _errorMessage = null;
     _successfullyMessage = null;
@@ -30,7 +28,7 @@ class UserResetPasswordRepository extends GetxController {
     final response = await ApiService.postApi(
       ApiUrls.changePassword,
       ChangePasswordModel,
-      header: resetToken,
+        header: resetToken,
     );
 
     _inProgress = false;
