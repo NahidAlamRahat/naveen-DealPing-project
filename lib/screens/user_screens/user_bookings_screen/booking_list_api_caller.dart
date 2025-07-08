@@ -25,7 +25,7 @@ class BookingListController extends GetxController {
       header: {
         'Authorization': 'Bearer ${LocalStorage.token}',
       },
-    ); // URL ঠিক করো
+    );
 
     print("response status code ${response.statusCode}");
 
