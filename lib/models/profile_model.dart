@@ -5,6 +5,7 @@ class Profile {
   int? reportCount;
   String? sId;
   String? name;
+  String? lastName;
   String? businessName;
   String? email;
   String? status;
@@ -12,7 +13,6 @@ class Profile {
   String? role;
   String? createdAt;
   String? updatedAt;
-  int? iV;
   String? profile;
 
   Profile(
@@ -20,6 +20,7 @@ class Profile {
         this.reportCount,
         this.sId,
         this.name,
+        this.lastName,
         this.businessName,
         this.email,
         this.status,
@@ -27,24 +28,26 @@ class Profile {
         this.role,
         this.createdAt,
         this.updatedAt,
-        this.iV,
+
         this.profile});
 
-  Profile.fromJson(Map<String, dynamic> json) {
-    location =
-    json['location'] != null ? Location.fromJson(json['location']) : null;
-    reportCount = json['reportCount'];
-    sId = json['_id'];
-    name = json['name'];
-    businessName = json['businessName'];
-    email = json['email'];
-    status = json['status'];
-    verified = json['verified'];
-    role = json['role'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    iV = json['__v'];
-    profile = json['profile'];
+factory  Profile.fromJson(Map<String, dynamic> json) {
+return Profile(
+    location :
+    json['location'] != null ? Location.fromJson(json['location']) : null,
+    reportCount : json['reportCount'] ?? "",
+    sId : json['_id'] ?? "",
+    name : json['name'] ?? "",
+    lastName : json['lastName'] ?? "",
+    businessName : json['businessName'] ?? "",
+    email : json['email'] ?? "",
+    status : json['status'] ?? "",
+    verified : json['verified'] ?? "",
+    role : json['role'] ?? "",
+    createdAt : json['createdAt'] ?? "",
+    updatedAt : json['updatedAt'] ?? "",
+profile : json['profile'] ?? "",
+);
   }
 
   Map<String, dynamic> toJson() {
@@ -55,6 +58,7 @@ class Profile {
     data['reportCount'] = reportCount;
     data['_id'] = sId;
     data['name'] = name;
+    data['lastName'] = lastName;
     data['businessName'] = businessName;
     data['email'] = email;
     data['status'] = status;
@@ -62,7 +66,6 @@ class Profile {
     data['role'] = role;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
-    data['__v'] = iV;
     data['profile'] = profile;
     return data;
   }

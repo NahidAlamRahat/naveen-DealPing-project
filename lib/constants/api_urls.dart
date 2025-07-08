@@ -1,8 +1,12 @@
-/*
+
+import 'package:flutter/foundation.dart';
+
+import '../utils/app_log/error_log.dart';
+
 String _getDomain() {
   String serverDomain =
-      "https://asad.binarybards.online"; //////////// live server
-  String localDomain = "http://10.0.80.49:5010"; ///////// local server
+      "https://divx-rare-realtor-immune.trycloudflare.com"; //////////// live server
+  String localDomain = "https://divx-rare-realtor-immune.trycloudflare.com"; ///////// local server
   try {
     if (kReleaseMode) {
       return serverDomain;
@@ -10,19 +14,19 @@ String _getDomain() {
       return localDomain;
     }
   } catch (e) {
-    errorLog("_getDomain", e);
+    errorLog("_getDomain",);
     return serverDomain;
   }
 }
-*/
+
 
 class ApiUrls {
   ApiUrls._();
 
   // base url
-  // static final String domain = _getDomain();
+  static final String domain = _getDomain();
   static const String baseUrl = "https://divx-rare-realtor-immune.trycloudflare.com/api/v1";
-  static const String imageUrl = "https://asad.binarybards.online";
+  static const String imageUrl = "https://divx-rare-realtor-immune.trycloudflare.com";
 
   // auth urls
   static String login = "$baseUrl/auth/login";
@@ -46,6 +50,8 @@ class ApiUrls {
   // Common urls
   static const String faq = "/public/faq/all";
   static const String termsAndCondition = "/public/terms-and-condition";
+  static const String about = "/public/about-us";
+
   static const String createRequest = "$baseUrl/request/create-request";
   static const String chatListUrl = "$baseUrl/request";
   static const String bookingListUrl = "$baseUrl/booking/?status=upcoming";

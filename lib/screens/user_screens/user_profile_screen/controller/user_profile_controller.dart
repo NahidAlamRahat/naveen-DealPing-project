@@ -16,10 +16,12 @@ class UserProfileController extends GetxController {
     fetchUserProfile();
   }
 
-  void fetchUserProfile() async {
+   fetchUserProfile() async {
     isLoading.value = true;
     try {
+
       var fetchedProfile = await _profileRepository.fetchProfile();
+      print('fetchProfile ==> $fetchedProfile');
       if (fetchedProfile != null) {
         profile.value = fetchedProfile;
       } else {

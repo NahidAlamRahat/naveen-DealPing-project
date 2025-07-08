@@ -1,12 +1,12 @@
-class TermsAndConditions {
+class StaticPageModel {
   int? statusCode;
   bool? success;
   String? message;
   TermsData? data;
 
-  TermsAndConditions({this.statusCode, this.success, this.message, this.data});
+  StaticPageModel({this.statusCode, this.success, this.message, this.data});
 
-  TermsAndConditions.fromJson(Map json) {
+  StaticPageModel.fromJson(Map json) {
     statusCode = json['statusCode'];
     success = json['success'];
     message = json['message'];

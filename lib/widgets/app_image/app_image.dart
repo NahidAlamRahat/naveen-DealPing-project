@@ -134,7 +134,7 @@ class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> {
       if (uri != null && (uri.isScheme('http') || uri.isScheme('https'))) {
         _image = widget.imageUrl;
       } else {
-        _image = "${ApiUrls.baseUrl}${widget.imageUrl}";
+        _image = "${ApiUrls.imageUrl}${widget.imageUrl}";
       }
     } catch (e) {
       _image = widget.imageUrl;

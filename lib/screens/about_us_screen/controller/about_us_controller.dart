@@ -6,7 +6,7 @@ import '../../../utils/app_all_log/error_log.dart';
 import '../../../utils/app_log/error_log.dart';
 import '../../../widgets/app_snack_bar/app_snack_bar.dart';
 
-class TermsAndConditionsController extends GetxController {
+class AboutUsController extends GetxController {
   final CommonRepository commonRepository = CommonRepository();
   var termsConditions = StaticPageModel().obs;
   var isLoading = false.obs;
@@ -21,7 +21,7 @@ class TermsAndConditionsController extends GetxController {
   void loadData() async {
     try {
       isLoading(true);
-      final response = await commonRepository.fetchTermsAndConditions();
+      final response = await commonRepository.fetchAboutUs();
       if (response != null && response.data != null) {
         termsConditions.value = response;
         data.value = (response.data!.content ?? '')
@@ -30,11 +30,11 @@ class TermsAndConditionsController extends GetxController {
             .replaceAll(RegExp(r'\s+'), ' ')
             .trim();
       } else {
-        AppSnackBar.message("Terms and conditions not found");
+        AppSnackBar.message("About Us not found");
       }
     } catch (e) {
       errorLog("loadData");
-      AppSnackBar.error("Error fetching terms and conditions");
+      AppSnackBar.error(e.toString());
     } finally {
       isLoading(false);
     }

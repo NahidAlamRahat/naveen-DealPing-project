@@ -24,13 +24,14 @@ class CommonRepository {
     }
   }
 
-  Future<TermsAndConditions?> fetchTermsAndConditions() async {
+
+  Future<StaticPageModel?> fetchTermsAndConditions() async {
     try {
       final response = await ApiService.getApi(
         ApiUrls.termsAndCondition,
       );
       if (response != null) {
-        return TermsAndConditions.fromJson(response.body);
+        return StaticPageModel.fromJson(response.body);
       } else {
         AppSnackBar.error("Failed to fetch terms and conditions");
         return null;
@@ -40,4 +41,23 @@ class CommonRepository {
       return null;
     }
   }
+
+
+  Future<StaticPageModel?> fetchAboutUs() async {
+    try {
+      final response = await ApiService.getApi(
+        ApiUrls.about,
+      );
+      if (response != null) {
+        return StaticPageModel.fromJson(response.body);
+      } else {
+        AppSnackBar.error("Failed to fetch terms and conditions");
+        return null;
+      }
+    } catch (e) {
+      AppSnackBar.error("Error fetching terms and conditions: ${e.toString()}");
+      return null;
+    }
+  }
+
 }

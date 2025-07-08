@@ -27,15 +27,18 @@ class ProfileRepository {
   }
 
   Future<bool> updateProfile({
-    String? name, // Optional
-    List<double>? location, // Optional
-    File? imageFile, // Optional
+    String? name,
+    String? lastName,
+    List<double>? location,
+    File? imageFile,
   }) async {
     try {
-      // Prepare FormData dynamically
       final Map<String, dynamic> data = {};
       if (name != null && name.trim().isNotEmpty) {
         data["name"] = name;
+      }
+      if (lastName != null && lastName.trim().isNotEmpty) {
+        data["lastName"] = lastName;
       }
       if (location != null && location.isNotEmpty) {
         data["location"] = {"type": "Point", "coordinates": location};
@@ -50,13 +53,8 @@ class ProfileRepository {
 
       FormData formData = FormData.fromMap(data);
 
-      // Log FormData for debugging
-      errorLog(
-        formData.fields,
-        source: "FormData being sent",
-      );
+      errorLog(formData.fields, source: "FormData being sent");
 
-      // Send the PATCH request
       var response = await ApiService.patchApi(
         ApiUrls.updateProfile,
         body: formData,
@@ -70,12 +68,10 @@ class ProfileRepository {
         return false;
       }
     } catch (e) {
-      errorLog(
-        e,
-        source: "updateProfile error",
-      );
+      errorLog(e, source: "updateProfile error");
       AppSnackBar.error("An error occurred while updating the profile.");
       return false;
     }
   }
+
 }

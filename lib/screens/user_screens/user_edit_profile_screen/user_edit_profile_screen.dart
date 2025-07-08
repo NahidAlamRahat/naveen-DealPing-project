@@ -1,6 +1,7 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
+import 'package:deal_ping/widgets/space_widget/space_widget.dart';
 import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -57,7 +58,7 @@ class UserEditProfileScreen extends StatelessWidget {
                                       fit: BoxFit.cover,
                                     ),
                                   )
-                                : AppImage(
+                                : const AppImage(
                                     height: 120,
                                     width: 120,
                                     url: AppImagePath.profileImage,
@@ -84,7 +85,7 @@ class UserEditProfileScreen extends StatelessWidget {
                                       leading: const Icon(Icons.photo_library),
                                       title: const Text('Choose from Gallery'),
                                       onTap: () {
-                                        controller.pickImage();
+                                        controller.pickImage(fromCamera: false);
                                         Get.back();
                                       },
                                     ),
@@ -92,7 +93,7 @@ class UserEditProfileScreen extends StatelessWidget {
                                       leading: const Icon(Icons.camera_alt),
                                       title: const Text('Take a Photo'),
                                       onTap: () {
-                                        controller.pickImage();
+                                        controller.pickImage(fromCamera: true);
                                         Get.back();
                                       },
                                     ),
@@ -138,7 +139,7 @@ class UserEditProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               TextField(
-                controller: controller.nameController,
+                controller: controller.firstName,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -156,23 +157,91 @@ class UserEditProfileScreen extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
               ),
+
+              SpaceWidget(spaceHeight: 16,),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: TextWidget(
+                  text: 'Last Name',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  fontColor: AppColors.green500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: controller.lastName,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: AppColors.grey300),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: AppColors.grey300),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: AppColors.green500),
+                  ),
+                  contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                ),
+              ),
+
+             
             ],
           ),
         ),
       ),
+/*
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: ButtonWidget(
-          onPressed: () => controller.updateProfile(),
-          backgroundColor: AppColors.green500,
-          label: AppStrings.saveAndChange,
-          buttonHeight: 52,
-          buttonWidth: double.infinity,
-          fontSize: 16,
-          textColor: AppColors.white,
-          fontWeight: FontWeight.w500,
+        child: GetBuilder<UserEditProfileController>(
+          builder: (getController) {
+            return Visibility(
+              visible: getController.isLoading == false,
+              replacement: const Center(
+                child: CircularProgressIndicator(),
+              ),
+              child: ButtonWidget(
+                onPressed: () => controller.updateProfile(),
+                backgroundColor: AppColors.green500,
+                label: AppStrings.saveAndChange,
+                buttonHeight: 52,
+                buttonWidth: double.infinity,
+                fontSize: 16,
+                textColor: AppColors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
         ),
       ),
+*/
+
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: GetBuilder<UserEditProfileController>(
+          builder: (controller) {
+            return Visibility(
+              visible: !controller.isLoading.value,
+              replacement: const Center(child: CircularProgressIndicator()),
+              child: ButtonWidget(
+                onPressed: () => controller.updateProfile(context),
+                backgroundColor: AppColors.green500,
+                label: AppStrings.saveAndChange,
+                buttonHeight: 52,
+                buttonWidth: double.infinity,
+                fontSize: 16,
+                textColor: AppColors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          },
+        ),
+      ),
+
     );
   }
 }

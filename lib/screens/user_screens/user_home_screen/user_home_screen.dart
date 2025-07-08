@@ -4,9 +4,11 @@ import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/category
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/home_screen_input_widget.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/sub_category_widget.dart';
 import 'package:deal_ping/utils/app_size.dart';
+import 'package:deal_ping/widgets/app_image/app_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../constants/app_image_path.dart';
 import '../../../constants/app_strings.dart';
 import '../../../widgets/button_widget/button_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
@@ -184,7 +186,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   _controller.selectedCategory.value == category.title
                       ? AppColors.green100
                       : Colors.transparent,
-              imagePath: '${ApiUrls.imageUrl}${category.icon}' ?? "",
+              imagePath: '${AppImagePath.imageUrl}${category.icon}' ?? "",
               text: category.title ?? "",
               textWeight: _controller.selectedCategory.value == category.title
                   ? FontWeight.w600
