@@ -25,8 +25,8 @@ class ApiUrls {
 
   // base url
   static final String domain = _getDomain();
-  static const String baseUrl = "https://divx-rare-realtor-immune.trycloudflare.com/api/v1";
-  static const String imageUrl = "https://divx-rare-realtor-immune.trycloudflare.com";
+  static const String baseUrl = "https://perceived-bare-wholesale-lives.trycloudflare.com/api/v1";
+  static const String imageUrl = "https://perceived-bare-wholesale-lives.trycloudflare.com";
 
   // auth urls
   static String login = "$baseUrl/auth/login";
@@ -54,5 +54,5 @@ class ApiUrls {
 
   static const String createRequest = "$baseUrl/request/create-request";
   static const String chatListUrl = "$baseUrl/request";
-  static const String bookingListUrl = "$baseUrl/booking/?status=upcoming";
+  static const String bookingListUrl = "$baseUrl/booking/?longitude=90.4125&latitude=23.8103&status=upcoming";
 }

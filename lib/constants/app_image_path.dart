@@ -2,7 +2,7 @@ class AppImagePath {
   AppImagePath._();
 
 
-  static const String imageUrl = "https://divx-rare-realtor-immune.trycloudflare.com";
+  static const String imageUrl = "https://perceived-bare-wholesale-lives.trycloudflare.com";
 
   static const String appLogoWhite = "assets/images/app_logo_white.png";
   static const String appLogoGreen = "assets/images/app_logo_green.png";

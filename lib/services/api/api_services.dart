@@ -30,9 +30,12 @@ class ApiService {
     String url, {
     Map<String, String>? header,
     Map<String, dynamic>? queryParams,
+
   }) async {
     return requestApi(url, "GET", header: header, queryParams: queryParams);
+
   }
+
 
   static Future<ApiResponseModel> putApi(String url,
       {Map<String, dynamic>? body, Map<String, String>? header}) async {

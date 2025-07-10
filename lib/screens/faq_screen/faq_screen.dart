@@ -21,7 +21,7 @@ class FAQScreen extends StatelessWidget {
         text: AppStrings.faq,
         centerTitle: true,
       ),
-      body: Obx(() {
+    /*  body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -48,6 +48,31 @@ class FAQScreen extends StatelessWidget {
           },
         );
       }),
+*/
+
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (controller.faqs.isEmpty) {
+          return const Center(child: Text('No FAQs available'));
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(20),
+          itemCount: controller.faqs.length,
+          itemBuilder: (context, index) {
+            final faq = controller.faqs[index];
+            return FAQItem(
+              question:
+              "${index.bitLength + 1}. ${capitalize(faq.question ?? "No question available")}",
+              answer: capitalize(faq.answer ?? "No answer available"),
+            );
+          },
+        );
+      }),
+
+
     );
   }
 }

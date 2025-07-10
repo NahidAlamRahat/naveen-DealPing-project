@@ -27,13 +27,7 @@ class UserProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
 
-        if (controller.profile.value == null) {
-          return const Center(child: Text("No profile data available."));
-        }
 
         final profileData = controller.profile.value;
 

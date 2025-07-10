@@ -27,7 +27,6 @@ class FAQScreenController extends GetxController {
       AppSnackBar.error("An error occurred while fetching FAQs.");
     } finally {
       isLoading.value = false;
-      AppSnackBar.message('An error occurred while fetching FAQs.');
     }
   }
 }

@@ -17,6 +17,9 @@ class UserBottomNavController extends GetxController {
   ];
 
   void changeIndex(int index) {
+  try{
     selectedIndex.value = index;
+    update();
+  }catch(e){}
   }
 }
