@@ -121,7 +121,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../../models/booking_list_model.dart';
 
-class CategoryController extends GetxController {
+class BookingListController extends GetxController {
   final int _perPageDataCount = 30;
   int _currentPage = 0;
   int? _totalPage;
@@ -136,7 +136,7 @@ class CategoryController extends GetxController {
   bool get isLoading => _isLoading;
   bool get isInitialLoading => _isInitialLoading;
 
-  Future<bool> getCategoryList() async {
+  Future<bool> getBookingList() async {
     if (_totalPage != null && _currentPage > _totalPage!) return true;
 
     bool isSuccess = false;
@@ -183,12 +183,12 @@ class CategoryController extends GetxController {
     _currentPage = 1;
     _bookingList.clear();
     _isInitialLoading = true;
-    return getCategoryList();
+    return getBookingList();
   }
 
   Future<void> appOnInit() async {
     try {
-      await getCategoryList();
+      await getBookingList();
     } catch (e) {
       debugPrint('error from ${e.toString()}');
     }
