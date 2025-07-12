@@ -128,7 +128,8 @@ class BookingCard extends StatelessWidget {
     required this.title,
     required this.location,
     required this.distance,
-    this.isPastBooking = false,
+    this.isPastBooking = false, required
+
   });
 
   @override

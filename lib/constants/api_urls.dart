@@ -21,12 +21,18 @@ String _getDomain() {
 
 
 class ApiUrls {
-  ApiUrls._();
+  // instance variable
+  String id;
+
+  // constructor
+  ApiUrls({this.id = ''});
 
   // base url
   static final String domain = _getDomain();
-  static const String baseUrl = "https://perceived-bare-wholesale-lives.trycloudflare.com/api/v1";
-  static const String imageUrl = "https://perceived-bare-wholesale-lives.trycloudflare.com";
+  // static const String baseUrl = "https://perceived-bare-wholesale-lives.trycloudflare.com/api/v1";
+  static const String baseUrl = "http://10.10.7.26:5000/api/v1";
+
+  static const String imageUrl = "http://10.10.7.26:5000";
 
   // auth urls
   static String login = "$baseUrl/auth/login";
@@ -55,4 +61,10 @@ class ApiUrls {
   static const String createRequest = "$baseUrl/request/create-request";
   static const String chatListUrl = "$baseUrl/request";
   static const String bookingListUrl = "$baseUrl/booking/?longitude=90.4125&latitude=23.8103&status=upcoming";
+  String get userChatUrl => "$baseUrl/chat/user/$id";
+  static const String userNotificationsUrl = "$baseUrl/notifications";
+
+
+
+
 }

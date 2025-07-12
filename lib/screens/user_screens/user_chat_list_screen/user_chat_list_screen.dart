@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../constants/app_strings.dart';
+import '../../../models/request_list_model.dart';
 import '../../../routes/app_routes.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller/chat_list_api_caller.dart';
@@ -101,7 +102,7 @@ class UserChatListScreen extends StatelessWidget {
                               physics: const AlwaysScrollableScrollPhysics(),
                               itemCount: controller.requestList.length,
                               itemBuilder: (context, index) {
-                                final request = controller.requestList[index];
+                                Request request = controller.requestList[index];
                                 return Container(
                                   width: double.infinity,
                                   margin: const EdgeInsets.symmetric(
@@ -113,9 +114,16 @@ class UserChatListScreen extends StatelessWidget {
                                   ),
                                   child: ListTile(
                                     onTap: () {
+                                      int? requestIdAsInt;
+                                      requestIdAsInt = int.tryParse(request.id); // Use tryParse for safety
+                                      print('😢😢😢😢====>>>>>${request.id}');
+                                      print('😥😥😥😥😪====>>>>>$requestIdAsInt');
+
+
                                       Get.toNamed(
                                         AppRoutes.userChatListProposalScreen,
-                                        arguments: request.message,
+                                        arguments: request,
+
                                       );
                                     },
                                     title: TextWidget(

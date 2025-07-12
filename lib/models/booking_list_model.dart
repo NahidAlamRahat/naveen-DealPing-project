@@ -1,6 +1,6 @@
 class BookingModel {
   final String id;
-  final double rating; // ✅ make it double
+  final double rating;
   final String businessName;
   final String address;
   final double distance;
@@ -22,7 +22,7 @@ class BookingModel {
       address: json['business']?['address'] ?? '',
       distance: (json['distance'] ?? 0).toDouble(),
       userProfileImage: json['user']?['profile'] ?? '',
-      rating: (json['business']?['rating'] ?? 0).toDouble(), // ✅ fixed here
+      rating: (json['business']?['rating'] ?? 0).toDouble(),
     );
   }
 }

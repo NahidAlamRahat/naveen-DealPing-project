@@ -22,7 +22,7 @@ class TextWidget extends StatelessWidget {
     this.fontWeight = FontWeight.w400,
     this.fontSize = 14,
     this.fontStyle = FontStyle.normal,
-    this.fontColor = Colors.transparent,
+    this.fontColor = Colors.black,
     this.overflow,
     this.maxLines,
     this.textAlignment = TextAlign.center,

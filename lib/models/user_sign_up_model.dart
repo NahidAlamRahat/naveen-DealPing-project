@@ -24,4 +24,5 @@ class UserSignUpModel {
       "role": "user",
     };
   }
+
 }

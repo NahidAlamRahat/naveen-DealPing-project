@@ -1,17 +1,20 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/utils/app_size.dart';
 import 'package:deal_ping/widgets/appbar_widget/appbar_widget.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
+import 'package:deal_ping/widgets/image_widget/image_widget.dart';
 import 'package:deal_ping/widgets/space_widget/space_widget.dart';
 import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../models/notification_model.dart';
 import 'controller/user_notification_controller.dart';
 
 class UserNotificationScreen extends StatelessWidget {
   final UserNotificationController controller =
-      Get.put(UserNotificationController());
+  Get.put(UserNotificationController());
 
   UserNotificationScreen({super.key});
 
@@ -48,44 +51,46 @@ class UserNotificationScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+/*
                   Obx(
-                    () => DropdownButton<String>(
+                        () => DropdownButton<String>(
                       value: controller.filterType.value,
                       underline: const SizedBox(),
                       icon: const Icon(Icons.keyboard_arrow_down_rounded,
                           color: AppColors.green500),
                       items: controller.filterOptions
                           .map((e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(
-                                  e,
-                                  style: const TextStyle(
-                                    color: AppColors.grey300,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ))
+                        value: e,
+                        child: Text(
+                          e,
+                          style: const TextStyle(
+                            color: AppColors.grey300,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ))
                           .toList(),
                       onChanged: controller.changeFilterType,
                     ),
                   ),
+*/
                 ],
               ),
             ),
             // Notification List
             Obx(
-              () => Padding(
+                  () => Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: Column(
-                  children: controller.filteredNotifications
+                  children: controller.notifications
                       .asMap()
                       .entries
                       .map((entry) => NotificationItem(
-                            notification: entry.value,
-                            isNew: entry.key == 0,
-                          ))
+                    notification: entry.value,
+                    isNew: entry.key == 0, networkImageUrl: '',
+                  ))
                       .toList(),
                 ),
               ),
@@ -108,16 +113,23 @@ class UserNotificationScreen extends StatelessWidget {
   }
 }
 
-// Notification Item Widget
+
+
+
 class NotificationItem extends StatelessWidget {
   final Map<String, String> notification;
   final bool isNew;
+  final String networkImageUrl;
 
   const NotificationItem({
     super.key,
     required this.notification,
     this.isNew = false,
+    required this.networkImageUrl,
   });
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -133,11 +145,17 @@ class NotificationItem extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const CircleAvatar(
-            backgroundColor: AppColors.green500,
-            radius: 20,
-            child: Icon(Icons.check, color: AppColors.white, size: 24),
+
+           ClipRRect(
+             borderRadius: BorderRadiusGeometry.circular(AppSize.width(value: 200)),
+            child: NetworkImageWidget(
+              fit: BoxFit.cover,
+                height: AppSize.height(value: 40),
+                width: AppSize.height(value: 40),
+                networkImageUrl: networkImageUrl),
           ),
+
+
           const SpaceWidget(spaceWidth: 12),
           Expanded(
             child: Column(

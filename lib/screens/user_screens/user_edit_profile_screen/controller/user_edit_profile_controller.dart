@@ -8,7 +8,6 @@ import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserEditProfileController extends GetxController {
   final ProfileRepository _profileRepository = ProfileRepository();
-
   final Rx<File?> profileImage = Rx<File?>(null);
   final RxString profileImageUrl = ''.obs;
   final RxBool isLocalImage = false.obs;
@@ -74,38 +73,6 @@ class UserEditProfileController extends GetxController {
       AppSnackBar.error("Failed to select image.");
     }
   }
-
-/*
-  Future<void> updateProfile() async {
-    if (firstName.text.trim().isEmpty) {
-      AppSnackBar.error("Please enter your first name.");
-      return;
-    }
-
-    isLoading.value = true;
-    try {
-      final success = await _profileRepository.updateProfile(
-        name:firstName.text.trim() ,
-        lastName: lastName.text.trim(),
-        location: userLocation.isNotEmpty ? userLocation : null,
-        imageFile: isLocalImage.value ? profileImage.value : null,
-      );
-
-
-
-      if (success) {
-        Get.back(result: {'updated': true});
-        AppSnackBar.message('profile updated successfully');
-      }
-    } catch (e) {
-      errorLog("updateProfile controller error");
-      AppSnackBar.error("An error occurred while updating the profile.");
-    } finally {
-      isLoading.value = false;
-    }
-  }
-*/
-
 
   Future<void> updateProfile(BuildContext context) async {
     if (firstName.text.trim().isEmpty) {

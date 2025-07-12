@@ -112,6 +112,7 @@ class UserSignUpScreen extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
                 const SpaceWidget(spaceHeight: 4),
+
                 TextFieldWidget(
                   controller: controller.emailController,
                   hintText: 'Enter Your E-Mail',
