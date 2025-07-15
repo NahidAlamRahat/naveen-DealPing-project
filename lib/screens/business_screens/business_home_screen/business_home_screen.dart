@@ -2,6 +2,7 @@ import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_icons_path.dart';
 import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/utils/extension.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,7 @@ import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/image_widget/image_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
+import 'controller/new_chat_list_api_caller.dart';
 
 class BusinessHomeScreen extends StatefulWidget {
   const BusinessHomeScreen({super.key});
@@ -20,10 +22,11 @@ class BusinessHomeScreen extends StatefulWidget {
 }
 
 class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
+  BusinessChatListApiController controller = Get.put(BusinessChatListApiController());
   List<Map<String, dynamic>> messages = List.generate(
       5,
       (index) => {
-            "name": "John Doe",
+            "name": "John Doe12",
             "message": "Hi! I'd love to book a table for 4 tonight.",
             "time": "01:42",
             "unread": 2,
@@ -77,6 +80,11 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
                 ),
+                onTap: (index) async {
+                  controller.onChatTypeChange(index); // tab select change
+                  await controller.refreshList();     // new data fetch
+                },
+
                 unselectedLabelColor: AppColors.green500,
                 dividerColor: Colors.transparent,
                 indicatorSize: TabBarIndicatorSize.tab,
@@ -84,32 +92,14 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                   color: AppColors.green500,
                   borderRadius: BorderRadius.circular(4),
                 ),
-                tabs: const [
-                  Tab(
-                    // text: "New\nmessage",
-                    child: Text(
-                      "New",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14),
-                    ),
+                tabs: ChatType.values.map((chat)=> Tab(
+                  // text: "New\nmessage",
+                  child: Text(
+                    chat.name,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 14),
                   ),
-                  Tab(
-                    // text: "New\nmessage",
-                    child: Text(
-                      "Ongoing",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ),
-                  Tab(
-                    // text: "New\nmessage",
-                    child: Text(
-                      "Confirmed",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ),
-                ],
+                ), ).toList(),
               ),
             ),
             const SpaceWidget(spaceHeight: 16),
@@ -136,263 +126,106 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
             ),
             const SpaceWidget(spaceHeight: 16),
             Expanded(
-              child: TabBarView(
-                children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        ...List.generate(messages.length, (index) {
-                          var msg = messages[index];
+              child: GetBuilder<BusinessChatListApiController>(
+                builder: (controller) {
+                  final list = controller.businessChatList;
 
-                          return InkWell(
-                            onTap: () {
-                              Get.toNamed(AppRoutes.businessChatScreen);
-                            },
-                            highlightColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              margin: const EdgeInsets.only(
-                                  bottom: 12, left: 20, right: 20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                  if (controller.isInitialLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (controller.errorMessage != null) {
+                    return Center(child: Text(controller.errorMessage!));
+                  }
+
+                  if (list.isEmpty) {
+                    return const Center(child: Text("No chats available"));
+                  }
+
+                  return ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    itemCount: list.length,
+                    itemBuilder: (context, index) {
+                      final item = list[index];
+                      return InkWell(
+                        onTap: () {
+                          Get.toNamed(AppRoutes.businessChatScreen);
+                        },
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          margin: const EdgeInsets.only(bottom: 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
                                 children: [
-                                  Row(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: ImageWidget(
-                                          imagePath: msg['image'],
-                                          width: 40,
-                                          height: 40,
-                                        ),
-                                      ),
-                                      const SpaceWidget(spaceWidth: 8),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TextWidget(
-                                            text: msg['name'],
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                            fontColor: AppColors.green500,
-                                          ),
-                                          TextWidget(
-                                            text: msg['message'],
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                            fontColor: AppColors.grey700,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: NetworkImageWidget(
+                                      networkImageUrl: "${AppImagePath.imageUrl}${item.profileImage}",
+                                      width: 40,
+                                      height: 40,
+                                    ),
                                   ),
+                                  const SpaceWidget(spaceWidth: 8),
                                   Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      if (msg['unread'] > 0)
-                                        CircleAvatar(
-                                          radius: 9,
-                                          backgroundColor: AppColors.redisPink,
-                                          child: TextWidget(
-                                            text: msg['unread'].toString(),
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w400,
-                                            fontColor: AppColors.white,
-                                          ),
-                                        ),
-                                      const SpaceWidget(spaceHeight: 2),
                                       TextWidget(
-                                        text: msg['time'],
-                                        fontSize: 10,
+                                        text: item.name,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        fontColor: AppColors.green500,
+                                      ),
+                                      TextWidget(
+                                        text: item.latestMessage,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.w400,
-                                        fontColor: AppColors.grey300,
+                                        fontColor: AppColors.grey700,
                                       ),
                                     ],
                                   ),
                                 ],
                               ),
-                            ),
-                          );
-                        }),
-                      ],
-                    ),
-                  ),
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        ...List.generate(messages.length, (index) {
-                          var msg = messages[index];
-
-                          return InkWell(
-                            onTap: () {
-                              Get.toNamed(AppRoutes.businessChatScreen);
-                            },
-                            highlightColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              margin: const EdgeInsets.only(
-                                  bottom: 12, left: 20, right: 20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Row(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: ImageWidget(
-                                          imagePath: msg['image'],
-                                          width: 40,
-                                          height: 40,
-                                        ),
-                                      ),
-                                      const SpaceWidget(spaceWidth: 8),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TextWidget(
-                                            text: msg['name'],
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                            fontColor: AppColors.green500,
-                                          ),
-                                          TextWidget(
-                                            text: msg['message'],
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                            fontColor: AppColors.grey700,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      if (msg['unread'] > 0)
-                                        CircleAvatar(
-                                          radius: 9,
-                                          backgroundColor: AppColors.redisPink,
-                                          child: TextWidget(
-                                            text: msg['unread'].toString(),
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w400,
-                                            fontColor: AppColors.white,
-                                          ),
-                                        ),
-                                      const SpaceWidget(spaceHeight: 2),
-                                      TextWidget(
-                                        text: msg['time'],
+                                  if (item.unreadMessageCount > 0)
+                                    CircleAvatar(
+                                      radius: 9,
+                                      backgroundColor: AppColors.redisPink,
+                                      child: TextWidget(
+                                        text: item.unreadMessageCount.toString(),
                                         fontSize: 10,
                                         fontWeight: FontWeight.w400,
-                                        fontColor: AppColors.grey300,
+                                        fontColor: AppColors.white,
                                       ),
-                                    ],
+                                    ),
+                                  const SpaceWidget(spaceHeight: 2),
+                                  TextWidget(
+                                    text: (DateTime.tryParse(
+                                        item.createdAt) ??
+                                        DateTime.now())
+                                        .time,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w400,
+                                    fontColor: AppColors.grey300,
                                   ),
                                 ],
                               ),
-                            ),
-                          );
-                        }),
-                      ],
-                    ),
-                  ),
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        ...List.generate(messages.length, (index) {
-                          var msg = messages[index];
-
-                          return InkWell(
-                            onTap: () {
-                              Get.toNamed(AppRoutes.businessChatScreen);
-                            },
-                            highlightColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              margin: const EdgeInsets.only(
-                                  bottom: 12, left: 20, right: 20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: ImageWidget(
-                                          imagePath: msg['image'],
-                                          width: 40,
-                                          height: 40,
-                                        ),
-                                      ),
-                                      const SpaceWidget(spaceWidth: 8),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TextWidget(
-                                            text: msg['name'],
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                            fontColor: AppColors.green500,
-                                          ),
-                                          TextWidget(
-                                            text: msg['message'],
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                            fontColor: AppColors.grey700,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      if (msg['unread'] > 0)
-                                        CircleAvatar(
-                                          radius: 9,
-                                          backgroundColor: AppColors.redisPink,
-                                          child: TextWidget(
-                                            text: msg['unread'].toString(),
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w400,
-                                            fontColor: AppColors.white,
-                                          ),
-                                        ),
-                                      const SpaceWidget(spaceHeight: 2),
-                                      TextWidget(
-                                        text: msg['time'],
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400,
-                                        fontColor: AppColors.grey300,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }),
-                      ],
-                    ),
-                  ),
-                ],
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
-            ),
+            )
+
           ],
         ),
       ),

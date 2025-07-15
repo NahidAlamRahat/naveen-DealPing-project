@@ -1,13 +1,12 @@
 
 import 'package:deal_ping/services/api/api_services.dart';
-import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import '../../../../constants/api_urls.dart';
 import '../../../../models/notification_model.dart';
 
-class UserNotificationApiCallerController extends GetxController {
+class NotificationApiCallerController extends GetxController {
 
   final int _perPageDataCount = 10;
   int _currentPage = 0;

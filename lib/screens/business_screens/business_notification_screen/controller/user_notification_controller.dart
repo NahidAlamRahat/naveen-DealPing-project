@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class UserNotificationController extends GetxController {
+class BusinessNotificationController extends GetxController {
   var notifications = <NotificationModel>[].obs;
   var filteredNotifications = <NotificationModel>[].obs;
   var searchQuery = ''.obs;

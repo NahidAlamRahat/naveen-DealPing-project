@@ -36,29 +36,37 @@ class UserSignInButtonController extends GetxController {
   }
 
   Future<void> onTapSignInButton() async {
-
     if (formKey.currentState!.validate()) {
-      SignInModel signInModel = SignInModel(
+      try {
+        // Show loading
+        _signInController.inProgress == true;
+
+
+        SignInModel signInModel = SignInModel(
           email: emailController.text.trim(),
-          password: passwordController.text);
+          password: passwordController.text,
+        );
 
-      final bool isSuccess =
-          await _signInController.signInApiCall(signInModel: signInModel);
-      _signInController.inProgress == true;
+        final bool isSuccess =
+        await _signInController.signInApiCall(signInModel: signInModel);
 
-      if (isSuccess) {
+        // Hide loading
         _signInController.inProgress == false;
 
-        AppSnackBar.success(
-            _signInController.successfullyMessage ?? 'Login Successful!');
-        print('success message => ${_signInController.errorMessage}');
-
-       Get.offAllNamed(AppRoutes.userBottomNav);
-      } else {
+        if (isSuccess) {
+          AppSnackBar.success(
+              _signInController.successfullyMessage ?? 'Login Successful!');
+          print('success message => ${_signInController.successfullyMessage}');
+          Get.offAllNamed(AppRoutes.userBottomNav);
+        } else {
+          AppSnackBar.message('${_signInController.errorMessage}');
+          debugPrint('error message => ${_signInController.errorMessage}');
+        }
+      } catch (e, stackTrace) {
         _signInController.inProgress == false;
-        // error message
-        AppSnackBar.message('${_signInController.errorMessage}');
-        debugPrint('error message => ${_signInController.errorMessage}');
+        AppSnackBar.message('Something went wrong. Please try again.');
+        debugPrint('Exception in SignIn: $e');
+        debugPrint('StackTrace: $stackTrace');
       }
     }
   }

@@ -11,7 +11,7 @@ import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/image_widget/image_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
-import 'booking_list_api_caller.dart';
+import 'controller/booking_list_api_caller.dart';
 
 class UserBookingsScreen extends StatelessWidget {
   @override
@@ -46,6 +46,7 @@ class UserBookingsScreen extends StatelessWidget {
                     unselectedLabelColor: AppColors.green500,
                     dividerColor: Colors.transparent,
                     indicatorSize: TabBarIndicatorSize.tab,
+                    onTap: controller.onBookingStatusChange,
                     indicator: BoxDecoration(
                       color: AppColors.green500,
                       borderRadius: BorderRadius.circular(4),

@@ -1,4 +1,5 @@
 
+import 'package:deal_ping/screens/user_screens/user_bookings_screen/controller/booking_list_api_caller.dart';
 import 'package:flutter/foundation.dart';
 
 import '../utils/app_log/error_log.dart';
@@ -23,9 +24,11 @@ String _getDomain() {
 class ApiUrls {
   // instance variable
   String id;
+  String status;
+
 
   // constructor
-  ApiUrls({this.id = ''});
+  ApiUrls({this.id = '',this.status = ''});
 
   // base url
   static final String domain = _getDomain();
@@ -60,9 +63,15 @@ class ApiUrls {
 
   static const String createRequest = "$baseUrl/request/create-request";
   static const String chatListUrl = "$baseUrl/request";
-  static const String bookingListUrl = "$baseUrl/booking/?longitude=90.4125&latitude=23.8103&status=upcoming";
+  static  String bookingListUrl({required double longitude, required double latitude, required BookingStatus status })
+                        => "$baseUrl/booking/?longitude=$longitude&latitude=$latitude&status=${status.name}";
   String get userChatUrl => "$baseUrl/chat/user/$id";
   static const String userNotificationsUrl = "$baseUrl/notifications";
+
+  static String businessChatListUrl({required String status}) => "$baseUrl/chat/businesses?status=$status";
+
+
+
 
 
 

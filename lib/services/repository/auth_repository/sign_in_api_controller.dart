@@ -50,9 +50,12 @@ class SignInApiController extends GetxController {
       LocalStorage.setString(LocalStorageKeys.myRole, LocalStorage.myRole);
 
       _successfullyMessage = response.message;
+      _inProgress = false;
+
       update();
       return true;
     } else {
+      _inProgress = false;
       print('Error message => ${response.message}');
       _errorMessage = response.message;
       update();

@@ -1,5 +1,6 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/screens/user_screens/user_bottom_nav/controller/user_bottom_nav_controller.dart';
 import 'package:deal_ping/utils/app_size.dart';
 import 'package:deal_ping/widgets/appbar_widget/appbar_widget.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
@@ -10,13 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../models/notification_model.dart';
+import '../../business_screens/business_notification_screen/controller/business_notification_api_caller_controller.dart';
 import 'controller/user_notification_controller.dart';
 
 class UserNotificationScreen extends StatelessWidget {
-  final UserNotificationController controller =
-  Get.put(UserNotificationController());
+  final NotificationApiCallerController _apiCallerController = Get.put(NotificationApiCallerController());
+  final UserNotificationController controller;
 
-  UserNotificationScreen({super.key});
+  UserNotificationScreen({super.key}): controller = Get.find<UserBottomNavController>().userNotificationController;
 
   @override
   Widget build(BuildContext context) {
@@ -43,78 +45,46 @@ class UserNotificationScreen extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
+        controller: controller.scrollController,
         child: Column(
           children: [
-            // Dropdown Filter
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-/*
-                  Obx(
-                        () => DropdownButton<String>(
-                      value: controller.filterType.value,
-                      underline: const SizedBox(),
-                      icon: const Icon(Icons.keyboard_arrow_down_rounded,
-                          color: AppColors.green500),
-                      items: controller.filterOptions
-                          .map((e) => DropdownMenuItem(
-                        value: e,
-                        child: Text(
-                          e,
-                          style: const TextStyle(
-                            color: AppColors.grey300,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ))
-                          .toList(),
-                      onChanged: controller.changeFilterType,
-                    ),
-                  ),
-*/
-                ],
-              ),
-            ),
             // Notification List
-            Obx(
-                  () => Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                child: Column(
-                  children: controller.notifications
-                      .asMap()
-                      .entries
-                      .map((entry) => NotificationItem(
-                    notification: entry.value,
-                    isNew: entry.key == 0, networkImageUrl: '',
-                  ))
-                      .toList(),
-                ),
+            Obx(() => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              child: Column(
+                children: controller.filteredNotifications
+                    .asMap()
+                    .entries
+                    .map((entry) => NotificationItem(
+                  notification: entry.value,
+                  isNew: entry.key == 0,
+                  networkImageUrl: entry.value['image'] ?? '',
+
+                )
+                )
+                    .toList(),
               ),
-            ),
-            // View More Button
-            Padding(
+            )),
+
+            // View More / Show Less Button
+            Obx(() => Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: ButtonWidget(
-                onPressed: controller.onViewMore,
-                label: AppStrings.viewMore,
+                onPressed: controller.onToggleNotificationsView,
+                label: controller.isViewMore.value
+                    ? AppStrings.viewMore
+                    : "Show Less",
                 buttonHeight: 36,
                 buttonWidth: 100,
                 fontSize: 12,
               ),
-            ),
+            )),
           ],
         ),
       ),
     );
   }
 }
-
-
-
 
 class NotificationItem extends StatelessWidget {
   final Map<String, String> notification;
@@ -127,9 +97,6 @@ class NotificationItem extends StatelessWidget {
     this.isNew = false,
     required this.networkImageUrl,
   });
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -145,17 +112,15 @@ class NotificationItem extends StatelessWidget {
       ),
       child: Row(
         children: [
-
-           ClipRRect(
-             borderRadius: BorderRadiusGeometry.circular(AppSize.width(value: 200)),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(AppSize.width(value: 200)),
             child: NetworkImageWidget(
               fit: BoxFit.cover,
-                height: AppSize.height(value: 40),
-                width: AppSize.height(value: 40),
-                networkImageUrl: networkImageUrl),
+              height: AppSize.height(value: 40),
+              width: AppSize.height(value: 40),
+              networkImageUrl: networkImageUrl,
+            ),
           ),
-
-
           const SpaceWidget(spaceWidth: 12),
           Expanded(
             child: Column(

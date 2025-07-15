@@ -1,5 +1,7 @@
 
+import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/screens/user_screens/user_notification_screen/controller/user_notification_api_caller_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 // class UserNotificationController extends GetxController {
@@ -70,8 +72,11 @@ import 'package:get/get.dart';
 ///==================================
 
 class UserNotificationController extends GetxController {
-  NotificationApiCallerController _apiCallerController = Get.put(NotificationApiCallerController());
-  var notifications = <Map<String, String>>[].obs;
+  ScrollController scrollController = ScrollController();
+  UserNotificationApiCallerController _apiCallerController = Get.put(UserNotificationApiCallerController());
+  var notifications = <Map<String, String>>[
+
+  ].obs;
   var filteredNotifications = <Map<String, String>>[].obs;
   var searchQuery = ''.obs;
   var filterType = 'Weekly'.obs;
@@ -82,11 +87,18 @@ class UserNotificationController extends GetxController {
   void onInit() {
     super.onInit();
     fetchNotifications();
+    scrollController.addListener((){
+      if (scrollController.position.pixels >= scrollController.position.maxScrollExtent) {
+        print("========================> max extent called");
+        fetchNotifications();
+      }
+    });
   }
 
 
 
   Future<void> fetchNotifications() async{
+
     await _apiCallerController.getNotificationList();
     print("_apiCallerController.notificationList ====================>>>>>   ${_apiCallerController.notificationList}");
     notifications.value = List.generate(
@@ -94,7 +106,8 @@ class UserNotificationController extends GetxController {
           (index) => {
         'title': _apiCallerController.notificationList[index].businessName,  // businessName
         'subtitle': _apiCallerController.notificationList[index].body,  // body
-        'date': '20-Jan-2025, 3:00 PM',  // createdAt
+        'date': _apiCallerController.notificationList[index].createdAt,
+        'image' : '${AppImagePath.imageUrl}${_apiCallerController.notificationList[index].userProfileImage}' // createdAt
       },
     );
     filteredNotifications.assignAll(notifications);

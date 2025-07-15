@@ -12,8 +12,8 @@ import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller/user_notification_controller.dart';
 
 class BusinessNotificationScreen extends StatelessWidget {
-  final UserNotificationController controller =
-      Get.put(UserNotificationController());
+  final BusinessNotificationController controller =
+      Get.put(BusinessNotificationController());
 
   BusinessNotificationScreen({super.key});
 

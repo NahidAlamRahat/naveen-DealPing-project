@@ -1,31 +1,35 @@
 
+import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/services/api/api_services.dart';
-import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import '../../../../constants/api_urls.dart';
-import '../../../../models/notification_model.dart';
+import '../../../../models/booking_list_model.dart';
 
-class UserNotificationApiCallerController extends GetxController {
 
-  final int _perPageDataCount = 10;
+enum BookingStatus{upcoming, completed}
+
+class BookingListController extends GetxController {
+
+  BookingStatus bookingStatus = BookingStatus.upcoming;
+  final int _perPageDataCount = 30;
   int _currentPage = 0;
   int? _totalPage;
   bool _isInitialLoading = true;
   bool _isLoading = false;
-  List<NotificationModel> notificationList = [];
+  List<BookingModel> _bookingList = [];
   String? _errorMessage;
-
-
 
   String? get errorMessage => _errorMessage;
   int? get totalPage => _totalPage;
-  // List<NotificationModel> get notificationList => _notificationList;
+  List<BookingModel> get bookingList => _bookingList;
   bool get isLoading => _isLoading;
   bool get isInitialLoading => _isInitialLoading;
 
-  Future<bool> getNotificationList() async {
+  void onBookingStatusChange(int index){
+    bookingStatus = BookingStatus.values.elementAt(index);
+  }
+
+  Future<bool> getBookingList() async {
     if (_totalPage != null && _currentPage > _totalPage!) return true;
 
     bool isSuccess = false;
@@ -34,33 +38,29 @@ class UserNotificationApiCallerController extends GetxController {
     if (!_isInitialLoading) _isLoading = true;
     update();
 
-    final response = await ApiService.getApi(ApiUrls.userNotificationsUrl, queryParams: {
+    final response = await ApiService.getApi(ApiUrls.bookingListUrl(longitude:  90.4125, latitude:  23.8103, status: bookingStatus), queryParams: {
       'count': _perPageDataCount,
       'page': _currentPage,
     });
 
 
-    print('url userNotificationsUrl😊😊😊😊😊===>  ${ApiUrls.userNotificationsUrl}');
+    print('url 😊😊😊😊😊===>  ${ApiUrls.bookingListUrl}');
 
     if (response.statusCode == 200) {
-      print('notificationList statusCode ===>  ${response.statusCode}');
-      List<NotificationModel> list = [];
+      print('statusCode ===>  ${response.statusCode}');
+      List<BookingModel> list = [];
 
       final body = response.body['data']; // ✅ Corrected
-      print('notificationList 😊😊😊😊😊===>  $body');
-
-      for (var item in body['data']) {
-        notificationList.add(NotificationModel.fromJson(item));
+      for (Map<String, dynamic> data in body['data']) {
+        list.add(BookingModel.fromJson(data));
       }
-      print('notificationList 😊😊😊😊😊===>  $notificationList');
 
-      // _notificationList.addAll(list);
+      _bookingList.addAll(list);
       _totalPage = body['meta']['totalPages']; // ✅ Corrected
       _errorMessage = null;
       isSuccess = true;
 
-      print('Fetched bookings: ${notificationList.length}');
-      update();
+      print('Fetched bookings: ${_bookingList.length}');
     } else {
       _errorMessage = response.message;
       debugPrint('_errorMessage ===>  ${response.message}');
@@ -73,15 +73,15 @@ class UserNotificationApiCallerController extends GetxController {
   }
 
   Future<bool> refreshList() async {
-    _currentPage = 1;
-    // _notificationList.clear();
+    _currentPage = 0;
+    _bookingList.clear();
     _isInitialLoading = true;
-    return getNotificationList();
+    return getBookingList();
   }
 
   Future<void> appOnInit() async {
     try {
-      await getNotificationList();
+      await getBookingList();
     } catch (e) {
       debugPrint('error from ${e.toString()}');
     }
@@ -93,3 +93,4 @@ class UserNotificationApiCallerController extends GetxController {
     super.onInit();
   }
 }
+
