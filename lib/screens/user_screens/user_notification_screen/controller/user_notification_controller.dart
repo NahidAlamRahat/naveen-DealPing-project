@@ -25,7 +25,7 @@ class UserNotificationController extends GetxController {
     fetchNotifications();
     scrollController.addListener((){
       if (scrollController.position.pixels >= scrollController.position.maxScrollExtent) {
-        print("========================> max extent called");
+        print("============ 😊😊😊😊😊============> max extent called");
         fetchNotifications();
       }
     });

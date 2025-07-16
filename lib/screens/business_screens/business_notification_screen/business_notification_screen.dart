@@ -1,21 +1,22 @@
 import 'package:deal_ping/constants/app_colors.dart';
-import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/screens/user_screens/user_bottom_nav/controller/user_bottom_nav_controller.dart';
+import 'package:deal_ping/utils/app_size.dart';
+import 'package:deal_ping/widgets/appbar_widget/appbar_widget.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:deal_ping/widgets/image_widget/image_widget.dart';
+import 'package:deal_ping/widgets/space_widget/space_widget.dart';
+import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../widgets/appbar_widget/appbar_widget.dart';
-import '../../../widgets/space_widget/space_widget.dart';
-import '../../../widgets/text_widget/text_widgets.dart';
-import 'controller/user_notification_controller.dart';
+import '../../business_screens/business_notification_screen/controller/business_notification_api_caller_controller.dart';
+import '../../user_screens/user_notification_screen/controller/user_notification_controller.dart';
 
 class BusinessNotificationScreen extends StatelessWidget {
-  final BusinessNotificationController controller =
-      Get.put(BusinessNotificationController());
+  final NotificationApiCallerController _apiCallerController = Get.put(NotificationApiCallerController());
+  final UserNotificationController controller;
 
-  BusinessNotificationScreen({super.key});
+  BusinessNotificationScreen({super.key}): controller = Get.find<UserBottomNavController>().userNotificationController;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +28,7 @@ class BusinessNotificationScreen extends StatelessWidget {
         centerTitle: true,
         action: PopupMenuButton<int>(
           constraints: const BoxConstraints.expand(width: 150, height: 60),
-          onSelected: (value) {
-            if (value == 1) {}
-          },
+          onSelected: controller.onMarkAllRead,
           itemBuilder: (context) => [
             const PopupMenuItem(
               value: 1,
@@ -39,72 +38,45 @@ class BusinessNotificationScreen extends StatelessWidget {
               ),
             ),
           ],
-          // offset: Offset(0, 100),
           color: AppColors.white,
           elevation: 2,
         ),
       ),
       body: SingleChildScrollView(
+        controller: controller.scrollController,
         child: Column(
           children: [
-            // Dropdown Filter
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Obx(
-                    () => DropdownButton<String>(
-                      value: controller.filterType.value,
-                      underline: const SizedBox(),
-                      icon: const Icon(Icons.keyboard_arrow_down_rounded,
-                          color: AppColors.green500),
-                      items: ["Weekly", "Monthly"]
-                          .map((e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(
-                                  e,
-                                  style: const TextStyle(
-                                    color: AppColors.grey300,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ))
-                          .toList(),
-                      onChanged: controller.changeFilterType,
-                    ),
-                  ),
-                ],
-              ),
-            ),
             // Notification List
             Obx(() => Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  child: Column(
-                    children: [
-                      ...List.generate(controller.filteredNotifications.length,
-                          (index) {
-                        final notification =
-                            controller.filteredNotifications[index];
-                        return NotificationItem(
-                            notification: notification, isNew: index == 0);
-                      }),
-                    ],
-                  ),
-                )),
-            // View More Button
-            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              child: Column(
+                children: controller.filteredNotifications
+                    .asMap()
+                    .entries
+                    .map((entry) => NotificationItem(
+                  notification: entry.value,
+                  isNew: entry.key == 0,
+                  networkImageUrl: entry.value['image'] ?? '',
+
+                )
+                )
+                    .toList(),
+              ),
+            )),
+
+            // View More / Show Less Button
+            Obx(() => Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: ButtonWidget(
-                onPressed: () {},
-                label: AppStrings.viewMore,
+                onPressed: controller.onToggleNotificationsView,
+                label: controller.isViewMore.value
+                    ? "Show Less"
+                    : AppStrings.viewMore,
                 buttonHeight: 36,
                 buttonWidth: 100,
                 fontSize: 12,
               ),
-            ),
+            )),
           ],
         ),
       ),
@@ -112,15 +84,16 @@ class BusinessNotificationScreen extends StatelessWidget {
   }
 }
 
-// Notification Item Widget
 class NotificationItem extends StatelessWidget {
-  final NotificationModel notification;
+  final Map<String, String> notification;
   final bool isNew;
+  final String networkImageUrl;
 
   const NotificationItem({
     super.key,
     required this.notification,
     this.isNew = false,
+    required this.networkImageUrl,
   });
 
   @override
@@ -138,11 +111,12 @@ class NotificationItem extends StatelessWidget {
       child: Row(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: const ImageWidget(
-              height: 44,
-              width: 44,
-              imagePath: AppImagePath.businessNotificationImage,
+            borderRadius: BorderRadius.circular(AppSize.width(value: 200)),
+            child: NetworkImageWidget(
+              fit: BoxFit.cover,
+              height: AppSize.height(value: 40),
+              width: AppSize.height(value: 40),
+              networkImageUrl: networkImageUrl,
             ),
           ),
           const SpaceWidget(spaceWidth: 12),
@@ -151,21 +125,21 @@ class NotificationItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextWidget(
-                  text: notification.title,
+                  text: notification['title'] ?? '',
                   fontWeight: FontWeight.w500,
                   fontColor: AppColors.green500,
                   fontSize: 14,
                 ),
                 const SpaceWidget(spaceHeight: 4),
                 TextWidget(
-                  text: notification.subtitle,
+                  text: notification['subtitle'] ?? '',
                   fontColor: AppColors.grey300,
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
                 ),
                 const SpaceWidget(spaceHeight: 4),
                 TextWidget(
-                  text: notification.date,
+                  text: notification['date'] ?? '',
                   fontColor: AppColors.grey200,
                   fontSize: 12,
                   fontWeight: FontWeight.w400,

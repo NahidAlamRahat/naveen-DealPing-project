@@ -50,11 +50,11 @@ class ApiUrls {
   static const String updateProfile = "/user/profile";
 
   // category urls
-  static const String categories = "/category/";
-  static const String createOffer = "/offer/";
-  static const String getAllOffer = "/offer/";
-  static const String updateOffer = "/offer/";
-  static const String deleteOffer = "/offer/";
+  static const String categories = "$baseUrl/category/";
+  static const String createOffer = "$baseUrl/offer/";
+  static const String getAllOffer = "$baseUrl/offer/";
+  static const String updateOffer = "$baseUrl/offer/";
+  static const String deleteOffer = "$baseUrl/offer/";
 
   // Common urls
   static const String faq = "/public/faq/all";

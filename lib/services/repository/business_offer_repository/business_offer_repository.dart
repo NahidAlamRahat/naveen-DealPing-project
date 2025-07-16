@@ -34,17 +34,16 @@ class BusinessOfferRepository {
     }
   }
 
-  Future<List<AllOffers>?> fetchAllOffers() async {
+  Future<List<AllOffers>?> getAllOffers() async {
     try {
       var response = await ApiService.getApi(ApiUrls.getAllOffer);
-      if (response != null) {
-        Welcome offersData = Welcome.fromJson(response.body['data']);
-        return offersData.data;
-      } else {
-        AppSnackBar.error("Failed to fetch offers.");
-        return null;
-      }
-    } catch (e) {
+
+      final List<dynamic> offersJson = response.body['data'] ?? [];
+      return offersJson
+          .map((json) => AllOffers.fromJson(json))
+          .toList();
+
+        } catch (e) {
       errorLog(e);
       AppSnackBar.error("An error occurred while fetching offers.");
       return null;

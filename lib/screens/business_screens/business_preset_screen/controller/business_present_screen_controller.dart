@@ -67,7 +67,7 @@ class BusinessPresetScreenController extends GetxController {
     isLoadingOffers.value = true;
     try {
       List<AllOffers>? fetchedOffers =
-          await _businessOfferRepository.fetchAllOffers();
+          await _businessOfferRepository.getAllOffers();
       if (fetchedOffers != null) {
         offers.assignAll(fetchedOffers);
       }
@@ -82,7 +82,7 @@ class BusinessPresetScreenController extends GetxController {
     isLoading.value = true;
     try {
       List<AllOffers>? fetchedOffers =
-          await _businessOfferRepository.fetchAllOffers();
+          await _businessOfferRepository.getAllOffers();
       if (fetchedOffers != null) {
         selectedOffer.value = fetchedOffers.firstWhere(
           (offer) => offer.id == offerId,

@@ -256,7 +256,7 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                           offerId: offer.id ?? '',
                           title: offer.title ?? "No Title",
                           description: offer.description ?? "No Description",
-                          discount: offer.discount ?? 0,
+                          discount:  0, //need to fix later
                           isDefault: offer.datumDefault ?? false,
                           onToggleDefault: (value) {
                             controller.setDefaultOffer(offer.id ?? '', value);

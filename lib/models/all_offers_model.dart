@@ -1,146 +1,47 @@
-import 'dart:convert';
-
-Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
-
-String welcomeToJson(Welcome data) => json.encode(data.toJson());
-
-class Welcome {
-  int? statusCode;
-  bool? success;
-  String? message;
-  List<AllOffers>? data;
-
-  Welcome({
-    this.statusCode,
-    this.success,
-    this.message,
-    this.data,
-  });
-
-  factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
-        statusCode: json["statusCode"],
-        success: json["success"],
-        message: json["message"],
-        data: json["data"] == null
-            ? []
-            : List<AllOffers>.from(
-                json["data"]!.map((x) => AllOffers.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "statusCode": statusCode,
-        "success": success,
-        "message": message,
-        "data": data == null
-            ? []
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
-}
-
 class AllOffers {
-  String? id;
-  Business? business;
-  String? title;
-  String? description;
-  int? discount;
-  bool? datumDefault;
-  String? status;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  int? v;
+  final String id;
+  final String business;
+  final String title;
+  final String description;
+  final bool datumDefault;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final int v;
 
   AllOffers({
-    this.id,
-    this.business,
-    this.title,
-    this.description,
-    this.discount,
-    this.datumDefault,
-    this.status,
-    this.createdAt,
-    this.updatedAt,
-    this.v,
+    required this.id,
+    required this.business,
+    required this.title,
+    required this.description,
+    required this.datumDefault,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.v,
   });
 
-  factory AllOffers.fromJson(Map<String, dynamic> json) => AllOffers(
-        id: json["_id"],
-        business: json["business"] == null
-            ? null
-            : Business.fromJson(json["business"]),
-        title: json["title"],
-        description: json["description"],
-        discount: json["discount"],
-        datumDefault: json["default"],
-        status: json["status"],
-        createdAt: json["createdAt"] == null
-            ? null
-            : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null
-            ? null
-            : DateTime.parse(json["updatedAt"]),
-        v: json["__v"],
-      );
+  factory AllOffers.fromJson(Map<String, dynamic> json) {
+    return AllOffers(
+      id: json['_id'] ?? '',
+      business: json['business'] ?? '',
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      datumDefault: json['default'] ?? false,
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      v: json['__v'] ?? 0,
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "business": business?.toJson(),
-        "title": title,
-        "description": description,
-        "discount": discount,
-        "default": datumDefault,
-        "status": status,
-        "createdAt": createdAt?.toIso8601String(),
-        "updatedAt": updatedAt?.toIso8601String(),
-        "__v": v,
-      };
-}
-
-class Business {
-  String? id;
-  String? businessName;
-  Location? location;
-
-  Business({
-    this.id,
-    this.businessName,
-    this.location,
-  });
-
-  factory Business.fromJson(Map<String, dynamic> json) => Business(
-        id: json["_id"],
-        businessName: json["businessName"],
-        location: json["location"] == null
-            ? null
-            : Location.fromJson(json["location"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "businessName": businessName,
-        "location": location?.toJson(),
-      };
-}
-
-class Location {
-  String? type;
-  List<int>? coordinates;
-
-  Location({
-    this.type,
-    this.coordinates,
-  });
-
-  factory Location.fromJson(Map<String, dynamic> json) => Location(
-        type: json["type"],
-        coordinates: json["coordinates"] == null
-            ? []
-            : List<int>.from(json["coordinates"]!.map((x) => x)),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "type": type,
-        "coordinates": coordinates == null
-            ? []
-            : List<dynamic>.from(coordinates!.map((x) => x)),
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'business': business,
+      'title': title,
+      'description': description,
+      'default': datumDefault,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      '__v': v,
+    };
+  }
 }
