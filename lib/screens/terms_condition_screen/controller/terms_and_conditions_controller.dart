@@ -30,11 +30,11 @@ class TermsAndConditionsController extends GetxController {
             .replaceAll(RegExp(r'\s+'), ' ')
             .trim();
       } else {
-        AppSnackBar.message("Terms and conditions not found");
+        // AppSnackBar.message("Terms and conditions not found");
       }
     } catch (e) {
       errorLog("loadData");
-      AppSnackBar.error("Error fetching terms and conditions");
+      // AppSnackBar.error("Error fetching terms and conditions");
     } finally {
       isLoading(false);
     }

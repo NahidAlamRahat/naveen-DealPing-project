@@ -232,7 +232,7 @@ class OfferItemState extends State<OfferItem> {
                                         description:
                                         editDescriptionController.text
                                             .trim(),
-                                        discount: _selectedPercentage!,
+                                        // discount: _selectedPercentage!,
                                       );
                                       Get.back();
                                     },

@@ -30,11 +30,11 @@ class AboutUsController extends GetxController {
             .replaceAll(RegExp(r'\s+'), ' ')
             .trim();
       } else {
-        AppSnackBar.message("About Us not found");
+        // AppSnackBar.message("About Us not found");
       }
     } catch (e) {
       errorLog("loadData");
-      AppSnackBar.error(e.toString());
+      // AppSnackBar.error(e.toString());
     } finally {
       isLoading(false);
     }

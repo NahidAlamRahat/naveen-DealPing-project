@@ -8,7 +8,7 @@ class BusinessOfferRepository {
   Future<bool> postOffer({
     required String title,
     required String description,
-    required int discount,
+    // required int discount,
   }) async {
     try {
       var response = await ApiService.postApi(
@@ -16,7 +16,7 @@ class BusinessOfferRepository {
         {
           "title": title,
           "description": description,
-          "discount": discount,
+          // "discount": discount,
         },
       );
 
@@ -54,7 +54,7 @@ class BusinessOfferRepository {
     required String offerId,
     required String title,
     required String description,
-    required int discount,
+    // required int discount,
   }) async {
     try {
       var response = await ApiService.patchApi(
@@ -62,7 +62,7 @@ class BusinessOfferRepository {
         body: {
           "title": title,
           "description": description,
-          "discount": discount,
+          // "discount": discount,
         },
       );
 

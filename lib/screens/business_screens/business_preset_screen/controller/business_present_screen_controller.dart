@@ -35,9 +35,9 @@ class BusinessPresetScreenController extends GetxController {
   Future<void> postOffer({
     required String title,
     required String description,
-    required int discount,
+    // required int discount,
   }) async {
-    if (title.isEmpty || description.isEmpty || discount == 0) {
+    if (title.isEmpty || description.isEmpty) {
       AppSnackBar.error("Please fill in all fields and select a discount.");
       return;
     }
@@ -47,7 +47,7 @@ class BusinessPresetScreenController extends GetxController {
       bool success = await _businessOfferRepository.postOffer(
         title: title,
         description: description,
-        discount: discount,
+        // discount: discount,
       );
 
       if (success) {
@@ -100,12 +100,12 @@ class BusinessPresetScreenController extends GetxController {
     required String offerId,
     required String title,
     required String description,
-    required int discount,
+    // required int discount,
   }) async {
-    if (title.isEmpty || description.isEmpty || discount == 0) {
+   /* if (title.isEmpty || description.isEmpty || discount == 0) {
       AppSnackBar.error("Please fill in all fields and select a discount.");
       return;
-    }
+    }*/
 
     isLoading.value = true;
     try {
@@ -113,7 +113,7 @@ class BusinessPresetScreenController extends GetxController {
         offerId: offerId,
         title: title,
         description: description,
-        discount: discount,
+        // discount: discount,
       );
 
       if (success) {

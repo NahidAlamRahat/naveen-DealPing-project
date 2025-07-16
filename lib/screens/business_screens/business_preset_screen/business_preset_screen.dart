@@ -152,7 +152,7 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                                       StateSetter setState) {
                                     return Column(
                                       children: [
-                                        _buildOfferButtonsRow(
+                                       /* _buildOfferButtonsRow(
                                             (selectedPercentage) {
                                           setState(() {
                                             _selectedPercentage =
@@ -160,7 +160,7 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                                             controller.discount.value =
                                                 selectedPercentage;
                                           });
-                                        }),
+                                        }),*/
                                         const SizedBox(height: 18),
                                         Row(
                                           mainAxisAlignment:
@@ -182,8 +182,8 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                                                   description:
                                                       descriptionController.text
                                                           .trim(),
-                                                  discount:
-                                                      controller.discount.value,
+                                                  // discount:
+                                                  //     controller.discount.value,
                                                 );
                                                 Get.back();
                                               },
@@ -256,7 +256,7 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                           offerId: offer.id ?? '',
                           title: offer.title ?? "No Title",
                           description: offer.description ?? "No Description",
-                          discount:  0, //need to fix later
+                          // discount:  offer.discount ?? 0, //need to fix later
                           isDefault: offer.datumDefault ?? false,
                           onToggleDefault: (value) {
                             controller.setDefaultOffer(offer.id ?? '', value);
@@ -286,6 +286,7 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
     );
   }
 
+/*
   Widget _buildOfferButton(int percentage, Function(int) onSelected) {
     bool isSelected = _selectedPercentage == percentage;
     return GestureDetector(
@@ -321,7 +322,9 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
       ),
     );
   }
+*/
 
+/*
   Widget _buildOfferButtonsRow(Function(int) onSelected) {
     return SizedBox(
       height: 30,
@@ -337,13 +340,14 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
       ),
     );
   }
+*/
 }
 
 class OfferItem extends StatefulWidget {
   final String offerId;
   final String title;
   final String description;
-  final int discount;
+  // final int discount;
   final bool isDefault;
   final ValueChanged<bool> onToggleDefault;
 
@@ -352,7 +356,7 @@ class OfferItem extends StatefulWidget {
     required this.offerId,
     required this.title,
     required this.description,
-    required this.discount,
+    // required this.discount,
     required this.isDefault,
     required this.onToggleDefault,
   });
@@ -377,7 +381,7 @@ class _OfferItemState extends State<OfferItem> {
     _isDefault = widget.isDefault;
     editTitleController.text = widget.title;
     editDescriptionController.text = widget.description;
-    _selectedPercentage = widget.discount;
+    // _selectedPercentage = widget.discount;
   }
 
   @override
@@ -387,6 +391,7 @@ class _OfferItemState extends State<OfferItem> {
     super.dispose();
   }
 
+/*
   Widget _buildOfferButton(int percentage, Function(int) onSelected) {
     bool isSelected = _selectedPercentage == percentage;
     return GestureDetector(
@@ -422,22 +427,23 @@ class _OfferItemState extends State<OfferItem> {
       ),
     );
   }
+*/
 
-  Widget _buildOfferButtonsRow(Function(int) onSelected) {
-    return SizedBox(
-      height: 30,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: List.generate(
-          10,
-          (index) {
-            int percentage = 5 * (index + 1);
-            return _buildOfferButton(percentage, onSelected);
-          },
-        ),
-      ),
-    );
-  }
+  // Widget _buildOfferButtonsRow(Function(int) onSelected) {
+  //   return SizedBox(
+  //     height: 30,
+  //     child: ListView(
+  //       scrollDirection: Axis.horizontal,
+  //       children: List.generate(
+  //         10,
+  //         (index) {
+  //           int percentage = 5 * (index + 1);
+  //           return _buildOfferButton(percentage, onSelected);
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -554,24 +560,24 @@ class _OfferItemState extends State<OfferItem> {
                                     StateSetter setState) {
                                   return Column(
                                     children: [
-                                      _buildOfferButtonsRow(
+                                      /*_buildOfferButtonsRow(
                                           (selectedPercentage) {
                                         setState(() {
                                           _selectedPercentage =
                                               selectedPercentage;
                                         });
-                                      }),
+                                      }),*/
                                       const SizedBox(height: 18),
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: ButtonWidget(
                                           label: AppStrings.update,
                                           onPressed: () {
-                                            if (_selectedPercentage == null) {
+                                           /* if (_selectedPercentage == null) {
                                               AppSnackBar.error(
                                                   "Please select a discount percentage.");
                                               return;
-                                            }
+                                            }*/
                                             controller.updateOffer(
                                               offerId: widget.offerId,
                                               title: editTitleController.text
@@ -579,7 +585,7 @@ class _OfferItemState extends State<OfferItem> {
                                               description:
                                                   editDescriptionController.text
                                                       .trim(),
-                                              discount: _selectedPercentage!,
+                                              // discount: _selectedPercentage!,
                                             );
                                             Get.back();
                                           },
