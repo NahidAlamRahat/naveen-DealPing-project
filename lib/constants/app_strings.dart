@@ -83,8 +83,8 @@ class AppStrings {
   static const String chatList = "Chat List";
 
   // User Bookings Screen
-  static const String ongoingBookings = "Upcoming";
-  static const String pastBookings = "Completed";
+  // static const String ongoingBookings = "Upcoming";
+  // static const String pastBookings = "Completed";
   static const String view = "View";
 
   // User Chat Screen

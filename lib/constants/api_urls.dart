@@ -63,9 +63,12 @@ class ApiUrls {
 
   static const String createRequest = "$baseUrl/request/create-request";
   static const String chatListUrl = "$baseUrl/request";
+
   static  String bookingListUrl({required double longitude, required double latitude, required BookingStatus status })
                         => "$baseUrl/booking/?longitude=$longitude&latitude=$latitude&status=${status.name}";
+
   String get userChatUrl => "$baseUrl/chat/user/$id";
+
   static const String userNotificationsUrl = "$baseUrl/notifications";
 
   static String businessChatListUrl({required String status}) => "$baseUrl/chat/businesses?status=$status";

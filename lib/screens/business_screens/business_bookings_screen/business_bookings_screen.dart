@@ -1,123 +1,174 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/utils/app_size.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
+import '../../user_screens/user_bookings_screen/controller/booking_list_api_caller.dart';
 
 class BusinessBookingsScreen extends StatelessWidget {
+  BusinessBookingsScreen({super.key}) {
+    // Controller initialization
+    if (!Get.isRegistered<BookingListController>()) {
+      Get.put(BookingListController());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        backgroundColor: AppColors.white,
-        appBar: AppBar(
-          backgroundColor: AppColors.white,
-          title: const TextWidget(
-            text: AppStrings.bookings,
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-            fontColor: AppColors.grey700,
-          ),
-        ),
-        body: Column(
-          children: [
-            Container(
-              height: 50,
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: AppColors.green50),
-              child: TabBar(
-                indicatorColor: AppColors.green500,
-                labelColor: AppColors.white,
-                unselectedLabelColor: AppColors.green500,
-                dividerColor: Colors.transparent,
-                indicatorSize: TabBarIndicatorSize.tab,
-                indicator: BoxDecoration(
-                  color: AppColors.green500,
-                  borderRadius: BorderRadius.circular(4),
+    return GetBuilder<BookingListController>(
+        builder: (controller) {
+        return DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            backgroundColor: AppColors.white,
+            appBar: AppBar(
+              backgroundColor: AppColors.white,
+              title: const TextWidget(
+                text: AppStrings.bookings,
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                fontColor: AppColors.grey700,
+              ),
+            ),
+            body: Column(
+              children: [
+                Container(
+                  height: AppSize.height(value: 50),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: AppColors.green50),
+                  child: TabBar(
+                    indicatorColor: AppColors.green500,
+                    labelColor: AppColors.white,
+                    unselectedLabelColor: AppColors.green500,
+                    dividerColor: Colors.transparent,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    onTap: controller.onBookingStatusChange,
+                    indicator: BoxDecoration(
+                      color: AppColors.green500,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+
+                    tabs: BookingStatus .values.map((chat)=> Tab(
+                      child: Text(
+                        chat.name,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    ), ).toList(),
+
+
+                  ),
                 ),
-                tabs: const [
-                  Tab(text: AppStrings.ongoingBookings),
-                  Tab(text: AppStrings.pastBookings),
-                ],
-              ),
+                const SpaceWidget(spaceHeight: 8),
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      BookingsList(),
+                      PastBookings(),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            const SpaceWidget(spaceHeight: 8),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  BookingsList(),
-                  PastBookings(),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      }
     );
   }
 }
 
 class BookingsList extends StatelessWidget {
-  final List<Map<String, String>> bookings = List.generate(
-      5,
-      (index) => {
-            'title': 'John Doe',
-            'location': '22 January, 2025||04:00 PM',
-            'distance': '#263487',
-          });
-
-  BookingsList({super.key});
+  const BookingsList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      itemCount: bookings.length,
-      itemBuilder: (context, index) {
-        final booking = bookings[index];
-        return BookingCard(
-          title: booking['title']!,
-          location: booking['location']!,
-          distance: booking['distance']!,
+    return GetBuilder<BookingListController>(
+      builder: (controller) {
+        if (controller.isInitialLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (controller.errorMessage != null) {
+          return Center(child: Text(controller.errorMessage!));
+        }
+
+        return NotificationListener<ScrollNotification>(
+          onNotification: (scrollNotification) {
+            if (scrollNotification.metrics.pixels ==
+                scrollNotification.metrics.maxScrollExtent) {
+              controller.getBookingList(); // Load more on scroll bottom
+            }
+            return false;
+          },
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: controller.bookingList.length,
+            itemBuilder: (context, index) {
+              final booking = controller.bookingList[index];
+              return BookingCard(
+                title: booking.businessName,
+                location: booking.createdAt,
+                distance: booking.bookingCode ?? '',
+              );
+            },
+          ),
         );
       },
     );
   }
 }
+
 
 class PastBookings extends StatelessWidget {
-  final List<Map<String, String>> bookings = List.generate(
-      5,
-      (index) => {
-            'title': 'John Doe',
-            'location': '22 January, 2025||04:00 PM',
-            'distance': '#263487',
-          });
-
-  PastBookings({super.key});
+  const PastBookings({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      itemCount: bookings.length,
-      itemBuilder: (context, index) {
-        final booking = bookings[index];
-        return BookingCard(
-          title: booking['title']!,
-          location: booking['location']!,
-          distance: booking['distance']!,
-          isPastBooking: true,
+    return GetBuilder<BookingListController>(
+      builder: (controller) {
+        if (controller.isInitialLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (controller.errorMessage != null) {
+          return Center(child: Text(controller.errorMessage!));
+        }
+
+        return NotificationListener<ScrollNotification>(
+          onNotification: (scrollNotification) {
+            if (scrollNotification.metrics.pixels ==
+                scrollNotification.metrics.maxScrollExtent) {
+              controller.getBookingList(); // Load more on scroll bottom
+            }
+            return false;
+          },
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: controller.bookingList.length,
+            itemBuilder: (context, index) {
+              final booking = controller.bookingList[index];
+              return BookingCard(
+                title: booking.businessName,
+                location: booking.createdAt,
+                distance: booking.bookingCode ?? '',
+                isPastBooking: true,
+              );
+            },
+          ),
         );
       },
     );
   }
 }
+
 
 class BookingCard extends StatelessWidget {
   final String title, location, distance;
@@ -185,8 +236,8 @@ class BookingCard extends StatelessWidget {
               : ButtonWidget(
                   onPressed: () {},
                   label: AppStrings.checkIn,
-                  buttonHeight: 36,
-                  buttonWidth: 90,
+                  buttonHeight: AppSize.height(value: 36) ,
+                  buttonWidth:AppSize.height(value: 90) ,
                   fontSize: 12,
                 ),
         ],

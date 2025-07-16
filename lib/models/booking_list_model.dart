@@ -5,6 +5,8 @@ class BookingModel {
   final String address;
   final double distance;
   final String userProfileImage;
+  final String createdAt;
+  final String? bookingCode;
 
   BookingModel({
     required this.id,
@@ -13,6 +15,8 @@ class BookingModel {
     required this.address,
     required this.distance,
     required this.userProfileImage,
+    required this.createdAt,
+    required this.bookingCode,
   });
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
@@ -22,7 +26,10 @@ class BookingModel {
       address: json['business']?['address'] ?? '',
       distance: (json['distance'] ?? 0).toDouble(),
       userProfileImage: json['user']?['profile'] ?? '',
+      createdAt: json['createdAt'] ?? '',
+      bookingCode: json['code'] ?? '',
       rating: (json['business']?['rating'] ?? 0).toDouble(),
+
     );
   }
 }

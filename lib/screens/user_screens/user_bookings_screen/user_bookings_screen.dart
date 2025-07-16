@@ -51,10 +51,14 @@ class UserBookingsScreen extends StatelessWidget {
                       color: AppColors.green500,
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    tabs: const [
-                      Tab(text: AppStrings.ongoingBookings),
-                      Tab(text: AppStrings.pastBookings),
-                    ],
+                    tabs: BookingStatus .values.map((chat)=> Tab(
+                      child: Text(
+                        chat.name,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    ), ).toList(),
+
                   ),
                 ),
               ),

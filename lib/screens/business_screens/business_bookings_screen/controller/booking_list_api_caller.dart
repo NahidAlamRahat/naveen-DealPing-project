@@ -1,3 +1,4 @@
+/*
 
 import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/services/api/api_services.dart';
@@ -11,7 +12,7 @@ enum BookingStatus{upcoming, completed}
 class BookingListController extends GetxController {
 
   BookingStatus bookingStatus = BookingStatus.upcoming;
-  final int _perPageDataCount = 10;
+  final int _perPageDataCount = 30;
   int _currentPage = 0;
   int? _totalPage;
   bool _isInitialLoading = true;
@@ -24,8 +25,6 @@ class BookingListController extends GetxController {
   List<BookingModel> get bookingList => _bookingList;
   bool get isLoading => _isLoading;
   bool get isInitialLoading => _isInitialLoading;
-
-
 
   void onBookingStatusChange(int index){
     bookingStatus = BookingStatus.values.elementAt(index);
@@ -96,3 +95,4 @@ class BookingListController extends GetxController {
   }
 }
 
+*/
