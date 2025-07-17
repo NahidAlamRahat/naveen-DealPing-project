@@ -151,6 +151,8 @@ class _UserChatListProposalScreenState
 */
 
 ///================================================
+library;
+
 
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
@@ -167,12 +169,14 @@ import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller.dart';
 
 class UserChatListProposalScreen extends StatelessWidget {
+  const UserChatListProposalScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    ChatController _chatController = Get.put(ChatController());
+    ChatController chatController = Get.put(ChatController());
 
     return Scaffold(
-      appBar: AppbarWidget(text: _chatController.request.value?.message ?? ''),
+      appBar: AppbarWidget(text: chatController.request.value?.message ?? ''),
 
       backgroundColor: AppColors.white,
       // appBar: AppbarWidget(text: "chatItem"),

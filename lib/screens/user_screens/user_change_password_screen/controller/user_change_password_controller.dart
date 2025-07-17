@@ -66,19 +66,19 @@ class UserChangePasswordController extends GetxController {
     // Optional: Add "Bearer" if your backend expects it
     var resetToken = {"Authorization": "Bearer $token"};
 
-    ChangePasswordModel _changePasswordModel = ChangePasswordModel(
+    ChangePasswordModel changePasswordModel = ChangePasswordModel(
       currentPassword: currentPasswordController.text,
       newPassword: newPasswordController.text,
       confirmPassword: confirmPasswordController.text,
     );
 
     debugPrint('🔐 Sending token: $token');
-    debugPrint('📦 ChangePasswordModel: $_changePasswordModel');
+    debugPrint('📦 ChangePasswordModel: $changePasswordModel');
 
     isLoading.value = true;
 
     final bool isSuccess = await _userChangePasswordRepository.changePasswordApiCaller(
-      changePasswordModel: _changePasswordModel,
+      changePasswordModel: changePasswordModel,
       resetToken: resetToken,
     );
 

@@ -87,13 +87,11 @@ class AuthRepository {
           "role": "business",
         },
       );
-      if (response != null) {
-        if (response.message.runtimeType != Null) {
-          AppSnackBar.message(response.message.toString());
-        }
-        return true;
+      if (response.message.runtimeType != Null) {
+        AppSnackBar.message(response.message.toString());
       }
-      return false;
+      return true;
+          return false;
     } catch (e) {
       errorLog(e, source: "sign up repo provider  function ");
       return false;
@@ -109,13 +107,11 @@ class AuthRepository {
         ApiUrls.verifyEmail,
         {"email": email, "oneTimeCode": otp}, // Send OTP as a string
       );
-      if (response != null) {
-        if (response.message.runtimeType != Null) {
-          AppSnackBar.message(response.message.toString());
-        }
-        return true;
+      if (response.message.runtimeType != Null) {
+        AppSnackBar.message(response.message.toString());
       }
-      return false;
+      return true;
+          return false;
     } catch (e) {
       errorLog(e);
       return false;
@@ -191,13 +187,9 @@ class AuthRepository {
           "confirmPassword": confirmPassword,
         },
       );
-      if (response != null) {
-        if (response.message != null) {
-          AppSnackBar.message(response.message.toString());
-        }
-        return true;
-      }
-      return false;
+      AppSnackBar.message(response.message.toString());
+          return true;
+          return false;
     } catch (e) {
       errorLog(e);
       return false;
@@ -214,10 +206,8 @@ class AuthRepository {
         "newPassword": newPassword,
         "confirmPassword": confirmPassword
       });
-      if (response != null) {
-        return true;
-      }
-      return false;
+      return true;
+          return false;
     } catch (e) {
       errorLog(e);
       return false;

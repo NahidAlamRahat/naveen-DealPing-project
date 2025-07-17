@@ -2,7 +2,6 @@ import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_icons_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/services/storage/storage_service.dart';
-import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:deal_ping/utils/app_size.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
@@ -41,7 +40,7 @@ class UserProfileScreen extends StatelessWidget {
             }
           },
           child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Column(
@@ -90,7 +89,7 @@ class UserProfileScreen extends StatelessWidget {
                   Center(
                     child: ButtonWidget(
                       onPressed: () {
-                        Get.to(() => UserEditProfileScreen(), arguments: {
+                        Get.to(() => const UserEditProfileScreen(), arguments: {
                           'name': profileData?.name ?? "",
                           'lastName': profileData?.lastName,
                           'profileImage': profileData?.profile ?? "",

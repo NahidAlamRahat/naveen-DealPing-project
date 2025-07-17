@@ -98,12 +98,12 @@ class UserForgotVerifyAccountController extends GetxController {
             otpTextEditingController5.text +
             otpTextEditingController6.text;
 
-        VerifyOtpModel _verifyOtpModel = VerifyOtpModel(
+        VerifyOtpModel verifyOtpModel = VerifyOtpModel(
           email: email,
           otp: otp,
         );
         var response = await _verifyOtpController.verifyOtp(
-            verifyOtpModel: _verifyOtpModel, url: ApiUrls.verifyEmail);
+            verifyOtpModel: verifyOtpModel, url: ApiUrls.verifyEmail);
 
         print("response ==> $response");
 

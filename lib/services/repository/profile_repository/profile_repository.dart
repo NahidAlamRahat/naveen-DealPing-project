@@ -60,14 +60,9 @@ class ProfileRepository {
         body: formData,
       );
 
-      if (response != null) {
-        AppSnackBar.success("Profile updated successfully.");
-        return true;
-      } else {
-        AppSnackBar.error("Failed to update profile.");
-        return false;
-      }
-    } catch (e) {
+      AppSnackBar.success("Profile updated successfully.");
+      return true;
+        } catch (e) {
       errorLog(e, source: "updateProfile error");
       AppSnackBar.error("An error occurred while updating the profile.");
       return false;

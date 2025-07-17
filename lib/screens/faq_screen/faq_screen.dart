@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_strings.dart';
 import '../../widgets/appbar_widget/appbar_widget.dart';
-import '../../widgets/text_widget/text_widgets.dart';
 import 'controller/faq_screen_controller.dart';
 
 class FAQScreen extends StatelessWidget {

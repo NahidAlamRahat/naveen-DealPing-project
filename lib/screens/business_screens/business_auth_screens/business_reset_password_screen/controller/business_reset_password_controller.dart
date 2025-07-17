@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../../../models/reset_password_model.dart';
 import '../../../../../routes/app_routes.dart';
-import '../../../../../services/repository/auth_repository/auth_repository.dart';
 import '../../../../../services/repository/auth_repository/user_reset_password_repository.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
@@ -45,13 +44,13 @@ class BusinessResetPasswordController extends GetxController {
 
     var resetToken = {"Authorization": token};
 
-    ResetPasswordModel _resetPasswordModel = ResetPasswordModel(
+    ResetPasswordModel resetPasswordModel = ResetPasswordModel(
         newPassword: newPasswordController.text,
         confirmPassword: confirmPasswordController.text);
 
     final bool isSuccess =
     await _userResetPasswordRepository.resetPasswordApiCaller(
-        resetPasswordModel: _resetPasswordModel, resetToken: resetToken);
+        resetPasswordModel: resetPasswordModel, resetToken: resetToken);
 
     if (isSuccess) {
       AppSnackBar.success(

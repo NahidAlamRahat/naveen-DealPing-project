@@ -92,7 +92,7 @@ class BusinessSignUpController extends GetxController {
 
   Future<void> onTapBusinessSignUpButton() async {
     if (formKey.currentState!.validate()) {
-      BusinessSignUpModel _businessSignUpModel = BusinessSignUpModel(
+      BusinessSignUpModel businessSignUpModel = BusinessSignUpModel(
           licenceNumber: licenceNumberController.text.trim(),
           businessName: businessNameController.text.trim(),
           eiinNumber: eiinNumberController.text.trim(),
@@ -102,7 +102,7 @@ class BusinessSignUpController extends GetxController {
           role: 'business');
 
       final bool isSuccess =
-          await _signUpApiController.userSignUp(_businessSignUpModel);
+          await _signUpApiController.userSignUp(businessSignUpModel);
       _signUpApiController.signUpInProgress == true;
 
       if (isSuccess) {

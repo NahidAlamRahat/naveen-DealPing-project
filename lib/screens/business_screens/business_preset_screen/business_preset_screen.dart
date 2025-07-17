@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../constants/app_colors.dart';
-import '../../../widgets/app_snack_bar/app_snack_bar.dart';
 import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
@@ -26,7 +25,7 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
-  bool _switchValue = false;
+  final bool _switchValue = false;
   int? _selectedPercentage;
 
   @override
@@ -170,12 +169,12 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                                             ButtonWidget(
                                               label: AppStrings.add,
                                               onPressed: () {
-                                                if (controller.discount.value ==
-                                                    0) {
-                                                  AppSnackBar.error(
-                                                      "Please select a discount percentage.");
-                                                  return;
-                                                }
+                                                // if (controller.discount.value ==
+                                                //     0) {
+                                                //   AppSnackBar.error(
+                                                //       "Please select a discount percentage.");
+                                                //   return;
+                                                // }
                                                 controller.postOffer(
                                                   title: titleController.text
                                                       .trim(),
@@ -254,12 +253,13 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                         final offer = controller.offers[index];
                         return OfferItem(
                           offerId: offer.id ?? '',
+                          itemIndex: index,
                           title: offer.title ?? "No Title",
                           description: offer.description ?? "No Description",
                           // discount:  offer.discount ?? 0, //need to fix later
                           isDefault: offer.datumDefault ?? false,
-                          onToggleDefault: (value) {
-                            controller.setDefaultOffer(offer.id ?? '', value);
+                          onToggleDefault: (value, int index) {
+                            controller.setDefaultOffer(offer.id ?? '', value, index);
                           },
                         );
                       }),
@@ -349,12 +349,14 @@ class OfferItem extends StatefulWidget {
   final String description;
   // final int discount;
   final bool isDefault;
-  final ValueChanged<bool> onToggleDefault;
+  final int  itemIndex;
+  final Function( bool value, int index) onToggleDefault;
 
   const OfferItem({
     super.key,
     required this.offerId,
     required this.title,
+    required this.itemIndex,
     required this.description,
     // required this.discount,
     required this.isDefault,
@@ -369,7 +371,7 @@ class _OfferItemState extends State<OfferItem> {
   bool _isExpanded = false;
   final editTitleController = TextEditingController();
   final editDescriptionController = TextEditingController();
-  late bool _isDefault;
+  // late bool _isDefault;
   int? _selectedPercentage;
 
   final BusinessPresetScreenController controller =
@@ -378,7 +380,7 @@ class _OfferItemState extends State<OfferItem> {
   @override
   void initState() {
     super.initState();
-    _isDefault = widget.isDefault;
+    // _isDefault = widget.isDefault;
     editTitleController.text = widget.title;
     editDescriptionController.text = widget.description;
     // _selectedPercentage = widget.discount;
@@ -639,35 +641,39 @@ class _OfferItemState extends State<OfferItem> {
                 textAlignment: TextAlign.start,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const TextWidget(
-                    text: "Set as default response",
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    fontColor: AppColors.grey500,
-                    textAlignment: TextAlign.start,
+            GetBuilder<BusinessPresetScreenController>(
+              builder: (controller) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const TextWidget(
+                        text: "Set as default response",
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.grey500,
+                        textAlignment: TextAlign.start,
+                      ),
+                      Transform.scale(
+                        scale: 0.8,
+                        child: Switch(
+                            value: controller.offers[widget.itemIndex].datumDefault,
+                            onChanged: (value) {
+                              if (!controller.offers[widget.itemIndex].datumDefault) {
+                                widget.onToggleDefault(true, widget.itemIndex);
+                              }
+                              // else do nothing, user can't turn it OFF directly
+                          },
+                          activeColor: AppColors.green500,
+                          activeTrackColor: AppColors.green100,
+                          trackOutlineColor: WidgetStateColor.transparent,
+                        ),
+                      ),
+                    ],
                   ),
-                  Transform.scale(
-                    scale: 0.8,
-                    child: Switch(
-                      value: _isDefault,
-                      onChanged: (value) {
-                        setState(() {
-                          _isDefault = value;
-                        });
-                        widget.onToggleDefault(value);
-                      },
-                      activeColor: AppColors.green500,
-                      activeTrackColor: AppColors.green100,
-                      trackOutlineColor: WidgetStateColor.transparent,
-                    ),
-                  ),
-                ],
-              ),
+                );
+              }
             ),
           ],
         ),

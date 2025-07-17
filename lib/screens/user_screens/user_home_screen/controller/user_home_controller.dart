@@ -99,7 +99,7 @@ class UserHomeController extends GetxController {
 
   Future<void> onTapRequestButton() async {
     // model call
-    RequestModel _requestModel = RequestModel(
+    RequestModel requestModel = RequestModel(
         message: messageController.text.trim(),
         radius: currentValue,
         category: selectedCategoryId.value,
@@ -107,7 +107,7 @@ class UserHomeController extends GetxController {
         coordinates: latLong);
 
     final bool isSuccess =
-        await _sentRequestController.createRequest(_requestModel);
+        await _sentRequestController.createRequest(requestModel);
     _sentRequestController.signUpInProgress == true;
 
     if (isSuccess) {

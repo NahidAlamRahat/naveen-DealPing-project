@@ -14,6 +14,8 @@ import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller/booking_list_api_caller.dart';
 
 class UserBookingsScreen extends StatelessWidget {
+  const UserBookingsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder(

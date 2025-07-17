@@ -10,14 +10,9 @@ class CommonRepository {
   Future<List<FAQData>?> fetchFAQs() async {
     try {
       var response = await ApiService.getApi(ApiUrls.faq);
-      if (response != null) {
-        FAQ faqData = FAQ.fromJson(response.body);
-        return faqData.data;
-      } else {
-        AppSnackBar.error("Failed to fetch FAQs.");
-        return null;
-      }
-    } catch (e) {
+      FAQ faqData = FAQ.fromJson(response.body);
+      return faqData.data;
+        } catch (e) {
       errorLog(e);
       AppSnackBar.error("An error occurred while fetching FAQs.");
       return null;
@@ -30,14 +25,9 @@ class CommonRepository {
       final response = await ApiService.getApi(
         ApiUrls.termsAndCondition,
       );
-      if (response != null) {
-        return StaticPageModel.fromJson(response.body);
-      } else {
-        AppSnackBar.error("Failed to fetch terms and conditions");
-        return null;
-      }
-    } catch (e) {
-      AppSnackBar.error("Error fetching terms and conditions: ${e.toString()}");
+      return StaticPageModel.fromJson(response.body);
+        } catch (e) {
+      // AppSnackBar.error("Error fetching terms and conditions: ${e.toString()}");
       return null;
     }
   }
@@ -48,13 +38,8 @@ class CommonRepository {
       final response = await ApiService.getApi(
         ApiUrls.about,
       );
-      if (response != null) {
-        return StaticPageModel.fromJson(response.body);
-      } else {
-        AppSnackBar.error("Failed to fetch terms and conditions");
-        return null;
-      }
-    } catch (e) {
+      return StaticPageModel.fromJson(response.body);
+        } catch (e) {
       AppSnackBar.error("Error fetching terms and conditions: ${e.toString()}");
       return null;
     }

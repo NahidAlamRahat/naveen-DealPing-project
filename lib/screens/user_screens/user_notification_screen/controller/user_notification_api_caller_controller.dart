@@ -1,6 +1,5 @@
 
 import 'package:deal_ping/services/api/api_services.dart';
-import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';

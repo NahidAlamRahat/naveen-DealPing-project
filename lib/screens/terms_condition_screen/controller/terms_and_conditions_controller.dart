@@ -2,9 +2,7 @@ import 'package:get/get.dart';
 
 import '../../../models/terms_and_conditions_model.dart';
 import '../../../services/repository/common_repository/common_repository.dart';
-import '../../../utils/app_all_log/error_log.dart';
 import '../../../utils/app_log/error_log.dart';
-import '../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class TermsAndConditionsController extends GetxController {
   final CommonRepository commonRepository = CommonRepository();

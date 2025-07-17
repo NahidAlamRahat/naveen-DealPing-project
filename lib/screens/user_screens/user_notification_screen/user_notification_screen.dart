@@ -10,7 +10,6 @@ import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../models/notification_model.dart';
 import '../../business_screens/business_notification_screen/controller/business_notification_api_caller_controller.dart';
 import 'controller/user_notification_controller.dart';
 

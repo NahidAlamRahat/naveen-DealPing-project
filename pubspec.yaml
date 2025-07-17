@@ -60,10 +60,10 @@ dependencies:
   http: ^1.2.1
   cached_network_image: ^3.4.1
   flutter_cache_manager: ^3.4.1
-  skeletonizer: ^2.1.0+1
+  skeletonizer: ^2.0.0
 
 
-  google_maps_flutter: ^2.12.3
+  google_maps_flutter: ^2.0.0
   geocoding: ^4.0.0
   flutter_google_places_hoc081098: ^2.0.0
   location: ^5.0.3

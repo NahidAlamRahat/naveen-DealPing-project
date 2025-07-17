@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 
 import '../../../models/faq_model.dart';
 import '../../../services/repository/common_repository/common_repository.dart';
-import '../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class FAQScreenController extends GetxController {
   final CommonRepository _commonRepository = CommonRepository();

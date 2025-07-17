@@ -18,8 +18,30 @@ class AllOffers {
     required this.updatedAt,
     required this.v,
   });
+  AllOffers copyWith({
+    String? id,
+    String? business,
+    String? title,
+    String? description,
+    bool? datumDefault,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? v,
+  }) {
+    return AllOffers(
+      id: id ?? this.id,
+      business: business ?? this.business,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      datumDefault: datumDefault ?? this.datumDefault,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      v: v ?? this.v,
+    );
+  }
 
   factory AllOffers.fromJson(Map<String, dynamic> json) {
+    print("====================> ddddddddd ${json['default'] }");
     return AllOffers(
       id: json['_id'] ?? '',
       business: json['business'] ?? '',
@@ -44,4 +66,6 @@ class AllOffers {
       '__v': v,
     };
   }
+
+
 }

@@ -20,14 +20,9 @@ class BusinessOfferRepository {
         },
       );
 
-      if (response != null) {
-        AppSnackBar.success("Offer posted successfully.");
-        return true;
-      } else {
-        AppSnackBar.error("Failed to post offer.");
-        return false;
-      }
-    } catch (e) {
+      AppSnackBar.success("Offer posted successfully.");
+      return true;
+        } catch (e) {
       errorLog(e);
       AppSnackBar.error("An error occurred while posting the offer.");
       return false;
@@ -66,14 +61,9 @@ class BusinessOfferRepository {
         },
       );
 
-      if (response != null) {
-        AppSnackBar.success("Offer updated successfully.");
-        return true;
-      } else {
-        AppSnackBar.error("Failed to update offer.");
-        return false;
-      }
-    } catch (e) {
+      AppSnackBar.success("Offer updated successfully.");
+      return true;
+        } catch (e) {
       errorLog(e);
       AppSnackBar.error("An error occurred while updating the offer.");
       return false;
@@ -86,14 +76,9 @@ class BusinessOfferRepository {
         "${ApiUrls.deleteOffer}$offerId",
       );
 
-      if (response != null) {
-        AppSnackBar.success("Offer deleted successfully.");
-        return true;
-      } else {
-        AppSnackBar.error("Failed to delete offer.");
-        return false;
-      }
-    } catch (e) {
+      AppSnackBar.success("Offer deleted successfully.");
+      return true;
+        } catch (e) {
       errorLog(e);
       AppSnackBar.error("An error occurred while deleting the offer.");
       return false;
@@ -130,15 +115,10 @@ class BusinessOfferRepository {
         },
       );
 
-      if (response != null) {
-        AppSnackBar.success(
-            isDefault ? "Offer set as default." : "Offer unset as default.");
-        return true;
-      } else {
-        AppSnackBar.error("Failed to set default offer.");
-        return false;
-      }
-    } catch (e) {
+      AppSnackBar.success(
+          isDefault ? "Offer set as default." : "Offer unset as default.");
+      return true;
+        } catch (e) {
       errorLog(e);
       AppSnackBar.error("An error occurred while setting the default offer.");
       return false;

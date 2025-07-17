@@ -16,7 +16,7 @@ class BookingListController extends GetxController {
   int? _totalPage;
   bool _isInitialLoading = true;
   bool _isLoading = false;
-  List<BookingModel> _bookingList = [];
+  final List<BookingModel> _bookingList = [];
   String? _errorMessage;
 
   String? get errorMessage => _errorMessage;

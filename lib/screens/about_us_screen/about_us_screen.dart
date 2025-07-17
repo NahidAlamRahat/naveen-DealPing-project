@@ -1,10 +1,8 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/screens/about_us_screen/controller/about_us_controller.dart';
-import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../../constants/app_strings.dart';
 import '../../widgets/appbar_widget/appbar_widget.dart';
@@ -21,7 +19,7 @@ class AboutUsScreen extends StatelessWidget {
 
     return  Scaffold(
       backgroundColor: AppColors.white,
-      appBar: AppbarWidget(
+      appBar: const AppbarWidget(
         text: AppStrings.aboutUs,
         centerTitle: true,
       ),

@@ -497,10 +497,10 @@ packages:
     dependency: transitive
     description:
       name: google_api_headers
-      sha256: "97b778eec0f7c09ee6adfdddab29ad454d30208b772d7ce8d3c01e5970911841"
+      sha256: ef333ee15581a6f8b28d90dbab963f5309cca6b6bd7aca87ed72b52f08529561
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.4"
+    version: "4.5.2"
   google_maps:
     dependency: transitive
     description:
@@ -1500,4 +1500,4 @@ packages:
     version: "6.5.0"
 sdks:
   dart: ">=3.8.1 <4.0.0"
-  flutter: ">=3.32.5"
+  flutter: ">=3.32.2"

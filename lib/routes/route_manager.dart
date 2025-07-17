@@ -110,7 +110,7 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.userBottomNav,
-        page: () => UserBottomNav(),
+        page: () => const UserBottomNav(),
         // binding: GeneralBindings(),
       ),
       GetPage(
@@ -120,7 +120,7 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.userLocationScreen,
-        page: () => UserLocationScreen(),
+        page: () => const UserLocationScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
@@ -135,7 +135,7 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.userChatListProposalScreen,
-        page: () => UserChatListProposalScreen(),
+        page: () => const UserChatListProposalScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
@@ -160,7 +160,7 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.userBookingsScreen,
-        page: () => UserBookingsScreen(),
+        page: () => const UserBookingsScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(

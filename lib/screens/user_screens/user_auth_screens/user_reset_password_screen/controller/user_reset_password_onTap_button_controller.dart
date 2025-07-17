@@ -44,13 +44,13 @@ class UserResetPasswordController extends GetxController {
 
     var resetToken = {"Authorization": token};
 
-    ResetPasswordModel _resetPasswordModel = ResetPasswordModel(
+    ResetPasswordModel resetPasswordModel = ResetPasswordModel(
         newPassword: newPasswordController.text,
         confirmPassword: confirmPasswordController.text);
 
     final bool isSuccess =
         await _userResetPasswordRepository.resetPasswordApiCaller(
-            resetPasswordModel: _resetPasswordModel, resetToken: resetToken);
+            resetPasswordModel: resetPasswordModel, resetToken: resetToken);
 
     if (isSuccess) {
       AppSnackBar.success(

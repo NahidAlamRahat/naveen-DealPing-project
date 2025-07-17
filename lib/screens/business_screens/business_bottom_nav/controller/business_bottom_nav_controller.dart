@@ -13,8 +13,8 @@ class BusinessBottomNavController extends GetxController {
 
 
   final List<Widget> widgetOptions = [
-    BusinessHomeScreen(),
-    BusinessPresetScreen(),
+    const BusinessHomeScreen(),
+    const BusinessPresetScreen(),
     BusinessBookingsScreen(),
     const BusinessProfileScreen(),
   ];

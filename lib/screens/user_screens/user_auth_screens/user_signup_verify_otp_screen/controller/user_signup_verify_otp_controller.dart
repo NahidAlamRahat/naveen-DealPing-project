@@ -98,11 +98,11 @@ class UserSignupVerifyAccountController extends GetxController {
         otpTextEditingController5.text +
         otpTextEditingController6.text;
 
-    VerifyOtpModel _verifyOtpModel = VerifyOtpModel(email: email, otp: otp);
+    VerifyOtpModel verifyOtpModel = VerifyOtpModel(email: email, otp: otp);
     print(email);
 
     var response = await _verifyOtpController.verifyOtp(
-      verifyOtpModel: _verifyOtpModel,
+      verifyOtpModel: verifyOtpModel,
       url: ApiUrls.verifyEmail,
     );
 

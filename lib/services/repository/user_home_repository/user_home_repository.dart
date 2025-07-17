@@ -10,14 +10,9 @@ class UserHomeRepository {
       final response = await ApiService.getApi(
         ApiUrls.categories,
       );
-      if (response != null) {
-        print("response ==> ${response.body}");
-        return Category.fromJson(response.body);
-      } else {
-        AppSnackBar.error("Failed to fetch categories.");
-        return null;
-      }
-    } catch (e) {
+      print("response ==> ${response.body}");
+      return Category.fromJson(response.body);
+        } catch (e) {
       AppSnackBar.error("An error occurred while fetching categories.");
       return null;
     }

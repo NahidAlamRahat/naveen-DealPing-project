@@ -158,7 +158,7 @@ class UserEditProfileScreen extends StatelessWidget {
                 ),
               ),
 
-              SpaceWidget(spaceHeight: 16,),
+              const SpaceWidget(spaceHeight: 16,),
               const Align(
                 alignment: Alignment.centerLeft,
                 child: TextWidget(

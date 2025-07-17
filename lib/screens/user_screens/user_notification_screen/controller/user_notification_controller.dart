@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 
 class UserNotificationController extends GetxController {
   ScrollController scrollController = ScrollController();
-  UserNotificationApiCallerController _apiCallerController = Get.put(UserNotificationApiCallerController());
+  final UserNotificationApiCallerController _apiCallerController = Get.put(UserNotificationApiCallerController());
   var notifications = <Map<String, String>>[
 
   ].obs;

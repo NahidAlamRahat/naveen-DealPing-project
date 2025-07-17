@@ -4,8 +4,6 @@ import 'package:deal_ping/utils/app_size.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
@@ -68,7 +66,7 @@ class BusinessBookingsScreen extends StatelessWidget {
                   ),
                 ),
                 const SpaceWidget(spaceHeight: 8),
-                Expanded(
+                const Expanded(
                   child: TabBarView(
                     children: [
                       BookingsList(),

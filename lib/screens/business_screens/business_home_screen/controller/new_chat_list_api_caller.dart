@@ -14,7 +14,7 @@ class BusinessChatListApiController extends GetxController {
   int? _totalPage;
   bool _isInitialLoading = true;
   bool _isLoading = false;
-  List<BusinessesChatListModel> _businessChatList = [];
+  final List<BusinessesChatListModel> _businessChatList = [];
   String? _errorMessage;
 
   String? get errorMessage => _errorMessage;

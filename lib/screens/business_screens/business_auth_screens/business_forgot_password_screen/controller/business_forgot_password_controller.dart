@@ -1,9 +1,7 @@
-import 'package:deal_ping/services/api/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../routes/app_routes.dart';
-import '../../../../../services/repository/auth_repository/auth_repository.dart';
 import '../../../../../services/repository/auth_repository/forgot_password_repository.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 

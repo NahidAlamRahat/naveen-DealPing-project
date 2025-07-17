@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../business_screens/business_notification_screen/controller/user_notification_controller.dart';
 import '../../user_bookings_screen/user_bookings_screen.dart';
 import '../../user_chat_list_screen/user_chat_list_screen.dart';
 import '../../user_home_screen/user_home_screen.dart';
@@ -13,10 +12,10 @@ class UserBottomNavController extends GetxController {
   final  userNotificationController = Get.put(UserNotificationController());
 
   final List<Widget> widgetOptions = [
-    UserHomeScreen(),
+    const UserHomeScreen(),
     UserChatListScreen(),
-    UserBookingsScreen(),
-    UserProfileScreen(),
+    const UserBookingsScreen(),
+    const UserProfileScreen(),
   ];
 
   void changeIndex(int index) {

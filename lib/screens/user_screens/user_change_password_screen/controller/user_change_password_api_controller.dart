@@ -1,7 +1,6 @@
 import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/models/change_password_model.dart';
 import 'package:deal_ping/services/api/api_services.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 

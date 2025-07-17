@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../constants/api_urls.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_image_path.dart';
-import '../../utils/app_all_log/error_log.dart';
 import '../../utils/app_log/error_log.dart';
 
 class AppImage extends StatelessWidget {

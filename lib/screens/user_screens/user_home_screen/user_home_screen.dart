@@ -1,10 +1,8 @@
-import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/category_widget.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/home_screen_input_widget.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/sub_category_widget.dart';
 import 'package:deal_ping/utils/app_size.dart';
-import 'package:deal_ping/widgets/app_image/app_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -41,7 +39,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Color(0xffE6F4EC)
+            color: const Color(0xffE6F4EC)
           ),
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20),

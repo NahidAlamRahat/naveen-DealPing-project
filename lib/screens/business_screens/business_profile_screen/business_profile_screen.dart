@@ -1,11 +1,9 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_icons_path.dart';
-import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/screens/business_screens/business_profile_screen/controller/business_profile_controller.dart';
 import 'package:deal_ping/widgets/app_image/app_image.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
-import 'package:deal_ping/widgets/image_widget/image_widget.dart';
 import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -56,7 +54,7 @@ class BusinessProfileScreen extends StatelessWidget {
                   child: AppImage(
                     height: 120,
                     width: 120,
-                    url: profileData?.profile ?? "",
+                    url: profileData.profile ?? "",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -65,7 +63,7 @@ class BusinessProfileScreen extends StatelessWidget {
               // Name and Username
               Center(
                 child: TextWidget(
-                  text: profileData?.businessName ?? "",
+                  text: profileData.businessName ?? "",
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                   fontColor: AppColors.green500,
@@ -73,7 +71,7 @@ class BusinessProfileScreen extends StatelessWidget {
               ),
               Center(
                 child: TextWidget(
-                  text: profileData?.email ?? "",
+                  text: profileData.email ?? "",
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   fontColor: AppColors.grey700,
