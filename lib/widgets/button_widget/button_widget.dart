@@ -4,8 +4,8 @@ import '../../constants/app_colors.dart';
 import '../../utils/app_size.dart';
 
 class ButtonWidget extends StatelessWidget {
-  final String label;
-  final String? icon;
+  final String? label;
+  final Widget? icon;
   final double? iconHeight;
   final double? iconWidth;
   final Color textColor;
@@ -21,7 +21,7 @@ class ButtonWidget extends StatelessWidget {
 
   const ButtonWidget({
     super.key,
-    required this.label,
+     this.label,
     this.icon,
     this.iconHeight,
     this.iconWidth,
@@ -53,14 +53,24 @@ class ButtonWidget extends StatelessWidget {
       child: MaterialButton(
         onPressed: onPressed,
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        child: Text(
-          label,
+        padding: padding,
+        shape: RoundedRectangleBorder(borderRadius: buttonRadius),
+        child: label != null
+            ? Text(
+          label!,
           style: TextStyle(
             color: textColor,
             fontSize: ResponsiveUtils.width(fontSize),
             fontWeight: fontWeight ?? FontWeight.w500,
           ),
-        ),
+        )
+            : (icon != null
+            ? SizedBox(
+          height: iconHeight,
+          width: iconWidth,
+          child: icon,
+        )
+            : const SizedBox()),
       ),
     );
   }

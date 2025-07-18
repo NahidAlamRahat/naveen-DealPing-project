@@ -21,6 +21,7 @@ import '../screens/business_screens/business_profile_screen/business_profile_scr
 import '../screens/faq_screen/faq_screen.dart';
 import '../screens/onboarding_screen/onboarding_screen.dart';
 import '../screens/splash_screen/splash_screen.dart';
+import '../screens/support_screen/screen/support_screen.dart';
 import '../screens/terms_condition_screen/terms_condition_screen.dart';
 import '../screens/user_screens/user_auth_screens/user_forgot_password_screen/user_forgot_password_screen.dart';
 import '../screens/user_screens/user_auth_screens/user_forgot_verify_otp_screen/user_forgot_verify_otp_screen.dart';
@@ -66,6 +67,13 @@ class RouteManager {
         page: () => const AboutUsScreen(),
         // binding: GeneralBindings(),
       ),
+
+      GetPage(
+        name: AppRoutes.supportScreen,
+        page: () => SupportScreen(),
+        // binding: GeneralBindings(),
+      ),
+
       GetPage(
         name: AppRoutes.termsAndConditionsScreen,
         page: () => const TermsAndConditionsScreen(),

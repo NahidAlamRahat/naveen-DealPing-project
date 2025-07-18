@@ -147,6 +147,17 @@ class UserProfileScreen extends StatelessWidget {
                     },
                   ),
                   const SpaceWidget(spaceHeight: 16),
+
+                  _buildMenuItem(
+                    context,
+                    icon: AppIconsPath.faqIcon,
+                    title: AppStrings.faq,
+                    onTap: () {
+                      Get.toNamed(AppRoutes.faqScreen);
+                    },
+                  ),
+
+                  const SpaceWidget(spaceHeight: 16),
                   _buildMenuItem(
                     context,
                     icon: AppIconsPath.logoutIcon,

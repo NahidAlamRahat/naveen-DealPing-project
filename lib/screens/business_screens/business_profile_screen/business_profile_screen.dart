@@ -112,6 +112,7 @@ class BusinessProfileScreen extends StatelessWidget {
                   Get.toNamed(AppRoutes.aboutUsScreen);
                 },
               ),
+
               const SpaceWidget(spaceHeight: 16),
               _buildMenuItem(
                 context,
@@ -139,6 +140,21 @@ class BusinessProfileScreen extends StatelessWidget {
                   Get.toNamed(AppRoutes.faqScreen);
                 },
               ),
+
+
+              const SpaceWidget(spaceHeight: 16),
+              _buildMenuItem(
+                context,
+                icon: AppIconsPath.supportIcon,
+                title: AppStrings.supportRequestScreen,
+                onTap: () {
+                  Get.toNamed(AppRoutes.supportScreen);
+                },
+              ),
+
+
+
+
               const SpaceWidget(spaceHeight: 16),
               _buildMenuItem(
                 context,

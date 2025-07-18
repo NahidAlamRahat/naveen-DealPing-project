@@ -125,6 +125,18 @@ class AppStrings {
   static const String newPassword = "New Password";
   static const String update = "Update";
 
+  //support screen
+  static const String supportRequestScreen = "Support Request";
+  static const String selectSupportType = "Select support type";
+  static const String other = "Other";
+  static const String writeYourProblem = "Write your problem";
+  static const String addMoreProblem = "add more problem";
+  static const String selectSubCategory = 'Select Sub Category';
+  static const String selectCategory = 'Select Category';
+
+
+
+
   // Business Bottom Nav
   static const String preset = "Preset";
 
