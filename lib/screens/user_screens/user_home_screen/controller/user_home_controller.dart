@@ -20,7 +20,7 @@ class UserHomeController extends GetxController {
   List<double> latLong = [90.4045442, 23.7935446];
 
   var isLoading = false.obs;
-  var categories = <Data>[].obs;
+  RxList<Category> categories = <Category>[].obs;
   var subCategories = <String>[].obs;
 
   // Selected Values
@@ -34,18 +34,15 @@ class UserHomeController extends GetxController {
   void onInit() {
     super.onInit();
     fetchCategories();
+
   }
+
+
 
   void fetchCategories() async {
     isLoading.value = true;
     try {
-      final categoryResponse = await _repository.fetchCategories();
-      if (categoryResponse != null && categoryResponse.success == true) {
-        categories.value = categoryResponse.data ?? [];
-      } else {
-        AppSnackBar.error(
-            categoryResponse?.message ?? "Failed to load categories.");
-      }
+      categories.value = await _repository.fetchCategories();
     } catch (e) {
       AppSnackBar.error("An unexpected error occurred.");
     } finally {
@@ -61,10 +58,11 @@ class UserHomeController extends GetxController {
 
     final selectedCategoryData = categories.firstWhere(
       (cat) => cat.title == categoryTitle,
-      orElse: () => Data(),
+      orElse: () => Category(),
+
     );
 
-    selectedCategoryId.value = selectedCategoryData.sId ?? '';
+    selectedCategoryId.value = selectedCategoryData.id ?? '';
 
     // Update the subcategories list
     subCategories.value = selectedCategoryData.subCategories
@@ -78,15 +76,15 @@ class UserHomeController extends GetxController {
 
     final category = categories.firstWhere(
       (cat) => cat.title == selectedCategory.value,
-      orElse: () => Data(),
+      orElse: () => Category(),
     );
 
     final subCategory = category.subCategories?.firstWhere(
       (sub) => sub.title == subCategoryTitle,
-      orElse: () => SubCategories(),
+      orElse: () =>SubCategory (),
     );
 
-    selectedSubCategoryId.value = subCategory?.sId ?? '';
+    selectedSubCategoryId.value = subCategory?.id ?? '';
   }
 
   // Navigate to Location Screen
@@ -117,10 +115,6 @@ class UserHomeController extends GetxController {
           _sentRequestController.successfullyMessage ?? 'Successful!');
       print('success message => ${_sentRequestController.successfullyMessage}');
 
-      /*   Get.toNamed(
-        AppRoutes.userSignupVerifyOtpScreen,
-        arguments: {'email': emailController.text},
-      );*/
     } else {
       _sentRequestController.signUpInProgress == false;
       // error message

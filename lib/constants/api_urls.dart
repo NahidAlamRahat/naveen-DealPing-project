@@ -51,6 +51,7 @@ class ApiUrls {
 
   // category urls
   static const String categories = "$baseUrl/category/";
+  static const String subCategories = "$baseUrl/subcategory/";
   static const String createOffer = "$baseUrl/offer/";
   static const String getAllOffer = "$baseUrl/offer/";
   static const String updateOffer = "$baseUrl/offer/";

@@ -1,98 +1,101 @@
+import 'package:flutter/cupertino.dart';
+
 class Category {
-  int? statusCode;
-  bool? success;
-  String? message;
-  List<Data>? data;
+  final String? id;
+  final String? title;
+  final String? icon;
+  final List<SubCategory>? subCategories;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? version;
 
-  Category({this.statusCode, this.success, this.message, this.data});
+  Category({
+    this.id,
+    this.title,
+    this.icon,
+    this.subCategories,
+    this.createdAt,
+    this.updatedAt,
+    this.version,
+  });
 
-  Category.fromJson(Map json) {
-    statusCode = json['statusCode'];
-    success = json['success'];
-    message = json['message'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(Data.fromJson(v));
-      });
-    }
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(
+      id: json['_id'] != null && json['_id'] is String ? json['_id'] : "",
+      title: json['title'],
+      icon: json['icon'],
+      subCategories: (json['subCategories'] as List)
+          .map((item) => SubCategory.fromJson(item))
+          .toList(),
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      version: json['__v'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['statusCode'] = statusCode;
-    data['success'] = success;
-    data['message'] = message;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
+    return {
+      '_id': id,
+      'title': title,
+      'icon': icon,
+      'subCategories': subCategories?.map((item) => item.toJson()).toList(),
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
+      '__v': version,
+    };
+  }
+
+  Category copyWith({
+    String? id,
+    String? title,
+    String? icon,
+    List<SubCategory>? subCategories,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? version,
+  }) {
+    return Category(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      icon: icon ?? this.icon,
+      subCategories: subCategories ?? this.subCategories,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      version: version ?? this.version,
+    );
   }
 }
 
-class Data {
-  String? sId;
-  String? title;
-  String? icon;
-  List<SubCategories>? subCategories;
-  String? createdAt;
-  String? updatedAt;
-  int? iV;
+class SubCategory {
+  final String? id;
+  final String? title;
 
-  Data(
-      {this.sId,
-      this.title,
-      this.icon,
-      this.subCategories,
-      this.createdAt,
-      this.updatedAt,
-      this.iV});
+  SubCategory({
+    this.id,
+    this.title,
+  });
 
-  Data.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    title = json['title'];
-    icon = json['icon'];
-    if (json['subCategories'] != null) {
-      subCategories = <SubCategories>[];
-      json['subCategories'].forEach((v) {
-        subCategories!.add(SubCategories.fromJson(v));
-      });
-    }
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    iV = json['__v'];
+  factory SubCategory.fromJson(Map<String, dynamic> json) {
+    return SubCategory(
+      id: json['_id'],
+      title: json['title'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['title'] = title;
-    data['icon'] = icon;
-    if (subCategories != null) {
-      data['subCategories'] = subCategories!.map((v) => v.toJson()).toList();
-    }
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['__v'] = iV;
-    return data;
-  }
-}
-
-class SubCategories {
-  String? sId;
-  String? title;
-
-  SubCategories({this.sId, this.title});
-
-  SubCategories.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    title = json['title'];
+    return {
+      '_id': id,
+      'title': title,
+    };
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['title'] = title;
-    return data;
+  SubCategory copyWith({
+    String? id,
+    String? title,
+  }) {
+    return SubCategory(
+      id: id ?? this.id,
+      title: title ?? this.title,
+    );
   }
 }
