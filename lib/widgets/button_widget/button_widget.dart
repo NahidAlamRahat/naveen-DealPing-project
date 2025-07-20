@@ -66,8 +66,8 @@ class ButtonWidget extends StatelessWidget {
         )
             : (icon != null
             ? SizedBox(
-          height: iconHeight,
-          width: iconWidth,
+          // height: iconHeight,
+          // width: iconWidth,
           child: icon,
         )
             : const SizedBox()),

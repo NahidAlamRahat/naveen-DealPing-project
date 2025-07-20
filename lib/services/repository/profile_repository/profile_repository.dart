@@ -55,7 +55,7 @@ class ProfileRepository {
 
       errorLog(formData.fields, source: "FormData being sent");
 
-      var response = await ApiService.patchApi(
+       await ApiService.patchApi(
         ApiUrls.updateProfile,
         body: formData,
       );

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import '../../../../constants/api_urls.dart';
 import '../../../../models/notification_model.dart';
+import '../../../../utils/app_log/app_log.dart';
 
 class NotificationApiCallerController extends GetxController {
 
@@ -39,26 +40,25 @@ class NotificationApiCallerController extends GetxController {
     });
 
 
-    print('url userNotificationsUrl😊😊😊😊😊===>  ${ApiUrls.userNotificationsUrl}');
+    appLog('url userNotificationsUrl😊😊😊😊😊===>  ${ApiUrls.userNotificationsUrl}');
 
     if (response.statusCode == 200) {
-      print('notificationList statusCode ===>  ${response.statusCode}');
-      List<NotificationModel> list = [];
+      appLog('notificationList statusCode ===>  ${response.statusCode}');
 
       final body = response.body['data']; // ✅ Corrected
-      print('notificationList 😊😊😊😊😊===>  $body');
+      appLog('notificationList 😊😊😊😊😊===>  $body');
 
       for (var item in body['data']) {
         notificationList.add(NotificationModel.fromJson(item));
       }
-      print('notificationList 😊😊😊😊😊===>  $notificationList');
+      appLog('notificationList 😊😊😊😊😊===>  $notificationList');
 
       // _notificationList.addAll(list);
       _totalPage = body['meta']['totalPages']; // ✅ Corrected
       _errorMessage = null;
       isSuccess = true;
 
-      print('Fetched bookings: ${notificationList.length}');
+      appLog('Fetched bookings: ${notificationList.length}');
       update();
     } else {
       _errorMessage = response.message;

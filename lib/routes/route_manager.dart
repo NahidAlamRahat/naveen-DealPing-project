@@ -70,7 +70,7 @@ class RouteManager {
 
       GetPage(
         name: AppRoutes.supportScreen,
-        page: () => SupportScreen(),
+        page: () => const SupportScreen(),
         // binding: GeneralBindings(),
       ),
 

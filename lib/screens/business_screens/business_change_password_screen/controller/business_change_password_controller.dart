@@ -2,6 +2,7 @@ import 'package:deal_ping/services/repository/auth_repository/auth_repository.da
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../utils/app_log/app_log.dart';
 import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class BusinessChangePasswordController extends GetxController {
@@ -37,7 +38,7 @@ class BusinessChangePasswordController extends GetxController {
     isLoading.value = true;
     try {
       // For debugging
-      print("Attempting to change password...");
+      appLog("Attempting to change password...");
 
       bool success = await _authRepository.changePassword(
         currentPassword: currentPasswordController.text,
@@ -46,7 +47,7 @@ class BusinessChangePasswordController extends GetxController {
       );
 
       // For debugging
-      print("Password change result: $success");
+      appLog("Password change result: $success");
 
       if (success) {
         // Delay navigation slightly to ensure snackbar is visible
@@ -57,7 +58,7 @@ class BusinessChangePasswordController extends GetxController {
         AppSnackBar.error("Failed to change password.");
       }
     } catch (e) {
-      print("Error during password change: $e");
+      appLog("Error during password change: $e");
       AppSnackBar.error("An unexpected error occurred: ${e.toString()}");
     } finally {
       isLoading.value = false;

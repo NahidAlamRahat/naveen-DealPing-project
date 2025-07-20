@@ -1,3 +1,4 @@
+/*
 import 'dart:ui';
 
 extension ColorExtension on Color {
@@ -32,3 +33,4 @@ extension ColorExtension on Color {
     return Color.fromARGB(alphaAvg, redAvg, greenAvg, blueAvg);
   }
 }
+*/

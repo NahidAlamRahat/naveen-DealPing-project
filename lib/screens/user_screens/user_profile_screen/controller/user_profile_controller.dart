@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../../models/profile_model.dart';
 import '../../../../services/repository/profile_repository/profile_repository.dart';
+import '../../../../utils/app_log/app_log.dart';
 import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserProfileController extends GetxController {
@@ -21,7 +22,7 @@ class UserProfileController extends GetxController {
     try {
 
       var fetchedProfile = await _profileRepository.fetchProfile();
-      print('fetchProfile ==> $fetchedProfile');
+      appLog('fetchProfile ==> $fetchedProfile');
       if (fetchedProfile != null) {
         profile.value = fetchedProfile;
       } else {

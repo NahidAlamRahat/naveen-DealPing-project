@@ -4,11 +4,12 @@ import 'package:deal_ping/services/api/api_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import '../../../../utils/app_log/app_log.dart';
+
 enum ChatType{New, Ongoing, Completed}
 
 class BusinessChatListApiController extends GetxController {
   ChatType selectedChatType = ChatType.New;
-  final ApiUrls _apiUrls= ApiUrls();
   final int _perPageDataCount = 30;
   int _currentPage = 0;
   int? _totalPage;
@@ -47,12 +48,12 @@ class BusinessChatListApiController extends GetxController {
     });
 
 
-    print('url 😊😊😊😊😊===>  ${ApiUrls.businessChatListUrl(
+    appLog('url 😊😊😊😊😊===>  ${ApiUrls.businessChatListUrl(
       status: selectedChatType.name.toLowerCase(),
     )}');
 
     if (response.statusCode == 200) {
-      print('response ===>  ${response.body}');
+      appLog('response ===>  ${response.body}');
       List<BusinessesChatListModel> list = [];
 
       final body = response.body['data']; // ✅ Corrected
@@ -65,7 +66,7 @@ class BusinessChatListApiController extends GetxController {
       _errorMessage = null;
       isSuccess = true;
 
-      print('Fetched bookings: ${_businessChatList.length}');
+      appLog('Fetched bookings: ${_businessChatList.length}');
     } else {
       _errorMessage = response.message;
       debugPrint('_errorMessage ===>  ${response.message}');

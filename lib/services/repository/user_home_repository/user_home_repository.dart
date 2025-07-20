@@ -1,5 +1,4 @@
 import 'package:deal_ping/services/api/api_services.dart';
-import 'package:flutter/cupertino.dart';
 
 import '../../../constants/api_urls.dart';
 import '../../../models/category_model.dart';

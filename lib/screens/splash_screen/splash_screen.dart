@@ -15,27 +15,33 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
+  void initState() {
+    super.initState();
+    // Initialize controller once here
+    Get.put(SplashController());
+  }
+
+  @override
   Widget build(BuildContext context) {
-     SplashController splashController = Get.put(SplashController());
-
-
-
-    return AnnotatedRegion(
-      value: const SystemUiOverlayStyle(
-        statusBarIconBrightness: Brightness.dark,
-
-      ),
-      child: Scaffold(
-        backgroundColor: AppColors.green500,
-        body: Center(
-          child: Image.asset(
-            AppImagePath.appLogoWhite,
-            height: 180,
-            width: 180,
-            fit: BoxFit.contain,
+    return GetBuilder<SplashController>(
+      builder: (controller) {
+        return AnnotatedRegion(
+          value: const SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.dark,
           ),
-        ),
-      ),
+          child: Scaffold(
+            backgroundColor: AppColors.green500,
+            body: Center(
+              child: Image.asset(
+                AppImagePath.appLogoWhite,
+                height: 180,
+                width: 180,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

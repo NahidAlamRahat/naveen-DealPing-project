@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../utils/app_log/app_log.dart';
 import '../../user_bookings_screen/user_bookings_screen.dart';
 import '../../user_chat_list_screen/user_chat_list_screen.dart';
 import '../../user_home_screen/user_home_screen.dart';
@@ -22,6 +23,8 @@ class UserBottomNavController extends GetxController {
   try{
     selectedIndex.value = index;
     update();
-  }catch(e){}
+  }catch(e){
+    appLog(e) ;
+  }
   }
 }

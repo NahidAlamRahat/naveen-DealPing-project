@@ -16,17 +16,15 @@ class BusinessPresetScreen extends StatefulWidget {
   const BusinessPresetScreen({super.key});
 
   @override
-  _BusinessPresetScreenState createState() => _BusinessPresetScreenState();
+  BusinessPresetScreenState createState() => BusinessPresetScreenState();
 }
 
-class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
+class BusinessPresetScreenState extends State<BusinessPresetScreen> {
   final BusinessPresetScreenController controller =
       Get.put(BusinessPresetScreenController());
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
-  final bool _switchValue = false;
-  int? _selectedPercentage;
 
   @override
   void dispose() {
@@ -252,14 +250,14 @@ class _BusinessPresetScreenState extends State<BusinessPresetScreen> {
                       ...List.generate(controller.offers.length, (index) {
                         final offer = controller.offers[index];
                         return OfferItem(
-                          offerId: offer.id ?? '',
+                          offerId: offer.id ,
                           itemIndex: index,
-                          title: offer.title ?? "No Title",
-                          description: offer.description ?? "No Description",
+                          title: offer.title ,
+                          description: offer.description ,
                           // discount:  offer.discount ?? 0, //need to fix later
-                          isDefault: offer.datumDefault ?? false,
+                          isDefault: offer.datumDefault ,
                           onToggleDefault: (value, int index) {
-                            controller.setDefaultOffer(offer.id ?? '', value, index);
+                            controller.setDefaultOffer(offer.id , value, index);
                           },
                         );
                       }),
@@ -371,8 +369,7 @@ class _OfferItemState extends State<OfferItem> {
   bool _isExpanded = false;
   final editTitleController = TextEditingController();
   final editDescriptionController = TextEditingController();
-  // late bool _isDefault;
-  int? _selectedPercentage;
+
 
   final BusinessPresetScreenController controller =
       Get.find<BusinessPresetScreenController>();

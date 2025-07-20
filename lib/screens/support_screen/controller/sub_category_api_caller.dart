@@ -1,3 +1,4 @@
+/*
 
 import 'package:deal_ping/screens/support_screen/model/support_category.dart';
 import 'package:deal_ping/services/api/api_services.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../../../constants/api_urls.dart';
 import '../../../../services/storage/storage_service.dart';
+import '../../../utils/app_log/app_log.dart';
 
 class SubCategoryApiController extends GetxController {
   bool _isLoading = false;
@@ -26,7 +28,7 @@ class SubCategoryApiController extends GetxController {
       },
     );
 
-    print("response status code ${response.statusCode}");
+    appLog("response status code ${response.statusCode}");
 
     bool isSuccess = false;
 
@@ -61,3 +63,4 @@ class SubCategoryApiController extends GetxController {
   }
 }
 
+*/

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../routes/app_routes.dart';
+import '../../../../../utils/app_log/app_log.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserForgotPasswordOnTapButtonController extends GetxController {
@@ -28,7 +29,7 @@ class UserForgotPasswordOnTapButtonController extends GetxController {
 
         AppSnackBar.success(_forgotPasswordRepository.successfullyMessage ??
             'Login Successful!');
-        print('success message => ${_forgotPasswordRepository.errorMessage}');
+        appLog('success message => ${_forgotPasswordRepository.errorMessage}');
         Get.toNamed(
           AppRoutes.userForgotVerifyOtpScreen,
           arguments: {'email': emailController.text},
@@ -37,7 +38,7 @@ class UserForgotPasswordOnTapButtonController extends GetxController {
         _forgotPasswordRepository.inProgress == false;
         // error message
         AppSnackBar.message('${_forgotPasswordRepository.errorMessage}');
-        debugPrint(
+        appLog(
             'error message => ${_forgotPasswordRepository.errorMessage}');
       }
     } else {

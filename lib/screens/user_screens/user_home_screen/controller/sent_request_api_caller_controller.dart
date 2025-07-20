@@ -1,8 +1,9 @@
 import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/models/sent_home_screen_data_model.dart';
 import 'package:deal_ping/services/api/api_services.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../../utils/app_log/app_log.dart';
 
 class SentRequestController extends GetxController {
   late bool _signUpInProgress = false;
@@ -30,14 +31,14 @@ class SentRequestController extends GetxController {
     if (response.statusCode == 200 || response.statusCode == 201) {
       _successfullyMessage = response.message;
 
-      print('response message => ${response.message}');
+      appLog('response message => ${response.message}');
 
       _successfullyMessage = response.message;
 
-      print(
+      appLog(
           'Success message *==> ${_successfullyMessage = response.message} <===*');
-      debugPrint('_successfullyMessage ==> $_successfullyMessage');
-      debugPrint('SrrorMessage ==> $successfullyMessage <==');
+      appLog('_successfullyMessage ==> $_successfullyMessage');
+      appLog('SrrorMessage ==> $successfullyMessage <==');
 
       _signUpInProgress = false;
       isSuccess = true;

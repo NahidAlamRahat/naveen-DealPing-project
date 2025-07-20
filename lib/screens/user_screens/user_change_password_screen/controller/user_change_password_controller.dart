@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../routes/app_routes.dart';
+import '../../../../utils/app_log/app_log.dart';
 import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserChangePasswordController extends GetxController {
@@ -28,10 +29,10 @@ class UserChangePasswordController extends GetxController {
 
     if (args != null && args is Map<String, dynamic> && args['token'] != null) {
       token = args['token'];
-      print('✅ Received token: $token');
+      appLog('✅ Received token: $token');
     } else {
       token = '';
-      print('❌ Token missing in arguments!');
+      appLog('❌ Token missing in arguments!');
     }
   }
 
@@ -86,11 +87,11 @@ class UserChangePasswordController extends GetxController {
 
     if (isSuccess) {
       AppSnackBar.success('${_userChangePasswordRepository.successfullyMessage}');
-      print('✅ Success message: ${_userChangePasswordRepository.successfullyMessage}');
+      appLog('✅ Success message: ${_userChangePasswordRepository.successfullyMessage}');
       Get.offAllNamed(AppRoutes.userSignInScreen);
     } else {
       AppSnackBar.message('${_userChangePasswordRepository.errorMessage}');
-      print('❌ Error message: ${_userChangePasswordRepository.errorMessage}');
+      appLog('❌ Error message: ${_userChangePasswordRepository.errorMessage}');
     }
   }
 }

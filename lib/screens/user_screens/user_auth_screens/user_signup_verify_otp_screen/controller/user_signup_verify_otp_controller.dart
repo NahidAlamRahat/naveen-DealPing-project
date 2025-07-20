@@ -8,6 +8,7 @@ import '../../../../../models/verify_otp_model.dart';
 import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/auth_repository.dart';
 import '../../../../../services/repository/auth_repository/common_repository_controller/verify_otp_controller.dart';
+import '../../../../../utils/app_log/app_log.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserSignupVerifyAccountController extends GetxController {
@@ -60,7 +61,7 @@ class UserSignupVerifyAccountController extends GetxController {
             "Timer: ${remainingSeconds.value} seconds remaining");*/ // Debugging
       } else {
         canResend.value = true;
-        print("Timer completed. You can resend the code now."); // Debugging
+        appLog("Timer completed. You can resend the code now."); // Debugging
         _timer.cancel();
       }
     });
@@ -99,7 +100,7 @@ class UserSignupVerifyAccountController extends GetxController {
         otpTextEditingController6.text;
 
     VerifyOtpModel verifyOtpModel = VerifyOtpModel(email: email, otp: otp);
-    print(email);
+    appLog(email);
 
     var response = await _verifyOtpController.verifyOtp(
       verifyOtpModel: verifyOtpModel,
@@ -109,10 +110,10 @@ class UserSignupVerifyAccountController extends GetxController {
     if (response != false && response['success'] == true) {
       AppSnackBar.success('${_verifyOtpController.successfullyMessage}');
       Get.offAllNamed(AppRoutes.userBottomNav);
-      print('success message => ${_verifyOtpController.errorMessage}');
+      appLog('success message => ${_verifyOtpController.errorMessage}');
     } else {
       AppSnackBar.message('${_verifyOtpController.errorMessage}');
-      print('error message => ${_verifyOtpController.errorMessage}');
+      appLog('error message => ${_verifyOtpController.errorMessage}');
     }
   }
 

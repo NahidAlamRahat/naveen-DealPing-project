@@ -1,5 +1,6 @@
 import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/services/api/api_services.dart';
+import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -35,11 +36,11 @@ class UserResetPasswordRepository extends GetxController {
     _inProgress = false;
 
     if (response.statusCode == 200) {
-      print('response message => ${response.message}');
+      appLog('response message => ${response.message}');
 
       _successfullyMessage = response.message;
 
-      print(
+      appLog(
           'Success message *==> ${_successfullyMessage = response.message} <===*');
       debugPrint('_successfullyMessage ==> $_successfullyMessage');
       debugPrint('SrrorMessage ==> $successfullyMessage <==');
@@ -47,7 +48,7 @@ class UserResetPasswordRepository extends GetxController {
       update();
       return true;
     } else {
-      print('Error message => ${response.message}');
+      appLog('Error message => ${response.message}');
       _errorMessage = response.message;
       update();
       return false;

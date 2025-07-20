@@ -2,6 +2,8 @@ import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/services/api/api_services.dart';
 import 'package:get/get.dart';
 
+import '../../../utils/app_log/app_log.dart';
+
 class ForgotPasswordRepository extends GetxController {
   late bool _inProgress = false;
 
@@ -27,13 +29,13 @@ class ForgotPasswordRepository extends GetxController {
     _inProgress = false;
 
     if (response.statusCode == 200) {
-      print('message => ${response.message}');
+      appLog('message => ${response.message}');
 
       _successfullyMessage = response.message;
       update();
       return true;
     } else {
-      print('Error message => ${response.message}');
+      appLog('Error message => ${response.message}');
       _errorMessage = response.message;
       update();
       return false;

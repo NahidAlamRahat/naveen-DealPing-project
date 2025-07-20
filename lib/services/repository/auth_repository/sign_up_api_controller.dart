@@ -3,6 +3,8 @@ import 'package:deal_ping/services/api/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../utils/app_log/app_log.dart';
+
 class SignUpApiController extends GetxController {
   late bool _signUpInProgress = false;
 
@@ -16,7 +18,7 @@ class SignUpApiController extends GetxController {
 
   String? get successfullyMessage => _successfullyMessage;
 
-  userSignUp(var SignUpModel) async {
+  userSignUp(var signUpModel) async {
     bool isSuccess = false;
     _signUpInProgress = true;
     update();
@@ -24,16 +26,16 @@ class SignUpApiController extends GetxController {
     var response = await ApiService.postApi(
       ///Url
       ApiUrls.createUserAccount,
-      SignUpModel,
+      signUpModel,
     );
     if (response.statusCode == 200) {
       _successfullyMessage = response.message;
 
-      print('response message => ${response.message}');
+      appLog('response message => ${response.message}');
 
       _successfullyMessage = response.message;
 
-      print(
+      appLog(
           'Success message *==> ${_successfullyMessage = response.message} <===*');
       debugPrint('_successfullyMessage ==> $_successfullyMessage');
       debugPrint('SrrorMessage ==> $successfullyMessage <==');

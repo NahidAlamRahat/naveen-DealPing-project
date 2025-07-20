@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/auth_repository.dart';
 import '../../../../../services/repository/auth_repository/sign_up_api_controller.dart';
+import '../../../../../utils/app_log/app_log.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class BusinessSignUpController extends GetxController {
@@ -110,7 +111,7 @@ class BusinessSignUpController extends GetxController {
 
         AppSnackBar.success(
             _signUpApiController.successfullyMessage ?? 'Successful!');
-        print('success message => ${_signUpApiController.successfullyMessage}');
+        appLog('success message => ${_signUpApiController.successfullyMessage}');
 
         Get.toNamed(
           AppRoutes.businessSignupVerifyOtpScreen,
@@ -120,7 +121,7 @@ class BusinessSignUpController extends GetxController {
         _signUpApiController.signUpInProgress == false;
         // error message
         AppSnackBar.message('${_signUpApiController.errorMessage}');
-        print('error message => ${_signUpApiController.errorMessage}');
+        appLog('error message => ${_signUpApiController.errorMessage}');
       }
     }
   }

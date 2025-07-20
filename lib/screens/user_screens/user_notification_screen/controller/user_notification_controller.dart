@@ -4,6 +4,8 @@ import 'package:deal_ping/screens/user_screens/user_notification_screen/controll
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import '../../../../utils/app_log/app_log.dart';
+
 
 ///==================================
 
@@ -25,7 +27,7 @@ class UserNotificationController extends GetxController {
     fetchNotifications();
     scrollController.addListener((){
       if (scrollController.position.pixels >= scrollController.position.maxScrollExtent) {
-        print("============ 😊😊😊😊😊============> max extent called");
+        appLog("============ 😊😊😊😊😊============> max extent called");
         fetchNotifications();
       }
     });
@@ -36,7 +38,7 @@ class UserNotificationController extends GetxController {
   Future<void> fetchNotifications() async{
 
     await _apiCallerController.getNotificationList();
-    print("_apiCallerController.notificationList ====================>>>>>   ${_apiCallerController.notificationList}");
+    appLog("_apiCallerController.notificationList ====================>>>>>   ${_apiCallerController.notificationList}");
     notifications.value = List.generate(
         _apiCallerController.notificationList.length,
           (index) => {

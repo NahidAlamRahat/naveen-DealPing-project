@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../../constants/app_colors.dart';
 import '../../../../constants/app_image_path.dart';
 import '../../../../constants/app_strings.dart';
+import '../../../../utils/app_log/app_log.dart';
 import '../../../../widgets/button_widget/button_widget.dart';
 import '../../../../widgets/image_widget/image_widget.dart';
 import '../../../../widgets/space_widget/space_widget.dart';
@@ -146,7 +147,7 @@ class BusinessForgotVerifyOtpScreen extends StatelessWidget {
                         Obx(() {
                           // Debugging check
                           if (controller.canResend.value) {
-                            print("Resend Code Button is now visible!");
+                            appLog("Resend Code Button is now visible!");
                           }
                           return controller.canResend.value
                               ? Padding(

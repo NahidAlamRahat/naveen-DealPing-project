@@ -2,6 +2,7 @@ import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/services/api/api_services.dart';
 import 'package:get/get.dart';
 
+import '../../../utils/app_log/app_log.dart';
 import '../../storage/storage_key.dart';
 import '../../storage/storage_service.dart';
 
@@ -56,7 +57,7 @@ class SignInApiController extends GetxController {
       return true;
     } else {
       _inProgress = false;
-      print('Error message => ${response.message}');
+      appLog('Error message => ${response.message}');
       _errorMessage = response.message;
       update();
       return false;

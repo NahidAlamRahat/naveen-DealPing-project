@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/forgot_password_repository.dart';
+import '../../../../../utils/app_log/app_log.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class BusinessForgotPasswordController extends GetxController {
@@ -29,7 +30,7 @@ class BusinessForgotPasswordController extends GetxController {
 
         AppSnackBar.success(_forgotPasswordRepository.successfullyMessage ??
             'Login Successful!');
-        print('success message => ${_forgotPasswordRepository.errorMessage}');
+        appLog('success message => ${_forgotPasswordRepository.errorMessage}');
         Get.toNamed(
           AppRoutes.businessForgotVerifyOtpScreen,
           arguments: {'email': emailController.text},

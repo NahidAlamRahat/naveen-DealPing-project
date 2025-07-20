@@ -11,7 +11,7 @@ class BusinessOfferRepository {
     // required int discount,
   }) async {
     try {
-      var response = await ApiService.postApi(
+       await ApiService.postApi(
         ApiUrls.createOffer,
         {
           "title": title,
@@ -52,7 +52,7 @@ class BusinessOfferRepository {
     // required int discount,
   }) async {
     try {
-      var response = await ApiService.patchApi(
+      await ApiService.patchApi(
         "${ApiUrls.updateOffer}$offerId",
         body: {
           "title": title,
@@ -72,7 +72,7 @@ class BusinessOfferRepository {
 
   Future<bool> deleteOffer(String offerId) async {
     try {
-      var response = await ApiService.deleteApi(
+      await ApiService.deleteApi(
         "${ApiUrls.deleteOffer}$offerId",
       );
 
@@ -108,7 +108,7 @@ class BusinessOfferRepository {
 
   Future<bool> setDefaultOffer(String offerId, bool isDefault) async {
     try {
-      var response = await ApiService.patchApi(
+       await ApiService.patchApi(
         "${ApiUrls.updateOffer}$offerId",
         body: {
           "default": isDefault,

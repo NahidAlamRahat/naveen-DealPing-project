@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../../../models/sign_in_model.dart';
 import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/sign_in_api_controller.dart';
+import '../../../../../utils/app_log/app_log.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserSignInButtonController extends GetxController {
@@ -56,7 +57,7 @@ class UserSignInButtonController extends GetxController {
         if (isSuccess) {
           AppSnackBar.success(
               _signInController.successfullyMessage ?? 'Login Successful!');
-          print('success message => ${_signInController.successfullyMessage}');
+          appLog('success message => ${_signInController.successfullyMessage}');
           Get.offAllNamed(AppRoutes.userBottomNav);
         } else {
           AppSnackBar.message('${_signInController.errorMessage}');

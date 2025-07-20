@@ -126,7 +126,7 @@ class AppStrings {
   static const String update = "Update";
 
   //support screen
-  static const String supportRequestScreen = "Support Request";
+  static const String supportRequestScreen = "Support";
   static const String selectSupportType = "Select support type";
   static const String other = "Other";
   static const String writeYourProblem = "Write your problem";

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../routes/app_routes.dart';
+import '../../../../../utils/app_log/app_log.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserResetPasswordController extends GetxController {
@@ -19,7 +20,7 @@ class UserResetPasswordController extends GetxController {
     super.onInit();
     if (Get.arguments != null && Get.arguments is Map<String, dynamic>) {
       token = Get.arguments['token'] ?? '';
-      print(token);
+      appLog(token);
     } else {
       token = '';
     }
@@ -34,8 +35,8 @@ class UserResetPasswordController extends GetxController {
 
 
   Future<void> onTapResetButton() async {
-    print(newPasswordController.text);
-    print(confirmPasswordController.text);
+    appLog(newPasswordController.text);
+    appLog(confirmPasswordController.text);
     if (newPasswordController.text.isEmpty ||
         confirmPasswordController.text.isEmpty) {
       AppSnackBar.error("Please fill in all required fields.");
@@ -56,13 +57,13 @@ class UserResetPasswordController extends GetxController {
       AppSnackBar.success(
           '${_userResetPasswordRepository.successfullyMessage}');
 
-      print(
+      appLog(
           'success message ===> ${_userResetPasswordRepository.successfullyMessage} <===');
 
       Get.offAllNamed(AppRoutes.userSignInScreen);
     } else {
       AppSnackBar.message('${_userResetPasswordRepository.errorMessage}');
-      print('error message => ${_userResetPasswordRepository.errorMessage}');
+      appLog('error message => ${_userResetPasswordRepository.errorMessage}');
     }
   }
 }

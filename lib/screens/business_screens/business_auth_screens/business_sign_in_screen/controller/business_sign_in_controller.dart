@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../../../models/sign_in_model.dart';
 import '../../../../../routes/app_routes.dart';
+import '../../../../../utils/app_log/app_log.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class BusinessSignInController extends GetxController {
@@ -50,7 +51,7 @@ class BusinessSignInController extends GetxController {
 
         AppSnackBar.success(
             _signInController.successfullyMessage ?? 'Login Successful!');
-        print(
+        appLog(
             'success message ==> ${_signInController.successfullyMessage} <===');
 
         Get.offAllNamed(AppRoutes.businessBottomNav);
@@ -58,7 +59,7 @@ class BusinessSignInController extends GetxController {
         _signInController.inProgress == false;
         // error message
         AppSnackBar.message('${_signInController.errorMessage}');
-        debugPrint('error message => ${_signInController.errorMessage}');
+        appLog('error message => ${_signInController.errorMessage}');
       }
     }
   }

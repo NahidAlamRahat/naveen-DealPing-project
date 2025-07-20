@@ -1,10 +1,10 @@
 
 import 'package:deal_ping/services/api/api_services.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../../../constants/api_urls.dart';
 import '../../../../models/request_list_model.dart';
 import '../../../../services/storage/storage_service.dart';
+import '../../../../utils/app_log/app_log.dart';
 import '../../user_chat_list_proposal_screen/controller.dart';
 
 class RequestListController extends GetxController {
@@ -28,7 +28,7 @@ class RequestListController extends GetxController {
       },
     );
 
-    print("response status code ${response.statusCode}");
+    appLog("response status code ${response.statusCode}");
 
     bool isSuccess = false;
 
@@ -39,7 +39,7 @@ class RequestListController extends GetxController {
         _errorMessage = null;
         isSuccess = true;
 
-        debugPrint('😒😒😒===>>>>${_requestList[0].id}');// Passing the ID to ChatController
+        appLog('😒😒😒===>>>>${_requestList[0].id}');// Passing the ID to ChatController
 
         // Assuming you want to pass the `id` of the first request
 

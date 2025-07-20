@@ -91,7 +91,7 @@ class AuthRepository {
         AppSnackBar.message(response.message.toString());
       }
       return true;
-          return false;
+
     } catch (e) {
       errorLog(e, source: "sign up repo provider  function ");
       return false;
@@ -111,7 +111,7 @@ class AuthRepository {
         AppSnackBar.message(response.message.toString());
       }
       return true;
-          return false;
+
     } catch (e) {
       errorLog(e);
       return false;
@@ -189,7 +189,7 @@ class AuthRepository {
       );
       AppSnackBar.message(response.message.toString());
           return true;
-          return false;
+
     } catch (e) {
       errorLog(e);
       return false;
@@ -201,13 +201,13 @@ class AuthRepository {
       required String confirmPassword,
       required String currentPassword}) async {
     try {
-      var response = await ApiService.postApi(ApiUrls.changePassword, {
+      await ApiService.postApi(ApiUrls.changePassword, {
         "currentPassword": currentPassword,
         "newPassword": newPassword,
         "confirmPassword": confirmPassword
       });
       return true;
-          return false;
+
     } catch (e) {
       errorLog(e);
       return false;

@@ -29,8 +29,8 @@ class ChatController extends GetxController {
       isLoading.value = true;
       update(); // Manually trigger UI update when loading starts
 
-      var response = await ApiService.getApi(_apiUrls.userChatUrl + id);
-      debugPrint('Fetching chat data from: ${_apiUrls.userChatUrl + id}');
+      var response = await ApiService.getApi(ApiUrls.userChatUrl(id: id));
+      debugPrint('Fetching chat data from: ${ApiUrls.userChatUrl(id: id)}');
 
       if (response.statusCode == 200) {
         List<ChatModel> chats = (response.body['data'] as List)

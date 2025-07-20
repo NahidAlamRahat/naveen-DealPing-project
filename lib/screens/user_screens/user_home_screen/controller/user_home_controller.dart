@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../../models/category_model.dart';
 import '../../../../models/sent_home_screen_data_model.dart';
 import '../../../../services/repository/user_home_repository/user_home_repository.dart';
+import '../../../../utils/app_log/app_log.dart';
 import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class UserHomeController extends GetxController {
@@ -113,13 +114,13 @@ class UserHomeController extends GetxController {
 
       AppSnackBar.success(
           _sentRequestController.successfullyMessage ?? 'Successful!');
-      print('success message => ${_sentRequestController.successfullyMessage}');
+      appLog('success message => ${_sentRequestController.successfullyMessage}');
 
     } else {
       _sentRequestController.signUpInProgress == false;
       // error message
       AppSnackBar.message('${_sentRequestController.errorMessage}');
-      print('error message => ${_sentRequestController.errorMessage}');
+      appLog('error message => ${_sentRequestController.errorMessage}');
     }
   }
 

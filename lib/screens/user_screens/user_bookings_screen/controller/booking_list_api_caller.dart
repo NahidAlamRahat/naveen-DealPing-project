@@ -4,6 +4,7 @@ import 'package:deal_ping/services/api/api_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../../../models/booking_list_model.dart';
+import '../../../../utils/app_log/app_log.dart';
 
 
 enum BookingStatus{upcoming, completed}
@@ -11,6 +12,7 @@ enum BookingStatus{upcoming, completed}
 class BookingListController extends GetxController {
 
   BookingStatus bookingStatus = BookingStatus.upcoming;
+
   final int _perPageDataCount = 10;
   int _currentPage = 0;
   int? _totalPage;
@@ -46,10 +48,10 @@ class BookingListController extends GetxController {
     });
 
 
-    print('url 😊😊😊😊😊===>  ${ApiUrls.bookingListUrl}');
+    appLog('url 😊😊😊😊😊===>  ${ApiUrls.bookingListUrl}');
 
     if (response.statusCode == 200) {
-      print('statusCode ===>  ${response.statusCode}');
+      appLog('statusCode ===>  ${response.statusCode}');
       List<BookingModel> list = [];
 
       final body = response.body['data']; // ✅ Corrected
@@ -62,10 +64,10 @@ class BookingListController extends GetxController {
       _errorMessage = null;
       isSuccess = true;
 
-      print('Fetched bookings: ${_bookingList.length}');
+      appLog('Fetched bookings: ${_bookingList.length}');
     } else {
       _errorMessage = response.message;
-      debugPrint('_errorMessage ===>  ${response.message}');
+      appLog('_errorMessage ===>  ${response.message}');
     }
 
     _isInitialLoading = false;

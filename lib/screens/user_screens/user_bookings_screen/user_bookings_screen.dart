@@ -3,6 +3,7 @@ import 'package:deal_ping/constants/app_icons_path.dart';
 import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/routes/app_routes.dart';
+import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:deal_ping/utils/app_size.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:flutter/material.dart';
@@ -103,8 +104,8 @@ class BookingsList extends StatelessWidget {
               location: booking.address,
               distance: "${booking.distance.toStringAsFixed(2)} miles",
               networkImageUrl:
-                  '${AppImagePath.imageUrl}${booking.userProfileImage}' ?? '',
-              rating: booking.rating ?? 0,
+                  '${AppImagePath.imageUrl}${booking.userProfileImage}' ,
+              rating: booking.rating ,
             );
           },
         );
@@ -138,9 +139,9 @@ class PastBookings extends StatelessWidget {
               location: booking.address,
               distance: "${booking.distance.toStringAsFixed(2)} miles",
               networkImageUrl:
-                  '${AppImagePath.imageUrl}${booking.userProfileImage}' ?? '',
+                  '${AppImagePath.imageUrl}${booking.userProfileImage}' ,
               isPastBooking: true,
-              rating: booking.rating ?? 0,
+              rating: booking.rating ,
             );
           },
         );
@@ -166,7 +167,7 @@ class BookingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Image URL:❤️❤️❤️❤️❤️ $networkImageUrl");
+    appLog("Image URL:❤️❤️❤️❤️❤️ $networkImageUrl");
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(8),

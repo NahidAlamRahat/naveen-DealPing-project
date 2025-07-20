@@ -24,11 +24,10 @@ String _getDomain() {
 class ApiUrls {
   // instance variable
   String id;
-  String status;
 
 
   // constructor
-  ApiUrls({this.id = '',this.status = ''});
+  ApiUrls({this.id = ''});
 
   // base url
   static final String domain = _getDomain();
@@ -68,7 +67,7 @@ class ApiUrls {
   static  String bookingListUrl({required double longitude, required double latitude, required BookingStatus status })
                         => "$baseUrl/booking/?longitude=$longitude&latitude=$latitude&status=${status.name}";
 
-  String get userChatUrl => "$baseUrl/chat/user/$id";
+ static String  userChatUrl({required String id}) => "$baseUrl/chat/user/$id";
 
   static const String userNotificationsUrl = "$baseUrl/notifications";
 

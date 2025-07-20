@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../routes/app_routes.dart';
+import '../../../../utils/app_log/app_log.dart';
 
 class UserBookingSummaryController extends GetxController {
   // User Details
@@ -72,9 +73,9 @@ class UserBookingSummaryController extends GetxController {
     // Here you would typically add booking logic
     // For now, we'll just print the booking details
     Get.toNamed(AppRoutes.userBookingSuccessfullScreen);
-    print('Booking Confirmed:');
-    print('Date: ${DateFormat('dd MMM yyyy').format(selectedDate.value)}');
-    print('Time: ${selectedTime.value.format(Get.context!)}');
-    print('People: ${numberOfPeople.value}');
+    appLog('Booking Confirmed:');
+    appLog('Date: ${DateFormat('dd MMM yyyy').format(selectedDate.value)}');
+    appLog('Time: ${selectedTime.value.format(Get.context!)}');
+    appLog('People: ${numberOfPeople.value}');
   }
 }

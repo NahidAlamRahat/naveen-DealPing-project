@@ -5,6 +5,7 @@ import '../../../../constants/app_colors.dart';
 import '../../../../constants/app_icons_path.dart';
 import '../../../../constants/app_image_path.dart';
 import '../../../../constants/app_strings.dart';
+import '../../../../utils/app_log/app_log.dart';
 import '../../../../widgets/button_widget/button_widget.dart';
 import '../../../../widgets/image_widget/image_widget.dart';
 import '../../../../widgets/space_widget/space_widget.dart';
@@ -20,7 +21,7 @@ class UserResetPasswordScreen extends StatelessWidget {
     final UserResetPasswordController controller =
         Get.put(UserResetPasswordController());
 
-    print("object");
+    appLog("object");
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SingleChildScrollView(

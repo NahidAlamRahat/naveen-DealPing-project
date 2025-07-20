@@ -9,11 +9,10 @@ import 'package:deal_ping/widgets/space_widget/space_widget.dart';
 import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../business_screens/business_notification_screen/controller/business_notification_api_caller_controller.dart';
 import '../../user_screens/user_notification_screen/controller/user_notification_controller.dart';
 
 class BusinessNotificationScreen extends StatelessWidget {
-  final NotificationApiCallerController _apiCallerController = Get.put(NotificationApiCallerController());
+  // final NotificationApiCallerController _apiCallerController = Get.put(NotificationApiCallerController());
   final UserNotificationController controller;
 
   BusinessNotificationScreen({super.key}): controller = Get.find<UserBottomNavController>().userNotificationController;

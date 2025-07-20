@@ -28,7 +28,6 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
   final TextEditingController _controller = TextEditingController();
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
-  final bool _switchValue = false;
   final ImagePicker _picker = ImagePicker();
   final List<Map<String, dynamic>> _messages = [
     {

@@ -1,40 +1,42 @@
 import 'package:deal_ping/services/storage/storage_service.dart';
+import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:get/get.dart';
-
 import '../../../routes/app_routes.dart';
 
 class SplashController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    Future.delayed(const Duration(seconds: 3)).then((_) {
-      // Use AppAuthStorage methods instead of direct GetStorage
-      String? accessToken = LocalStorage.token;
-      String? role = LocalStorage.myRole;
-      print("$accessToken😊😊😊😊😊😊");
-      print("${LocalStorage.token}😊😊😊😊😊😊");
-      print("${LocalStorage.myRole}😊😊😊😊😊😊");
+    goToNextScreen();
+  }
 
-      if (accessToken.isNotEmpty) {
-        print("accessToken.isNotEmpty : ${accessToken.isNotEmpty}");
-        // Get.offAllNamed(AppRoutes.userBottomNav);
-        if (role == "user") {
-          Get.offAllNamed(AppRoutes.userBottomNav);
-        } else if (role == "business") {
-          Get.offAllNamed(AppRoutes.businessBottomNav);
-        } else {
-          Get.offAllNamed(AppRoutes.onboardingScreen);
-        }
+  void goToNextScreen() async {
+    await Future.delayed(const Duration(seconds: 3));
+
+    String? accessToken = LocalStorage.token;
+    String? role = LocalStorage.myRole;
+
+    appLog("Access Token: $accessToken");
+    appLog("Role: $role");
+
+    if (accessToken != null && accessToken.isNotEmpty) {
+      appLog("accessToken.isNotEmpty : ${accessToken.isNotEmpty}");
+
+      if (role == "user") {
+        Get.offAllNamed(AppRoutes.userBottomNav);
+      } else if (role == "business") {
+        Get.offAllNamed(AppRoutes.businessBottomNav);
       } else {
-        // print("dfhdkjfldlfkjdflk😊😊😊😊😊😊");
         Get.offAllNamed(AppRoutes.onboardingScreen);
       }
-    });
+    } else {
+      Get.offAllNamed(AppRoutes.onboardingScreen);
+    }
   }
 
   @override
   void onClose() {
     super.onClose();
-    print("SplashController disposed");
+    appLog("SplashController disposed");
   }
 }

@@ -3,6 +3,8 @@ import 'package:deal_ping/models/change_password_model.dart';
 import 'package:deal_ping/services/api/api_services.dart';
 import 'package:get/get.dart';
 
+import '../../../../utils/app_log/app_log.dart';
+
 
 class UserChangePasswordApiCaller extends GetxController {
   late bool _inProgress = false;
@@ -37,19 +39,19 @@ class UserChangePasswordApiCaller extends GetxController {
 
       if (response.statusCode == 200) {
         _successfullyMessage = response.message;
-        print('Success message => $_successfullyMessage');
+        appLog('Success message => $_successfullyMessage');
         update();
         return true;
       } else {
         _errorMessage = response.message;
-        print('Error message => $_errorMessage');
+        appLog('Error message => $_errorMessage');
         update();
         return false;
       }
     } catch (e) {
       _inProgress = false;
       _errorMessage = "Something went wrong: $e";
-      print('Exception => $e');
+      appLog('Exception => $e');
       update();
       return false;
     }

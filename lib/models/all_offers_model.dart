@@ -1,3 +1,5 @@
+import 'package:deal_ping/utils/app_log/app_log.dart';
+
 class AllOffers {
   final String id;
   final String business;
@@ -41,7 +43,7 @@ class AllOffers {
   }
 
   factory AllOffers.fromJson(Map<String, dynamic> json) {
-    print("====================> ddddddddd ${json['default'] }");
+    appLog("====================> ddddddddd ${json['default'] }");
     return AllOffers(
       id: json['_id'] ?? '',
       business: json['business'] ?? '',
