@@ -8,6 +8,7 @@ import '../../../widgets/app_snack_bar/app_snack_bar.dart';
 import 'package:flutter/material.dart';
 import '../model/request_model.dart';
 import '../model/support_category.dart';
+import '../widget/formfild.dart';
 
 
 /*class SupportRequestController extends GetxController {
@@ -138,7 +139,7 @@ class SupportRequestController extends GetxController {
 
 
   void setAdditionalFormType(int index, String value) {
-    additionalForms[index].selectedType.value = value;
+    additionalForms[index].selectedSupportType = value;
   }
 
   void addFormSection() {
@@ -348,23 +349,31 @@ void removeFormSection(int index) {
 }
 
 // Category and subcategory management
-void fetchCategories() async {
-  isLoading.value = true;
-  try {
-    var response = await _repository.fetchCategories();
+  void fetchCategories() async {
+    isLoading.value = true;
+    try {
+      var response = await _repository.fetchCategories();
 
-    categories.value = response.map((item) => SupportCategory(
-      id: item.id ?? "",
-      title: item.title ?? "",
-      subCategories: item.subCategories?.map((e) => e.title ?? '').toList() ?? [],
+      categories.value = response.map((item) => SupportCategory(
+        id: item.id ?? "",
+        title: item.title ?? "",
+        subCategories: item.subCategories?.map((e) => e.title ?? '').toList() ?? [],
+      )).toList();
 
-    )).toList();
-  } catch (e) {
-    AppSnackBar.error("Failed to load categories");
-  } finally {
-    isLoading.value = false;
+      // Log the category data for debugging
+      appLog("Fetched Categories: ");
+      for (var category in categories) {
+        appLog("Category ID: ${category.id}, Category Title: ${category.title}");
+        appLog("Subcategories: ${category.subCategories}");
+      }
+
+    } catch (e) {
+      AppSnackBar.error("Failed to load categories");
+    } finally {
+      isLoading.value = false;
+    }
   }
-}
+
 
 
 List<String> getSubcategoriesFor(String categoryTitle) {
@@ -391,70 +400,70 @@ void setFormSectionCategory(int index, String value) {
   formSections[index].selectedSubCategories.clear();
 }
 
-void toggleFormSectionSubCategory(int index, String subCategory) {
-  if (formSections[index].selectedSubCategories.contains(subCategory)) {
-
-    formSections[index].selectedSubCategories.remove(subCategory);
-  } else {
-    formSections[index].selectedSubCategories.add(subCategory);
+  void toggleFormSectionSubCategory(int index, String subCategoryId) {
+    if (formSections[index].selectedSubCategories.contains(subCategoryId)) {
+      formSections[index].selectedSubCategories.remove(subCategoryId);
+    } else {
+      formSections[index].selectedSubCategories.add(subCategoryId);
+    }
   }
-}
 
 
 
-Future<void> onTapSubmitSupportRequests() async {
-  try {
-    // Step 1: Validate all form sections
-    for (int i = 0; i < formSections.length; i++) {
-      final section = formSections[i];
 
-      if (section.selectedType.value.isEmpty) {
-        throw "Section ${i + 1}: Please select a support type.";
+  Future<void> onTapSubmitSupportRequests() async {
+    try {
+      // Step 1: Validate all form sections
+      for (int i = 0; i < formSections.length; i++) {
+        final section = formSections[i];
+
+        if (section.selectedType.value.isEmpty) {
+          throw "Section ${i + 1}: Please select a support type.";
+        }
+
+        if (section.problemController.text.trim().isEmpty) {
+          throw "Section ${i + 1}: Please describe your problem.";
+        }
       }
 
-      if (section.problemController.text.trim().isEmpty) {
-        throw "Section ${i + 1}: Please describe your problem.";
+      // Step 2: Convert each form section to model and send to API
+      for (var section in formSections) {
+        String? categoryId =
+        section.selectedCategory.value != "empty" ? section.selectedCategory.value : null;
+        List<String>? subCategoryList = section.selectedSubCategories.isNotEmpty
+            ? section.selectedSubCategories
+            : null;
+
+        // Debug log to check if category and subcategories are IDs
+        appLog('Submitting Section: ${section.selectedType.value}');
+        appLog('Category ID: $categoryId');
+        appLog('Subcategory IDs: $subCategoryList');
+
+        SupportRequestModel model = SupportRequestModel(
+          category: categoryId,
+          subcategories: subCategoryList,
+          businessName:
+          section.selectedType.value == 'Business Name' ? section.problemController.text.trim() : null,
+          eiin: section.selectedType.value == 'Eiin Number' ? section.problemController.text.trim() : null,
+        );
+
+        // Log the model data to check if it’s correct before submitting
+        appLog("Submitting model: ${model.toJson()}");
+
+        // TODO: call your repository API here, for example:
+        await _requestApiController.sentRequest(model.toJson());
       }
 
-      // Optional: you can add type-specific validations here
+      AppSnackBar.success('${_requestApiController.successfullyMessage}');
+      appLog('Submission Success: ${_requestApiController.successfullyMessage}');
+
+      // Optionally clear all sections
+      formSections.value = [SupportFormSection()];
+    } catch (e) {
+      AppSnackBar.error(e.toString());
+      appLog('Error: $e');
     }
-
-    // Step 2: Convert each form section to model and send to API
-    for (var section in formSections) {
-
-
-      String? categoryId =
-      section.selectedCategory.value != "empty" ? section.selectedCategory.value : null;
-      List<String>? subCategoryList = section.selectedSubCategories.isNotEmpty
-          ? section.selectedSubCategories
-          : null;
-      appLog('=====subCategoryList==>>>> 😢😢😎 ==> $subCategoryList');
-
-      SupportRequestModel model = SupportRequestModel(
-        category: categoryId,
-        subcategories: subCategoryList,
-        businessName:
-        section.selectedType.value == 'Business Name' ? section.problemController.text.trim() : null,
-        eiin: section.selectedType.value == 'Eiin Number' ? section.problemController.text.trim() : null,
-      );
-
-      appLog("Submitting: ${model.toJson()}");
-
-
-      // TODO: call your repository API here, for example:
-      await _requestApiController.sentRequest(model.toJson());
-    }
-
-    AppSnackBar.success('${_requestApiController.successfullyMessage}');
-
-    appLog('ssjs=====>>😢😢${_requestApiController.successfullyMessage}');
-
-    // Optionally clear all sections
-    formSections.value = [SupportFormSection()];
-  } catch (e) {
-    AppSnackBar.error(e.toString());
   }
-}
 
 
 
