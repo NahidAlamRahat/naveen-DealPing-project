@@ -55,6 +55,7 @@ class ApiUrls {
   static const String getAllOffer = "$baseUrl/offer/";
   static const String updateOffer = "$baseUrl/offer/";
   static const String deleteOffer = "$baseUrl/offer/";
+  static const String supportUrl = "$baseUrl/support/";
 
   // Common urls
   static const String faq = "/public/faq/all";

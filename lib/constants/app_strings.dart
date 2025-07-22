@@ -130,6 +130,8 @@ class AppStrings {
   static const String selectSupportType = "Select support type";
   static const String other = "Other";
   static const String writeYourProblem = "Write your problem";
+  static const String writeYour = "Write your ";
+
   static const String addMoreProblem = "add more problem";
   static const String selectSubCategory = 'Select Sub Category';
   static const String selectCategory = 'Select Category';

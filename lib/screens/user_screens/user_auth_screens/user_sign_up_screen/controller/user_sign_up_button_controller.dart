@@ -7,6 +7,8 @@ import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/sign_up_api_controller.dart';
 import '../../../../../utils/app_log/app_log.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
+import '../../../../support_screen/controller/supportApiCallerController.dart';
+import '../../../../support_screen/model/request_model.dart';
 
 class UserSignUpButtonController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -111,6 +113,63 @@ class UserSignUpButtonController extends GetxController {
       }
     }
   }
+
+
+  RxList<SupportFormSection> formSections = <SupportFormSection>[SupportFormSection()].obs;
+
+
+
+  Future<void> onTapSubmitSupportRequests() async {
+    try {
+      // Step 1: Validate all form sections
+      for (int i = 0; i < formSections.length; i++) {
+        final section = formSections[i];
+
+        if (section.selectedType.value.isEmpty) {
+          throw "Section ${i + 1}: Please select a support type.";
+        }
+
+        if (section.problemController.text.trim().isEmpty) {
+          throw "Section ${i + 1}: Please describe your problem.";
+        }
+
+        // Optional: you can add type-specific validations here
+      }
+
+      // Step 2: Convert each form section to model and send to API
+      for (var section in formSections) {
+        String? categoryId =
+        section.selectedCategory.value != "empty" ? section.selectedCategory.value : null;
+        List<String>? subCategoryList = section.selectedSubCategories.isNotEmpty
+            ? section.selectedSubCategories
+            : null;
+
+        SupportRequestModel model = SupportRequestModel(
+          category: categoryId,
+          subcategories: subCategoryList,
+          businessName:
+          section.selectedType.value == 'Business Name' ? section.problemController.text.trim() : null,
+          eiin: section.selectedType.value == 'Eiin Number' ? section.problemController.text.trim() : null,
+        );
+
+        appLog("Submitting: ${model.toJson()}");
+
+        // TODO: call your repository API here, for example:
+        // await _repository.submitSupportRequest(model.toJson());
+      }
+
+      AppSnackBar.success("Support request(s) submitted successfully!");
+
+      // Optionally clear all sections
+      formSections.value = [SupportFormSection()];
+    } catch (e) {
+      AppSnackBar.error(e.toString());
+    }
+  }
+
+
+
+
 
   @override
   void onClose() {

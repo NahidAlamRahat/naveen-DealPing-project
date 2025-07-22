@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -165,11 +166,33 @@ class SupportFormSection extends StatelessWidget {
         const SpaceWidget(spaceHeight: 8),
 
         TextFieldWidget(
-          hintText: AppStrings.writeYourProblem,
+          hintText:import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+
+
+ AppStrings.writeYourProblem,
           maxLines: 4,
 
          controller: isMain ? controller.writeProblemTEController : problemController,),
       ],
     );
   }
+}
+*/
+
+import 'package:flutter/cupertino.dart';
+
+class SupportFormSection {
+  String selectedSupportType;
+  String selectedCategory;
+  List<String> selectedSubCategories;
+  TextEditingController problemController;
+
+  SupportFormSection({
+    this.selectedSupportType = '',
+    this.selectedCategory = '',
+    List<String>? selectedSubCategories,
+    TextEditingController? problemController,
+  })  : selectedSubCategories = selectedSubCategories ?? [],
+        problemController = problemController ?? TextEditingController();
 }
