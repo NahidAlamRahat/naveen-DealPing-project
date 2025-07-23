@@ -7,8 +7,9 @@ import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/sign_up_api_controller.dart';
 import '../../../../../utils/app_log/app_log.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
-import '../../../../support_screen/controller/supportApiCallerController.dart';
+import '../../../../support_screen/controller/support_controller.dart';
 import '../../../../support_screen/model/request_model.dart';
+import '../../../../support_screen/widget/support_form_section.dart';
 
 class UserSignUpButtonController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();

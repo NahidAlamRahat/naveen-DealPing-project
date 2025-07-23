@@ -5,59 +5,6 @@ import 'package:get/get.dart';
 
 import '../../../utils/app_log/app_log.dart';
 
-/*
-class RequestApiController extends GetxController {
-  RxBool _inProgress = false.obs;
-
-  bool get inProgress => _inProgress.value;
-
-  String? _errorMessage;
-
-  String? get errorMessage => _errorMessage;
-
-  String? _successfullyMessage;
-
-  String? get successfullyMessage => _successfullyMessage;
-
-  sentRequest(var requestModel) async {
-    bool isSuccess = false;
-    _inProgress = true.obs;
-    update();
-
-    var response = await ApiService.postApi(
-      ///Url
-      ApiUrls.supportUrl,
-      requestModel,
-    );
-    if (response.statusCode == 200) {
-      _successfullyMessage = response.message;
-
-      appLog('response message => ${response.message}');
-
-      _successfullyMessage = response.message;
-
-      appLog(
-          'Success message *==> ${_successfullyMessage = response.message} <===*');
-      debugPrint('_successfullyMessage ==> $_successfullyMessage');
-      debugPrint('SrrorMessage ==> $successfullyMessage <==');
-
-      _inProgress = false.obs;
-      _errorMessage = null;
-      isSuccess = true;
-      update();
-    } else {
-      _errorMessage = response.message;
-    }
-
-    inProgress == false;
-    update();
-
-    return isSuccess;
-  }
-}
-*/
-
-
 class RequestApiController extends GetxController {
   final RxBool _inProgress = false.obs;
 

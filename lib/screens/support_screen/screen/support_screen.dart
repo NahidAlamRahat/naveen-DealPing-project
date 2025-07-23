@@ -6,7 +6,7 @@ import '../../../../widgets/space_widget/space_widget.dart';
 import '../../../../widgets/text_widget/text_widgets.dart';
 import '../../../utils/app_size.dart';
 
-import '../controller/supportApiCallerController.dart';
+import '../controller/support_controller.dart';
 import '../widget/support_request_widget.dart';
 
 class SupportScreen extends StatelessWidget {
@@ -15,8 +15,8 @@ class SupportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SupportRequestController>(
-      init: SupportRequestController(),
+    return GetBuilder<SupportController>(
+      init: SupportController(),
         builder: (controller) {
           return DefaultTabController(
             length: 2,
