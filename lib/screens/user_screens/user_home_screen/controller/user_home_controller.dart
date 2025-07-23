@@ -107,17 +107,17 @@ class UserHomeController extends GetxController {
 
     final bool isSuccess =
         await _sentRequestController.createRequest(requestModel);
-    _sentRequestController.signUpInProgress == true;
+    _sentRequestController.inProgress == true;
 
     if (isSuccess) {
-      _sentRequestController.signUpInProgress == false;
+      _sentRequestController.inProgress == false;
 
       AppSnackBar.success(
           _sentRequestController.successfullyMessage ?? 'Successful!');
       appLog('success message => ${_sentRequestController.successfullyMessage}');
 
     } else {
-      _sentRequestController.signUpInProgress == false;
+      _sentRequestController.inProgress == false;
       // error message
       AppSnackBar.message('${_sentRequestController.errorMessage}');
       appLog('error message => ${_sentRequestController.errorMessage}');

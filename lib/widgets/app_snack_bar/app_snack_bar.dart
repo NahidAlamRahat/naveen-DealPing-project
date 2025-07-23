@@ -8,7 +8,7 @@ import '../space_widget/space_widget.dart';
 import '../text_widget/text_widgets.dart';
 
 class AppSnackBar {
-  static error(String parameterValue, {int seconds = 6}) {
+  static error(String parameterValue, {int seconds = 2}) {
     Get.showSnackbar(
       GetSnackBar(
         backgroundColor: AppColors.grey,
@@ -50,7 +50,7 @@ class AppSnackBar {
     );
   }
 
-  static success(String parameterValue, {int seconds = 6}) {
+  static success(String parameterValue, {int seconds = 2}) {
     Get.showSnackbar(
       GetSnackBar(
         backgroundColor: AppColors.grey,
@@ -80,7 +80,7 @@ class AppSnackBar {
     String parameterValue, {
     Color backgroundColor = AppColors.grey,
     Color color = AppColors.white,
-    int seconds = 10,
+    int seconds = 2,
   }) {
     Get.showSnackbar(
       GetSnackBar(

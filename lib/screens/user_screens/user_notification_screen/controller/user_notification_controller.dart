@@ -56,7 +56,7 @@ class UserNotificationController extends GetxController {
     if (isViewMore.value) {
       filteredNotifications.assignAll(notifications);  // Show less (show all notifications)
     } else {
-      filteredNotifications.assignAll(notifications.take(5));  // Show more (show only 5 notifications)
+      filteredNotifications.assignAll(notifications.take(6));  // Show more (show only 6 notifications)
     }
   }
 

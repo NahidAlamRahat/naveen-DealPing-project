@@ -65,18 +65,25 @@ class UserNotificationScreen extends StatelessWidget {
             )),
 
             // View More / Show Less Button
-            Obx(() => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: ButtonWidget(
-                onPressed: controller.onToggleNotificationsView,
-                label: controller.isViewMore.value
-                    ? AppStrings.viewMore
-                    : "Show Less",
-                buttonHeight: 36,
-                buttonWidth: 100,
-                fontSize: 12,
-              ),
-            )),
+            Obx(() {
+              if (controller.notifications.length > 5) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: ButtonWidget(
+                    onPressed: controller.onToggleNotificationsView,
+                    label: controller.isViewMore.value
+                        ? AppStrings.viewMore
+                        : "Show Less",
+                    buttonHeight: 36,
+                    buttonWidth: 100,
+                    fontSize: 12,
+                  ),
+                );
+              } else {
+                return const SizedBox(); // Return empty widget if 5 or fewer
+              }
+            })
+
           ],
         ),
       ),

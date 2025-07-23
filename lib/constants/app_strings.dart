@@ -74,7 +74,7 @@ class AppStrings {
   static const String trackMyLocation = "Track My Location";
 
   // User Notification Screen
-  static const String notification = "Notification";
+  static const String notification = "Notifications";
   static const String viewMore = "View More";
   static const String showLess = 'Show Less';
 

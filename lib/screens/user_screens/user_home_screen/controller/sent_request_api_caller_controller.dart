@@ -6,9 +6,9 @@ import 'package:get/get.dart';
 import '../../../../utils/app_log/app_log.dart';
 
 class SentRequestController extends GetxController {
-  late bool _signUpInProgress = false;
+  late bool _inProgress = false;
 
-  bool get signUpInProgress => _signUpInProgress;
+  bool get inProgress => _inProgress;
 
   String? _errorMessage;
 
@@ -20,7 +20,7 @@ class SentRequestController extends GetxController {
 
   createRequest(RequestModel requestModel) async {
     bool isSuccess = false;
-    _signUpInProgress = true;
+    _inProgress = true;
     update();
 
     var response = await ApiService.postApi(
@@ -40,14 +40,17 @@ class SentRequestController extends GetxController {
       appLog('_successfullyMessage ==> $_successfullyMessage');
       appLog('SrrorMessage ==> $successfullyMessage <==');
 
-      _signUpInProgress = false;
+      _inProgress = false;
       isSuccess = true;
       update();
     } else {
       _errorMessage = response.message;
+      _inProgress = false;
+      isSuccess = false;
+      update();
     }
 
-    signUpInProgress == false;
+    inProgress == false;
     update();
 
     return isSuccess;
