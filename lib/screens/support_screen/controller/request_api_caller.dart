@@ -82,14 +82,15 @@ class RequestApiController extends GetxController {
     if (response.statusCode == 200) {
       _successfullyMessage = response.message;
 
-      appLog('response message => ${response.message}');
+      appLog('response message => $response');
       debugPrint('_successfullyMessage ==> $_successfullyMessage');
-      debugPrint('ErrorMessage ==> $successfullyMessage <==');
 
       _errorMessage = null;
       isSuccess = true;
     } else {
       _errorMessage = response.message;
+      debugPrint('ErrorMessage ==> $errorMessage <==');
+
     }
 
     _inProgress.value = false;

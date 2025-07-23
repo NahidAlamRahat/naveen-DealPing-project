@@ -388,8 +388,6 @@ class SupportRequestWidget extends StatelessWidget {
                                     onPressed: () => controller.removeFormSection(index),
                                     child: Text("Remove"),
                                   ),
-
-
                               ],
                             );
                           }).toList(),
