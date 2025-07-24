@@ -10,11 +10,10 @@ import '../../../../utils/app_log/app_log.dart';
 class UserNotificationApiCallerController extends GetxController {
 
   final int _perPageDataCount = 10;
-  int _currentPage = 0;
+  int _currentPage = 1;
   int? _totalPage;
   bool _isInitialLoading = true;
   bool _isLoading = false;
-  List<NotificationModel> notificationList = [];
   String? _errorMessage;
 
 
@@ -25,41 +24,29 @@ class UserNotificationApiCallerController extends GetxController {
   bool get isLoading => _isLoading;
   bool get isInitialLoading => _isInitialLoading;
 
-  Future<bool> getNotificationList() async {
-    if (_totalPage != null && _currentPage > _totalPage!) return true;
+  Future< List<NotificationModel>> getNotificationList() async {
 
-    bool isSuccess = false;
-    _currentPage++;
-
-    if (!_isInitialLoading) _isLoading = true;
+    // if (_totalPage != null && _currentPage > _totalPage!) return [];
+    // _currentPage++;
+    //
+    // if (!_isInitialLoading) _isLoading = true;
     update();
 
+
     final response = await ApiService.getApi(ApiUrls.userNotificationsUrl, queryParams: {
-      'count': _perPageDataCount,
+      // 'count': _perPageDataCount,
       'page': _currentPage,
     });
 
-
-    appLog('url userNotificationsUrl😊😊😊😊😊===>  ${ApiUrls.userNotificationsUrl}');
+    appLog('url $_currentPage, $_currentPage userNotificationsUrl😊😊😊😊😊===>  ${ApiUrls.userNotificationsUrl}');
 
     if (response.statusCode == 200) {
       appLog('notificationList statusCode ===>  ${response.statusCode}');
 
       final body = response.body['data']; // ✅ Corrected
-      appLog('notificationList 😊😊😊😊😊===>  $body');
+      appLog('notificationList 😊😊😊😊😊===>  ${body['data']}');
 
-      for (var item in body['data']) {
-        notificationList.add(NotificationModel.fromJson(item));
-      }
-      appLog('notificationList 😊😊😊😊😊===>  $notificationList');
-
-      // _notificationList.addAll(list);
-      _totalPage = body['meta']['totalPages']; // ✅ Corrected
-      _errorMessage = null;
-      isSuccess = true;
-
-      appLog('Fetched bookings: ${notificationList.length}');
-      update();
+     return List.from( body['data']).map((item)=> NotificationModel.fromJson(item)).toList();
     } else {
       _errorMessage = response.message;
       debugPrint('_errorMessage ===>  ${response.message}');
@@ -68,27 +55,27 @@ class UserNotificationApiCallerController extends GetxController {
     _isInitialLoading = false;
     _isLoading = false;
     update();
-    return isSuccess;
+    return [];
   }
 
-  Future<bool> refreshList() async {
+  Future< List<NotificationModel>> refreshList() async {
     _currentPage = 1;
     // _notificationList.clear();
     _isInitialLoading = true;
     return getNotificationList();
   }
 
-  Future<void> appOnInit() async {
-    try {
-      await getNotificationList();
-    } catch (e) {
-      debugPrint('error from ${e.toString()}');
-    }
-  }
+  // Future<void> appOnInit() async {
+  //   try {
+  //     await getNotificationList();
+  //   } catch (e) {
+  //     debugPrint('error from ${e.toString()}');
+  //   }
+  // }
 
   @override
   void onInit() {
-    appOnInit();
+    // appOnInit();
     super.onInit();
   }
 }

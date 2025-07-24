@@ -1,3 +1,4 @@
+import 'package:deal_ping/screens/user_screens/user_notification_screen/controller/user_notification_controller.dart';
 import 'package:deal_ping/services/repository/auth_repository/common_repository_controller/verify_otp_controller.dart';
 import 'package:deal_ping/services/repository/auth_repository/sign_in_api_controller.dart';
 import 'package:deal_ping/services/repository/auth_repository/sign_up_api_controller.dart';
@@ -9,5 +10,7 @@ class ControllerBinders extends Bindings {
     Get.put(SignUpApiController());
     Get.put(SignInApiController());
     Get.put(VerifyOtpController());
+    Get.lazyPut(UserNotificationController.new, fenix: true);
+
   }
 }

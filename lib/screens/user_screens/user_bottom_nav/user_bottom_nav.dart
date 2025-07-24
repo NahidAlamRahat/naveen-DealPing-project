@@ -1,5 +1,6 @@
 import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/routes/app_routes.dart';
+import 'package:deal_ping/screens/user_screens/user_notification_screen/controller/user_notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -37,22 +38,27 @@ const UserBottomNav({super.key});
               ),
             ),
             actions: [
-              IconButton(
-                tooltip: "Notifications",
-                onPressed: () {
-                  Get.toNamed(AppRoutes.userNotificationScreen);
-                },
-                icon: const Badge(
-                  isLabelVisible: true,
-                  label: Text("3"),
-                  backgroundColor: AppColors.red,
-                  child: IconWidget(
-                    icon: AppIconsPath.notificationIcon,
-                    width: 24,
-                    height: 24,
-                    color: AppColors.grey700,
-                  ),
-                ),
+              GetBuilder<UserNotificationController>(
+                init: UserNotificationController(),
+                builder: (notificationController) {
+                  return IconButton(
+                    tooltip: "Notifications",
+                    onPressed: () {
+                      Get.toNamed(AppRoutes.userNotificationScreen);
+                    },
+                    icon:  Badge(
+                      isLabelVisible: true,
+                      label: Text(notificationController.notifications.length.toString()),
+                      backgroundColor: AppColors.red,
+                      child: const IconWidget(
+                        icon: AppIconsPath.notificationIcon,
+                        width: 24,
+                        height: 24,
+                        color: AppColors.grey700,
+                      ),
+                    ),
+                  );
+                }
               ),
             ],
           ),

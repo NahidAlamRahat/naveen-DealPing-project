@@ -30,9 +30,10 @@ class ApiUrls {
   ApiUrls({this.id = ''});
 
   // base url
-  static final String domain = _getDomain();
+  // static final String domain = _getDomain();
   // static const String baseUrl = "https://perceived-bare-wholesale-lives.trycloudflare.com/api/v1";
   static const String baseUrl = "http://10.10.7.26:5000/api/v1";
+  static const String domain = "http://10.10.7.26:5000";
 
   static const String imageUrl = "http://10.10.7.26:5000";
 

@@ -488,6 +488,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.16"
+  lazy_scroll_view:
+    dependency: "direct main"
+    description:
+      name: lazy_scroll_view
+      sha256: f62a7996bb4bbcf123365b73b492e77114148275ac09caf66deaf49ee67d7b90
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0+2"
   leak_tracker:
     dependency: transitive
     description:

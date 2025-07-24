@@ -131,26 +131,27 @@ Dio getMyDio() {
       options
         ..headers["Authorization"] ??= "Bearer ${LocalStorage.token}"
         ..headers["Content-Type"] ??= "application/json"
-        ..sendTimeout = const Duration(seconds: 30)
-        ..receiveTimeout = const Duration(seconds: 30)
+        ..sendTimeout = const Duration(seconds: 120)
+        ..receiveTimeout = const Duration(seconds: 120)
+        ..connectTimeout= const Duration(seconds: 120)
         ..baseUrl = options.baseUrl.startsWith("http") ? "" : ApiUrls.baseUrl
         ..extra["stopwatch"] = stopwatch;
 
       if (kDebugMode) {
         stopwatch.start();
 
-        print(
+        debugPrint(
             "Api Service==================>Requested URL:${options.method} ${options.uri}");
-        print(
+        debugPrint(
             "Api Service==================>Request Headers: ${options.headers}");
 
         if (options.headers["Content-Type"] == "application/json") {
-          print(
+          debugPrint(
               "Api Service==================>Request Body: ${jsonEncode(options.data)}");
         } else if (options.headers["Content-Type"] == "multipart/form-data") {
           if (options.data is FormData) {
             for (var entry in (options.data as FormData).files) {
-              print("File Key: ${entry.key}, File MIME Type: ${entry.value}");
+              debugPrint("File Key: ${entry.key}, File MIME Type: ${entry.value}");
             }
           }
         }
@@ -160,11 +161,11 @@ Dio getMyDio() {
     onResponse: (response, handler) {
       if (kDebugMode) {
         stopwatch.stop();
-        print(
+        debugPrint(
             "Api Service==================>Response Time: ${stopwatch.elapsedMilliseconds / 1000} Second");
-        print(
+        debugPrint(
             "Api Service==================>Response Status Code: ${response.statusCode} ${response.requestOptions.uri}");
-        print(
+        debugPrint(
             "Api Service==================>Response Data: ${jsonEncode(response.data)}");
         stopwatch.reset();
       }
@@ -173,11 +174,11 @@ Dio getMyDio() {
     onError: (error, handler) {
       if (kDebugMode) {
         stopwatch.stop();
-        print(
+        debugPrint(
             "Api Service==================>Response Time: ${stopwatch.elapsedMilliseconds / 1000} Second");
-        print(
+        debugPrint(
             "Api Service==================>Error Status Code: ${error.response?.statusCode} ${error.requestOptions.uri}");
-        print(
+        debugPrint(
             "Api Service==================>Error Data: ${jsonEncode(error.response?.data)}");
         stopwatch.reset();
       }

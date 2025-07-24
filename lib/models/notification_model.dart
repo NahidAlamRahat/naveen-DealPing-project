@@ -18,7 +18,7 @@ class NotificationModel {
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
       id: json['sender']?['_id'] ?? '',
-      businessName: json['sender']?['businessName'] ?? '',
+      businessName: json['sender']?['name'] ?? '',
       userProfileImage: json['sender']?['profile'] ?? '',
       createdAt: json['createdAt'] ?? '',
       isRead: json['isRead'] ?? false, // use `false` instead of '' for bool

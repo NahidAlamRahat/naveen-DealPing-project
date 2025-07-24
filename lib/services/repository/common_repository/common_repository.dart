@@ -1,4 +1,7 @@
+import 'package:deal_ping/models/chat_message_responce_model.dart';
+import 'package:deal_ping/models/notification_model.dart';
 import 'package:deal_ping/services/api/api_services.dart';
+import 'package:deal_ping/services/api/app_api_services.dart';
 
 import '../../../constants/api_urls.dart';
 import '../../../models/faq_model.dart';
@@ -7,6 +10,8 @@ import '../../../utils/app_log/error_log.dart';
 import '../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 class CommonRepository {
+
+  AppApiServices apiServices = AppApiServices.instance;
   Future<List<FAQData>?> fetchFAQs() async {
     try {
       var response = await ApiService.getApi(ApiUrls.faq);
@@ -44,5 +49,65 @@ class CommonRepository {
       return null;
     }
   }
+
+
+  Future<List<NotificationModel>> getNotificationData(int page)async{
+    List<NotificationModel> notificationDataList = <NotificationModel>[];
+    try{
+      Map<String, dynamic> queryParameters = {"page": page};
+   var response = await  apiServices.apiGetServices("/notifications", queryParameters:queryParameters );
+if(response != null){
+if(response["data"] != null && response["data"] is Map){
+  var data = response["data"];
+  if(data["data"] != null && data["data"] is List){
+for(var item in data["data"]){
+notificationDataList.add(NotificationModel.fromJson(item));
+}
+  }
+
+}
+}
+
+
+    }catch(e){
+
+
+
+      errorLog(e);
+    }
+    return notificationDataList;
+  }
+
+
+
+  Future<List<ChatMessageResponseModel>> getChatMessage(int page)async{
+    List<ChatMessageResponseModel> chatMessageResponseModelList = <ChatMessageResponseModel>[];
+    try{
+      Map<String, dynamic> queryParameters = {"page": page};
+      var response = await  apiServices.apiGetServices("/notifications", queryParameters:queryParameters );
+      if(response != null){
+        if(response["data"] != null && response["data"] is Map){
+          var data = response["data"];
+          if(data["data"] != null && data["data"] is List){
+            for(var item in data["data"]){
+              chatMessageResponseModelList.add(ChatMessageResponseModel.fromJson(item));
+            }
+          }
+
+        }
+      }
+
+
+    }catch(e){
+
+
+
+      errorLog(e);
+    }
+    return chatMessageResponseModelList;
+  }
+
+
+
 
 }

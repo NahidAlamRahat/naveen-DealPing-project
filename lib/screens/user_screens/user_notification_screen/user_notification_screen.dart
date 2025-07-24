@@ -1,5 +1,6 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/models/notification_model.dart';
 import 'package:deal_ping/screens/user_screens/user_bottom_nav/controller/user_bottom_nav_controller.dart';
 import 'package:deal_ping/utils/app_size.dart';
 import 'package:deal_ping/widgets/appbar_widget/appbar_widget.dart';
@@ -9,90 +10,85 @@ import 'package:deal_ping/widgets/space_widget/space_widget.dart';
 import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lazy_scroll_view/lazy_scroll_view.dart';
 import '../../business_screens/business_notification_screen/controller/business_notification_api_caller_controller.dart';
 import 'controller/user_notification_controller.dart';
 
 class UserNotificationScreen extends StatelessWidget {
-  final NotificationApiCallerController _apiCallerController = Get.put(NotificationApiCallerController());
-  final UserNotificationController controller;
-
-  UserNotificationScreen({super.key}): controller = Get.find<UserBottomNavController>().userNotificationController;
+  const UserNotificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppbarWidget(
-        text: AppStrings.notification,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        action: PopupMenuButton<int>(
-          constraints: const BoxConstraints.expand(width: 150, height: 60),
-          onSelected: controller.onMarkAllRead,
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              value: 1,
-              child: Text(
-                "Mark All As Read",
-                style: TextStyle(fontSize: 14, color: AppColors.grey300),
-              ),
-            ),
-          ],
-          color: AppColors.white,
-          elevation: 2,
-        ),
-      ),
-      body: SingleChildScrollView(
-        controller: controller.scrollController,
-        child: Column(
-          children: [
-            // Notification List
-            Obx(() => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: Column(
-                children: controller.filteredNotifications
-                    .asMap()
-                    .entries
-                    .map((entry) => NotificationItem(
-                  notification: entry.value,
-                  isNew: entry.key == 0,
-                  networkImageUrl: entry.value['image'] ?? '',
-
-                )
-                )
-                    .toList(),
-              ),
-            )),
-
-            // View More / Show Less Button
-            Obx(() {
-              if (controller.notifications.length > 5) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: ButtonWidget(
-                    onPressed: controller.onToggleNotificationsView,
-                    label: controller.isViewMore.value
-                        ? AppStrings.viewMore
-                        : "Show Less",
-                    buttonHeight: 36,
-                    buttonWidth: 100,
-                    fontSize: 12,
+    return  GetBuilder<UserNotificationController>(
+      init:UserNotificationController() ,
+        builder: (controller) {
+          return Scaffold(
+          backgroundColor: AppColors.white,
+          appBar: AppbarWidget(
+            text: AppStrings.notification,
+            backgroundColor: Colors.white,
+            centerTitle: true,
+            action: PopupMenuButton<int>(
+              constraints: const BoxConstraints.expand(width: 150, height: 60),
+              onSelected: controller.onMarkAllRead,
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  value: 1,
+                  child: Text(
+                    "Mark All As Read",
+                    style: TextStyle(fontSize: 14, color: AppColors.grey300),
                   ),
-                );
-              } else {
-                return const SizedBox(); // Return empty widget if 5 or fewer
+                ),
+              ],
+              color: AppColors.white,
+              elevation: 2,
+            ),
+          ),
+          //   body: LazyListView.builder(
+          //     onLoad: controller.onAppInitialDataLoad(),
+          //   itemCount: controller.notifications.length,
+          //   itemBuilder: (context, index) {
+          //     final entry = controller.notifications.elementAt(index);
+          //     return NotificationItem(
+          //       notification: entry,
+          //       isNew: !entry.isRead,
+          //       networkImageUrl: entry.userProfileImage,
+          //     );
+          //   },
+          // ),
+            body: Obx((){
+              if(controller.isLoading.value){
+                return CircularProgressIndicator();
               }
-            })
+              return SingleChildScrollView(
+                controller: controller.scrollController,
+                physics:const AlwaysScrollableScrollPhysics(),
+                child: Column(children: [
+                  ...List.generate(controller.notifications.length, (index) {
+                    var item = controller.notifications[index];
+                        return NotificationItem(
+                          notification: item,
+                          isNew: !item.isRead,
+                          networkImageUrl: item.userProfileImage,
+                        );
+                  },),
 
-          ],
-        ),
-      ),
-    );
+                 if(controller.isPagination.value) Padding(padding: EdgeInsetsGeometry.all(AppSize.width(value: 10)), child: Align(child: SizedBox(
+                    width: AppSize.width(value: 20),
+                    height: AppSize.width(value: 20),
+                    child: CircularProgressIndicator(),
+                  ),),)
+                ],),
+              );
+            }),
+              );
+        }
+      );
   }
 }
 
 class NotificationItem extends StatelessWidget {
-  final Map<String, String> notification;
+  final  NotificationModel notification;
   final bool isNew;
   final String networkImageUrl;
 
@@ -132,21 +128,21 @@ class NotificationItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextWidget(
-                  text: notification['title'] ?? '',
+                  text: notification.businessName,
                   fontWeight: FontWeight.w500,
                   fontColor: AppColors.green500,
                   fontSize: 14,
                 ),
                 const SpaceWidget(spaceHeight: 4),
                 TextWidget(
-                  text: notification['subtitle'] ?? '',
+                  text: notification.body,
                   fontColor: AppColors.grey300,
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
                 ),
                 const SpaceWidget(spaceHeight: 4),
                 TextWidget(
-                  text: notification['date'] ?? '',
+                  text: notification.createdAt,
                   fontColor: AppColors.grey200,
                   fontSize: 12,
                   fontWeight: FontWeight.w400,

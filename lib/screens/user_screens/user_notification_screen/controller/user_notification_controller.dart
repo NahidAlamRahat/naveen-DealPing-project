@@ -1,79 +1,32 @@
-
 import 'package:deal_ping/constants/app_image_path.dart';
+import 'package:deal_ping/models/notification_model.dart';
 import 'package:deal_ping/screens/user_screens/user_notification_screen/controller/user_notification_api_caller_controller.dart';
+import 'package:deal_ping/utils/app_log/error_log.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-
+import '../../../../services/repository/common_repository/common_repository.dart';
 import '../../../../utils/app_log/app_log.dart';
-
 
 ///==================================
 
 class UserNotificationController extends GetxController {
   ScrollController scrollController = ScrollController();
-  final UserNotificationApiCallerController _apiCallerController = Get.put(UserNotificationApiCallerController());
-  var notifications = <Map<String, String>>[
+  CommonRepository commonRepository = CommonRepository();
+  final UserNotificationApiCallerController apiCallerController =
+      Get.put(UserNotificationApiCallerController());
 
-  ].obs;
-  var filteredNotifications = <Map<String, String>>[].obs;
+  RxList<NotificationModel> notifications = <NotificationModel>[].obs;
   var searchQuery = ''.obs;
   var filterType = 'Weekly'.obs;
   var isViewMore = true.obs; // To manage view state
   final filterOptions = ['Weekly', 'Monthly'];
 
-  @override
-  void onInit() {
-    super.onInit();
-    fetchNotifications();
-    scrollController.addListener((){
-      if (scrollController.position.pixels >= scrollController.position.maxScrollExtent) {
-        appLog("============ 😊😊😊😊😊============> max extent called");
-        fetchNotifications();
-      }
-    });
-  }
-
-
-
-  Future<void> fetchNotifications() async{
-
-    await _apiCallerController.getNotificationList();
-    appLog("_apiCallerController.notificationList ====================>>>>>   ${_apiCallerController.notificationList}");
-    notifications.value = List.generate(
-        _apiCallerController.notificationList.length,
-          (index) => {
-        'title': _apiCallerController.notificationList[index].businessName,  // businessName
-        'subtitle': _apiCallerController.notificationList[index].body,  // body
-        'date': _apiCallerController.notificationList[index].createdAt,
-        'image' : '${AppImagePath.imageUrl}${_apiCallerController.notificationList[index].userProfileImage}' // createdAt
-      },
-    );
-    filteredNotifications.assignAll(notifications);
-  }
-
-  void onToggleNotificationsView() {
-    isViewMore.value = !isViewMore.value;
-    if (isViewMore.value) {
-      filteredNotifications.assignAll(notifications);  // Show less (show all notifications)
-    } else {
-      filteredNotifications.assignAll(notifications.take(6));  // Show more (show only 6 notifications)
-    }
-  }
-
-  void filterNotifications(String query) {
-    searchQuery.value = query;
-    if (query.isEmpty) {
-      filteredNotifications.assignAll(notifications);
-    } else {
-      filteredNotifications.assignAll(
-        notifications.where(
-              (item) =>
-          (item['title']?.toLowerCase().contains(query.toLowerCase()) ?? false) ||
-              (item['subtitle']?.toLowerCase().contains(query.toLowerCase()) ?? false),
-        ),
-      );
-    }
-  }
+  // Future<void> fetchNotifications() async {
+  //  apiCallerController.getNotificationList().then((value) {
+  //     notifications.addAll(value);
+  //     update();
+  //   });
+  // }
 
   void onMarkAllRead(int value) {
     if (value == 1) {
@@ -86,5 +39,70 @@ class UserNotificationController extends GetxController {
   void onViewMore() {
     // Logic for loading more notifications
     Get.snackbar('View More', 'Loading more notifications...');
+  }
+
+  RxBool isLoading = true.obs;
+  RxBool isPagination = false.obs;
+  int currentPage = 1;
+  bool isLast = false;
+
+
+
+  Future<void> onDataLoad()async{
+    try{
+      if(isLast){
+        isLoading.value = false;
+        isPagination.value = false;
+        return;
+      }
+
+    var response = await  commonRepository.getNotificationData(currentPage);
+if(response.isEmpty){
+  isLast = true;
+}else{
+  notifications.addAll(response);
+
+}
+      currentPage++;
+    }catch(e){
+      errorLog(e);
+    }
+    isLoading.value = false;
+    isPagination.value = false;
+  }
+
+ void paginationData(){
+    try{
+      scrollController.addListener(() {
+        if(scrollController.hasClients){
+          if(scrollController.position.pixels == scrollController.position.maxScrollExtent){
+            if(isPagination.value == false){
+              isPagination.value = true;
+              onDataLoad();
+            }
+
+          }
+        }
+      },);
+    }catch(e){
+      errorLog(e);
+    }
+  }
+
+  Future<void> onAppInitialDataLoad()async{
+    try{
+      isLoading.value = true;
+await onDataLoad();
+      paginationData();
+    }catch(e){
+
+      errorLog(e);
+    }
+    isLoading.value = false;
+  }
+  @override
+  void onInit() {
+    onAppInitialDataLoad();
+    super.onInit();
   }
 }
