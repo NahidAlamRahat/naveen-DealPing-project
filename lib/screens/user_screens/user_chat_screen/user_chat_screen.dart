@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:deal_ping/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,59 +9,79 @@ import '../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../business_screens/business_chat_screen/business_chat_screen.dart';
 import 'controller/user_chate_controller.dart';
 
-class UserChatScreen extends StatelessWidget {
+class UserChatScreen extends StatefulWidget {
   const UserChatScreen({super.key});
 
   @override
+  State<UserChatScreen> createState() => _UserChatScreenState();
+}
+
+class _UserChatScreenState extends State<UserChatScreen> {
+
+  ScrollController _scrollController = ScrollController();
+  final controller = Get.put(UserChatController());
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.minScrollExtent - 100) {
+        controller.fetchChatMessages();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-    final controller = Get.put(UserChatController());
 
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: const AppbarWidget(
         text: 'Mirchi Dance',
-
-///PopupMenuButton
-/*
-        action: PopupMenuButton<int>(
-          onSelected: (value) {
-            if (value == 1) {}
-          },
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              value: 1,
-              child: Text("Report", style: TextStyle(fontSize: 14, color: AppColors.grey300)),
-            ),
-            const PopupMenuDivider(height: 0.2),
-            const PopupMenuItem(
-              value: 1,
-              child: Text("Delete Chat", style: TextStyle(fontSize: 14, color: AppColors.grey300)),
-            ),
-          ],
-          color: AppColors.white,
-          elevation: 2,
-        ),
-*/
-
-
       ),
       body: Column(
         children: [
           Expanded(
-            child: Obx(() => ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: controller.messages.length,
-              itemBuilder: (context, index) {
-                final message = controller.messages[index];
-                return ChatMessage(
-                  text: message['text'] as String?,
-                  image: message['image'] as File?,
-                  isSent: message['isSent'] as bool,
-                  time: message['time'] as String,
-                  showButton: message['button'] == true,
-                );
-              },
-            )),
+            child: Obx(() {
+              if (controller.chatMessages.isEmpty) {
+                return const Center(child: Text('No messages available'));
+              }
+
+              return ListView.builder(
+                controller: _scrollController,
+                // reverse: true, // <-- এখানে reverse: true যোগ করুন
+                padding: const EdgeInsets.all(16),
+                itemCount: controller.chatMessages.length + (controller.isLoading.value ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (index == controller.chatMessages.length) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: controller.isLoading.value
+                          ? const CircularProgressIndicator()
+                          : const SizedBox(),
+                    );
+                  }
+
+                  // Reverse ইনডেক্সিং (পুরানো মেসেজ উপরে, নতুন মেসেজ নিচে)
+                  final reversedIndex = controller.chatMessages.length - 1 - index;
+                  final message = controller.chatMessages[reversedIndex];
+
+                  return ChatMessage(
+                    text: message.message ?? '',
+                    time: message.createdAt ?? '',
+                    isSent: message.sender?.id == '686a5af0f2d6c20e53a903cf',
+                  );
+                },
+              );
+            }),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),

@@ -1,19 +1,16 @@
-import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/models/notification_model.dart';
-import 'package:deal_ping/screens/user_screens/user_notification_screen/controller/user_notification_api_caller_controller.dart';
 import 'package:deal_ping/utils/app_log/error_log.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../../../services/repository/common_repository/common_repository.dart';
-import '../../../../utils/app_log/app_log.dart';
 
 ///==================================
 
 class UserNotificationController extends GetxController {
   ScrollController scrollController = ScrollController();
   CommonRepository commonRepository = CommonRepository();
-  final UserNotificationApiCallerController apiCallerController =
-      Get.put(UserNotificationApiCallerController());
+  // final UserNotificationApiCallerController apiCallerController =
+  //     Get.put(UserNotificationApiCallerController());
 
   RxList<NotificationModel> notifications = <NotificationModel>[].obs;
   var searchQuery = ''.obs;
@@ -36,10 +33,10 @@ class UserNotificationController extends GetxController {
     }
   }
 
-  void onViewMore() {
-    // Logic for loading more notifications
-    Get.snackbar('View More', 'Loading more notifications...');
-  }
+  // void onViewMore() {
+  //   // Logic for loading more notifications
+  //   Get.snackbar('View More', 'Loading more notifications...');
+  // }
 
   RxBool isLoading = true.obs;
   RxBool isPagination = false.obs;
@@ -100,6 +97,7 @@ await onDataLoad();
     }
     isLoading.value = false;
   }
+
   @override
   void onInit() {
     onAppInitialDataLoad();

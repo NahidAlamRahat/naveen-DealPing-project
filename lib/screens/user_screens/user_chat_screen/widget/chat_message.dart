@@ -73,6 +73,7 @@ class ChatMessage extends StatelessWidget {
                 if (showButton) ...[
                   const SizedBox(height: 10.0),
                   Container(
+
                     padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
                       color: AppColors.green500,
@@ -144,10 +145,10 @@ class ChatMessage extends StatelessWidget {
                         ButtonWidget(
                           onPressed: () {
                             Get.toNamed(AppRoutes.userBookingSummaryScreen);
-                            // ScaffoldMessenger.of(context).showSnackBar(
-                            //   const SnackBar(
-                            //       content: Text('Table booked successfully!')),
-                            // );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Table booked successfully!')),
+                            );
                           },
                           backgroundColor: AppColors.white,
                           label: AppStrings.bookYourTable,

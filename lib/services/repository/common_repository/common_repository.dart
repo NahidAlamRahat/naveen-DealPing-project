@@ -1,13 +1,20 @@
-import 'package:deal_ping/models/chat_message_responce_model.dart';
-import 'package:deal_ping/models/notification_model.dart';
-import 'package:deal_ping/services/api/api_services.dart';
-import 'package:deal_ping/services/api/app_api_services.dart';
+
+import 'dart:async';
+import 'package:deal_ping/utils/app_log/app_log.dart';
+import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 import '../../../constants/api_urls.dart';
+import '../../../models/chat_message_responce_model.dart';
 import '../../../models/faq_model.dart';
+import '../../../models/notification_model.dart';
 import '../../../models/terms_and_conditions_model.dart';
 import '../../../utils/app_log/error_log.dart';
 import '../../../widgets/app_snack_bar/app_snack_bar.dart';
+import '../../api/api_services.dart';
+import '../../api/app_api_services.dart';
 
 class CommonRepository {
 
@@ -84,7 +91,7 @@ notificationDataList.add(NotificationModel.fromJson(item));
     List<ChatMessageResponseModel> chatMessageResponseModelList = <ChatMessageResponseModel>[];
     try{
       Map<String, dynamic> queryParameters = {"page": page};
-      var response = await  apiServices.apiGetServices("/notifications", queryParameters:queryParameters );
+      var response = await  apiServices.apiGetServices("${ApiUrls.baseUrl}/message/686c9e47cb13e5e76eba962e", queryParameters:queryParameters );
       if(response != null){
         if(response["data"] != null && response["data"] is Map){
           var data = response["data"];
@@ -97,14 +104,40 @@ notificationDataList.add(NotificationModel.fromJson(item));
         }
       }
 
-
     }catch(e){
-
-
 
       errorLog(e);
     }
     return chatMessageResponseModelList;
+  }
+
+
+
+
+  Future<ChatMessageResponseModel?> sendMessage ({required String message,required String chatId,required List<XFile> imageUrl})
+  async{
+
+    FormData formData = FormData.fromMap({
+      "data": '''{
+        "message": "$message"
+      }''',  // Add string data
+      if(imageUrl.isNotEmpty)
+      "image": await Future.wait(
+        imageUrl.map((file) async {
+          return await MultipartFile.fromFile(file.path, filename: file.name);
+        }),
+      ), // Add multiple files
+    });
+
+    var response =await  ApiService.postApi('${ApiUrls.baseUrl}/message/$chatId', formData);
+    appLog("---------------------------------------------------------------");
+    appLog(response.body);
+     if(response.statusCode == 200){
+       return ChatMessageResponseModel.fromJson(response.body['data']);
+     }else{
+       // ("Failed to send message");
+       return null;
+     }
   }
 
 

@@ -1,76 +1,86 @@
 import 'dart:io';
+import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../models/chat_message_responce_model.dart';
+import '../../../../services/repository/common_repository/common_repository.dart';
+import '../../../../utils/app_log/error_log.dart';
+
 class UserChatController extends GetxController {
   final TextEditingController messageController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
+  final List<XFile> images = [];
+  String chatId = '686c9e47cb13e5e76eba962e';
 
-  // send message
-  RxList<Map<String, dynamic>> messages = <Map<String, dynamic>>[
-    {
-      'text': "Hi! I'd love to book a table for 4 tonight. Do you have availability?",
-      'isSent': true,
-      'time': '09:41',
-    },
+  CommonRepository commonRepository = CommonRepository();
 
+  RxList<ChatMessageResponseModel> chatMessages =
+      <ChatMessageResponseModel>[].obs;
 
-    //receiver
-    {
-      'text':
-      "=reaching out! Let me check availability for you.\n\nWe have a table for 4 available at 9:00 PM tonight. Plus, we’re offering 20% off your first bottle of wine! 🍷 Would you like to confirm the booking?",
-      'isSent': false,
-      'time': '16:38',
-    },
+  int currentPage = 1;
+  RxBool isLoading = false.obs;
 
-    {
-      'text': "Yes, please! Can we also get a bottle of wine with the discount?",
-      'isSent': true,
-      'time': '16:38',
-    },
-    {
-      'text': "Of Course.\n\nIs there anything else you want to add?",
-      'isSent': false,
-      'time': '16:38',
-    },
-    {
-      'text': "No. Thank you",
-      'isSent': true,
-      'time': '16:38',
-    },
-    {
-      'text':
-      "Your table for 4 at 12:30 PM is pending.\n\nWe’re holding the spot for you! To confirm your reservation, please click below.",
-      'isSent': false,
-      'time': '16:38',
-      'button': true,
-    },
-    {
-      'text':
-      "YOU’RE ALL SET! We’ll see you at 9:00 PM tonight. 🎵 Enjoy the music and drinks, and don’t forget to show this message to claim your 20% off wine! 🍷\n\nIf anything changes, feel free to message us!",
-      'isSent': false,
-      'time': '16:38',
-    },
-  ].obs;
+  Future<void> fetchChatMessages() async {
+    try {
+      isLoading.value = true;
+      final data = await commonRepository.getChatMessage(currentPage);
 
-  void sendMessage({File? image}) {
-    if (image != null || messageController.text.isNotEmpty) {
-      messages.add({
-        if (image != null) 'image': image,
-        if (messageController.text.isNotEmpty) 'text': messageController.text,
-        'isSent': true,
-        'time': '16:38', // Ideally use DateTime.now()
-      });
-      messageController.clear();
+      if (data.isNotEmpty) {
+        chatMessages.addAll( data); // <-- নতুন ডাটা লিস্টের শুরুতে যোগ করুন
+        currentPage++;
+      }
+      isLoading.value = false;
+    } catch (e) {
+      isLoading.value = false;
+      errorLog(e);
     }
   }
 
-  Future<void> pickImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      sendMessage(image: File(image.path));
+  Future<void> sendMessage() async {
+    if (messageController.text.trim().isEmpty && images.isEmpty) return;
+
+    var response = await commonRepository.sendMessage(
+      message: messageController.text.trim(),
+      chatId: chatId,
+      imageUrl: images,
+    );
+
+    if (response != null) {
+      chatMessages.add(response); // নতুন মেসেজ লিস্টের শেষে যোগ হবে
+      messageController.clear();
     }
+  }
+  // // Send new message and add it to the bottom of the list
+  // Future<void> sendMessage() async {
+  //   if (messageController.text.trim().isEmpty && images.isEmpty) return;
+  //
+  //   var response = await commonRepository.sendMessage(
+  //       message: messageController.text.trim(),
+  //       chatId: chatId,
+  //       imageUrl: images);
+  //
+  //   images.clear();
+  //   if (response != null) {
+  //     chatMessages.add(response);
+  //     messageController.clear();
+  //     update();
+  //   }
+  // }
+
+  // Pick images for the message
+  Future<void> pickImage() async {
+    final List<XFile> pickedImages = await _picker.pickMultiImage();
+    images.addAll(pickedImages);
+    update();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    appLog('onInit called');
+    fetchChatMessages();
   }
 
   @override

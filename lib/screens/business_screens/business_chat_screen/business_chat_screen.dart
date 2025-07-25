@@ -219,7 +219,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                 return ChatMessage(
                   text: message['text'] as String?,
                   // Cast as nullable String
-                  image: message['image'] as File?,
+                  image: message['image'],
                   isSent: message['isSent'] as bool,
                   time: message['time'] as String,
                   showButton: message['button'] == true,
@@ -317,15 +317,15 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
 }
 
 class ChatMessage extends StatelessWidget {
-  final String? text; // Changed to nullable
-  final File? image;
+  final String? text;
+  final String? image;
   final bool isSent;
   final String time;
   final bool showButton;
 
   const ChatMessage({
     super.key,
-    this.text, // Changed to optional
+    this.text,
     this.image,
     required this.isSent,
     required this.time,
@@ -338,8 +338,9 @@ class ChatMessage extends StatelessWidget {
       alignment: isSent ? Alignment.centerRight : Alignment.centerLeft,
       child: Column(
         crossAxisAlignment:
-            isSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        isSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
+          // মেসেজ বক্স
           Container(
             margin: const EdgeInsets.symmetric(vertical: 4.0),
             padding: const EdgeInsets.all(12.0),
@@ -353,17 +354,23 @@ class ChatMessage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // ইমেজ থাকলে দেখাও
                 if (image != null)
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.file(
-                      image!,
+                      image as File,
                       width: 200,
                       fit: BoxFit.cover,
                     ),
                   ),
-                if (image != null && text != null) const SizedBox(height: 8),
-                if (text != null) // Only show text widget if text exists
+
+                // ইমেজ ও টেক্সট দুটোই থাকলে স্পেস
+                if (image != null && text != null)
+                  const SizedBox(height: 8),
+
+                // টেক্সট থাকলে দেখাও
+                if (text != null)
                   TextWidget(
                     text: text!,
                     fontSize: 14,
@@ -371,6 +378,8 @@ class ChatMessage extends StatelessWidget {
                     fontColor: isSent ? AppColors.white : AppColors.grey700,
                     textAlignment: TextAlign.start,
                   ),
+
+                // শো বাটন থাকলে বুকিং UI দেখাও
                 if (showButton) ...[
                   const SizedBox(height: 10.0),
                   Container(
@@ -396,7 +405,6 @@ class ChatMessage extends StatelessWidget {
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   const TextWidget(
                                     text: 'Mirchi Dance Bar',
@@ -407,7 +415,7 @@ class ChatMessage extends StatelessWidget {
                                   Row(
                                     children: List.generate(
                                       5,
-                                      (index) => const Icon(
+                                          (index) => const Icon(
                                         Icons.star,
                                         color: AppColors.yellow,
                                         size: 12,
@@ -459,6 +467,8 @@ class ChatMessage extends StatelessWidget {
               ],
             ),
           ),
+
+          // টাইমস্ট্যাম্প
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
