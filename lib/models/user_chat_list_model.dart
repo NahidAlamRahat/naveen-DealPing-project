@@ -1,5 +1,5 @@
 class ChatModel {
-  final String id;
+  final String chatId; //main
   final String requestId;
   final String latestMessage;
   final String latestMessageTime;
@@ -12,7 +12,7 @@ class ChatModel {
   final String participantProfile;
 
   ChatModel({
-    required this.id,
+    required this.chatId,
     required this.requestId,
     required this.latestMessage,
     required this.latestMessageTime,
@@ -29,7 +29,7 @@ class ChatModel {
     final participant = json['participant'] ?? {};
 
     return ChatModel(
-      id: json['_id'] ?? '',
+      chatId: json['_id'] ?? '',
       requestId: json['request'] ?? '',
       latestMessage: json['latestMessage'] ?? '',
       latestMessageTime: json['latestMessageTime'] ?? '',

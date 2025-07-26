@@ -19,7 +19,9 @@ class ChatController extends GetxController {
     debugPrint('😎😎😎😎😎=====>>>$newId');
 
     id = newId;
-    debugPrint('😎😎😎😎😎=====>>>$id');
+
+    debugPrint('chat id😎😎😎😎😎=====>>>${chatList[0].chatId}');
+
     fetchChatData(id: id); // Re-fetch data when ID changes
   }
 
@@ -29,8 +31,8 @@ class ChatController extends GetxController {
       isLoading.value = true;
       update(); // Manually trigger UI update when loading starts
 
-      var response = await ApiService.getApi(ApiUrls.userChatUrl(id: id));
-      debugPrint('Fetching chat data from: ${ApiUrls.userChatUrl(id: id)}');
+      var response = await ApiService.getApi(ApiUrls.userChatUrl(requestId: id));
+      debugPrint('fetchChatData()  id : ${ApiUrls.userChatUrl(requestId: id)}');
 
       if (response.statusCode == 200) {
         List<ChatModel> chats = (response.body['data'] as List)

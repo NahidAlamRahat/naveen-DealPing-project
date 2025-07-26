@@ -1,3 +1,4 @@
+import 'package:deal_ping/screens/user_screens/user_bottom_nav/controller/user_bottom_nav_controller.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/controller/sent_request_api_caller_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,6 +36,7 @@ class UserHomeController extends GetxController {
   void onInit() {
     super.onInit();
     fetchCategories();
+
 
   }
 

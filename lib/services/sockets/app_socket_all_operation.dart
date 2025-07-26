@@ -1,5 +1,6 @@
 
 import 'package:deal_ping/constants/api_urls.dart';
+import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import '../../utils/app_log/app_log.dart';
@@ -85,23 +86,8 @@ class AppSocketAllOperation {
     appRootSocket?.on('connect', listener);
   }
 
-  void vendorLiveLocationUpdate({required String orderId, required dynamic latitude, required dynamic longitude}) {
-    try {
-      final data = {"orderId": orderId, "latitude": _convertToDouble(latitude), "longitude": _convertToDouble(longitude)};
-      emitEvent("liveTracking", data);
-    } catch (e, stackTrace) {
-    errorLog("vendorLiveLocationUpdate$e $stackTrace", );
-    }
-  }
 
-  double _convertToDouble(dynamic value) {
-    try {
-      return double.parse(value.toString());
-    } catch (e, stackTrace) {
-      errorLog("_convertToDouble $e $stackTrace", );
-      return 0.0;
-    }
-  }
+
 
   void _connectSocketToServer() {
     try {
@@ -112,7 +98,12 @@ class AppSocketAllOperation {
 
       appRootSocket = io.io(
         ApiUrls.domain,
-        io.OptionBuilder().setTransports(['websocket']).disableAutoConnect().setExtraHeaders({'foo': 'bar'}).enableReconnection().build(),
+        io.OptionBuilder()
+            .setTransports(['websocket'])
+            .disableAutoConnect()
+            .setExtraHeaders({'foo': 'bar',"Authorization": "Bearer ${LocalStorage.token}"})
+            .enableReconnection()
+            .build(),
       );
 
       // Setup connection listeners

@@ -69,7 +69,11 @@ class ApiUrls {
   static  String bookingListUrl({required double longitude, required double latitude, required BookingStatus status })
                         => "$baseUrl/booking/?longitude=$longitude&latitude=$latitude&status=${status.name}";
 
- static String  userChatUrl({required String id}) => "$baseUrl/chat/user/$id";
+
+ static String  userChatUrl({required String requestId}) => "$baseUrl/chat/user/$requestId";
+
+  static String  messageUrl({required String chatId}) => "$baseUrl/message/$chatId";
+
 
   static const String userNotificationsUrl = "$baseUrl/notifications";
 

@@ -91,7 +91,7 @@ notificationDataList.add(NotificationModel.fromJson(item));
     List<ChatMessageResponseModel> chatMessageResponseModelList = <ChatMessageResponseModel>[];
     try{
       Map<String, dynamic> queryParameters = {"page": page};
-      var response = await  apiServices.apiGetServices("${ApiUrls.baseUrl}/message/686c9e47cb13e5e76eba962e", queryParameters:queryParameters );
+      var response = await  apiServices.apiGetServices("${ApiUrls.baseUrl}/message/686a5af0f2d6c20e53a903cf", queryParameters:queryParameters );
       if(response != null){
         if(response["data"] != null && response["data"] is Map){
           var data = response["data"];
@@ -111,11 +111,10 @@ notificationDataList.add(NotificationModel.fromJson(item));
     return chatMessageResponseModelList;
   }
 
-
-
-
-  Future<ChatMessageResponseModel?> sendMessage ({required String message,required String chatId,required List<XFile> imageUrl})
-  async{
+  Future<ChatMessageResponseModel?> sendMessage(
+      {required String message,
+      required String chatId,
+      required List<XFile> imageUrl}) async{
 
     FormData formData = FormData.fromMap({
       "data": '''{
@@ -130,12 +129,12 @@ notificationDataList.add(NotificationModel.fromJson(item));
     });
 
     var response =await  ApiService.postApi('${ApiUrls.baseUrl}/message/$chatId', formData);
-    appLog("---------------------------------------------------------------");
+    appLog("--------------------------sendMessage------------------------------------");
     appLog(response.body);
      if(response.statusCode == 200){
        return ChatMessageResponseModel.fromJson(response.body['data']);
      }else{
-       // ("Failed to send message");
+       AppSnackBar.error(response.message);
        return null;
      }
   }

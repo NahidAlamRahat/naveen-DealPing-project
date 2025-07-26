@@ -147,7 +147,7 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.userChatScreen,
-        page: () => const UserChatScreen(),
+        page: () =>  UserChatScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(

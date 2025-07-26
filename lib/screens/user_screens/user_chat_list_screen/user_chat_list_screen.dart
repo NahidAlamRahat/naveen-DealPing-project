@@ -49,18 +49,20 @@ class UserChatListScreen extends StatelessWidget {
               ),
 
               // Header Row
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 10),
+              const Padding(
+                padding: EdgeInsets.only(left: 20, right: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const TextWidget(
+                    TextWidget(
                       text: AppStrings.chatList,
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
                       fontColor: AppColors.grey700,
                       textAlignment: TextAlign.start,
                     ),
+                   /// delete chat requres item
+                    /*
                     PopupMenuButton<int>(
                       onSelected: (value) {
                         if (value == 1) {
@@ -85,6 +87,8 @@ class UserChatListScreen extends StatelessWidget {
                       color: AppColors.white,
                       elevation: 2,
                     ),
+                    */
+
                   ],
                 ),
               ),
@@ -118,7 +122,6 @@ class UserChatListScreen extends StatelessWidget {
                                       int? requestIdAsInt;
                                       requestIdAsInt = int.tryParse(request.id); // Use tryParse for safety
                                       appLog('😢😢😢😢====>>>>>${request.id}');
-                                      appLog('😥😥😥😥😪====>>>>>$requestIdAsInt');
 
 
                                       Get.toNamed(

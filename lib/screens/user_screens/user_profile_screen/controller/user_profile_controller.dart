@@ -11,6 +11,9 @@ class UserProfileController extends GetxController {
   var profile = Rxn<Profile>();
   var isLoading = false.obs;
 
+
+
+
   @override
   void onInit() {
     super.onInit();
@@ -25,6 +28,8 @@ class UserProfileController extends GetxController {
       appLog('fetchProfile ==> $fetchedProfile');
       if (fetchedProfile != null) {
         profile.value = fetchedProfile;
+        LocalStorage.userId = profile.value?.sId ?? '';
+        appLog('Local userId======> ${LocalStorage.userId}');
       } else {
         AppSnackBar.error("Failed to load profile data.");
       }

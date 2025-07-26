@@ -206,7 +206,8 @@ class UserChatListProposalScreen extends StatelessWidget {
             child: Column(
               children: [
                 const SpaceWidget(spaceHeight: 12),
-                TextField(
+                /// Search bar
+                /*TextField(
                   decoration: InputDecoration(
                     hintText: "Search Your message",
                     hintStyle: const TextStyle(
@@ -223,7 +224,7 @@ class UserChatListProposalScreen extends StatelessWidget {
                       borderSide: const BorderSide(color: AppColors.grey300),
                     ),
                   ),
-                ),
+                ),*/
                 const SpaceWidget(spaceHeight: 16),
                 // Using List.generate to display chat data
                 Column(
@@ -233,7 +234,7 @@ class UserChatListProposalScreen extends StatelessWidget {
                     return InkWell(
                       onTap: () {
                         // Navigate to the chat screen
-                        Get.toNamed(AppRoutes.userChatScreen);
+                        Get.toNamed(AppRoutes.userChatScreen,arguments: {'chatId': chat.chatId});
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -304,13 +305,13 @@ class UserChatListProposalScreen extends StatelessWidget {
                   }),
                 ),
                 const SpaceWidget(spaceHeight: 12),
-                ButtonWidget(
+            /*    ButtonWidget(
                   onPressed: () {},
                   label: AppStrings.viewMore,
                   buttonHeight: 36,
                   buttonWidth: 100,
                   fontSize: 12,
-                ),
+                ),*/
               ],
             ),
           );

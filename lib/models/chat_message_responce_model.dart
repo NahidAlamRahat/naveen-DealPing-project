@@ -29,7 +29,7 @@ class ChatMessageResponseModel {
   factory ChatMessageResponseModel.fromJson(Map<String, dynamic> json) {
     return ChatMessageResponseModel(
       id: json['_id'],
-      chatId: json['chat'],
+      // chatId: json['chat'],
       sender: json['sender'] != null ? Sender.fromJson(json['sender']) : null,
       receiver: json['receiver'] != null ? Receiver.fromJson(json['receiver']) : null,
       message: json['message'],
@@ -46,7 +46,7 @@ class ChatMessageResponseModel {
   factory ChatMessageResponseModel.fromMap(Map<String, dynamic> map) {
     return ChatMessageResponseModel(
       id: map['_id'],
-      chatId: map['chat'],
+      // chatId: map['chat'],
       sender: map['sender'] != null ? Sender.fromMap(map['sender']) : null,
       receiver: map['receiver'] != null ? Receiver.fromMap(map['receiver']) : null,
       message: map['message'],
