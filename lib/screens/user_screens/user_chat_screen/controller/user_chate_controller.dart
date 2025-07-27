@@ -1,3 +1,4 @@
+
 import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:deal_ping/widgets/app_snack_bar/app_snack_bar.dart';
@@ -39,51 +40,59 @@ class UserChatController extends GetxController {
 
   int currentPage = 1;
   RxBool isLoading = false.obs;
+  RxBool isPagination = false.obs;
+  bool isLast = false;
 
   Future<void> fetchChatMessages() async {
     try {
-      isLoading.value = true;
-      final data = await commonRepository.getChatMessage(currentPage);
+   if(isLast){
+     isLoading.value = false;
+     isPagination.value = false;
+     return;
+   }
+
+      final data = await commonRepository.getChatMessage(page: currentPage, chatId: chatId);
 
       if (data.isNotEmpty) {
         chatMessages.addAll(data);
-        currentPage++;
+        chatMessages.refresh();
+      }else {
+        isLast = true;
       }
-
-      // if(isAtBottom){
-      //   scrollToBottom();
-      // }
-
-      isLoading.value = false;
+   currentPage++;
     } catch (e) {
-      isLoading.value = false;
-      errorLog(e);
+      errorLog(' fetchChatMessages errorLog=====>$e');
     }
+    isLoading.value = false;
+    isPagination.value = false;
+
   }
+bool isMessageSent = false;
 
   Future<void> sendMessage() async {
     try {
       if (messageController.text.trim().isEmpty && images.isEmpty) return;
-      
+      if(isMessageSent) return;
+      isMessageSent = true;
+
       var response = await commonRepository.sendMessage(
         message: messageController.text.trim(),
         chatId: chatId,
         imageUrl: images,
       );
-      
+
       if (response != null) {
-        chatMessages.add(response);
+
         messageController.clear();
         images.clear();
-        update();
-      
-        if (!scrollController.hasClients) return;
-        scrollToBottom();
+        // scrollToBottom();
       }
     }  catch (e) {
-      errorLog(e);
+      errorLog(' sendMessage errorLog=====>$e');
     }
+    isMessageSent = false;
   }
+
 
   // Pick images for the message
   Future<void> pickImage() async {
@@ -92,13 +101,19 @@ class UserChatController extends GetxController {
     update();
   }
 
+
   void scrollToBottom() {
-    if (scrollController.hasClients) {
-      scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
+    try {
+      if (scrollController.hasClients) {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    }
+    catch (e) {
+      errorLog(" scrollToBottom========>>>  $e");
     }
   }
 
@@ -122,11 +137,26 @@ class UserChatController extends GetxController {
 
   void chatMessageSocketHandler(dynamic message) {
     try {
+
       chatMessages.insert(
-          chatMessages.length - 1, ChatMessageResponseModel.fromJson(message));
+         0, ChatMessageResponseModel.fromJson(message));
+      // chatMessages.add(ChatMessageResponseModel.fromJson(message));
       chatMessages.refresh();
+      appLog('rahat');
     } catch (e) {
       errorLog("chatMessageSocketHandler $e");
+    }
+  }
+
+  void paginationData(){
+    try{
+      scrollController.addListener((){
+        appLog(scrollController.position.pixels);
+        isPagination.value = true;
+        fetchChatMessages();
+      });
+    }catch(e){
+      errorLog(e);
     }
   }
 
@@ -134,33 +164,51 @@ class UserChatController extends GetxController {
     try {
       scrollController = ScrollController();
       messageController = TextEditingController();
-      await fetchChatMessages();
-      // scroll();
       chatMessages.clear();
       currentPage = 1;
 
+       isLoading.value = true;
+       isPagination.value = false;
+
+      await fetchChatMessages();
 
 
       appSocketAllOperation.readEvent(
           event: "message::$chatId",
           handler: (data) {
+
             chatMessageSocketHandler(data);
-            appLog("😎😎😎😪😎 message::$chatId");
+
+
           });
+      paginationData();
     } catch (e) {
+      errorLog(' appSocketAllOperation errorLog=====>$e');
+
       appLog('😎😎😎😪😪😪😪😪😪😪😎  $e');
     }
   }
+
+
+
+
 
   void onAppClose() {
     try {
       messageController.dispose();
       scrollController.dispose();
-    } catch (e) {}
+    } catch (e) {
+      errorLog(' onAppClose errorLog=====>$e');
+    }
   }
 
   @override
   void onInit() {
+
+    appLog(' onInit call=====>done');
+
+    onAppInitialDataLoad();
+
     super.onInit();
   }
 

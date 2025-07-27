@@ -19,6 +19,7 @@ import '../../api/app_api_services.dart';
 class CommonRepository {
 
   AppApiServices apiServices = AppApiServices.instance;
+
   Future<List<FAQData>?> fetchFAQs() async {
     try {
       var response = await ApiService.getApi(ApiUrls.faq);
@@ -30,6 +31,23 @@ class CommonRepository {
       return null;
     }
   }
+
+
+
+  Future readNotification() async {
+    try {
+      var response = await ApiService.getApi(ApiUrls.readUserNotificationsUrl);
+      if(response.statusCode ==200) AppSnackBar.message(response.message);
+
+    } catch (e) {
+      errorLog(e);
+      AppSnackBar.error("An error occurred while fetching .");
+    }
+    return false;
+  }
+
+
+
 
 
   Future<StaticPageModel?> fetchTermsAndConditions() async {
@@ -58,40 +76,38 @@ class CommonRepository {
   }
 
 
-  Future<List<NotificationModel>> getNotificationData(int page)async{
+
+  Future<List<NotificationModel>> getNotificationData(int page) async {
     List<NotificationModel> notificationDataList = <NotificationModel>[];
-    try{
+    try {
       Map<String, dynamic> queryParameters = {"page": page};
-   var response = await  apiServices.apiGetServices("/notifications", queryParameters:queryParameters );
-if(response != null){
-if(response["data"] != null && response["data"] is Map){
-  var data = response["data"];
-  if(data["data"] != null && data["data"] is List){
-for(var item in data["data"]){
-notificationDataList.add(NotificationModel.fromJson(item));
-}
-  }
-
-}
-}
-
-
-    }catch(e){
-
-
-
+      var response = await apiServices.apiGetServices("/notifications",
+          queryParameters: queryParameters);
+      if (response != null) {
+        if (response["data"] != null && response["data"] is Map) {
+          var data = response["data"];
+          if (data["data"] != null && data["data"] is List) {
+            for (var item in data["data"]) {
+              notificationDataList.add(NotificationModel.fromJson(item));
+            }
+          }
+        }
+      }
+    } catch (e) {
       errorLog(e);
     }
     return notificationDataList;
   }
 
 
-
-  Future<List<ChatMessageResponseModel>> getChatMessage(int page)async{
+  Future<List<ChatMessageResponseModel>> getChatMessage({ required int page,  required String chatId})async{
     List<ChatMessageResponseModel> chatMessageResponseModelList = <ChatMessageResponseModel>[];
     try{
       Map<String, dynamic> queryParameters = {"page": page};
-      var response = await  apiServices.apiGetServices("${ApiUrls.baseUrl}/message/686a5af0f2d6c20e53a903cf", queryParameters:queryParameters );
+      appLog('current page😒😒 ====>>> $page');
+      appLog('chat ID😒😪😒 ====>>> $chatId');
+
+      var response = await  apiServices.apiGetServices("${ApiUrls.baseUrl}/message/$chatId", queryParameters:queryParameters );
       if(response != null){
         if(response["data"] != null && response["data"] is Map){
           var data = response["data"];
@@ -106,11 +122,12 @@ notificationDataList.add(NotificationModel.fromJson(item));
 
     }catch(e){
 
-      errorLog(e);
+      errorLog('getChatMessage======>>>  $e');
     }
     return chatMessageResponseModelList;
   }
 
+  ///
   Future<ChatMessageResponseModel?> sendMessage(
       {required String message,
       required String chatId,
@@ -129,12 +146,12 @@ notificationDataList.add(NotificationModel.fromJson(item));
     });
 
     var response =await  ApiService.postApi('${ApiUrls.baseUrl}/message/$chatId', formData);
-    appLog("--------------------------sendMessage------------------------------------");
+    appLog("------sendMessage-----------------${ApiService.postApi('${ApiUrls.baseUrl}/message/$chatId', formData)}");
     appLog(response.body);
      if(response.statusCode == 200){
        return ChatMessageResponseModel.fromJson(response.body['data']);
      }else{
-       AppSnackBar.error(response.message);
+       AppSnackBar.error('sendMessage=====>> ${response.message}');
        return null;
      }
   }

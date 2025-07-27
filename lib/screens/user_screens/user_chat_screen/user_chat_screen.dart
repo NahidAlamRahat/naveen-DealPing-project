@@ -1,16 +1,17 @@
 import 'dart:io';
 
 import 'package:deal_ping/services/storage/storage_service.dart';
+import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:deal_ping/utils/app_size.dart';
 import 'package:deal_ping/utils/extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../business_screens/business_chat_screen/business_chat_screen.dart';
 import 'controller/user_chate_controller.dart';
-
 class UserChatScreen extends StatefulWidget {
   final String? chatId;
    UserChatScreen({super.key} ):chatId = Get.arguments ['chatId'];
@@ -26,7 +27,7 @@ class _UserChatScreenState extends State<UserChatScreen> {
 
   @override
   void initState() {
-    controller.setChatId(widget.chatId);
+    controller.setChatId(widget.chatId);controller.setChatId(widget.chatId);
     super.initState();
 
   }
@@ -82,8 +83,10 @@ class _UserChatScreenState extends State<UserChatScreen> {
       ),
 
       backgroundColor: AppColors.white,
-      appBar: const AppbarWidget(
-        text: 'Mirchi Dan',
+      appBar: AppbarWidget(
+        textWidget: Obx(
+          () => Text('${controller.chatMessages[0].sender?.name}'),
+        ),
       ),
       body:  Obx(() {
         if (controller.chatMessages.isEmpty) {
@@ -91,23 +94,20 @@ class _UserChatScreenState extends State<UserChatScreen> {
         }
 
         return ListView.builder(
-
-          physics: const ClampingScrollPhysics() ,
+          reverse: true,
           controller: controller.scrollController,
           padding: const EdgeInsets.all(16),
+          physics: const ClampingScrollPhysics(),
           itemCount: controller.chatMessages.length + (controller.isLoading.value ? 1 : 0),
           itemBuilder: (context, index) {
             if (index == controller.chatMessages.length) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: controller.isLoading.value
-                    ? const CircularProgressIndicator()
-                    : const SizedBox(),
+              return const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(),
               );
             }
 
-            final reversedIndex = controller.chatMessages.length - 1 - index;
-            final message = controller.chatMessages[reversedIndex];
+            final message = controller.chatMessages[index];
 
             return ChatMessage(
               text: message.message ?? '',
@@ -120,3 +120,5 @@ class _UserChatScreenState extends State<UserChatScreen> {
     );
   }
 }
+
+

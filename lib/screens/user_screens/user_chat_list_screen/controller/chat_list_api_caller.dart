@@ -10,13 +10,14 @@ import '../../user_chat_list_proposal_screen/controller.dart';
 class RequestListController extends GetxController {
   bool _isLoading = false;
   String? _errorMessage;
-  List<Request> _requestList = [];
+
+  List<Request> _originalRequestList = [];
+  List<Request> _filteredRequestList = [];
 
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
-  List<Request> get requestList => _requestList;
+  List<Request> get requestList => _filteredRequestList;
 
-  // Fetch the list of requests and pass the ID to the ChatController
   Future<bool> fetchRequestList() async {
     _isLoading = true;
     update();
@@ -28,26 +29,20 @@ class RequestListController extends GetxController {
       },
     );
 
-    appLog("response status code ${response.statusCode}");
-
     bool isSuccess = false;
 
     if (response.statusCode == 200) {
       try {
         final List dataList = response.body['data']['data'];
-        _requestList = dataList.map((item) => Request.fromJson(item)).toList();
+        _originalRequestList =
+            dataList.map((item) => Request.fromJson(item)).toList();
+        _filteredRequestList = _originalRequestList;
         _errorMessage = null;
         isSuccess = true;
 
-        appLog('😒😒😒===>>>>${_requestList[0].id}');// Passing the ID to ChatController
-
-        // Assuming you want to pass the `id` of the first request
-
-          // String requestId = _requestList[0].id; // Fetching the ID of the first request
-          Get.find<ChatController>().setId(_requestList[0].id);
-
-          // debugPrint('😒😒😒===>>>>$requestId');// Passing the ID to ChatController
-
+        if (_originalRequestList.isNotEmpty) {
+          Get.find<ChatController>().setId(_originalRequestList[0].id);
+        }
       } catch (e) {
         _errorMessage = "Data parsing error";
       }
@@ -60,9 +55,19 @@ class RequestListController extends GetxController {
     return isSuccess;
   }
 
-  // Optionally, you can create a refresh function to re-fetch the data
+  void filterList(String query) {
+    if (query.isEmpty) {
+      _filteredRequestList = _originalRequestList;
+    } else {
+      _filteredRequestList = _originalRequestList.where((request) {
+        return request.message.toLowerCase().contains(query.toLowerCase());
+      }).toList();
+    }
+    update();
+  }
+
   Future<void> refreshRequestList() async {
-    _requestList = [];
+    _originalRequestList = [];
     await fetchRequestList();
   }
 }

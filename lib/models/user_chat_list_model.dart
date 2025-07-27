@@ -1,7 +1,7 @@
 class ChatModel {
   final String chatId; //main
   final String requestId;
-  final String latestMessage;
+  late final String latestMessage;
   final String latestMessageTime;
   // final String createdAt;
   // final String updatedAt;

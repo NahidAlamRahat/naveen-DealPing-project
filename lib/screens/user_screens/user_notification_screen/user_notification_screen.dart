@@ -19,76 +19,87 @@ class UserNotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  GetBuilder<UserNotificationController>(
-      init:UserNotificationController() ,
+    return GetBuilder<UserNotificationController>(
+        init: UserNotificationController(),
         builder: (controller) {
           return Scaffold(
-          backgroundColor: AppColors.white,
-          appBar: AppbarWidget(
-            text: AppStrings.notification,
-            backgroundColor: Colors.white,
-            centerTitle: true,
-            action: PopupMenuButton<int>(
-              constraints: const BoxConstraints.expand(width: 150, height: 60),
-              onSelected: controller.onMarkAllRead,
-              itemBuilder: (context) => [
-                const PopupMenuItem(
-                  value: 1,
-                  child: Text(
-                    "Mark All As Read",
-                    style: TextStyle(fontSize: 14, color: AppColors.grey300),
+            backgroundColor: AppColors.white,
+            appBar: AppbarWidget(
+              text: AppStrings.notification,
+              backgroundColor: Colors.white,
+              centerTitle: true,
+              action: PopupMenuButton<int>(
+                constraints:
+                    const BoxConstraints.expand(width: 150, height: 60),
+                onSelected: controller.onMarkAllRead,
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 1,
+                    child: Text(
+                      "Mark All As Read",
+                      style: TextStyle(fontSize: 14, color: AppColors.grey300),
+                    ),
                   ),
-                ),
-              ],
-              color: AppColors.white,
-              elevation: 2,
+                ],
+                color: AppColors.white,
+                elevation: 2,
+              ),
             ),
-          ),
-          //   body: LazyListView.builder(
-          //     onLoad: controller.onAppInitialDataLoad(),
-          //   itemCount: controller.notifications.length,
-          //   itemBuilder: (context, index) {
-          //     final entry = controller.notifications.elementAt(index);
-          //     return NotificationItem(
-          //       notification: entry,
-          //       isNew: !entry.isRead,
-          //       networkImageUrl: entry.userProfileImage,
-          //     );
-          //   },
-          // ),
-            body: Obx((){
-              if(controller.isLoading.value){
+            //   body: LazyListView.builder(
+            //     onLoad: controller.onAppInitialDataLoad(),
+            //   itemCount: controller.notifications.length,
+            //   itemBuilder: (context, index) {
+            //     final entry = controller.notifications.elementAt(index);
+            //     return NotificationItem(
+            //       notification: entry,
+            //       isNew: !entry.isRead,
+            //       networkImageUrl: entry.userProfileImage,
+            //     );
+            //   },
+            // ),
+            body: Obx(() {
+              if (controller.isLoading.value) {
                 return CircularProgressIndicator();
               }
               return SingleChildScrollView(
                 controller: controller.scrollController,
-                physics:const AlwaysScrollableScrollPhysics(),
-                child: Column(children: [
-                  ...List.generate(controller.notifications.length, (index) {
-                    var item = controller.notifications[index];
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    ...List.generate(
+                      controller.notifications.length,
+                      (index) {
+                        var item = controller.notifications[index];
                         return NotificationItem(
                           notification: item,
                           isNew: !item.isRead,
                           networkImageUrl: item.userProfileImage,
                         );
-                  },),
-
-                 if(controller.isPagination.value) Padding(padding: EdgeInsetsGeometry.all(AppSize.width(value: 10)), child: Align(child: SizedBox(
-                    width: AppSize.width(value: 20),
-                    height: AppSize.width(value: 20),
-                    child: CircularProgressIndicator(),
-                  ),),)
-                ],),
+                      },
+                    ),
+                    if (controller.isPagination.value)
+                      Padding(
+                        padding:
+                            EdgeInsetsGeometry.all(AppSize.width(value: 10)),
+                        child: Align(
+                          child: SizedBox(
+                            width: AppSize.width(value: 20),
+                            height: AppSize.width(value: 20),
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                      )
+                  ],
+                ),
               );
             }),
-              );
-        }
-      );
+          );
+        });
   }
 }
 
 class NotificationItem extends StatelessWidget {
-  final  NotificationModel notification;
+  final NotificationModel notification;
   final bool isNew;
   final String networkImageUrl;
 

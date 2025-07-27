@@ -6,7 +6,9 @@ import '../../constants/app_colors.dart';
 import '../../utils/app_size.dart';
 
 class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
-  final String text;
+  final String? text;
+  final Widget? textWidget;
+
   final Widget? action;
   final PreferredSizeWidget? bottom;
   final bool? centerTitle; // Add centerTitle property
@@ -16,7 +18,8 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   const AppbarWidget({
     super.key,
-    required this.text,
+     this.text,
+    this.textWidget,
     this.action,
     this.bottom,
     this.centerTitle, // Add centerTitle to constructor
@@ -45,8 +48,8 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
           : Container(),
       titleSpacing: -4,
       actions: action != null ? [action!] : null,
-      title: Text(
-        text,
+      title:textWidget ?? Text(
+        text ?? "",
         style: TextStyle(
           fontSize: ResponsiveUtils.width(20),
           fontWeight: FontWeight.w500,

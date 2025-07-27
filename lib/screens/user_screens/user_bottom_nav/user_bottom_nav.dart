@@ -48,7 +48,7 @@ const UserBottomNav({super.key});
                     },
                     icon:  Badge(
                       isLabelVisible: true,
-                      label: Text(notificationController.notifications.length.toString()),
+                      label: Text(notificationController.unreadCount.toString()),
                       backgroundColor: AppColors.red,
                       child: const IconWidget(
                         icon: AppIconsPath.notificationIcon,

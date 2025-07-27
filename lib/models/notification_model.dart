@@ -28,6 +28,11 @@ class NotificationModel {
 
   @override
   String toString() {
-    return 'NotificationModel(id: $id, businessName: $businessName, isRead: $isRead, body: $body, userProfileImage: $userProfileImage, createdAt: $createdAt)';
+    return 'NotificationModel(id: $id,'
+        ' businessName: $businessName, '
+        'isRead: $isRead, '
+        'body: $body,'
+        ' userProfileImage: $userProfileImage, '
+        'createdAt: $createdAt)';
   }
 }

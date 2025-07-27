@@ -76,6 +76,8 @@ class ApiUrls {
 
 
   static const String userNotificationsUrl = "$baseUrl/notifications";
+  static const String readUserNotificationsUrl = "$baseUrl/notifications/all";
+
 
   static String businessChatListUrl({required String status}) => "$baseUrl/chat/businesses?status=$status";
 

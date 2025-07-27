@@ -13,23 +13,18 @@ class UserNotificationController extends GetxController {
   //     Get.put(UserNotificationApiCallerController());
 
   RxList<NotificationModel> notifications = <NotificationModel>[].obs;
-  var searchQuery = ''.obs;
-  var filterType = 'Weekly'.obs;
-  var isViewMore = true.obs; // To manage view state
-  final filterOptions = ['Weekly', 'Monthly'];
+  // var searchQuery = ''.obs;
+  // var filterType = 'Weekly'.obs;
+  // var isViewMore = true.obs; // To manage view state
+  // final filterOptions = ['Weekly', 'Monthly'];
 
-  // Future<void> fetchNotifications() async {
-  //  apiCallerController.getNotificationList().then((value) {
-  //     notifications.addAll(value);
-  //     update();
-  //   });
-  // }
+
+  int get unreadCount => notifications.where((n) => n.isRead == false).length;
 
   void onMarkAllRead(int value) {
     if (value == 1) {
-      // Logic for marking all notifications as read
-      // For demo, we can clear the "new" status or update UI state
-      Get.snackbar('Notifications', 'All marked as read');
+      // Get.snackbar('Notifications', 'All marked as read');
+      commonRepository.readNotification();
     }
   }
 

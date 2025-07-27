@@ -9,7 +9,6 @@ import '../../../routes/app_routes.dart';
 import '../../../utils/app_log/app_log.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller/chat_list_api_caller.dart';
-
 class UserChatListScreen extends StatelessWidget {
   final searchController = TextEditingController();
 
@@ -29,17 +28,17 @@ class UserChatListScreen extends StatelessWidget {
 
               // Search Field
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: TextFormField(
                   controller: searchController,
-                  style:
-                      const TextStyle(color: AppColors.grey700, fontSize: 14),
+                  onChanged: (value) {
+                    Get.find<RequestListController>().filterList(value);
+                  },
+                  style: const TextStyle(color: AppColors.grey700, fontSize: 14),
                   decoration: InputDecoration(
                     hintText: "Search Your Message",
                     hintStyle: const TextStyle(color: AppColors.grey200),
-                    suffixIcon:
-                        const Icon(Icons.search, color: AppColors.grey300),
+                    suffixIcon: const Icon(Icons.search, color: AppColors.grey300),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(color: AppColors.grey300),
@@ -61,34 +60,6 @@ class UserChatListScreen extends StatelessWidget {
                       fontColor: AppColors.grey700,
                       textAlignment: TextAlign.start,
                     ),
-                   /// delete chat requres item
-                    /*
-                    PopupMenuButton<int>(
-                      onSelected: (value) {
-                        if (value == 1) {
-                          // implement delete logic here
-                        }
-                      },
-                      itemBuilder: (context) => [
-                        const PopupMenuItem(
-                          value: 1,
-                          child: Row(
-                            children: [
-                              Icon(Icons.delete_outline_rounded,
-                                  color: AppColors.grey300),
-                              SpaceWidget(spaceWidth: 10),
-                              Text("Delete chat list",
-                                  style: TextStyle(
-                                      fontSize: 14, color: AppColors.grey300)),
-                            ],
-                          ),
-                        ),
-                      ],
-                      color: AppColors.white,
-                      elevation: 2,
-                    ),
-                    */
-
                   ],
                 ),
               ),
@@ -100,52 +71,49 @@ class UserChatListScreen extends StatelessWidget {
                 child: controller.isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : controller.requestList.isEmpty
-                        ? const Center(child: Text("No requests available."))
-                        : RefreshIndicator(
-                            onRefresh: () => controller.fetchRequestList(),
-                            child: ListView.builder(
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              itemCount: controller.requestList.length,
-                              itemBuilder: (context, index) {
-                                Request request = controller.requestList[index];
-                                return Container(
-                                  width: double.infinity,
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 6),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                        color: AppColors.grey50, width: 1),
-                                  ),
-                                  child: ListTile(
-                                    onTap: () {
-                                      int? requestIdAsInt;
-                                      requestIdAsInt = int.tryParse(request.id); // Use tryParse for safety
-                                      appLog('😢😢😢😢====>>>>>${request.id}');
-
-
-                                      Get.toNamed(
-                                        AppRoutes.userChatListProposalScreen,
-                                        arguments: request,
-
-                                      );
-                                    },
-                                    title: TextWidget(
-                                      text: request.message,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      fontColor: AppColors.grey300,
-                                      textAlignment: TextAlign.start,
-                                    ),
-                                    trailing: const Icon(
-                                        Icons.arrow_forward_ios,
-                                        size: 16,
-                                        color: Colors.green),
-                                  ),
-                                );
-                              },
-                            ),
+                    ? const Center(child: Text("No requests available."))
+                    : RefreshIndicator(
+                  onRefresh: () => controller.fetchRequestList(),
+                  child: ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: controller.requestList.length,
+                    itemBuilder: (context, index) {
+                      Request request = controller.requestList[index];
+                      return Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 6),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                              color: AppColors.grey50, width: 1),
+                        ),
+                        child: ListTile(
+                          onTap: () {
+                            int? requestIdAsInt;
+                            requestIdAsInt = int.tryParse(request.id);
+                            appLog('😢😢😢😢====>>>>>${request.id}');
+                            Get.toNamed(
+                              AppRoutes.userChatListProposalScreen,
+                              arguments: request,
+                            );
+                          },
+                          title: TextWidget(
+                            text: request.message,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            fontColor: AppColors.grey300,
+                            textAlignment: TextAlign.start,
                           ),
+                          trailing: const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                              color: Colors.green),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
             ],
           ),
