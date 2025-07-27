@@ -109,11 +109,17 @@ class _UserChatScreenState extends State<UserChatScreen> {
 
             final message = controller.chatMessages[index];
 
+
+
             return ChatMessage(
               text: message.message ?? '',
-              time: message.createdAt ?? '',
+              time: (DateTime.tryParse(
+            message.createdAt.toString()) ??
+            DateTime.now())
+                .time,
               isSent: message.sender?.id == LocalStorage.userId,
             );
+
           },
         );
       }),

@@ -43,7 +43,7 @@ class NetworkImageWidget extends StatelessWidget {
     this.fit = BoxFit.cover,
   });
 
-  @override
+ /* @override
   Widget build(BuildContext context) {
     ResponsiveUtils.initialize(context);
 
@@ -70,7 +70,45 @@ class NetworkImageWidget extends StatelessWidget {
       width: ResponsiveUtils.width(width),
       fit: fit,
     );
+  }*/
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    ResponsiveUtils.initialize(context);
+
+    bool isNetworkUrl = networkImageUrl.startsWith('http');
+
+    return isNetworkUrl
+        ? Image.network(
+      networkImageUrl,
+      height: ResponsiveUtils.width(height),
+      width: ResponsiveUtils.width(width),
+      fit: fit,
+      errorBuilder: (context, error, stackTrace) {
+        return _buildProfileIcon();
+      },
+    )
+        : _buildProfileIcon();
   }
+
+  Widget _buildProfileIcon() {
+    return Container(
+      height: ResponsiveUtils.width(height),
+      width: ResponsiveUtils.width(width),
+      color: Colors.grey[300], // optional background color
+      alignment: Alignment.center,
+      child: const Icon(
+        Icons.person,
+        color: Colors.white,
+        size: 40, // adjust based on design
+      ),
+    );
+  }
+
+
+
 }
 
 
