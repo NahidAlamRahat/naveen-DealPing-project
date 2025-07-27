@@ -43,10 +43,10 @@ class _UserChatScreenState extends State<UserChatScreen> {
 
     return Scaffold(
 
-
       bottomNavigationBar: Padding(
-        padding:  EdgeInsets.all(AppSize.width(value: 8) ).copyWith(bottom: MediaQuery.of(context).viewInsets.bottom + AppSize.width(value: 10)
-        ),
+        padding: EdgeInsets.all(AppSize.width(value: 8)).copyWith(
+            bottom: MediaQuery.of(context).viewInsets.bottom +
+                AppSize.width(value: 10)),
         child: Row(
           children: [
             IconButton(
@@ -84,9 +84,19 @@ class _UserChatScreenState extends State<UserChatScreen> {
 
       backgroundColor: AppColors.white,
       appBar: AppbarWidget(
-        textWidget: Obx(
-          () => Text('${controller.chatMessages[0].sender?.name}'),
-        ),
+        textWidget: Obx(() {
+          final name = controller.chatMessages.isNotEmpty
+              ? controller.chatMessages[0].sender?.name
+              : null;
+
+          if (name == null) {
+            return const Text('Loading...');
+          } else if (name.trim().isEmpty) {
+            return const Text('Unknown');
+          } else {
+            return Text(name);
+          }
+        }),
       ),
       body:  Obx(() {
         if (controller.chatMessages.isEmpty) {
