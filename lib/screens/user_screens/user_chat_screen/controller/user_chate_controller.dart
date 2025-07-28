@@ -75,7 +75,7 @@ class UserChatController extends GetxController {
 
 
 
- /* Future<void> sendMessage() async {
+  Future<void> sendMessage() async {
     try {
       if (messageController.text.trim().isEmpty && images.isEmpty) return;
       if(isMessageSent) return;
@@ -100,44 +100,17 @@ class UserChatController extends GetxController {
     }
     isMessageSent = false;
     update();
-  }*/
-
-
-
-
-
-  Future<void> sendMessage() async {
-    if (messageController.text.trim().isEmpty && images.isEmpty) return;
-    if (isMessageSent) return;
-
-    isMessageSent = true;
-    update();
-
-    appLog("Before sending => ${images.length} images: $images");
-
-    try {
-      var response = await commonRepository.sendMessage(
-        message: messageController.text.trim(),
-        chatId: chatId,
-        imageUrl: images,
-      );
-
-      if (response != null) {
-        messageController.clear();
-        images.value = [];
-        images.refresh();
-        update(); // ✅ Ensure UI clears
-      }
-    } catch (e) {
-      errorLog('sendMessage errorLog=====>$e');
-    } finally {
-      isMessageSent = false;
-      update();
-    }
   }
 
 
 
+
+
+
+
+
+
+/*
 
   // Pick images for the message
   Future<void> pickImage() async {
@@ -148,6 +121,18 @@ class UserChatController extends GetxController {
     }    print('pickImage😊😊😊😊👌👌 path ==>> ${pickedImages.first.path}');
     appLog('pickImage😊😊😊😊👌👌image $images\npickedImages ==>> $pickedImages');
     update();
+  }
+*/
+
+
+  Future<void> pickImage() async {
+    final List<XFile> pickedImages = await _picker.pickMultiImage();
+    if (pickedImages.isNotEmpty) {
+      images.clear(); // ✅ আগের সব images clear করো
+      images.addAll(pickedImages);
+      images.refresh(); // reactive হলে দরকার
+      update(); // যদি GetBuilder ব্যবহার করো
+    }
   }
 
 

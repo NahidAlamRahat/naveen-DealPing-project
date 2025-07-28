@@ -357,19 +357,22 @@ class ChatMessage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ইমেজ থাকলে দেখাও
+
+
+                if (image != null && image!.isNotEmpty)
+                  NetworkImageGrid(
+                    images: image,
+                    onTap: (index) {
+                      // Full screen preview if needed
+                    },
+                  ),
+
+
+
+                /*// ইমেজ থাকলে দেখাও
                 if (image !=null)
                   Wrap(children: List.generate(image?.length ?? 0, (index) {
                     var i = image?[index];
-                   /* ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      // child: Image.file(
-                      //   image as File,
-                      //   width: 200,
-                      //   fit: BoxFit.cover,
-                      // ),
-                     child:  AppImage(url: i),
-                    );*/
 
                    return  NetworkImageGrid(
                      images: image,
@@ -378,7 +381,7 @@ class ChatMessage extends StatelessWidget {
                      },
                    );
 
-                  },),),
+                  },),),*/
 
                 // ইমেজ ও টেক্সট দুটোই থাকলে স্পেস
                 if (image != null && text != null)
