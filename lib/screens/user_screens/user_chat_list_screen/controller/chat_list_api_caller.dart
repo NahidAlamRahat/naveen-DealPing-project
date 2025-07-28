@@ -69,6 +69,7 @@ class RequestListController extends GetxController {
   Future<void> refreshRequestList() async {
     _originalRequestList = [];
     await fetchRequestList();
+    update();
   }
 }
 

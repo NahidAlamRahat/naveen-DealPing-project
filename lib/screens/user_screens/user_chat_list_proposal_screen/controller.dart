@@ -8,7 +8,7 @@ import '../../../models/user_chat_list_model.dart';
 class ChatController extends GetxController {
   Rxn<Request> request = Rxn<Request>();
   final ApiUrls _apiUrls = ApiUrls();
-  var chatList = <ChatModel>[].obs;
+  RxList<ChatModel> chatList = <ChatModel>[].obs;
   var isLoading = true.obs;
   var errorMessage = ''.obs;
 

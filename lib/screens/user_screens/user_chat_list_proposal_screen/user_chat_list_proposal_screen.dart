@@ -175,11 +175,21 @@ class UserChatListProposalScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     ChatController chatController = Get.put(ChatController());
 
+
+    @override
+    void didPopNext() {
+      chatController.fetchChatData(id: chatController.id);
+        }
+
+
     return Scaffold(
       appBar: AppbarWidget(text: chatController.request.value?.message ?? ''),
 
       backgroundColor: AppColors.white,
       // appBar: AppbarWidget(text: "chatItem"),
+
+
+
 
       body: GetBuilder<ChatController>(
         init: ChatController(),
@@ -227,82 +237,86 @@ class UserChatListProposalScreen extends StatelessWidget {
                 ),*/
                 const SpaceWidget(spaceHeight: 16),
                 // Using List.generate to display chat data
-                Column(
-                  children: List.generate(controller.chatList.length, (index) {
-                    var chat = controller.chatList[index];
+                Obx(
+                  () =>  Column(
+                    children: List.generate(controller.chatList.length, (index) {
+                      var chat = controller.chatList[index];
 
-                    return InkWell(
-                      onTap: () {
-                        // Navigate to the chat screen
-                        Get.toNamed(AppRoutes.userChatScreen,arguments: {'chatId': chat.chatId});
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        margin: const EdgeInsets.only(bottom: 12),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: NetworkImageWidget(
-                                      height: AppSize.height(value: 40),
-                                      width: AppSize.width(value: 40),
-                                      networkImageUrl: chat.participantProfile,
-                                    )),
-                                const SpaceWidget(spaceWidth: 8),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextWidget(
-                                      text: chat.participantBusinessName,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      fontColor: AppColors.green500,
-                                    ),
-                                    TextWidget(
-                                      text: chat.latestMessage,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400,
-                                      fontColor: AppColors.grey700,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                if (chat.unreadMessageCount > 0)
-                                  CircleAvatar(
-                                    radius: 9,
-                                    backgroundColor: AppColors.redisPink,
-                                    child: TextWidget(
-                                      text: chat.unreadMessageCount.toString(),
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w400,
-                                      fontColor: AppColors.white,
-                                    ),
+                      return InkWell(
+                        onTap: () {
+                          // Navigate to the chat screen
+                          Get.toNamed(AppRoutes.userChatScreen,arguments: chat.chatId.toString());
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          margin: const EdgeInsets.only(bottom: 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: NetworkImageWidget(
+                                        height: AppSize.height(value: 40),
+                                        width: AppSize.width(value: 40),
+                                        networkImageUrl: chat.participantProfile,
+                                      )),
+                                  const SpaceWidget(spaceWidth: 8),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      TextWidget(
+                                        text: chat.participantBusinessName,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        fontColor: AppColors.green500,
+                                      ),
+                                      TextWidget(
+                                        text: chat.latestMessage,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        fontColor: AppColors.grey700,
+                                      ),
+                                    ],
                                   ),
-                                const SpaceWidget(spaceHeight: 2),
-                                TextWidget(
-                                  text: (DateTime.tryParse(
-                                     chat.latestMessageTime) ??
-                                    DateTime.now())
-                                      .time,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w400,
-                                  fontColor: AppColors.grey300,
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  if (chat.unreadMessageCount > 0)
+                                    CircleAvatar(
+                                      radius: 9,
+                                      backgroundColor: AppColors.redisPink,
+                                      child: TextWidget(
+                                        text: chat.unreadMessageCount.toString(),
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w400,
+                                        fontColor: AppColors.white,
+                                      ),
+                                    ),
+                                   const SpaceWidget(spaceHeight: 2),
+
+                                 TextWidget(
+                                    text: (DateTime.tryParse(
+                                        chat.latestMessageTime) ??
+                                        DateTime.now())
+                                        .time,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w400,
+                                    fontColor: AppColors.grey300,
+                                  )
+
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  }),
+                      );
+                    }),
+                  ),
                 ),
                 const SpaceWidget(spaceHeight: 12),
             /*    ButtonWidget(
@@ -320,3 +334,7 @@ class UserChatListProposalScreen extends StatelessWidget {
     );
   }
 }
+
+
+
+

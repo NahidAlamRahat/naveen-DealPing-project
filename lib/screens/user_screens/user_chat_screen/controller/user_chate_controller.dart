@@ -1,7 +1,4 @@
-
-import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:deal_ping/utils/app_log/app_log.dart';
-import 'package:deal_ping/widgets/app_snack_bar/app_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,13 +13,17 @@ class UserChatController extends GetxController {
   ScrollController scrollController = ScrollController();
   TextEditingController messageController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
-  final List<XFile> images = [];
+  final RxList<XFile> images = <XFile>[].obs;
+  bool isMessageSent = false;
+  CommonRepository commonRepository = CommonRepository();
+
+
 
   String chatId = '';
 
   // bool isAtBottom = true;
 
-  setChatId(String? chatId) {
+  /*setChatId(String? chatId) {
     if (chatId == null) {
       appLog('chat id null===');
       return;
@@ -31,9 +32,10 @@ class UserChatController extends GetxController {
     onAppInitialDataLoad();
     appLog("==cha id main?===>>$chatId");
 
-  }
+  }*/
 
-  CommonRepository commonRepository = CommonRepository();
+
+
 
   RxList<ChatMessageResponseModel> chatMessages =
       <ChatMessageResponseModel>[].obs;
@@ -42,6 +44,8 @@ class UserChatController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isPagination = false.obs;
   bool isLast = false;
+
+
 
   Future<void> fetchChatMessages() async {
     try {
@@ -67,13 +71,16 @@ class UserChatController extends GetxController {
     isPagination.value = false;
 
   }
-bool isMessageSent = false;
 
-  Future<void> sendMessage() async {
+
+
+
+ /* Future<void> sendMessage() async {
     try {
       if (messageController.text.trim().isEmpty && images.isEmpty) return;
       if(isMessageSent) return;
       isMessageSent = true;
+      update();
 
       var response = await commonRepository.sendMessage(
         message: messageController.text.trim(),
@@ -82,22 +89,64 @@ bool isMessageSent = false;
       );
 
       if (response != null) {
-
         messageController.clear();
-        images.clear();
-        // scrollToBottom();
+        images.value=[];
+        images.refresh();
+        update();
       }
+
     }  catch (e) {
       errorLog(' sendMessage errorLog=====>$e');
     }
     isMessageSent = false;
+    update();
+  }*/
+
+
+
+
+
+  Future<void> sendMessage() async {
+    if (messageController.text.trim().isEmpty && images.isEmpty) return;
+    if (isMessageSent) return;
+
+    isMessageSent = true;
+    update();
+
+    appLog("Before sending => ${images.length} images: $images");
+
+    try {
+      var response = await commonRepository.sendMessage(
+        message: messageController.text.trim(),
+        chatId: chatId,
+        imageUrl: images,
+      );
+
+      if (response != null) {
+        messageController.clear();
+        images.value = [];
+        images.refresh();
+        update(); // ✅ Ensure UI clears
+      }
+    } catch (e) {
+      errorLog('sendMessage errorLog=====>$e');
+    } finally {
+      isMessageSent = false;
+      update();
+    }
   }
+
+
 
 
   // Pick images for the message
   Future<void> pickImage() async {
     final List<XFile> pickedImages = await _picker.pickMultiImage();
-    images.addAll(pickedImages);
+    if (pickedImages.isNotEmpty) {
+      images.addAll(pickedImages);
+      update(); // Ensure this if using GetBuilder
+    }    print('pickImage😊😊😊😊👌👌 path ==>> ${pickedImages.first.path}');
+    appLog('pickImage😊😊😊😊👌👌image $images\npickedImages ==>> $pickedImages');
     update();
   }
 
@@ -162,26 +211,39 @@ bool isMessageSent = false;
 
   Future<void> onAppInitialDataLoad() async {
     try {
-      scrollController = ScrollController();
-      messageController = TextEditingController();
-      chatMessages.clear();
-      currentPage = 1;
+      isLoading.value = true;
+      isPagination.value = false;
 
-       isLoading.value = true;
-       isPagination.value = false;
-
-      await fetchChatMessages();
-
-
-      appSocketAllOperation.readEvent(
-          event: "message::$chatId",
-          handler: (data) {
-
-            chatMessageSocketHandler(data);
+      final argData  = Get.arguments;
+if(argData != null && argData is String){
+  chatId = argData;
+  scrollController = ScrollController();
+  messageController = TextEditingController();
+  chatMessages.clear();
+  currentPage = 1;
+  await fetchChatMessages();
 
 
-          });
-      paginationData();
+  appSocketAllOperation.readEvent(
+      event: "message::$chatId",
+      handler: (data) {
+
+        chatMessageSocketHandler(data);
+
+
+      });
+  paginationData();
+}else{
+  appLog("chat id not found");
+  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    // Get.offAndToNamed(AppRoutes.n)
+  },);
+}
+
+
+
+
+
     } catch (e) {
       errorLog(' appSocketAllOperation errorLog=====>$e');
 
@@ -214,6 +276,7 @@ bool isMessageSent = false;
 
   @override
   void onClose() {
+    images.clear();
     onAppClose();
     super.onClose();
   }

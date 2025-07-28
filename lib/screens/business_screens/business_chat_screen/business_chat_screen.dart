@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/widgets/app_image/app_image.dart';
 import 'package:deal_ping/widgets/icon_text_button/icon_text_button.dart';
 import 'package:deal_ping/widgets/image_widget/image_widget.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
+import '../../user_screens/user_chat_screen/widget/network_image_grid.dart';
 
 class BusinessChatScreen extends StatefulWidget {
   const BusinessChatScreen({super.key});
@@ -29,6 +31,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
+
   final List<Map<String, dynamic>> _messages = [
     {
       'text':
@@ -318,7 +321,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
 
 class ChatMessage extends StatelessWidget {
   final String? text;
-  final String? image;
+  final List<String> ? image;
   final bool isSent;
   final String time;
   final bool showButton;
@@ -343,9 +346,9 @@ class ChatMessage extends StatelessWidget {
           // মেসেজ বক্স
           Container(
             margin: const EdgeInsets.symmetric(vertical: 4.0),
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(10.0),
             constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.75,
+              maxWidth: MediaQuery.of(context).size.width * 0.70,
             ),
             decoration: BoxDecoration(
               color: isSent ? AppColors.green500 : AppColors.green50,
@@ -355,19 +358,31 @@ class ChatMessage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // ইমেজ থাকলে দেখাও
-                if (image != null)
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.file(
-                      image as File,
-                      width: 200,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                if (image !=null)
+                  Wrap(children: List.generate(image?.length ?? 0, (index) {
+                    var i = image?[index];
+                   /* ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      // child: Image.file(
+                      //   image as File,
+                      //   width: 200,
+                      //   fit: BoxFit.cover,
+                      // ),
+                     child:  AppImage(url: i),
+                    );*/
+
+                   return  NetworkImageGrid(
+                     images: image,
+                     onTap: (index) {
+                       // যদি fullscreen preview দিতে চাও
+                     },
+                   );
+
+                  },),),
 
                 // ইমেজ ও টেক্সট দুটোই থাকলে স্পেস
                 if (image != null && text != null)
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 4),
 
                 // টেক্সট থাকলে দেখাও
                 if (text != null)

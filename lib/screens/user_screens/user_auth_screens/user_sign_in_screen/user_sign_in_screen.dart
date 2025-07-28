@@ -2,6 +2,7 @@ import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/routes/app_routes.dart';
 import 'package:deal_ping/screens/user_screens/user_auth_screens/user_sign_in_screen/widgets/social_login_widget.dart';
 import 'package:deal_ping/services/repository/auth_repository/sign_in_api_controller.dart';
+import 'package:deal_ping/utils/app_size.dart';
 import 'package:deal_ping/widgets/image_widget/image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -118,8 +119,8 @@ class UserSignInScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      height: 1,
-                      width: 125,
+                      height: AppSize.height(value: 1),
+                      width: AppSize.width(value: 125),
                       color: AppColors.grey300,
                     ),
                     const SpaceWidget(spaceWidth: 8),
@@ -131,8 +132,8 @@ class UserSignInScreen extends StatelessWidget {
                     ),
                     const SpaceWidget(spaceWidth: 8),
                     Container(
-                      height: 1,
-                      width: 125,
+                      height: AppSize.height(value: 1),
+                      width: AppSize.width(value: 125),
                       color: AppColors.grey300,
                     ),
                   ],
