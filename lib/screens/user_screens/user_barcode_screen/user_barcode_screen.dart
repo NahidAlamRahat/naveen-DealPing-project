@@ -166,7 +166,9 @@ class UserBarcodeScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
+
+     /// cancel button
+     /* bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: ButtonWidget(
           onPressed: () {
@@ -219,7 +221,8 @@ class UserBarcodeScreen extends StatelessWidget {
           textColor: AppColors.red,
           fontWeight: FontWeight.w500,
         ),
-      ),
+      ),*/
+
     );
   }
 
