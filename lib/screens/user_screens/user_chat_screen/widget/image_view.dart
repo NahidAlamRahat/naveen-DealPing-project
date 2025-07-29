@@ -5,7 +5,7 @@ class FullScreenImageView extends StatelessWidget {
   final String imageUrl;
 
   FullScreenImageView({Key? key, required String imagePath})
-      : imageUrl = "${ApiUrls.baseUrl}$imagePath",
+      : imageUrl = "${ApiUrls.imageUrl}$imagePath",
         super(key: key);
 
   @override
