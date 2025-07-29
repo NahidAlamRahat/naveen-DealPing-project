@@ -1,6 +1,7 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/utils/extension.dart';
 import 'package:deal_ping/widgets/appbar_widget/appbar_widget.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
@@ -9,10 +10,14 @@ import 'package:get/get.dart';
 
 import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
+import '../user_bookings_screen/controller/booking_list_api_caller.dart';
 import 'controller/user_barcode_controller.dart';
 
 class UserBarcodeScreen extends StatelessWidget {
   final UserBarcodeController controller = Get.put(UserBarcodeController());
+
+  final BookingListController bookingController =
+  Get.put(BookingListController());
 
   UserBarcodeScreen({super.key});
 
@@ -66,33 +71,39 @@ class UserBarcodeScreen extends StatelessWidget {
                   _buildDetailRow(
                     leftLabel: 'Name',
                     rightLabel: 'Offer',
-                    leftValue: controller.name.value,
-                    rightValue: controller.offer.value,
+                    leftValue: bookingController.bookingList[0].businessName,
+                    rightValue: bookingController.bookingList[0].offerTitle,
                   ),
                   const SpaceWidget(spaceHeight: 14),
                   _buildDetailRow(
                     leftLabel: 'Service Name',
-                    rightLabel: 'Number of People',
-                    leftValue: controller.serviceName.value,
-                    rightValue:
-                        controller.numberOfPeople.toString().padLeft(2, '0'),
+                    rightLabel: 'Type of Service',
+                    leftValue: bookingController.bookingList[0].categoryTitle,
+                    rightValue:bookingController.bookingList[0].subCategories.toString(),
                   ),
+
+
+
                   const SpaceWidget(spaceHeight: 14),
                   _buildDetailRow(
-                    leftLabel: 'Type of Service',
+                    leftLabel:'Location' ,
                     rightLabel: 'Date',
-                    leftValue: controller.typeOfService.value,
-                    rightValue: controller.formattedDate.value,
+                    leftValue: bookingController.bookingList[0].address,
+                    rightValue: (DateTime.tryParse(bookingController.bookingList[0].createdAt.toString()) ??
+                        DateTime.now())
+                        .date,
                   ),
                   const SpaceWidget(spaceHeight: 14),
                   _buildDetailRow(
-                    leftLabel: 'Location',
-                    rightLabel: 'Time',
-                    leftValue: controller.location.value,
-                    rightValue: controller.formattedTime.value,
+                    leftLabel: 'Time',
+                    leftValue: (DateTime.tryParse(bookingController.bookingList[0].createdAt.toString()) ??
+                        DateTime.now())
+                        .time,
                   ),
+
                   const SpaceWidget(spaceHeight: 36),
-                  Obx(() => Center(
+                ///bar-code
+                /*  Obx(() => Center(
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
@@ -112,7 +123,35 @@ class UserBarcodeScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                      )),
+                      )),*/
+
+                  Center(
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: 'Order code: ',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.grey300,
+                            ),
+                          ),
+                          TextSpan(
+                            text: bookingController.bookingList[0].bookingCode,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.grey700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+
+
                   const SpaceWidget(spaceHeight: 36),
                   const TextWidget(
                     text: 'Thanks & Regards\nDealPing',
@@ -185,10 +224,10 @@ class UserBarcodeScreen extends StatelessWidget {
   }
 
   Widget _buildDetailRow({
-    required String leftLabel,
-    required String rightLabel,
-    required String leftValue,
-    required String rightValue,
+     String? leftLabel,
+     String? rightLabel,
+     String? leftValue,
+     String? rightValue,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -201,7 +240,7 @@ class UserBarcodeScreen extends StatelessWidget {
               SizedBox(
                 width: 220,
                 child: TextWidget(
-                  text: leftLabel,
+                  text: leftLabel ?? '',
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
                   fontColor: AppColors.grey300,
@@ -213,7 +252,7 @@ class UserBarcodeScreen extends StatelessWidget {
               SizedBox(
                 width: 220,
                 child: TextWidget(
-                  text: leftValue,
+                  text: leftValue ?? '',
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   fontColor: AppColors.grey700,
@@ -234,7 +273,7 @@ class UserBarcodeScreen extends StatelessWidget {
               SizedBox(
                 width: 200,
                 child: TextWidget(
-                  text: rightLabel,
+                  text: rightLabel ?? '',
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
                   fontColor: AppColors.grey300,
@@ -246,7 +285,7 @@ class UserBarcodeScreen extends StatelessWidget {
               SizedBox(
                 width: 200,
                 child: TextWidget(
-                  text: rightValue,
+                  text: rightValue ?? '',
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   fontColor: AppColors.grey700,

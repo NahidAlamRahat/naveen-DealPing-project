@@ -194,31 +194,7 @@ class UserEditProfileScreen extends StatelessWidget {
           ),
         ),
       ),
-/*
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: GetBuilder<UserEditProfileController>(
-          builder: (getController) {
-            return Visibility(
-              visible: getController.isLoading == false,
-              replacement: const Center(
-                child: CircularProgressIndicator(),
-              ),
-              child: ButtonWidget(
-                onPressed: () => controller.updateProfile(),
-                backgroundColor: AppColors.green500,
-                label: AppStrings.saveAndChange,
-                buttonHeight: 52,
-                buttonWidth: double.infinity,
-                fontSize: 16,
-                textColor: AppColors.white,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-        ),
-      ),
-*/
+
 
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),

@@ -23,49 +23,6 @@ class UserChatScreen extends StatelessWidget{
       builder: (controller) {
         return Scaffold(
 
-          // bottomNavigationBar: Padding(
-          //   padding: EdgeInsets.all(AppSize.width(value: 8)).copyWith(
-          //       bottom: MediaQuery.of(context).viewInsets.bottom +
-          //           AppSize.width(value: 10)),
-          //   child: Row(
-          //     children: [
-          //
-          //       IconButton(
-          //         icon: const Icon(Icons.image, color: Colors.green, size: 32),
-          //         onPressed: controller.pickImage,
-          //       ),
-          //
-          //
-          //       Expanded(
-          //         child: TextField(
-          //           controller: controller.messageController,
-          //           decoration: InputDecoration(
-          //             hintText: 'Type a message...',
-          //             hintStyle: const TextStyle(
-          //                 color: AppColors.grey300, fontWeight: FontWeight.w400, fontSize: 14),
-          //             border: OutlineInputBorder(
-          //               borderRadius: BorderRadius.circular(8),
-          //               borderSide: const BorderSide(color: AppColors.grey300),
-          //             ),
-          //             filled: true,
-          //             fillColor: AppColors.white,
-          //           ),
-          //         ),
-          //       ),
-          //       const SizedBox(width: 8.0),
-          //       ClipRRect(
-          //         borderRadius: BorderRadius.circular(100),
-          //         child: FloatingActionButton(
-          //           onPressed: controller.sendMessage,
-          //           backgroundColor: AppColors.green500,
-          //           child: const Icon(Icons.send_rounded, color: AppColors.white),
-          //         ),
-          //       ),
-          //     ]
-          //   ),
-          // ),
-
-
           bottomNavigationBar: Padding(
             padding: EdgeInsets.all(AppSize.width(value: 8)).copyWith(
               bottom: MediaQuery.of(context).viewInsets.bottom + AppSize.width(value: 10),
@@ -152,22 +109,7 @@ class UserChatScreen extends StatelessWidget{
                     const SizedBox(width: 8.0),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: /*GetBuilder<UserChatController>(
-                        builder: (controller) {
-                          return Visibility(
-                            replacement: controller.isLoading==false,
-                            child: FloatingActionButton(
-                              onPressed: controller.sendMessage,
-                              backgroundColor: AppColors.green500,
-                              child: const Icon(Icons.send_rounded, color: AppColors.white),
-                            ),
-                          );
-                        }
-                      ),*/
-
-
-
-
+                      child:
                       GetBuilder<UserChatController>(builder: (controllers) {
                         return Visibility(
                           visible: controllers.isMessageSent == false,
@@ -235,14 +177,19 @@ class UserChatScreen extends StatelessWidget{
 
               final message = controller.chatMessages[index];
 
-              return ChatMessage(
-                text: message.message ?? '',
+              return
+                ChatMessage(
+                  text: message.message,
+                  isSent: message.sender?.id == LocalStorage.userId,
+                  time: (DateTime.tryParse(message.createdAt.toString()) ??
+                      DateTime.now())
+                      .time,
                 image: message.images,
-                time: (DateTime.tryParse(message.createdAt.toString()) ??
-                    DateTime.now())
-                    .time,
-                isSent: message.sender?.id == LocalStorage.userId,
-              );
+                showButton: message.type ?? 'text',
+                  message: controller.chatMessages[index],
+
+                 );
+
             },
           );
         }),

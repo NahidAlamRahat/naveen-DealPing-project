@@ -18,8 +18,13 @@ class UserBookingSummaryScreen extends StatelessWidget {
   final UserBookingSummaryController controller =
       Get.put(UserBookingSummaryController());
 
+
+
+
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: const AppbarWidget(
@@ -32,8 +37,10 @@ class UserBookingSummaryScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Bar Info Card
+              // Bar Info Card\
+
               const BookingCardWidget(
+
                 imagePath: AppImagePath.bookingsImage,
                 title: 'Mirchi Dance Bar3',
                 location: 'Dhanmondi, Dhaka',

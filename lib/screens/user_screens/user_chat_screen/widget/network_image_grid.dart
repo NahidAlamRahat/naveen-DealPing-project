@@ -1,3 +1,4 @@
+import 'package:deal_ping/utils/app_size.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../widgets/app_image/app_image.dart';
@@ -19,15 +20,19 @@ class NetworkImageGrid extends StatelessWidget {
     if (images!.length == 1) {
       return GestureDetector(
         onTap: () => onTap?.call(0),
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: AppImage(url: images![0], fit: BoxFit.cover),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: SizedBox(
+            height: AppSize.height(value: 200),
+            child: AppImage(
+              url: images![0],
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       );
     }
+
 
     if (images!.length == 2) {
       return Row(
@@ -35,14 +40,11 @@ class NetworkImageGrid extends StatelessWidget {
           return Expanded(
             child: GestureDetector(
               onTap: () => onTap?.call(index),
-              child: AspectRatio(
-                aspectRatio: 245 / 492,
-                child: Padding(
-                  padding: EdgeInsets.only(right: index == 0 ? 8 : 0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: AppImage(url: images![index], fit: BoxFit.cover),
-                  ),
+              child: Padding(
+                padding: EdgeInsets.only(right: index == 0 ? 8 : 0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: AppImage(url: images![index], fit: BoxFit.cover),
                 ),
               ),
             ),
@@ -58,31 +60,25 @@ class NetworkImageGrid extends StatelessWidget {
             flex: 2,
             child: GestureDetector(
               onTap: () => onTap?.call(0),
-              child: AspectRatio(
-                aspectRatio: 332 / 500,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: AppImage(url: images![0], fit: BoxFit.cover),
-                ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: AppImage(url: images![0], fit: BoxFit.cover),
               ),
             ),
           ),
-          const SizedBox(width: 8),
+          // const SizedBox(width: 8),
           Expanded(
             flex: 1,
             child: Column(
               children: [
                 GestureDetector(
                   onTap: () => onTap?.call(1),
-                  child: AspectRatio(
-                    aspectRatio: 166 / 249,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: AppImage(url: images![1], fit: BoxFit.cover),
-                    ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: AppImage(url: images![1], fit: BoxFit.cover),
                   ),
                 ),
-                const SizedBox(height: 8),
+                // const SizedBox(height: 8),
                 GestureDetector(
                   onTap: () => onTap?.call(2),
                   child: AspectRatio(
@@ -134,17 +130,14 @@ class NetworkImageGrid extends StatelessWidget {
                   onTap: () => onTap?.call(index),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: AppImage(url: images![index], fit: BoxFit.cover),
-                    ),
+                    child: AppImage(url: images![index], fit: BoxFit.cover),
                   ),
                 ),
               ),
             );
           }),
         ),
-        const SizedBox(height: 8),
+        // const SizedBox(height: 8),
         Row(
           children: List.generate(3, (index) {
             int imgIndex = index + 2;

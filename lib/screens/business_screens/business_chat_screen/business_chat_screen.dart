@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/screens/user_screens/user_chat_screen/controller/user_chate_controller.dart';
 import 'package:deal_ping/widgets/app_image/app_image.dart';
 import 'package:deal_ping/widgets/icon_text_button/icon_text_button.dart';
 import 'package:deal_ping/widgets/image_widget/image_widget.dart';
@@ -11,12 +12,14 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../constants/app_icons_path.dart';
+import '../../../models/chat_message_responce_model.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../../widgets/button_widget/button_widget.dart';
 import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
+import '../../user_screens/user_chat_screen/widget/image_view.dart';
 import '../../user_screens/user_chat_screen/widget/network_image_grid.dart';
 
 class BusinessChatScreen extends StatefulWidget {
@@ -225,7 +228,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                   image: message['image'],
                   isSent: message['isSent'] as bool,
                   time: message['time'] as String,
-                  showButton: message['button'] == true,
+                  showButton: message['type'],
                 );
               },
             ),
@@ -320,23 +323,33 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
 }
 
 class ChatMessage extends StatelessWidget {
+
+  final ChatMessageResponseModel? message;
   final String? text;
   final List<String> ? image;
   final bool isSent;
   final String time;
-  final bool showButton;
+  final String showButton;
 
   const ChatMessage({
+
     super.key,
     this.text,
     this.image,
+     this.message,
     required this.isSent,
     required this.time,
-    this.showButton = false,
-  });
+    this.showButton = 'text',
+  }
+
+  );
 
   @override
   Widget build(BuildContext context) {
+
+
+
+
     return Align(
       alignment: isSent ? Alignment.centerRight : Alignment.centerLeft,
       child: Column(
@@ -344,61 +357,68 @@ class ChatMessage extends StatelessWidget {
         isSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           // মেসেজ বক্স
+
           Container(
             margin: const EdgeInsets.symmetric(vertical: 4.0),
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(1.0),
             constraints: BoxConstraints(
               maxWidth: MediaQuery.of(context).size.width * 0.70,
             ),
-            decoration: BoxDecoration(
-              color: isSent ? AppColors.green500 : AppColors.green50,
+            decoration: (image == null || image!.isEmpty)
+                ? BoxDecoration(
+              color: (text != null && text!.isNotEmpty)
+                  ? (isSent ? AppColors.green500 : AppColors.green50)
+                  : null,
               borderRadius: BorderRadius.circular(8),
-            ),
+            )
+                : null,
+
+
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              crossAxisAlignment: isSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+
+                children: [
+
+                  if (image != null && image!.isNotEmpty)
+                    Column(
+
+                      children: [
+                        NetworkImageGrid(
+                          images: image,
+                          onTap: (index) {
+                            final imagePath = image?[index];
+                            Get.to(() => FullScreenImageView(imagePath: imagePath ??''));
+                          },
+
+                        ),
+
+                        if (text != null && text!.isNotEmpty)
+                          const SizedBox(height: 8),
+                      ],
+                    ),
 
 
-                if (image != null && image!.isNotEmpty)
-                  NetworkImageGrid(
-                    images: image,
-                    onTap: (index) {
-                      // Full screen preview if needed
-                    },
-                  ),
+                  if (text != null && text!.isNotEmpty)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: isSent ? AppColors.green500 : AppColors.green50,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: TextWidget(
+                        text: text!,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontColor: isSent ? AppColors.white : AppColors.grey700,
+                        textAlignment: TextAlign.start,
+                      ),
+                    ),
 
 
 
-                /*// ইমেজ থাকলে দেখাও
-                if (image !=null)
-                  Wrap(children: List.generate(image?.length ?? 0, (index) {
-                    var i = image?[index];
 
-                   return  NetworkImageGrid(
-                     images: image,
-                     onTap: (index) {
-                       // যদি fullscreen preview দিতে চাও
-                     },
-                   );
-
-                  },),),*/
-
-                // ইমেজ ও টেক্সট দুটোই থাকলে স্পেস
-                if (image != null && text != null)
-                  const SizedBox(height: 4),
-
-                // টেক্সট থাকলে দেখাও
-                if (text != null)
-                  TextWidget(
-                    text: text!,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontColor: isSent ? AppColors.white : AppColors.grey700,
-                    textAlignment: TextAlign.start,
-                  ),
-
-                // শো বাটন থাকলে বুকিং UI দেখাও
-                if (showButton) ...[
+                // বুকিং UI
+                if (showButton=='offer') ...[
                   const SizedBox(height: 10.0),
                   Container(
                     padding: const EdgeInsets.all(8.0),
@@ -410,6 +430,7 @@ class ChatMessage extends StatelessWidget {
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
+
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(6),
@@ -418,66 +439,97 @@ class ChatMessage extends StatelessWidget {
                                 width: 106,
                                 imagePath: AppImagePath.bookingsImage,
                               ),
+
                             ),
                             const SpaceWidget(spaceWidth: 8),
+
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const TextWidget(
-                                    text: 'Mirchi Dance Bar',
+                                   TextWidget(
+                                     text: message?.offerTitle?.toString() ?? '',
+
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                     fontColor: AppColors.white,
                                   ),
+
                                   Row(
-                                    children: List.generate(
-                                      5,
-                                          (index) => const Icon(
-                                        Icons.star,
-                                        color: AppColors.yellow,
-                                        size: 12,
-                                      ),
-                                    ),
+                                    children: List.generate(5, (index) {
+                                      final rating = message?.sender?.rating ?? 0.0;
+
+                                      if (index < rating.floor()) {
+                                        return const Icon(Icons.star, color: AppColors.yellow, size: 12); // Full star
+                                      } else if (index < rating && rating - index >= 0.5) {
+                                        return const Icon(Icons.star_half, color: AppColors.yellow, size: 12); // Half star
+                                      } else {
+                                        return const Icon(Icons.star_border, color: AppColors.yellow, size: 12); // Empty star
+                                      }
+                                    }),
                                   ),
-                                  const TextWidget(
-                                    text: "Dhanmondi, Dhaka",
+
+                                  TextWidget(
+
+                                     text: message?.sender?.address?.toString() ?? '',
                                     fontSize: 10,
                                     fontWeight: FontWeight.w400,
                                     fontColor: AppColors.white,
+                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  const Row(
+
+                                  ///miles
+                                   const Row(
                                     children: [
                                       IconWidget(
                                         icon: AppIconsPath.locationIconWhite,
                                         width: 12,
                                         height: 12,
                                       ),
-                                      SpaceWidget(spaceWidth: 4),
+                                      const SpaceWidget(spaceWidth: 4),
                                       TextWidget(
-                                        text: "2.3 miles",
+                                        text: "0 miles",
                                         fontSize: 10,
                                         fontWeight: FontWeight.w400,
                                         fontColor: AppColors.white,
                                       ),
                                     ],
                                   ),
+
                                 ],
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 10.0),
-                        ButtonWidget(
-                          onPressed: () {},
-                          backgroundColor: AppColors.white,
-                          label: AppStrings.bookYourTable,
-                          buttonHeight: 36,
-                          buttonWidth: double.infinity,
-                          fontSize: 12,
-                          textColor: AppColors.grey700,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8), // 👈 Rounded corners
+                                ),
+                              ),
+                              child: const Text('Accept'),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8), // 👈 Rounded corners
+                                ),
+                              ),
+                              child: const Text('message'),
+                            ),
+                          ],
+                        )
+
+
                       ],
                     ),
                   ),
@@ -485,6 +537,9 @@ class ChatMessage extends StatelessWidget {
               ],
             ),
           ),
+
+
+
 
           // টাইমস্ট্যাম্প
           Padding(

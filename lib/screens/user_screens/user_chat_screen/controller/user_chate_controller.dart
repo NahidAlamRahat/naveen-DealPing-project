@@ -21,22 +21,6 @@ class UserChatController extends GetxController {
 
   String chatId = '';
 
-  // bool isAtBottom = true;
-
-  /*setChatId(String? chatId) {
-    if (chatId == null) {
-      appLog('chat id null===');
-      return;
-    }
-    this.chatId = chatId;
-    onAppInitialDataLoad();
-    appLog("==cha id main?===>>$chatId");
-
-  }*/
-
-
-
-
   RxList<ChatMessageResponseModel> chatMessages =
       <ChatMessageResponseModel>[].obs;
 
@@ -104,27 +88,6 @@ class UserChatController extends GetxController {
 
 
 
-
-
-
-
-
-
-/*
-
-  // Pick images for the message
-  Future<void> pickImage() async {
-    final List<XFile> pickedImages = await _picker.pickMultiImage();
-    if (pickedImages.isNotEmpty) {
-      images.addAll(pickedImages);
-      update(); // Ensure this if using GetBuilder
-    }    print('pickImage😊😊😊😊👌👌 path ==>> ${pickedImages.first.path}');
-    appLog('pickImage😊😊😊😊👌👌image $images\npickedImages ==>> $pickedImages');
-    update();
-  }
-*/
-
-
   Future<void> pickImage() async {
     final List<XFile> pickedImages = await _picker.pickMultiImage();
     if (pickedImages.isNotEmpty) {
@@ -150,24 +113,6 @@ class UserChatController extends GetxController {
       errorLog(" scrollToBottom========>>>  $e");
     }
   }
-
-  // void scroll(){
-  //    try {
-  //      scrollController.addListener(() {
-  //        if (scrollController.position.pixels <= 100 && !isLoading.value) {
-  //          // fetchCha
-  //          tMessages();
-  //        }
-  //        if(scrollController.position.pixels == scrollController.position.maxScrollExtent){
-  //          isAtBottom = true;
-  //        }else{
-  //          isAtBottom = false;
-  //        }
-  //      });
-  //    } catch (e) {
-  //    AppSnackBar.error('Something went wrong\n$e');
-  //    }
-  //  }
 
   void chatMessageSocketHandler(dynamic message) {
     try {
