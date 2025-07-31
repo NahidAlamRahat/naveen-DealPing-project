@@ -11,7 +11,7 @@ class BusinessOfferRepository {
     // required int discount,
   }) async {
     try {
-       await ApiService.postApi(
+     var response = await ApiService.postApi(
         ApiUrls.createOffer,
         {
           "title": title,
@@ -20,7 +20,7 @@ class BusinessOfferRepository {
         },
       );
 
-      AppSnackBar.success("Offer posted successfully.");
+      AppSnackBar.success(response.message);
       return true;
         } catch (e) {
       errorLog(e);

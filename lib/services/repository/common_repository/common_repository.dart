@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:convert';
 import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
@@ -131,8 +132,8 @@ class CommonRepository {
   ///
   Future<ChatMessageResponseModel?> sendMessage(
       {required String message,
-      required String chatId,
-      required List<XFile> imageUrl}) async{
+        required String chatId,
+        required List<XFile> imageUrl}) async{
 
     FormData formData = FormData.fromMap({
       "data": '''{
@@ -149,13 +150,56 @@ class CommonRepository {
     var response =await  ApiService.postApi('${ApiUrls.baseUrl}/message/$chatId', formData);
     appLog("------sendMessage-----------------${ApiService.postApi('${ApiUrls.baseUrl}/message/$chatId', formData)}");
     appLog(response.body);
-     if(response.statusCode == 200){
-       return ChatMessageResponseModel.fromJson(response.body['data']);
-     }else{
-       AppSnackBar.error('sendMessage=====>> ${response.message}');
-       return null;
-     }
+    if(response.statusCode == 200){
+      return ChatMessageResponseModel.fromJson(response.body['data']);
+    }else{
+      AppSnackBar.error('sendMessage=====>> ${response.message}');
+      return null;
+    }
   }
+
+
+
+  Future<ChatMessageResponseModel?> sendOffer(
+      {required String offerTitle,
+        required String offerDescription,
+        required String chatId,
+       }) async{
+
+    FormData formData = FormData.fromMap({
+      "data": ''' {
+  "offerTitle": "$offerTitle",
+  "offerDescription": "$offerDescription"
+  }''',
+    });
+   /* if(imageUrl.isNotEmpty){
+      for(var i in imageUrl){
+        var mimeType = lookupMimeType(i.path);
+        formData.files.add(MapEntry(
+            "image",
+            await MultipartFile.fromFile(i.path,
+                filename: i.path.split("/").last,
+                contentType:
+                    MediaType.parse(mimeType ?? "application/octet-stream"))));
+      }
+    }
+*/
+    var response =await  ApiService.postApi('${ApiUrls.baseUrl}/message/$chatId', formData);
+    appLog("------sendMessage-----------------${ApiService.postApi('${ApiUrls.baseUrl}/message/$chatId', formData)}");
+    appLog(response.body);
+    if(response.statusCode == 200){
+      return ChatMessageResponseModel.fromJson(response.body['data']);
+
+    }else{
+      AppSnackBar.error('sendMessage=====>> ${response.message}');
+      return null;
+    }
+  }
+
+
+
+
+
 
 
 

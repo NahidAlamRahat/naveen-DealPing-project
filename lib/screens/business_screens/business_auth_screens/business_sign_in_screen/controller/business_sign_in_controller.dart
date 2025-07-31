@@ -36,31 +36,42 @@ class BusinessSignInController extends GetxController {
     return null;
   }
 
-  Future<void> onTapBusinessSignInButton() async {
+
+  Future<void> onTapSignInButton() async {
     if (formKey.currentState!.validate()) {
-      SignInModel signInModel = SignInModel(
+      try {
+        // Show loading
+        _signInController.inProgress == true;
+
+
+        SignInModel signInModel = SignInModel(
           email: emailController.text.trim(),
-          password: passwordController.text);
+          password: passwordController.text,
+        );
 
-      final bool isSuccess =
-          await _signInController.signInApiCall(signInModel: signInModel);
-      _signInController.inProgress == true;
+        final bool isSuccess =
+        await _signInController.signInApiCall(signInModel: signInModel);
 
-      if (isSuccess) {
+        // Hide loading
         _signInController.inProgress == false;
 
-        AppSnackBar.success(
-            _signInController.successfullyMessage ?? 'Login Successful!');
-        appLog(
-            'success message ==> ${_signInController.successfullyMessage} <===');
-
-        Get.offAllNamed(AppRoutes.businessBottomNav);
-      } else {
+        if (isSuccess) {
+          AppSnackBar.success(
+              _signInController.successfullyMessage ?? 'Login Successful!');
+          appLog('success message => ${_signInController.successfullyMessage}');
+          Get.offAllNamed(AppRoutes.businessBottomNav);
+        } else {
+          AppSnackBar.message('${_signInController.errorMessage}');
+          debugPrint('error message => ${_signInController.errorMessage}');
+        }
+      } catch (e, stackTrace) {
         _signInController.inProgress == false;
-        // error message
-        AppSnackBar.message('${_signInController.errorMessage}');
-        appLog('error message => ${_signInController.errorMessage}');
+        AppSnackBar.message('Something went wrong. Please try again.');
+        debugPrint('Exception in SignIn: $e');
+        debugPrint('StackTrace: $stackTrace');
       }
     }
   }
+
+
 }

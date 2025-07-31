@@ -1,4 +1,5 @@
 import 'package:deal_ping/services/storage/storage_service.dart';
+import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:get/get.dart';
 
 import '../../../../models/profile_model.dart';
@@ -22,6 +23,10 @@ class BusinessProfileController extends GetxController {
       var fetchedProfile = await _profileRepository.fetchProfile();
       if (fetchedProfile != null) {
         profile.value = fetchedProfile;
+        LocalStorage.userId = profile.value?.sId ?? '';
+        LocalStorage.businessId = profile.value?.sId ?? '';
+        appLog('business id ===>>> ${ LocalStorage.userId} ');
+
       } else {
         AppSnackBar.error("Failed to load profile data.");
       }

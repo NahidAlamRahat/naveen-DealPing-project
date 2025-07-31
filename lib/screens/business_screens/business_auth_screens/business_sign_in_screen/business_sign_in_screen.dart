@@ -99,7 +99,7 @@ class BusinessSignInScreen extends StatelessWidget {
                 ),
                 const SpaceWidget(spaceHeight: 12),
                 ButtonWidget(
-                  onPressed: controller.onTapBusinessSignInButton,
+                  onPressed: controller.onTapSignInButton,
                   label: AppStrings.signInTitle,
                   buttonWidth: double.infinity,
                   buttonRadius: const BorderRadius.all(Radius.circular(8)),

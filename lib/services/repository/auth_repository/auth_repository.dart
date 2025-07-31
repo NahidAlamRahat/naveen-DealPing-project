@@ -24,6 +24,7 @@ class AuthRepository {
         LocalStorage.token = accessToken;
         LocalStorage.refreshToken = refreshToken;
 
+
         LocalStorage.setString(LocalStorageKeys.token, LocalStorage.token);
         LocalStorage.setString(
             LocalStorageKeys.refreshToken, LocalStorage.refreshToken);

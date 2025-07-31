@@ -12,6 +12,9 @@ class UserChatController extends GetxController {
   AppSocketAllOperation appSocketAllOperation = AppSocketAllOperation.instance;
   ScrollController scrollController = ScrollController();
   TextEditingController messageController = TextEditingController();
+  // TextEditingController offerTitleTEController = TextEditingController();
+  // TextEditingController offerDescriptionTEController = TextEditingController();
+
   final ImagePicker _picker = ImagePicker();
   final RxList<XFile> images = <XFile>[].obs;
   bool isMessageSent = false;
@@ -33,11 +36,11 @@ class UserChatController extends GetxController {
 
   Future<void> fetchChatMessages() async {
     try {
-   if(isLast){
-     isLoading.value = false;
-     isPagination.value = false;
-     return;
-   }
+      if(isLast){
+        isLoading.value = false;
+        isPagination.value = false;
+        return;
+      }
 
       final data = await commonRepository.getChatMessage(page: currentPage, chatId: chatId);
 
@@ -47,7 +50,7 @@ class UserChatController extends GetxController {
       }else {
         isLast = true;
       }
-   currentPage++;
+      currentPage++;
     } catch (e) {
       errorLog(' fetchChatMessages errorLog=====>$e');
     }
@@ -57,6 +60,23 @@ class UserChatController extends GetxController {
   }
 
 
+
+  Future<void> sendOffer({required String offerTitle, required String offerDescription, })async {
+    try {
+      isMessageSent = true;
+      update();
+      await commonRepository.sendOffer(
+          offerTitle: offerTitle,
+          offerDescription:offerDescription,
+          chatId: chatId);
+
+    } catch (e) {
+      errorLog("send Offer method ===>> $e");
+    }
+    isMessageSent = false;
+    update();
+
+  }
 
 
   Future<void> sendMessage() async {
@@ -118,7 +138,7 @@ class UserChatController extends GetxController {
     try {
 
       chatMessages.insert(
-         0, ChatMessageResponseModel.fromJson(message));
+          0, ChatMessageResponseModel.fromJson(message));
       // chatMessages.add(ChatMessageResponseModel.fromJson(message));
       chatMessages.refresh();
       appLog('rahat');
@@ -145,30 +165,30 @@ class UserChatController extends GetxController {
       isPagination.value = false;
 
       final argData  = Get.arguments;
-if(argData != null && argData is String){
-  chatId = argData;
-  scrollController = ScrollController();
-  messageController = TextEditingController();
-  chatMessages.clear();
-  currentPage = 1;
-  await fetchChatMessages();
+      if(argData != null && argData is String){
+        chatId = argData;
+        scrollController = ScrollController();
+        messageController = TextEditingController();
+        chatMessages.clear();
+        currentPage = 1;
+        await fetchChatMessages();
 
 
-  appSocketAllOperation.readEvent(
-      event: "message::$chatId",
-      handler: (data) {
+        appSocketAllOperation.readEvent(
+            event: "message::$chatId",
+            handler: (data) {
 
-        chatMessageSocketHandler(data);
+              chatMessageSocketHandler(data);
 
 
-      });
-  paginationData();
-}else{
-  appLog("chat id not found");
-  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    // Get.offAndToNamed(AppRoutes.n)
-  },);
-}
+            });
+        paginationData();
+      }else{
+        appLog("chat id not found");
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          // Get.offAndToNamed(AppRoutes.n)
+        },);
+      }
 
 
 

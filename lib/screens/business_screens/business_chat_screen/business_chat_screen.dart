@@ -4,6 +4,8 @@ import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/screens/user_screens/user_chat_screen/controller/user_chate_controller.dart';
+import 'package:deal_ping/utils/app_log/app_log.dart';
+import 'package:deal_ping/utils/extension.dart';
 import 'package:deal_ping/widgets/app_image/app_image.dart';
 import 'package:deal_ping/widgets/icon_text_button/icon_text_button.dart';
 import 'package:deal_ping/widgets/image_widget/image_widget.dart';
@@ -13,6 +15,8 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../constants/app_icons_path.dart';
 import '../../../models/chat_message_responce_model.dart';
+import '../../../services/storage/storage_service.dart';
+import '../../../utils/app_size.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../../widgets/button_widget/button_widget.dart';
 import '../../../widgets/icon_widget/icon_widget.dart';
@@ -21,6 +25,7 @@ import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
 import '../../user_screens/user_chat_screen/widget/image_view.dart';
 import '../../user_screens/user_chat_screen/widget/network_image_grid.dart';
+import '../business_preset_screen/controller/business_present_screen_controller.dart';
 
 class BusinessChatScreen extends StatefulWidget {
   const BusinessChatScreen({super.key});
@@ -31,253 +36,482 @@ class BusinessChatScreen extends StatefulWidget {
 
 class _BusinessChatScreenState extends State<BusinessChatScreen> {
   final TextEditingController _controller = TextEditingController();
-  final titleController = TextEditingController();
-  final descriptionController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
+  // UserChatController controller = Get.find<UserChatController>();
 
-  final List<Map<String, dynamic>> _messages = [
-    {
-      'text':
-          "Hi! I'd love to book a table for 4 tonight. Do you have availability?",
-      'isSent': false,
-      'time': '09:41',
-    },
-    {
-      'text':
-          "Hello! Thanks for reaching out! Let me check availability for you.\n\nWe have a table for 4 available at 9:00 PM tonight. Plus, we’re offering 20% off your first bottle of wine! 🍷 Would you like to confirm the booking?",
-      'isSent': true,
-      'time': '16:38',
-    },
-    {
-      'text':
-          "Yes, please! Can we also get a bottle of wine with the discount?",
-      'isSent': false,
-      'time': '16:38',
-    },
-    {
-      'text': "Of Course.\n\nIs there anything else you want to add?",
-      'isSent': true,
-      'time': '16:38',
-    },
-    {
-      'text': "No. Thank you",
-      'isSent': false,
-      'time': '16:38',
-    },
-    {
-      'text':
-          "Your table for 4 at 12:30 PM is pending.\n\nWe’re holding the spot for you! To confirm your reservation, please click below.",
-      'isSent': true,
-      'time': '16:38',
-      'button': true,
-    },
-    {
-      'text':
-          "YOU’RE ALL SET! We’ll see you at 9:00 PM tonight. 🎵 Enjoy the music and drinks, and don’t forget to show this message to claim your 20% off wine! 🍷\n\nIf anything changes, feel free to message us!",
-      'isSent': true,
-      'time': '16:38',
-    },
-  ];
 
-  void _sendMessage({File? image}) {
-    if (image != null || _controller.text.isNotEmpty) {
-      setState(() {
-        _messages.add({
-          if (image != null) 'image': image,
-          if (_controller.text.isNotEmpty) 'text': _controller.text,
-          'isSent': true,
-          'time': '16:38', // You can use DateTime.now() for real-time
-        });
-        _controller.clear();
-      });
-    }
-  }
+  final BusinessPresetScreenController offerController =
+  Get.put(BusinessPresetScreenController());
 
-  Future<void> _pickImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      _sendMessage(image: File(image.path));
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppbarWidget(
-        text: 'Mirchi Dance',
-        action: PopupMenuButton<int>(
-          onSelected: (value) {
-            if (value == 1) {
-            } else if (value == 2) {
-            } else if (value == 3) {
-              showCustomPopup(
-                context,
-                [
-                  const Center(
-                    child: TextWidget(
-                      text: AppStrings.bookingRequest,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      fontColor: AppColors.grey700,
-                      textAlignment: TextAlign.center,
-                    ),
-                  ),
-                  const SpaceWidget(spaceHeight: 11),
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextWidget(
-                      text: 'Offer',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      fontColor: AppColors.grey300,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: titleController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: AppColors.grey300),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: AppColors.grey300),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: AppColors.green500),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildOfferButtonsRow(),
-                  const SizedBox(height: 18),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: IconTextButton(
-                      onTap: () {},
-                      text: "Save",
-                      textColor: AppColors.green500,
-                      icon: Icons.save,
-                      iconColor: AppColors.green500,
-                      textWeight: FontWeight.w500,
-                      fontSize: 12,
-                      iconSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  ButtonWidget(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    label: AppStrings.sendRequest,
-                    buttonWidth: double.infinity,
-                    buttonHeight: 45,
-                    fontSize: 14,
-                  )
-                ],
-              );
-            }
-          },
+    return GetBuilder(
+      init:  UserChatController(),
+      builder: (controller) {
+        return Scaffold(
+          backgroundColor: AppColors.white
+          ,
+          appBar: AppbarWidget(
+            textWidget: Obx(() {
+              final name = controller.chatMessages.isNotEmpty
+                  ? controller.chatMessages[0].sender?.name
+                  : null;
 
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              value: 1,
-              child: Text(
-                "Report",
-                style: TextStyle(fontSize: 14, color: AppColors.grey300),
-              ),
-            ),
-            const PopupMenuDivider(height: 0.5),
-            const PopupMenuItem(
-              value: 2,
-              child: Text(
-                "Delete Chat",
-                style: TextStyle(fontSize: 14, color: AppColors.grey300),
-              ),
-            ),
-            const PopupMenuDivider(height: 0.5),
-            const PopupMenuItem(
-              value: 3,
-              child: Text(
-                "Send Booking Request",
-                style: TextStyle(fontSize: 14, color: AppColors.grey300),
-              ),
-            ),
-          ],
-          // offset: Offset(0, 100),
-          color: AppColors.white,
-          elevation: 2,
-        ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final message = _messages[index];
-                return ChatMessage(
-                  text: message['text'] as String?,
-                  // Cast as nullable String
-                  image: message['image'],
-                  isSent: message['isSent'] as bool,
-                  time: message['time'] as String,
-                  showButton: message['type'],
-                );
+              if (name == null) {
+                return const Text('Loading...');
+              } else if (name.trim().isEmpty) {
+                return const Text('Unknown');
+              } else {
+                return Text(name);
+              }
+            }),
+            action: PopupMenuButton<int>(
+              onSelected: (value) {
+                if (value == 1) {
+                } else if (value == 2) {
+                } else if (value == 3) {
+                  showCustomPopup(
+                    context,
+                    [
+                      const Center(
+                        child: TextWidget(
+                          text: AppStrings.bookingRequest,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          fontColor: AppColors.grey700,
+                          textAlignment: TextAlign.center,
+                        ),
+                      ),
+                      const SpaceWidget(spaceHeight: 11),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextWidget(
+                          text: 'Offer',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.grey300,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Column(
+                        children: [
+                          TextField(
+                            controller: offerController.titleController,
+                            decoration: InputDecoration(
+                              hintText: 'Offer Title',
+                              hintStyle: const TextStyle(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(color: AppColors.grey300),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(color: AppColors.grey300),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(color: AppColors.green500),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                            ),
+                          ),
+
+                          SizedBox(height: 8,),
+
+                          TextField(
+                            controller: offerController.descriptionController,
+                            decoration: InputDecoration(
+                              hintStyle: const TextStyle(color: Colors.grey),
+                              hintText: 'Offer Description',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(color: AppColors.grey300),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(color: AppColors.grey300),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(color: AppColors.green500),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                            ),
+                          )
+
+
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      _buildOfferButtonsRow(),
+                      const SizedBox(height: 18),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: IconTextButton(
+                          onTap: () {
+                            offerController.postOffer(
+                              title: offerController.titleController.text,
+                              description: offerController.descriptionController.text,
+                            );
+                          },
+                          text: "Save",
+                          textColor: AppColors.green500,
+                          icon: Icons.save,
+                          iconColor: AppColors.green500,
+                          textWeight: FontWeight.w500,
+                          fontSize: 12,
+                          iconSize: 16,
+                        ),
+
+                      ),
+                      const SizedBox(height: 12),
+
+                      GetBuilder<UserChatController>(
+                        builder: (controller) {
+                          return Visibility(
+                            visible: controller.isMessageSent==false,
+                            replacement: const Center(child: CircularProgressIndicator(),),
+                            child: ButtonWidget(
+                              onPressed: () {
+                                controller.sendOffer(offerTitle: offerController.titleController.text,
+                                    offerDescription: offerController.descriptionController.text);
+                                Get.back();
+                                appLog('offerTitle==> ${offerController.titleController.text}');
+                                appLog('offerDes==>> ${offerController.descriptionController.text}');
+                            
+                              },
+                              label: AppStrings.sendRequest,
+                              buttonWidth: double.infinity,
+                              buttonHeight: 45,
+                              fontSize: 14,
+                            ),
+                          );
+                        }
+                      )
+                    ],
+                  );
+                }
               },
+
+              itemBuilder: (context) => [
+
+             /*   const PopupMenuItem(
+                  value: 1,
+                  child: Text(
+                    "Report",
+                    style: TextStyle(fontSize: 14, color: AppColors.grey300),
+                  ),
+                ),*/
+
+                // const PopupMenuDivider(height: 0.5),
+                const PopupMenuItem(
+                  value: 2,
+                  child: Text(
+                    "Delete Chat",
+                    style: TextStyle(fontSize: 14, color: AppColors.grey300),
+                  ),
+
+                ),
+                const PopupMenuDivider(height: 0.5),
+
+                const PopupMenuItem(
+                  value: 3,
+                  child: Text(
+                    "Send Booking Request",
+                    style: TextStyle(fontSize: 14, color: AppColors.grey300),
+                  ),
+                ),
+
+              ],
+              // offset: Offset(0, 100),
+              color: AppColors.white,
+              elevation: 2,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
+
+
+          bottomNavigationBar: Padding(
+            padding: EdgeInsets.all(AppSize.width(value: 8)).copyWith(
+              bottom: MediaQuery.of(context).viewInsets.bottom + AppSize.width(value: 10),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.image, color: Colors.green, size: 32),
-                  onPressed: _pickImage,
-                ),
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      hintText: 'Type a message...',
-                      hintStyle: const TextStyle(
-                          color: AppColors.grey300,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: AppColors.grey300),
+
+                //  Image preview chips
+                Obx((){
+                  if (controller.images.isEmpty) return const SizedBox();
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: List.generate(controller.images.length, (index) {
+                        final image = controller.images[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.file(
+                                  File(image.path),
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: InkWell(
+                                  onTap: () {
+                                    controller.images.removeAt(index);
+                                    controller.update();
+                                  },
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: Colors.black54,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(Icons.close, size: 18, color: Colors.white),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      }),
+                    ),
+                  );
+                },),
+
+                const SizedBox(height: 8),
+
+                // Message send Row
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.image, color: Colors.green, size: 32),
+                      onPressed: controller.pickImage,
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: controller.messageController,
+                        decoration: InputDecoration(
+                          hintText: 'Type a message...',
+                          hintStyle: const TextStyle(
+                            color: AppColors.grey300,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(color: AppColors.grey300),
+                          ),
+                          filled: true,
+                          fillColor: AppColors.white,
+                        ),
                       ),
-                      filled: true,
-                      fillColor: AppColors.white,
                     ),
-                  ),
-                ),
-                const SizedBox(width: 8.0),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: FloatingActionButton(
-                    onPressed: () => _sendMessage(),
-                    backgroundColor: AppColors.green500,
-                    child: const Icon(
-                      Icons.send_rounded,
-                      color: AppColors.white,
+                    const SizedBox(width: 8.0),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child:
+                      GetBuilder<UserChatController>(builder: (controllers) {
+                        return Visibility(
+                          visible: controllers.isMessageSent == false,
+                          replacement:
+                          const Center(child: CircularProgressIndicator()),
+                          child: FloatingActionButton(
+                            onPressed: controller.sendMessage,
+                            backgroundColor: AppColors.green500,
+                            child: const Icon(Icons.send_rounded, color: AppColors.white),
+                          ),
+                        );
+                      }),
+
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
           ),
-        ],
-      ),
+
+
+
+
+
+          ///old body
+          // body: Column(
+          //   children: [
+          //     Expanded(
+          //       child: /*ListView.builder(
+          //         padding: const EdgeInsets.all(16),
+          //         itemCount: _messages.length,
+          //         itemBuilder: (context, index) {
+          //           final message = _messages[index];
+          //           return ChatMessage(
+          //             text: message['text'] as String?,
+          //             // Cast as nullable String
+          //             image: message['image'],
+          //             isSent: message['isSent'] as bool,
+          //             time: message['time'].toString() ,
+          //             showButton: message['type'],
+          //           );
+          //         },
+          //       ),*/
+          //
+          //
+          //
+          //       Obx(() {
+          //         if (controller.isLoading.value) {
+          //           return const Center(child: CircularProgressIndicator()); // Initial loading
+          //         }
+          //
+          //         if (controller.chatMessages.isEmpty) {
+          //           return const Center(child: Text('No messages available')); // No messages
+          //         }
+          //
+          //         return ListView.builder(
+          //           reverse: true,
+          //           controller: controller.scrollController,
+          //           padding: const EdgeInsets.all(16),
+          //           physics: const ClampingScrollPhysics(),
+          //           itemCount: controller.chatMessages.length +
+          //               (controller.isLoading.value ? 1 : 0),
+          //           itemBuilder: (context, index) {
+          //             if (index == controller.chatMessages.length) {
+          //               return const Padding(
+          //                 padding: EdgeInsets.all(8.0),
+          //                 child: CircularProgressIndicator(), // pagination loading
+          //               );
+          //             }
+          //
+          //             final message = controller.chatMessages[index];
+          //
+          //             return
+          //               ChatMessage(
+          //                 text: message.message,
+          //                 isSent: message.sender?.id == LocalStorage.userId,
+          //                 time: (DateTime.tryParse(message.createdAt.toString()) ??
+          //                     DateTime.now())
+          //                     .time,
+          //                 image: message.images,
+          //                 showButton: message.type ?? 'text',
+          //                 message: controller.chatMessages[index],
+          //
+          //               );
+          //
+          //           },
+          //         );
+          //       }),
+          //
+          //
+          //
+          //     ),
+          //     Padding(
+          //       padding: const EdgeInsets.all(8.0),
+          //       child: Row(
+          //         children: [
+          //           IconButton(
+          //             icon: const Icon(Icons.image, color: Colors.green, size: 32),
+          //             onPressed: _pickImage,
+          //           ),
+          //           Expanded(
+          //             child: TextField(
+          //               controller: _controller,
+          //               decoration: InputDecoration(
+          //                 hintText: 'Type a message...',
+          //                 hintStyle: const TextStyle(
+          //                     color: AppColors.grey300,
+          //                     fontWeight: FontWeight.w400,
+          //                     fontSize: 14),
+          //                 border: OutlineInputBorder(
+          //                   borderRadius: BorderRadius.circular(8),
+          //                   borderSide: const BorderSide(color: AppColors.grey300),
+          //                 ),
+          //                 filled: true,
+          //                 fillColor: AppColors.white,
+          //               ),
+          //             ),
+          //           ),
+          //           const SizedBox(width: 8.0),
+          //           ClipRRect(
+          //             borderRadius: BorderRadius.circular(100),
+          //             child: FloatingActionButton(
+          //               onPressed: () => _sendMessage(),
+          //               backgroundColor: AppColors.green500,
+          //               child: const Icon(
+          //                 Icons.send_rounded,
+          //                 color: AppColors.white,
+          //               ),
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ],
+          // ),
+
+
+          ///new body
+          body: Obx(() {
+            if (controller.isLoading.value) {
+              return const Center(child: CircularProgressIndicator()); // Initial loading
+            }
+
+            if (controller.chatMessages.isEmpty) {
+              return const Center(child: Text('No messages available')); // No messages
+            }
+
+            return  ListView.builder(
+              reverse: true,
+              controller: controller.scrollController,
+              padding: const EdgeInsets.all(16),
+              physics: const ClampingScrollPhysics(),
+              itemCount: controller.chatMessages.length +
+                  (controller.isLoading.value ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index == controller.chatMessages.length) {
+                  return const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(), // pagination loading
+                  );
+                }
+
+                final message = controller.chatMessages[index];
+
+                return
+                  ChatMessage(
+                    text: message.message,
+                    isSent: message.sender?.id == LocalStorage.userId,
+                    time: (DateTime.tryParse(message.createdAt.toString()) ??
+                        DateTime.now())
+                        .time,
+                    image: message.images,
+                    showButton: message.type ?? 'text',
+                    message: controller.chatMessages[index],
+
+                  );
+
+
+
+              },
+            );
+          }),
+
+        );
+      }
     );
   }
+
+
+
+
+
 
   Widget _buildOfferButton(int percentage) {
     return Container(
@@ -353,8 +587,8 @@ class ChatMessage extends StatelessWidget {
     return Align(
       alignment: isSent ? Alignment.centerRight : Alignment.centerLeft,
       child: Column(
-        crossAxisAlignment:
-        isSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: isSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+
         children: [
           // মেসেজ বক্স
 
@@ -417,123 +651,124 @@ class ChatMessage extends StatelessWidget {
 
 
 
-                // বুকিং UI
-                if (showButton=='offer') ...[
-                  const SizedBox(height: 10.0),
-                  Container(
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: AppColors.green500,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                  // বুকিং UI
+                  if (showButton=='offer') ...[
+                    const SizedBox(height: 10.0),
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: AppColors.green500,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
 
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(6),
-                              child: const ImageWidget(
-                                height: 53,
-                                width: 106,
-                                imagePath: AppImagePath.bookingsImage,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(6),
+                                child: const ImageWidget(
+                                  height: 53,
+                                  width: 106,
+                                  imagePath: AppImagePath.bookingsImage,
+                                ),
+
                               ),
+                              const SpaceWidget(spaceWidth: 8),
 
-                            ),
-                            const SpaceWidget(spaceWidth: 8),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextWidget(
+                                      text: message?.offerTitle?.toString() ?? '',
 
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                   TextWidget(
-                                     text: message?.offerTitle?.toString() ?? '',
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      fontColor: AppColors.white,
+                                    ),
 
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: AppColors.white,
-                                  ),
+                                    Row(
+                                      children: List.generate(5, (index) {
+                                        final rating = message?.sender?.rating ?? 0.0;
 
-                                  Row(
-                                    children: List.generate(5, (index) {
-                                      final rating = message?.sender?.rating ?? 0.0;
+                                        if (index < rating.floor()) {
+                                          return const Icon(Icons.star, color: AppColors.yellow, size: 12); // Full star
+                                        } else if (index < rating && rating - index >= 0.5) {
+                                          return const Icon(Icons.star_half, color: AppColors.yellow, size: 12); // Half star
+                                        } else {
+                                          return const Icon(Icons.star_border, color: AppColors.yellow, size: 12); // Empty star
+                                        }
+                                      }),
+                                    ),
 
-                                      if (index < rating.floor()) {
-                                        return const Icon(Icons.star, color: AppColors.yellow, size: 12); // Full star
-                                      } else if (index < rating && rating - index >= 0.5) {
-                                        return const Icon(Icons.star_half, color: AppColors.yellow, size: 12); // Half star
-                                      } else {
-                                        return const Icon(Icons.star_border, color: AppColors.yellow, size: 12); // Empty star
-                                      }
-                                    }),
-                                  ),
+                                    TextWidget(
 
-                                  TextWidget(
+                                      text: message?.sender?.address?.toString() ?? '',
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w400,
+                                      fontColor: AppColors.white,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
 
-                                     text: message?.sender?.address?.toString() ?? '',
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w400,
-                                    fontColor: AppColors.white,
-                                     overflow: TextOverflow.ellipsis,
-                                  ),
+                                    ///miles
+                                    const Row(
+                                      children: [
+                                        IconWidget(
+                                          icon: AppIconsPath.locationIconWhite,
+                                          width: 12,
+                                          height: 12,
+                                        ),
+                                        const SpaceWidget(spaceWidth: 4),
+                                        TextWidget(
+                                          text: "0 miles",
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400,
+                                          fontColor: AppColors.white,
+                                        ),
+                                      ],
+                                    ),
 
-                                  ///miles
-                                   const Row(
-                                    children: [
-                                      IconWidget(
-                                        icon: AppIconsPath.locationIconWhite,
-                                        width: 12,
-                                        height: 12,
-                                      ),
-                                      const SpaceWidget(spaceWidth: 4),
-                                      TextWidget(
-                                        text: "0 miles",
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400,
-                                        fontColor: AppColors.white,
-                                      ),
-                                    ],
-                                  ),
-
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10.0),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8), // 👈 Rounded corners
+                                  ],
                                 ),
                               ),
-                              child: const Text('Accept'),
-                            ),
-                            const SizedBox(width: 8),
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8), // 👈 Rounded corners
+                            ],
+                          ),
+                          const SizedBox(height: 10.0),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8), // 👈 Rounded corners
+                                  ),
                                 ),
+                                child: const Text('Accept'),
                               ),
-                              child: const Text('message'),
-                            ),
-                          ],
-                        )
+                              const SizedBox(width: 8),
+                              ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8), // 👈 Rounded corners
+                                  ),
+                                ),
+                                child: const Text('message'),
+                              ),
+                            ],
+                          )
 
 
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+
               ],
             ),
           ),

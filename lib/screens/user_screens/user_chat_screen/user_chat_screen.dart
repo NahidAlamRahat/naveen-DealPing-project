@@ -132,7 +132,7 @@ class UserChatScreen extends StatelessWidget{
 
 
 
-
+          ///AppBar
           backgroundColor: AppColors.white,
           appBar: AppbarWidget(
             textWidget: Obx(() {
@@ -189,6 +189,8 @@ class UserChatScreen extends StatelessWidget{
                   message: controller.chatMessages[index],
 
                  );
+
+
 
             },
           );

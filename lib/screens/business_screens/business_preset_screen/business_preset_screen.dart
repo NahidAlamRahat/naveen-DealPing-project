@@ -21,7 +21,7 @@ class BusinessPresetScreen extends StatefulWidget {
 
 class BusinessPresetScreenState extends State<BusinessPresetScreen> {
   final BusinessPresetScreenController controller =
-      Get.put(BusinessPresetScreenController());
+  Get.put(BusinessPresetScreenController());
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 

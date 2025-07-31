@@ -44,6 +44,7 @@ class UserProfileController extends GetxController {
     try {
       AppSnackBar.success("Logged out successfully!");
       LocalStorage.removeAllPrefData();
+
     } catch (e) {
       AppSnackBar.error("Failed to log out. Please try again.");
     }

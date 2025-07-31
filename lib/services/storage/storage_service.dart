@@ -12,6 +12,7 @@ class LocalStorage {
   static String resetToken = "";
   static bool isLogIn = false;
   static String userId = "";
+  static String businessId = "";
   static String myImage = "";
   static String myName = "";
   static String myEmail = "";
@@ -36,6 +37,7 @@ class LocalStorage {
     resetToken = localStorage.getString(LocalStorageKeys.resetToken) ?? "";
     isLogIn = localStorage.getBool(LocalStorageKeys.isLogIn) ?? false;
     userId = localStorage.getString(LocalStorageKeys.userId) ?? "";
+    businessId = localStorage.getString(LocalStorageKeys.businessId) ?? "";
     myImage = localStorage.getString(LocalStorageKeys.myImage) ?? "";
     myName = localStorage.getString(LocalStorageKeys.myName) ?? "";
     myEmail = localStorage.getString(LocalStorageKeys.myEmail) ?? "";
@@ -61,13 +63,13 @@ class LocalStorage {
     localStorage.setString(LocalStorageKeys.refreshToken, "");
     localStorage.setString(LocalStorageKeys.resetToken, "");
     localStorage.setString(LocalStorageKeys.userId, "");
+    localStorage.setString(LocalStorageKeys.businessId, "");
     localStorage.setString(LocalStorageKeys.myImage, "");
     localStorage.setString(LocalStorageKeys.myName, "");
     localStorage.setString(LocalStorageKeys.myEmail, "");
     localStorage.setString(LocalStorageKeys.myRole, "");
     localStorage.setBool(LocalStorageKeys.isLogIn, false);
   }
-
   // Save Data To SharedPreferences
   static Future<void> setString(
     String key,
