@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../business_screens/business_chat_screen/business_chat_screen.dart';
+import '../../common_widget/chat_message_widget.dart';
 import 'controller/user_chate_controller.dart';
 
 
@@ -136,22 +137,25 @@ class UserChatScreen extends StatelessWidget{
           backgroundColor: AppColors.white,
           appBar: AppbarWidget(
             textWidget: Obx(() {
-              final name = controller.chatMessages.isNotEmpty
-                  ? controller.chatMessages[0].sender?.name
-                  : null;
+          final index = controller.selectedChatIndex.value;
+          final name = controller.chatMessages.isNotEmpty &&
+              index < controller.chatMessages.length
+              ? controller.chatMessages[index].sender?.name
+              : null;
 
-              if (name == null) {
-                return const Text('Loading...');
-              } else if (name.trim().isEmpty) {
-                return const Text('Unknown');
-              } else {
-                return Text(name);
-              }
-            }),
-          ),
+          if (name == null) {
+            return const Text('Loading...');
+          } else if (name.trim().isEmpty) {
+            return const Text('Unknown');
+          } else {
+            return Text(name);
+          }
+        }),
+        ),
 
 
-          body: Obx(() {
+
+        body: Obx(() {
           if (controller.isLoading.value) {
             return const Center(child: CircularProgressIndicator()); // Initial loading
           }
@@ -179,6 +183,7 @@ class UserChatScreen extends StatelessWidget{
 
               return
                 ChatMessage(
+                  chatId: controller.chatId,
                   text: message.message,
                   isSent: message.sender?.id == LocalStorage.userId,
                   time: (DateTime.tryParse(message.createdAt.toString()) ??
@@ -189,8 +194,6 @@ class UserChatScreen extends StatelessWidget{
                   message: controller.chatMessages[index],
 
                  );
-
-
 
             },
           );

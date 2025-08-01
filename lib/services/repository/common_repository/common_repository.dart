@@ -79,6 +79,24 @@ class CommonRepository {
 
 
 
+  Future<void> messageEnable({required String chatId}) async {
+    try {
+      final response = await ApiService.patchApi(
+        ApiUrls.messageUrl(chatId: chatId),
+      );
+
+      if(response.statusCode==200){
+        AppSnackBar.success(response.message);
+      }
+
+    } catch (e) {
+      AppSnackBar.error("Error fetching terms and conditions: ${e.toString()}");
+    }
+  }
+
+
+
+
   Future<List<NotificationModel>> getNotificationData(int page) async {
     List<NotificationModel> notificationDataList = <NotificationModel>[];
     try {
@@ -105,7 +123,7 @@ class CommonRepository {
   Future<List<ChatMessageResponseModel>> getChatMessage({ required int page,  required String chatId})async{
     List<ChatMessageResponseModel> chatMessageResponseModelList = <ChatMessageResponseModel>[];
     try{
-      Map<String, dynamic> queryParameters = {"page": page};
+      Map<String, dynamic> queryParameters = {"page": page,"limit":20};
       appLog('current page😒😒 ====>>> $page');
       appLog('chat ID😒😪😒 ====>>> $chatId');
 

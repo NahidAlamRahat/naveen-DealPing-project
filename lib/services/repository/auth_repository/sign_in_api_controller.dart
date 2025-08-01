@@ -2,12 +2,18 @@ import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/services/api/api_services.dart';
 import 'package:get/get.dart';
 
+import '../../../screens/business_screens/business_profile_screen/controller/business_profile_controller.dart';
+import '../../../screens/user_screens/user_profile_screen/controller/user_profile_controller.dart';
 import '../../../utils/app_log/app_log.dart';
 import '../../storage/storage_key.dart';
 import '../../storage/storage_service.dart';
 
 class SignInApiController extends GetxController {
   late bool _inProgress = false;
+
+  // UserProfileController userProfileController = Get.put(UserProfileController());
+  // BusinessProfileController businessProfileController = Get.put(BusinessProfileController());
+
 
   bool get inProgress => _inProgress;
 
@@ -41,6 +47,9 @@ class SignInApiController extends GetxController {
 
       LocalStorage.refreshToken = refreshToken;
       LocalStorage.myRole = role;
+
+      // LocalStorage.userId =userProfileController. profile.value?.sId ?? '';
+
 
       LocalStorage.setString(
         LocalStorageKeys.token,

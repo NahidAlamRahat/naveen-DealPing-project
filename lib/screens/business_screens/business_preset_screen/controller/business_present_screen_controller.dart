@@ -14,10 +14,12 @@ class BusinessPresetScreenController extends GetxController {
   // final RxInt discount = 0.obs;
   final RxBool isLoading = false.obs;
 
-  final RxList<AllOffers> offers = <AllOffers>[].obs;
+  final RxList<AllOffers> getAllOffers = <AllOffers>[].obs;
   final RxBool isLoadingOffers = false.obs;
 
   final Rx<AllOffers?> selectedOffer = Rx<AllOffers?>(null);
+  RxInt selectedOfferIndex = (-1).obs; // -1 means nothing selected
+
 
   @override
   void onInit() {
@@ -69,7 +71,7 @@ class BusinessPresetScreenController extends GetxController {
       List<AllOffers>? offersList =
           await _businessOfferRepository.getAllOffers();
       if (offersList != null) {
-        offers.assignAll(offersList);
+        getAllOffers.assignAll(offersList);
       }
     } catch (e) {
       AppSnackBar.error("An unexpected error occurred while fetching offers.");
@@ -146,18 +148,18 @@ class BusinessPresetScreenController extends GetxController {
       bool success = await _businessOfferRepository.setDefaultOffer(offerId, isDefault);
       if (success) {
         // Step 1: Set all offers to default = false
-        for (int i = 0; i < offers.length; i++) {
-          offers[i] = offers[i].copyWith(datumDefault: false);
+        for (int i = 0; i < getAllOffers.length; i++) {
+          getAllOffers[i] = getAllOffers[i].copyWith(datumDefault: false);
         }
 
         // Step 2: Set selected offer to default = true
-        AllOffers selected = offers[index].copyWith(datumDefault: true);
+        AllOffers selected = getAllOffers[index].copyWith(datumDefault: true);
 
         // Step 3: Remove it from current position
-        offers.removeAt(index);
+        getAllOffers.removeAt(index);
 
         // Step 4: Insert at top
-        offers.insert(0, selected);
+        getAllOffers.insert(0, selected);
 
         update();
         AppSnackBar.success("Offer set as default.");

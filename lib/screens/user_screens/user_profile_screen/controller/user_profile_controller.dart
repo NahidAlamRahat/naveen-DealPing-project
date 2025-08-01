@@ -43,7 +43,10 @@ class UserProfileController extends GetxController {
   Future<void> logout() async {
     try {
       AppSnackBar.success("Logged out successfully!");
-      LocalStorage.removeAllPrefData();
+      LocalStorage.userId='';
+      appLog('user screen userId clear===>  ${LocalStorage.userId}');
+     await  LocalStorage.removeAllPrefData();
+
 
     } catch (e) {
       AppSnackBar.error("Failed to log out. Please try again.");

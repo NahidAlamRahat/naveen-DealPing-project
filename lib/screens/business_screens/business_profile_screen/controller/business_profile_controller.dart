@@ -17,16 +17,16 @@ class BusinessProfileController extends GetxController {
     fetchUserProfile();
   }
 
-  void fetchUserProfile() async {
+  fetchUserProfile() async {
     isLoading.value = true;
     try {
+
       var fetchedProfile = await _profileRepository.fetchProfile();
+      appLog('fetchProfile ==> $fetchedProfile');
       if (fetchedProfile != null) {
         profile.value = fetchedProfile;
         LocalStorage.userId = profile.value?.sId ?? '';
-        LocalStorage.businessId = profile.value?.sId ?? '';
-        appLog('business id ===>>> ${ LocalStorage.userId} ');
-
+        appLog('Local business Id======> ${LocalStorage.userId}');
       } else {
         AppSnackBar.error("Failed to load profile data.");
       }
@@ -40,7 +40,11 @@ class BusinessProfileController extends GetxController {
   Future<void> logout() async {
     try {
       AppSnackBar.success("Logged out successfully!");
-      LocalStorage.removeAllPrefData();
+      LocalStorage.userId='';
+      appLog('business screen userId clear===>  ${LocalStorage.userId}');
+      await LocalStorage.removeAllPrefData();
+
+
     } catch (e) {
       AppSnackBar.error("Failed to log out. Please try again.");
     }

@@ -32,7 +32,6 @@ class BusinessOfferRepository {
   Future<List<AllOffers>?> getAllOffers() async {
     try {
       var response = await ApiService.getApi(ApiUrls.getAllOffer);
-
       final List<dynamic> offersJson = response.body['data'] ?? [];
       return offersJson
           .map((json) => AllOffers.fromJson(json))

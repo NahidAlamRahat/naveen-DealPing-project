@@ -23,6 +23,7 @@ import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
+import '../../common_widget/chat_message_widget.dart';
 import '../../user_screens/user_chat_screen/widget/image_view.dart';
 import '../../user_screens/user_chat_screen/widget/network_image_grid.dart';
 import '../business_preset_screen/controller/business_present_screen_controller.dart';
@@ -37,7 +38,9 @@ class BusinessChatScreen extends StatefulWidget {
 class _BusinessChatScreenState extends State<BusinessChatScreen> {
   final TextEditingController _controller = TextEditingController();
   final ImagePicker _picker = ImagePicker();
-  // UserChatController controller = Get.find<UserChatController>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+
 
 
   final BusinessPresetScreenController offerController =
@@ -55,7 +58,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
           appBar: AppbarWidget(
             textWidget: Obx(() {
               final name = controller.chatMessages.isNotEmpty
-                  ? controller.chatMessages[0].sender?.name
+                  ? controller.chatMessages[0].receiver?.name
                   : null;
 
               if (name == null) {
@@ -66,6 +69,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                 return Text(name);
               }
             }),
+
             action: PopupMenuButton<int>(
               onSelected: (value) {
                 if (value == 1) {
@@ -74,15 +78,29 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                   showCustomPopup(
                     context,
                     [
-                      const Center(
-                        child: TextWidget(
-                          text: AppStrings.bookingRequest,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          fontColor: AppColors.grey700,
-                          textAlignment: TextAlign.center,
-                        ),
+
+                      Row(
+                        children: [
+                          const Expanded(
+                            child: Center(
+                              child: TextWidget(
+                                text: AppStrings.bookingRequest,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                fontColor: AppColors.grey700,
+                                textAlignment: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close, size: 20, color: AppColors.grey500),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
                       ),
+
                       const SpaceWidget(spaceHeight: 11),
                       const Align(
                         alignment: Alignment.centerLeft,
@@ -94,60 +112,75 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Column(
-                        children: [
-                          TextField(
-                            controller: offerController.titleController,
-                            decoration: InputDecoration(
-                              hintText: 'Offer Title',
-                              hintStyle: const TextStyle(color: Colors.grey),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(color: AppColors.grey300),
+
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              controller: offerController.titleController,
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Title is required';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Offer Title',
+                                hintStyle: const TextStyle(color: Colors.grey),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(color: AppColors.grey300),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(color: AppColors.grey300),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(color: AppColors.green500),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(color: AppColors.grey300),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(color: AppColors.green500),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 12),
                             ),
-                          ),
-
-                          SizedBox(height: 8,),
-
-                          TextField(
-                            controller: offerController.descriptionController,
-                            decoration: InputDecoration(
-                              hintStyle: const TextStyle(color: Colors.grey),
-                              hintText: 'Offer Description',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(color: AppColors.grey300),
+                            const SizedBox(height: 8),
+                            TextFormField(
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              controller: offerController.descriptionController,
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Description is required';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Offer Description',
+                                hintStyle: const TextStyle(color: Colors.grey),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(color: AppColors.grey300),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(color: AppColors.grey300),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(color: AppColors.green500),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(color: AppColors.grey300),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(color: AppColors.green500),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 12),
                             ),
-                          )
-
-
-                        ],
+                          ],
+                        ),
                       ),
+
+
                       const SizedBox(height: 16),
                       _buildOfferButtonsRow(),
                       const SizedBox(height: 18),
+
                       Align(
                         alignment: Alignment.centerRight,
                         child: IconTextButton(
@@ -165,23 +198,24 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                           fontSize: 12,
                           iconSize: 16,
                         ),
-
                       ),
                       const SizedBox(height: 12),
 
                       GetBuilder<UserChatController>(
                         builder: (controller) {
                           return Visibility(
-                            visible: controller.isMessageSent==false,
-                            replacement: const Center(child: CircularProgressIndicator(),),
+                            visible: controller.isMessageSent == false,
+                            replacement: const Center(child: CircularProgressIndicator()),
                             child: ButtonWidget(
                               onPressed: () {
-                                controller.sendOffer(offerTitle: offerController.titleController.text,
-                                    offerDescription: offerController.descriptionController.text);
-                                Get.back();
-                                appLog('offerTitle==> ${offerController.titleController.text}');
-                                appLog('offerDes==>> ${offerController.descriptionController.text}');
-                            
+                                // Validate the form before proceeding
+                                if (_formKey.currentState!.validate()) {
+                                  controller.sendOffer(
+                                    offerTitle: offerController.titleController.text,
+                                    offerDescription: offerController.descriptionController.text,
+                                  );
+                                  Get.back();
+                                }
                               },
                               label: AppStrings.sendRequest,
                               buttonWidth: double.infinity,
@@ -189,34 +223,22 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                               fontSize: 14,
                             ),
                           );
-                        }
+                        },
                       )
+
                     ],
                   );
                 }
               },
-
               itemBuilder: (context) => [
-
-             /*   const PopupMenuItem(
-                  value: 1,
-                  child: Text(
-                    "Report",
-                    style: TextStyle(fontSize: 14, color: AppColors.grey300),
-                  ),
-                ),*/
-
-                // const PopupMenuDivider(height: 0.5),
                 const PopupMenuItem(
                   value: 2,
                   child: Text(
                     "Delete Chat",
                     style: TextStyle(fontSize: 14, color: AppColors.grey300),
                   ),
-
                 ),
                 const PopupMenuDivider(height: 0.5),
-
                 const PopupMenuItem(
                   value: 3,
                   child: Text(
@@ -224,12 +246,12 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                     style: TextStyle(fontSize: 14, color: AppColors.grey300),
                   ),
                 ),
-
               ],
-              // offset: Offset(0, 100),
               color: AppColors.white,
               elevation: 2,
-            ),
+            )
+
+
           ),
 
 
@@ -342,121 +364,6 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
 
 
 
-
-
-          ///old body
-          // body: Column(
-          //   children: [
-          //     Expanded(
-          //       child: /*ListView.builder(
-          //         padding: const EdgeInsets.all(16),
-          //         itemCount: _messages.length,
-          //         itemBuilder: (context, index) {
-          //           final message = _messages[index];
-          //           return ChatMessage(
-          //             text: message['text'] as String?,
-          //             // Cast as nullable String
-          //             image: message['image'],
-          //             isSent: message['isSent'] as bool,
-          //             time: message['time'].toString() ,
-          //             showButton: message['type'],
-          //           );
-          //         },
-          //       ),*/
-          //
-          //
-          //
-          //       Obx(() {
-          //         if (controller.isLoading.value) {
-          //           return const Center(child: CircularProgressIndicator()); // Initial loading
-          //         }
-          //
-          //         if (controller.chatMessages.isEmpty) {
-          //           return const Center(child: Text('No messages available')); // No messages
-          //         }
-          //
-          //         return ListView.builder(
-          //           reverse: true,
-          //           controller: controller.scrollController,
-          //           padding: const EdgeInsets.all(16),
-          //           physics: const ClampingScrollPhysics(),
-          //           itemCount: controller.chatMessages.length +
-          //               (controller.isLoading.value ? 1 : 0),
-          //           itemBuilder: (context, index) {
-          //             if (index == controller.chatMessages.length) {
-          //               return const Padding(
-          //                 padding: EdgeInsets.all(8.0),
-          //                 child: CircularProgressIndicator(), // pagination loading
-          //               );
-          //             }
-          //
-          //             final message = controller.chatMessages[index];
-          //
-          //             return
-          //               ChatMessage(
-          //                 text: message.message,
-          //                 isSent: message.sender?.id == LocalStorage.userId,
-          //                 time: (DateTime.tryParse(message.createdAt.toString()) ??
-          //                     DateTime.now())
-          //                     .time,
-          //                 image: message.images,
-          //                 showButton: message.type ?? 'text',
-          //                 message: controller.chatMessages[index],
-          //
-          //               );
-          //
-          //           },
-          //         );
-          //       }),
-          //
-          //
-          //
-          //     ),
-          //     Padding(
-          //       padding: const EdgeInsets.all(8.0),
-          //       child: Row(
-          //         children: [
-          //           IconButton(
-          //             icon: const Icon(Icons.image, color: Colors.green, size: 32),
-          //             onPressed: _pickImage,
-          //           ),
-          //           Expanded(
-          //             child: TextField(
-          //               controller: _controller,
-          //               decoration: InputDecoration(
-          //                 hintText: 'Type a message...',
-          //                 hintStyle: const TextStyle(
-          //                     color: AppColors.grey300,
-          //                     fontWeight: FontWeight.w400,
-          //                     fontSize: 14),
-          //                 border: OutlineInputBorder(
-          //                   borderRadius: BorderRadius.circular(8),
-          //                   borderSide: const BorderSide(color: AppColors.grey300),
-          //                 ),
-          //                 filled: true,
-          //                 fillColor: AppColors.white,
-          //               ),
-          //             ),
-          //           ),
-          //           const SizedBox(width: 8.0),
-          //           ClipRRect(
-          //             borderRadius: BorderRadius.circular(100),
-          //             child: FloatingActionButton(
-          //               onPressed: () => _sendMessage(),
-          //               backgroundColor: AppColors.green500,
-          //               child: const Icon(
-          //                 Icons.send_rounded,
-          //                 color: AppColors.white,
-          //               ),
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ],
-          // ),
-
-
           ///new body
           body: Obx(() {
             if (controller.isLoading.value) {
@@ -467,7 +374,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
               return const Center(child: Text('No messages available')); // No messages
             }
 
-            return  ListView.builder(
+            return ListView.builder(
               reverse: true,
               controller: controller.scrollController,
               padding: const EdgeInsets.all(16),
@@ -497,8 +404,6 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
 
                   );
 
-
-
               },
             );
           }),
@@ -511,284 +416,74 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
 
 
 
+  Widget _buildOfferButton({
+    required String offerTitle,
+    required String? offerDescription,
+    required int index,
+  }) {
+    return Obx(() {
+      final isSelected = offerController.selectedOfferIndex.value == index;
+
+      return InkWell(
+        onTap: () {
+          offerController.titleController.text = offerTitle.trim();
+          offerController.descriptionController.text = offerDescription?.trim() ?? '';
+          offerController.selectedOfferIndex.value = index;
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          margin: const EdgeInsets.only(right: 8),
+          decoration: BoxDecoration(
 
 
-  Widget _buildOfferButton(int percentage) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      margin: const EdgeInsets.only(right: 8),
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            '$percentage% offer',
-            style: const TextStyle(fontSize: 10, color: AppColors.grey300),
+              color: isSelected ? const Color.fromRGBO(230, 244, 236, 1) : Colors.grey[300],
+            borderRadius: BorderRadius.circular(8),
+            border: isSelected
+                ? Border.all(color: AppColors.green100, width: 1.5)
+                : Border.all(color: Colors.transparent),
           ),
-          const SizedBox(width: 5),
-          const Icon(
-            Icons.close,
-            size: 16,
-            color: Colors.black,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                offerTitle,
+                style: TextStyle(
+                  fontSize: 10,
+                  color: isSelected ? Colors.black : AppColors.grey300,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+              const SizedBox(width: 5),
+              const Icon(
+                Icons.close,
+                size: 16,
+                color: Colors.black,
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ),
+      );
+    });
   }
+
 
   Widget _buildOfferButtonsRow() {
     return SizedBox(
       height: 30,
-      child: ListView(
+      child: Obx(() => ListView.builder(
         scrollDirection: Axis.horizontal,
-        children: List.generate(
-          10, // Number of steps from 5% to 50% (5, 10, ..., 50)
-          (index) {
-            int percentage = 5 * (index + 1); // 5%, 10%, ..., 50%
-            return _buildOfferButton(percentage);
-          },
-        ),
-      ),
+        itemCount: offerController.getAllOffers.length,
+        itemBuilder: (context, index) {
+          final offer = offerController.getAllOffers[index];
+          return _buildOfferButton(
+            offerTitle: offer.title,
+            offerDescription: offer.description,
+            index: index,
+          );
+        },
+      )),
     );
   }
+
 }
 
-class ChatMessage extends StatelessWidget {
-
-  final ChatMessageResponseModel? message;
-  final String? text;
-  final List<String> ? image;
-  final bool isSent;
-  final String time;
-  final String showButton;
-
-  const ChatMessage({
-
-    super.key,
-    this.text,
-    this.image,
-     this.message,
-    required this.isSent,
-    required this.time,
-    this.showButton = 'text',
-  }
-
-  );
-
-  @override
-  Widget build(BuildContext context) {
-
-
-
-
-    return Align(
-      alignment: isSent ? Alignment.centerRight : Alignment.centerLeft,
-      child: Column(
-        crossAxisAlignment: isSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-
-        children: [
-          // মেসেজ বক্স
-
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 4.0),
-            padding: const EdgeInsets.all(1.0),
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.70,
-            ),
-            decoration: (image == null || image!.isEmpty)
-                ? BoxDecoration(
-              color: (text != null && text!.isNotEmpty)
-                  ? (isSent ? AppColors.green500 : AppColors.green50)
-                  : null,
-              borderRadius: BorderRadius.circular(8),
-            )
-                : null,
-
-
-            child: Column(
-              crossAxisAlignment: isSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-
-                children: [
-
-                  if (image != null && image!.isNotEmpty)
-                    Column(
-
-                      children: [
-                        NetworkImageGrid(
-                          images: image,
-                          onTap: (index) {
-                            final imagePath = image?[index];
-                            Get.to(() => FullScreenImageView(imagePath: imagePath ??''));
-                          },
-
-                        ),
-
-                        if (text != null && text!.isNotEmpty)
-                          const SizedBox(height: 8),
-                      ],
-                    ),
-
-
-                  if (text != null && text!.isNotEmpty)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: isSent ? AppColors.green500 : AppColors.green50,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: TextWidget(
-                        text: text!,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        fontColor: isSent ? AppColors.white : AppColors.grey700,
-                        textAlignment: TextAlign.start,
-                      ),
-                    ),
-
-
-
-
-                  // বুকিং UI
-                  if (showButton=='offer') ...[
-                    const SizedBox(height: 10.0),
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: AppColors.green500,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(6),
-                                child: const ImageWidget(
-                                  height: 53,
-                                  width: 106,
-                                  imagePath: AppImagePath.bookingsImage,
-                                ),
-
-                              ),
-                              const SpaceWidget(spaceWidth: 8),
-
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextWidget(
-                                      text: message?.offerTitle?.toString() ?? '',
-
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      fontColor: AppColors.white,
-                                    ),
-
-                                    Row(
-                                      children: List.generate(5, (index) {
-                                        final rating = message?.sender?.rating ?? 0.0;
-
-                                        if (index < rating.floor()) {
-                                          return const Icon(Icons.star, color: AppColors.yellow, size: 12); // Full star
-                                        } else if (index < rating && rating - index >= 0.5) {
-                                          return const Icon(Icons.star_half, color: AppColors.yellow, size: 12); // Half star
-                                        } else {
-                                          return const Icon(Icons.star_border, color: AppColors.yellow, size: 12); // Empty star
-                                        }
-                                      }),
-                                    ),
-
-                                    TextWidget(
-
-                                      text: message?.sender?.address?.toString() ?? '',
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w400,
-                                      fontColor: AppColors.white,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-
-                                    ///miles
-                                    const Row(
-                                      children: [
-                                        IconWidget(
-                                          icon: AppIconsPath.locationIconWhite,
-                                          width: 12,
-                                          height: 12,
-                                        ),
-                                        const SpaceWidget(spaceWidth: 4),
-                                        TextWidget(
-                                          text: "0 miles",
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w400,
-                                          fontColor: AppColors.white,
-                                        ),
-                                      ],
-                                    ),
-
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10.0),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8), // 👈 Rounded corners
-                                  ),
-                                ),
-                                child: const Text('Accept'),
-                              ),
-                              const SizedBox(width: 8),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8), // 👈 Rounded corners
-                                  ),
-                                ),
-                                child: const Text('message'),
-                              ),
-                            ],
-                          )
-
-
-                        ],
-                      ),
-                    ),
-                  ],
-
-              ],
-            ),
-          ),
-
-
-
-
-          // টাইমস্ট্যাম্প
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              time,
-              style: const TextStyle(
-                fontSize: 12.0,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

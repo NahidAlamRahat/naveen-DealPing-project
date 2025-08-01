@@ -235,7 +235,7 @@ class BusinessPresetScreenState extends State<BusinessPresetScreen> {
                   if (controller.isLoadingOffers.value) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  if (controller.offers.isEmpty) {
+                  if (controller.getAllOffers.isEmpty) {
                     return const Center(
                       child: TextWidget(
                         text: "No offers available.",
@@ -247,8 +247,8 @@ class BusinessPresetScreenState extends State<BusinessPresetScreen> {
 
                   return Column(
                     children: [
-                      ...List.generate(controller.offers.length, (index) {
-                        final offer = controller.offers[index];
+                      ...List.generate(controller.getAllOffers.length, (index) {
+                        final offer = controller.getAllOffers[index];
                         return OfferItem(
                           offerId: offer.id ,
                           itemIndex: index,
@@ -655,9 +655,9 @@ class _OfferItemState extends State<OfferItem> {
                       Transform.scale(
                         scale: 0.8,
                         child: Switch(
-                            value: controller.offers[widget.itemIndex].datumDefault,
+                            value: controller.getAllOffers[widget.itemIndex].datumDefault,
                             onChanged: (value) {
-                              if (!controller.offers[widget.itemIndex].datumDefault) {
+                              if (!controller.getAllOffers[widget.itemIndex].datumDefault) {
                                 widget.onToggleDefault(true, widget.itemIndex);
                               }
                               // else do nothing, user can't turn it OFF directly

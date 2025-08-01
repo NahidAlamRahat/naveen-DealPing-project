@@ -6,14 +6,16 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../models/chat_message_responce_model.dart';
 import '../../../../services/repository/common_repository/common_repository.dart';
 import '../../../../services/sockets/app_socket_all_operation.dart';
+import '../../../../services/storage/storage_service.dart';
 import '../../../../utils/app_log/error_log.dart';
+import '../../../common_widget/chat_message_widget.dart';
 
 class UserChatController extends GetxController {
   AppSocketAllOperation appSocketAllOperation = AppSocketAllOperation.instance;
   ScrollController scrollController = ScrollController();
   TextEditingController messageController = TextEditingController();
-  // TextEditingController offerTitleTEController = TextEditingController();
-  // TextEditingController offerDescriptionTEController = TextEditingController();
+  RxInt selectedChatIndex = 0.obs;
+
 
   final ImagePicker _picker = ImagePicker();
   final RxList<XFile> images = <XFile>[].obs;
@@ -31,6 +33,20 @@ class UserChatController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isPagination = false.obs;
   bool isLast = false;
+
+
+
+  RxBool isOtherUserReplied = false.obs;
+
+  void handleIncomingMessage(ChatMessag message) {
+    if ( chatMessages.value[].sender.id != LocalStorage.userId) {
+      isOtherUserReplied.value = true;
+    }
+
+    chatMessages.insert(0, message); // assuming newest at top
+    update();
+  }
+
 
 
 
@@ -160,15 +176,19 @@ class UserChatController extends GetxController {
   }
 
   Future<void> onAppInitialDataLoad() async {
+
     try {
       isLoading.value = true;
       isPagination.value = false;
+
+
 
       final argData  = Get.arguments;
       if(argData != null && argData is String){
         chatId = argData;
         scrollController = ScrollController();
         messageController = TextEditingController();
+
         chatMessages.clear();
         currentPage = 1;
         await fetchChatMessages();
@@ -199,6 +219,10 @@ class UserChatController extends GetxController {
 
       appLog('😎😎😎😪😪😪😪😪😪😪😎  $e');
     }
+
+
+
+
   }
 
 
