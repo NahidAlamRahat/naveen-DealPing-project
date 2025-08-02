@@ -1,4 +1,4 @@
-class Request {
+class RequestModel {
   final String id;
   final String user;
   final String category;
@@ -9,7 +9,7 @@ class Request {
   final String createdAt;
   final String updatedAt;
 
-  Request({
+  RequestModel({
     required this.id,
     required this.user,
     required this.category,
@@ -21,8 +21,8 @@ class Request {
     required this.updatedAt,
   });
 
-  factory Request.fromJson(Map<String, dynamic> json) {
-    return Request(
+  factory RequestModel.fromJson(Map<String, dynamic> json) {
+    return RequestModel(
       id: json['_id'],
       user: json['user'],
       category: json['category'],

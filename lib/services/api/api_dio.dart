@@ -16,9 +16,9 @@ class ApiDio {
   static ApiDio get instance => _instance;
   ApiDio() {
     _dio.options.baseUrl = ApiUrls.baseUrl;
-    _dio.options.sendTimeout = const Duration(seconds: 120);
-    _dio.options.connectTimeout = const Duration(seconds: 120);
-    _dio.options.receiveTimeout = const Duration(seconds: 120);
+    _dio.options.sendTimeout = const Duration(seconds: 30);
+    _dio.options.connectTimeout = const Duration(seconds: 30);
+    _dio.options.receiveTimeout = const Duration(seconds: 30);
     _dio.options.followRedirects = false;
 
     _dio.interceptors.addAll({

@@ -13,6 +13,8 @@ class BusinessSignInController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
   final SignInApiController _signInController = Get.put(SignInApiController());
 
+  bool get inProgress => _signInController.inProgress == false;
+
   // Validate Email
   String? validateEmail(String? value) {
     bool emailValid =

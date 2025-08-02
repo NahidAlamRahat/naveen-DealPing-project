@@ -18,8 +18,8 @@ class BusinessProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BusinessProfileController controller =
-        Get.put(BusinessProfileController());
+    final BusinessProfileController controller = Get.put(BusinessProfileController());
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Obx(() {
@@ -33,191 +33,189 @@ class BusinessProfileScreen extends StatelessWidget {
 
         final profileData = controller.profile.value!;
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Title
-              const TextWidget(
-                text: AppStrings.myProfile,
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                fontColor: AppColors.grey700,
-              ),
-              const SpaceWidget(spaceHeight: 24),
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const TextWidget(
+                        text: AppStrings.myProfile,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.grey700,
+                      ),
+                      const SpaceWidget(spaceHeight: 24),
 
-              // Profile Section
-              Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: AppImage(
-                    height: 120,
-                    width: 120,
-                    url: profileData.profile ?? "",
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              const SpaceWidget(spaceHeight: 16),
-              // Name and Username
-              Center(
-                child: TextWidget(
-                  text: profileData.businessName ?? "",
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  fontColor: AppColors.green500,
-                ),
-              ),
-              Center(
-                child: TextWidget(
-                  text: profileData.email ?? "",
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  fontColor: AppColors.grey700,
-                ),
-              ),
-              const SpaceWidget(spaceHeight: 12),
-              Center(
-                child: ButtonWidget(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.businessEditProfileScreen);
-                  },
-                  backgroundColor: AppColors.green500,
-                  label: AppStrings.editProfile,
-                  buttonHeight: 36,
-                  buttonWidth: 100,
-                  fontSize: 12,
-                  textColor: AppColors.white,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              const SpaceWidget(spaceHeight: 32),
-
-              // Menu Options
-              _buildMenuItem(
-                context,
-                icon: AppIconsPath.myReportIcon,
-                title: AppStrings.myReport,
-                onTap: () {
-                  Get.toNamed(AppRoutes.businessMyReportScreen);
-                },
-              ),
-              const SpaceWidget(spaceHeight: 16),
-              _buildMenuItem(
-                context,
-                icon: AppIconsPath.aboutUsIcon,
-                title: AppStrings.aboutUs,
-                onTap: () {
-                  Get.toNamed(AppRoutes.aboutUsScreen);
-                },
-              ),
-
-              const SpaceWidget(spaceHeight: 16),
-              _buildMenuItem(
-                context,
-                icon: AppIconsPath.termsConditionIcon,
-                title: AppStrings.termsCondition,
-                onTap: () {
-                  Get.toNamed(AppRoutes.termsAndConditionsScreen);
-                },
-              ),
-              const SpaceWidget(spaceHeight: 16),
-              _buildMenuItem(
-                context,
-                icon: AppIconsPath.passwordIcon,
-                title: AppStrings.password,
-                onTap: () {
-                  Get.toNamed(AppRoutes.businessChangePasswordScreen);
-                },
-              ),
-              const SpaceWidget(spaceHeight: 16),
-              _buildMenuItem(
-                context,
-                icon: AppIconsPath.faqIcon,
-                title: AppStrings.faq,
-                onTap: () {
-                  Get.toNamed(AppRoutes.faqScreen);
-                },
-              ),
-
-
-              const SpaceWidget(spaceHeight: 16),
-              _buildMenuItem(
-                context,
-                icon: AppIconsPath.supportIcon,
-                title: AppStrings.supportRequestScreen,
-                onTap: () {
-                  Get.toNamed(AppRoutes.supportScreen);
-                },
-              ),
-
-
-
-
-              const SpaceWidget(spaceHeight: 16),
-              _buildMenuItem(
-                context,
-                icon: AppIconsPath.logoutIcon,
-                title: AppStrings.logout,
-                onTap: () {
-                  // Perform logout action (placeholder)
-                  showCustomPopup(
-                    context,
-                    [
-                      const SpaceWidget(spaceHeight: 34),
-                      const Center(
-                        child: TextWidget(
-                          text: AppStrings.wantToLogout,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          fontColor: AppColors.grey700,
-                          textAlignment: TextAlign.center,
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: AppImage(
+                            height: 120,
+                            width: 120,
+                            url: profileData.profile ?? "",
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       const SpaceWidget(spaceHeight: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ButtonWidget(
-                            label: AppStrings.no,
-                            onPressed: () => Navigator.pop(context),
-                            buttonHeight: 36,
-                            buttonWidth: 71,
-                            backgroundColor: AppColors.green50,
-                            textColor: AppColors.green500,
-                            fontSize: 12,
-                          ),
-                          const SpaceWidget(spaceWidth: 24),
-                          ButtonWidget(
-                            label: AppStrings.yes,
-                            onPressed: () => controller.logout(),
-                            buttonHeight: 36,
-                            buttonWidth: 71,
-                            backgroundColor: AppColors.green500,
-                            textColor: AppColors.white,
-                            fontSize: 12,
-                          ),
-                        ],
+                      Center(
+                        child: TextWidget(
+                          text: profileData.businessName ?? "",
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          fontColor: AppColors.green500,
+                        ),
                       ),
-                      const SpaceWidget(spaceHeight: 24),
+                      Center(
+                        child: TextWidget(
+                          text: profileData.email ?? "",
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontColor: AppColors.grey700,
+                        ),
+                      ),
+                      const SpaceWidget(spaceHeight: 12),
+                      Center(
+                        child: ButtonWidget(
+                          onPressed: () {
+                            Get.toNamed(AppRoutes.businessEditProfileScreen);
+                          },
+                          backgroundColor: AppColors.green500,
+                          label: AppStrings.editProfile,
+                          buttonHeight: 36,
+                          buttonWidth: 100,
+                          fontSize: 12,
+                          textColor: AppColors.white,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const SpaceWidget(spaceHeight: 32),
+
+                      _buildMenuItem(
+                        context,
+                        icon: AppIconsPath.myReportIcon,
+                        title: AppStrings.myReport,
+                        onTap: () {
+                          Get.toNamed(AppRoutes.businessMyReportScreen);
+                        },
+                      ),
+                      const SpaceWidget(spaceHeight: 16),
+                      _buildMenuItem(
+                        context,
+                        icon: AppIconsPath.aboutUsIcon,
+                        title: AppStrings.aboutUs,
+                        onTap: () {
+                          Get.toNamed(AppRoutes.aboutUsScreen);
+                        },
+                      ),
+                      const SpaceWidget(spaceHeight: 16),
+                      _buildMenuItem(
+                        context,
+                        icon: AppIconsPath.termsConditionIcon,
+                        title: AppStrings.termsCondition,
+                        onTap: () {
+                          Get.toNamed(AppRoutes.termsAndConditionsScreen);
+                        },
+                      ),
+                      const SpaceWidget(spaceHeight: 16),
+                      _buildMenuItem(
+                        context,
+                        icon: AppIconsPath.passwordIcon,
+                        title: AppStrings.password,
+                        onTap: () {
+                          Get.toNamed(AppRoutes.businessChangePasswordScreen);
+                        },
+                      ),
+                      const SpaceWidget(spaceHeight: 16),
+                      _buildMenuItem(
+                        context,
+                        icon: AppIconsPath.faqIcon,
+                        title: AppStrings.faq,
+                        onTap: () {
+                          Get.toNamed(AppRoutes.faqScreen);
+                        },
+                      ),
+                      const SpaceWidget(spaceHeight: 16),
+                      _buildMenuItem(
+                        context,
+                        icon: AppIconsPath.supportIcon,
+                        title: AppStrings.supportRequestScreen,
+                        onTap: () {
+                          Get.toNamed(AppRoutes.supportScreen);
+                        },
+                      ),
+                      const SpaceWidget(spaceHeight: 16),
+                      _buildMenuItem(
+                        context,
+                        icon: AppIconsPath.logoutIcon,
+                        title: AppStrings.logout,
+                        onTap: () {
+                          showCustomPopup(
+                            context,
+                            [
+                              const SpaceWidget(spaceHeight: 34),
+                              const Center(
+                                child: TextWidget(
+                                  text: AppStrings.wantToLogout,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  fontColor: AppColors.grey700,
+                                  textAlignment: TextAlign.center,
+                                ),
+                              ),
+                              const SpaceWidget(spaceHeight: 16),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ButtonWidget(
+                                    label: AppStrings.no,
+                                    onPressed: () => Navigator.pop(context),
+                                    buttonHeight: 36,
+                                    buttonWidth: 71,
+                                    backgroundColor: AppColors.green50,
+                                    textColor: AppColors.green500,
+                                    fontSize: 12,
+                                  ),
+                                  const SpaceWidget(spaceWidth: 24),
+                                  ButtonWidget(
+                                    label: AppStrings.yes,
+                                    onPressed: () => controller.logout(),
+                                    buttonHeight: 36,
+                                    buttonWidth: 71,
+                                    backgroundColor: AppColors.green500,
+                                    textColor: AppColors.white,
+                                    fontSize: 12,
+                                  ),
+                                ],
+                              ),
+                              const SpaceWidget(spaceHeight: 24),
+                            ],
+                          );
+                        },
+                      ),
                     ],
-                  );
-                },
+                  ),
+                ),
               ),
-            ],
-          ),
+            );
+          },
         );
       }),
     );
   }
 
   Widget _buildMenuItem(
-    BuildContext context, {
-    required String icon,
-    required String title,
-    required VoidCallback onTap,
-  }) {
+      BuildContext context, {
+        required String icon,
+        required String title,
+        required VoidCallback onTap,
+      }) {
     return GestureDetector(
       onTap: onTap,
       child: Row(

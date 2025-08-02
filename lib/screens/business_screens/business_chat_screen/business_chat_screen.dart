@@ -348,7 +348,8 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                           replacement:
                           const Center(child: CircularProgressIndicator()),
                           child: FloatingActionButton(
-                            onPressed: controller.sendMessage,
+                            onPressed: controller.hasUserReplied.value ? controller.sendMessage : null,
+
                             backgroundColor: AppColors.green500,
                             child: const Icon(Icons.send_rounded, color: AppColors.white),
                           ),

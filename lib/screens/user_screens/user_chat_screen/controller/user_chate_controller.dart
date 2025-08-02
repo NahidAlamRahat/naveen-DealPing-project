@@ -36,17 +36,19 @@ class UserChatController extends GetxController {
 
 
 
-  RxBool isOtherUserReplied = false.obs;
+  RxBool hasUserReplied = false.obs;
 
-  void handleIncomingMessage(ChatMessag message) {
-    if ( chatMessages.value[].sender.id != LocalStorage.userId) {
-      isOtherUserReplied.value = true;
+  void checkIfUserReplied() {
+    try {
+      // যদি কোনো মেসেজ sender এর id ইউজার এর id এর সাথে না মিলে
+      bool anyUserMessage = chatMessages.any(
+            (msg) => msg.sender?.id != LocalStorage.userId,
+      );
+      hasUserReplied.value = anyUserMessage;
+    } catch (e) {
+      errorLog("checkIfUserReplied error: $e");
     }
-
-    chatMessages.insert(0, message); // assuming newest at top
-    update();
   }
-
 
 
 

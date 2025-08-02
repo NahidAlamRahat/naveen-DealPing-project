@@ -2,12 +2,12 @@ import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/widgets/space_widget/space_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../constants/app_strings.dart';
 import '../../../models/request_list_model.dart';
 import '../../../routes/app_routes.dart';
 import '../../../utils/app_log/app_log.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
+import '../../common_widget/search_bar_widget.dart';
 import 'controller/chat_list_api_caller.dart';
 class UserChatListScreen extends StatelessWidget {
   final searchController = TextEditingController();
@@ -17,7 +17,7 @@ class UserChatListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<RequestListController>(
-      init: RequestListController()..fetchRequestList(),
+      init: RequestListController()..onDataLoad(),
       builder: (controller) {
         return Scaffold(
           backgroundColor: AppColors.white,
@@ -27,12 +27,13 @@ class UserChatListScreen extends StatelessWidget {
               const SpaceWidget(spaceHeight: 20),
 
               // Search Field
-              Padding(
+
+             /* Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: TextFormField(
                   controller: searchController,
                   onChanged: (value) {
-                    Get.find<RequestListController>().filterList(value);
+                    controller.filterList(value);
                   },
                   style: const TextStyle(color: AppColors.grey700, fontSize: 14),
                   decoration: InputDecoration(
@@ -45,9 +46,16 @@ class UserChatListScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),*/
+
+              SearchBarWidget(
+                controller: searchController,
+                onChanged: (value) {
+                  controller.filterList(value);
+                },
               ),
 
-              // Header Row
+        // Header Row
               const Padding(
                 padding: EdgeInsets.only(left: 20, right: 10),
                 child: Row(
@@ -68,53 +76,72 @@ class UserChatListScreen extends StatelessWidget {
 
               // List Section
               Expanded(
-                child: controller.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : controller.requestList.isEmpty
+                child: controller.isLoading.value
+                    ? const Center(child: CircularProgressIndicator())  // full screen spinner only on first load
+                    : controller.requestModelList.isEmpty
                     ? const Center(child: Text("No requests available."))
                     : RefreshIndicator(
-                  onRefresh: () => controller.fetchRequestList(),
-                  child: ListView.builder(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: controller.requestList.length,
-                    itemBuilder: (context, index) {
-                      Request request = controller.requestList[index];
-                      return Container(
-                        width: double.infinity,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                              color: AppColors.grey50, width: 1),
-                        ),
-                        child: ListTile(
-                          onTap: () {
-                            int? requestIdAsInt;
-                            requestIdAsInt = int.tryParse(request.id);
-                            appLog('😢😢😢😢====>>>>>${request.id}');
-                            Get.toNamed(
-                              AppRoutes.userChatListProposalScreen,
-                              arguments: request,
-                            );
-                          },
-                          title: TextWidget(
-                            text: request.message,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            fontColor: AppColors.grey300,
-                            textAlignment: TextAlign.start,
+                  onRefresh: () async {
+                    await controller.refreshRequestList();
+                  },
+                  child: Obx(() {
+                    return ListView.builder(
+                      controller: controller.scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: controller.requestModelList.length + (controller.isPagination.value ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index == controller.requestModelList.length) {
+                          // Loader shown during pagination
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Center(
+                              child: SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                            ),
+                          );
+                        }
+
+                        RequestModel request = controller.requestModelList[index];
+                        return Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: AppColors.grey50, width: 1),
                           ),
-                          trailing: const Icon(
+                          child: ListTile(
+                            onTap: () {
+                              int.tryParse(request.id);
+                              appLog('😢😢😢😢====>>>>>${request.id}');
+                              Get.toNamed(
+                                AppRoutes.userChatListProposalScreen,
+                                // arguments: request,
+                              );
+                            },
+                            title: TextWidget(
+                              text: request.message,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              fontColor: AppColors.grey300,
+                              textAlignment: TextAlign.start,
+                            ),
+                            trailing: const Icon(
                               Icons.arrow_forward_ios,
                               size: 16,
-                              color: Colors.green),
-                        ),
-                      );
-                    },
-                  ),
+                              color: Colors.green,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }),
+
                 ),
               ),
+
             ],
           ),
         );

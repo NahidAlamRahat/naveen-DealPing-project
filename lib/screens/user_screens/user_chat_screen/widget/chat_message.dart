@@ -207,7 +207,7 @@ class ChatMessage extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 10.0),
-                        ButtonWidget(
+                        /*ButtonWidget(
                           onPressed: () {
                             Get.toNamed(AppRoutes.userBookingSummaryScreen);
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -221,7 +221,7 @@ class ChatMessage extends StatelessWidget {
                           fontSize: 12,
                           textColor: AppColors.grey700,
                           fontWeight: FontWeight.w500,
-                        ),
+                        ),*/
                       ],
                     ),
                   ),

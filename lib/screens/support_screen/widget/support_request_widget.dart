@@ -18,7 +18,7 @@ class SupportRequestWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-   final _requestApiController = Get.put(RequestApiController());
+    final _requestApiController = Get.put(RequestApiController());
 
     return GetBuilder<SupportController>(
         builder: (controller) {
@@ -210,13 +210,3 @@ class SupportRequestWidget extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-

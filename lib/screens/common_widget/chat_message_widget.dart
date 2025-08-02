@@ -8,7 +8,10 @@ import 'package:get/get_core/src/get_main.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_icons_path.dart';
 import '../../constants/app_image_path.dart';
+import '../../constants/app_strings.dart';
 import '../../models/chat_message_responce_model.dart';
+import '../../routes/app_routes.dart';
+import '../../widgets/button_widget/button_widget.dart';
 import '../../widgets/icon_widget/icon_widget.dart';
 import '../../widgets/image_widget/image_widget.dart';
 import '../../widgets/space_widget/space_widget.dart';
@@ -206,8 +209,12 @@ class ChatMessage extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
+                                onPressed: () {
+                                  Get.toNamed(AppRoutes.userBookingSummaryScreen);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Table booked successfully!')),
+                                  );
+                                },                                style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
@@ -215,6 +222,7 @@ class ChatMessage extends StatelessWidget {
                                 ),
                                 child: const Text('Accept'),
                               ),
+
                               const SizedBox(width: 8),
                               ElevatedButton(
                                 onPressed: () {
@@ -241,8 +249,6 @@ class ChatMessage extends StatelessWidget {
               ],
             ),
           ),
-
-
 
 
           // টাইমস্ট্যাম্প

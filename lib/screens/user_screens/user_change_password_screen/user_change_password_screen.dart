@@ -13,7 +13,7 @@ import 'controller/user_change_password_controller.dart';
 
 class UserChangePasswordScreen extends StatelessWidget {
   final UserChangePasswordController controller =
-      Get.put(UserChangePasswordController());
+  Get.put(UserChangePasswordController());
 
   UserChangePasswordScreen({super.key});
 

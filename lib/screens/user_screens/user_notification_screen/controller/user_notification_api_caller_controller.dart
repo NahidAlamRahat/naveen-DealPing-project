@@ -1,3 +1,4 @@
+/*
 
 import 'package:deal_ping/services/api/api_services.dart';
 import 'package:flutter/cupertino.dart';
@@ -78,4 +79,4 @@ class UserNotificationApiCallerController extends GetxController {
     // appOnInit();
     super.onInit();
   }
-}
+}*/

@@ -2,7 +2,7 @@ class AppImagePath {
   AppImagePath._();
 
 
-  static const String imageUrl = "http://10.10.7.26:5000";
+  static const String imageUrl = "https://asad.binarybards.online";
 
   static const String appLogoWhite = "assets/images/app_logo_white.png";
   static const String appLogoGreen = "assets/images/app_logo_green.png";

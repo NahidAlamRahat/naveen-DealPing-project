@@ -6,7 +6,7 @@ import '../../../constants/api_urls.dart';
 import '../../../models/user_chat_list_model.dart';
 
 class ChatController extends GetxController {
-  Rxn<Request> request = Rxn<Request>();
+  Rxn<RequestModel> request = Rxn<RequestModel>();
   final ApiUrls _apiUrls = ApiUrls();
   RxList<ChatModel> chatList = <ChatModel>[].obs;
   var isLoading = true.obs;
@@ -57,7 +57,7 @@ class ChatController extends GetxController {
     try {
       isLoading.value = true;
       final argData = Get.arguments;
-      if(argData != null && argData is Request){
+      if(argData != null && argData is RequestModel){
         request.value = argData;
         id = request.value?.id ?? "";
         debugPrint('😎😎😎😎😎=====>>>${request.value?.message}');

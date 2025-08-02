@@ -15,7 +15,6 @@ import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../user_edit_profile_screen/user_edit_profile_screen.dart';
 import 'controller/user_profile_controller.dart';
-
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({super.key});
 
@@ -26,15 +25,11 @@ class UserProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Obx(() {
-
-
         final profileData = controller.profile.value;
-
-        String fullName = '${profileData?.name} ${profileData?.lastName}' ;
+        String fullName = '${profileData?.name ?? ""} ${profileData?.lastName ?? ""}';
 
         return RefreshIndicator(
           onRefresh: () async {
-            // Prevent multiple refresh calls by checking if data is being loaded
             if (!controller.isLoading.value) {
               await controller.fetchUserProfile();
             }
@@ -62,12 +57,13 @@ class UserProfileScreen extends StatelessWidget {
                       child: AppImage(
                         height: AppSize.height(value: 120),
                         width: AppSize.width(value: 120),
-                        url:  controller.profile.value?.profile,
+                        url: controller.profile.value?.profile,
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                   const SpaceWidget(spaceHeight: 16),
+
                   // Name and Username
                   Center(
                     child: TextWidget(
@@ -86,6 +82,8 @@ class UserProfileScreen extends StatelessWidget {
                     ),
                   ),
                   const SpaceWidget(spaceHeight: 12),
+
+                  // Edit Button
                   Center(
                     child: ButtonWidget(
                       onPressed: () {
@@ -130,8 +128,6 @@ class UserProfileScreen extends StatelessWidget {
                     icon: AppIconsPath.passwordIcon,
                     title: AppStrings.password,
                     onTap: () {
-                      Get.toNamed(AppRoutes.userChangePasswordScreen);
-
                       Get.toNamed(AppRoutes.userChangePasswordScreen, arguments: {
                         'token': LocalStorage.token,
                       });
@@ -146,15 +142,12 @@ class UserProfileScreen extends StatelessWidget {
                       Get.toNamed(AppRoutes.faqScreen);
                     },
                   ),
-
-
                   const SpaceWidget(spaceHeight: 16),
                   _buildMenuItem(
                     context,
                     icon: AppIconsPath.logoutIcon,
                     title: AppStrings.logout,
                     onTap: () {
-                      // Perform logout action (placeholder)
                       showCustomPopup(
                         context,
                         [
