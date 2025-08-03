@@ -157,7 +157,7 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.userBookingSuccessfullScreen,
-        page: () => const UserBookingSuccessfullScreen(),
+        page: () => UserBookingSuccessFullScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(

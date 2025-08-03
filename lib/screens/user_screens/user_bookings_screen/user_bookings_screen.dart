@@ -105,7 +105,8 @@ class BookingsList extends StatelessWidget {
               distance: "${booking.distance.toStringAsFixed(2)} miles",
               networkImageUrl:
                   '${AppImagePath.imageUrl}${booking.userProfileImage}' ,
-              rating: booking.rating ,
+              rating: booking.rating,
+              index: index ,
             );
           },
         );
@@ -141,7 +142,8 @@ class PastBookings extends StatelessWidget {
               networkImageUrl:
                   '${AppImagePath.imageUrl}${booking.userProfileImage}' ,
               isPastBooking: true,
-              rating: booking.rating ,
+              rating: booking.rating,
+              index: index ,
             );
           },
         );
@@ -151,6 +153,7 @@ class PastBookings extends StatelessWidget {
 }
 
 class BookingCard extends StatelessWidget {
+  final int index;
   final String title, location, distance, networkImageUrl;
   final bool isPastBooking;
   final rating;
@@ -163,6 +166,7 @@ class BookingCard extends StatelessWidget {
     required this.networkImageUrl,
     this.isPastBooking = false,
     required this.rating,
+    required this.index,
   });
 
   @override
@@ -265,7 +269,7 @@ class BookingCard extends StatelessWidget {
                 )
               : ButtonWidget(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.userBarcodeScreen);
+                    Get.toNamed(AppRoutes.userBarcodeScreen,arguments: index);
                   },
                   label: AppStrings.view,
                   buttonHeight: 36,

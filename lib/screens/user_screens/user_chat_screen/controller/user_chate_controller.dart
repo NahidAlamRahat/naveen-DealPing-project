@@ -40,7 +40,6 @@ class UserChatController extends GetxController {
 
   void checkIfUserReplied() {
     try {
-      // যদি কোনো মেসেজ sender এর id ইউজার এর id এর সাথে না মিলে
       bool anyUserMessage = chatMessages.any(
             (msg) => msg.sender?.id != LocalStorage.userId,
       );

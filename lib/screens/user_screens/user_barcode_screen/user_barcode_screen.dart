@@ -13,13 +13,307 @@ import '../../../widgets/space_widget/space_widget.dart';
 import '../user_bookings_screen/controller/booking_list_api_caller.dart';
 import 'controller/user_barcode_controller.dart';
 
+// class UserBarcodeScreen extends StatelessWidget {
+//   final UserBarcodeController controller = Get.put(UserBarcodeController());
+//
+//   final BookingListController bookingController =
+//   Get.put(BookingListController());
+//
+//   UserBarcodeScreen({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.white,
+//       appBar: AppbarWidget(
+//         text: AppStrings.barcode,
+//         centerTitle: true,
+//         leading: IconButton(
+//           onPressed: () {
+//             // Get.offAll(UserBottomNav());
+//             Get.back();
+//           },
+//           icon: const Icon(Icons.close),
+//           color: AppColors.green500,
+//         ),
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Container(
+//               padding: const EdgeInsets.all(16),
+//               decoration: BoxDecoration(
+//                 color: AppColors.green50,
+//                 borderRadius: BorderRadius.circular(12),
+//               ),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   const TextWidget(
+//                     text: 'Hi there,',
+//                     fontSize: 13,
+//                     fontWeight: FontWeight.w400,
+//                     fontColor: AppColors.grey700,
+//                   ),
+//                   const SpaceWidget(spaceHeight: 8),
+//                   const TextWidget(
+//                     text: 'You have successfully reserved your Service!'
+//                         'Please scan the barcode to proceed with your request'
+//                         'and access the service seamlessly.',
+//                     fontSize: 13,
+//                     fontWeight: FontWeight.w400,
+//                     fontColor: AppColors.grey700,
+//                     textAlignment: TextAlign.start,
+//                   ),
+//                   const SpaceWidget(spaceHeight: 24),
+//                   _buildDetailRow(
+//                     leftLabel: 'Name',
+//                     rightLabel: 'Offer',
+//                     leftValue: bookingController.bookingList[0].businessName,
+//                     rightValue: bookingController.bookingList[0].offerTitle,
+//                   ),
+//                   const SpaceWidget(spaceHeight: 14),
+//                   _buildDetailRow(
+//                     leftLabel: 'Service Name',
+//                     rightLabel: 'Type of Service',
+//                     leftValue: bookingController.bookingList[0].categoryTitle,
+//                     rightValue:bookingController.bookingList[0].subCategories.toString(),
+//                   ),
+//
+//
+//
+//                   const SpaceWidget(spaceHeight: 14),
+//                   _buildDetailRow(
+//                     leftLabel:'Location' ,
+//                     rightLabel: 'Date',
+//                     leftValue: bookingController.bookingList[0].address,
+//                     rightValue: (DateTime.tryParse(bookingController.bookingList[0].createdAt.toString()) ??
+//                         DateTime.now())
+//                         .date,
+//                   ),
+//                   const SpaceWidget(spaceHeight: 14),
+//                   _buildDetailRow(
+//                     leftLabel: 'Time',
+//                     leftValue: (DateTime.tryParse(bookingController.bookingList[0].createdAt.toString()) ??
+//                         DateTime.now())
+//                         .time,
+//                   ),
+//
+//                   const SpaceWidget(spaceHeight: 36),
+//                 ///bar-code
+//                 /*  Obx(() => Center(
+//                         child: Container(
+//                           padding: const EdgeInsets.all(12),
+//                           decoration: BoxDecoration(
+//                             color: AppColors.white,
+//                             borderRadius: BorderRadius.circular(8),
+//                           ),
+//                           child: BarcodeWidget(
+//                             barcode: Barcode.code128(),
+//                             data: controller.barcodeNumber.value,
+//                             width: 200,
+//                             height: 100,
+//                             drawText: true,
+//                             style: const TextStyle(
+//                               fontSize: 14,
+//                               fontWeight: FontWeight.w500,
+//                               color: AppColors.grey700,
+//                             ),
+//                           ),
+//                         ),
+//                       )),*/
+//
+//                   Center(
+//                     child: RichText(
+//                       text: TextSpan(
+//                         children: [
+//                           const TextSpan(
+//                             text: 'Order code: ',
+//                             style: TextStyle(
+//                               fontSize: 12,
+//                               fontWeight: FontWeight.w400,
+//                               color: AppColors.grey300,
+//                             ),
+//                           ),
+//                           TextSpan(
+//                             text: bookingController.bookingList[0].bookingCode,
+//                             style: const TextStyle(
+//                               fontSize: 14,
+//                               fontWeight: FontWeight.w500,
+//                               color: AppColors.grey700,
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//
+//
+//
+//                   const SpaceWidget(spaceHeight: 36),
+//                   const TextWidget(
+//                     text: 'Thanks & Regards\nDealPing',
+//                     fontSize: 12,
+//                     fontWeight: FontWeight.w400,
+//                     fontColor: AppColors.grey700,
+//                     textAlignment: TextAlign.start,
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//
+//      /// cancel button
+//      /* bottomNavigationBar: Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+//         child: ButtonWidget(
+//           onPressed: () {
+//             showCustomPopup(
+//               context,
+//               [
+//                 const SpaceWidget(spaceHeight: 34),
+//                 const TextWidget(
+//                   text: AppStrings.areYouSure,
+//                   fontSize: 16,
+//                   fontWeight: FontWeight.w500,
+//                   fontColor: AppColors.grey700,
+//                   textAlignment: TextAlign.center,
+//                 ),
+//                 const SpaceWidget(spaceHeight: 16),
+//                 Row(
+//                   mainAxisAlignment: MainAxisAlignment.center,
+//                   children: [
+//                     ButtonWidget(
+//                       label: AppStrings.no,
+//                       onPressed: () => Navigator.pop(context),
+//                       buttonHeight: 36,
+//                       buttonWidth: 71,
+//                       backgroundColor: AppColors.white,
+//                       borderColor: AppColors.red,
+//                       textColor: AppColors.red,
+//                       fontSize: 12,
+//                     ),
+//                     const SpaceWidget(spaceWidth: 24),
+//                     ButtonWidget(
+//                       label: AppStrings.yes,
+//                       onPressed: () => Navigator.pop(context),
+//                       buttonHeight: 36,
+//                       buttonWidth: 71,
+//                       backgroundColor: AppColors.red,
+//                       textColor: AppColors.white,
+//                       fontSize: 12,
+//                     ),
+//                   ],
+//                 ),
+//                 const SpaceWidget(spaceHeight: 24),
+//               ],
+//             );
+//           },
+//           backgroundColor: AppColors.red.withAlpha(70),
+//           label: AppStrings.cancelBooking,
+//           buttonHeight: 52,
+//           buttonWidth: double.infinity,
+//           fontSize: 16,
+//           textColor: AppColors.red,
+//           fontWeight: FontWeight.w500,
+//         ),
+//       ),*/
+//
+//     );
+//   }
+//
+//   Widget _buildDetailRow({
+//      String? leftLabel,
+//      String? rightLabel,
+//      String? leftValue,
+//      String? rightValue,
+//   }) {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//       children: [
+//         Expanded(
+//           flex: 3,
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               SizedBox(
+//                 width: 220,
+//                 child: TextWidget(
+//                   text: leftLabel ?? '',
+//                   fontSize: 12,
+//                   fontWeight: FontWeight.w400,
+//                   fontColor: AppColors.grey300,
+//                   textAlignment: TextAlign.start,
+//                   maxLines: 1,
+//                   overflow: TextOverflow.ellipsis,
+//                 ),
+//               ),
+//               SizedBox(
+//                 width: 220,
+//                 child: TextWidget(
+//                   text: leftValue ?? '',
+//                   fontSize: 14,
+//                   fontWeight: FontWeight.w500,
+//                   fontColor: AppColors.grey700,
+//                   textAlignment: TextAlign.start,
+//                   maxLines: 1,
+//                   overflow: TextOverflow.ellipsis,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//         const SpaceWidget(spaceWidth: 24),
+//         Expanded(
+//           flex: 2,
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               SizedBox(
+//                 width: 200,
+//                 child: TextWidget(
+//                   text: rightLabel ?? '',
+//                   fontSize: 12,
+//                   fontWeight: FontWeight.w400,
+//                   fontColor: AppColors.grey300,
+//                   textAlignment: TextAlign.start,
+//                   maxLines: 1,
+//                   overflow: TextOverflow.ellipsis,
+//                 ),
+//               ),
+//               SizedBox(
+//                 width: 200,
+//                 child: TextWidget(
+//                   text: rightValue ?? '',
+//                   fontSize: 14,
+//                   fontWeight: FontWeight.w500,
+//                   fontColor: AppColors.grey700,
+//                   textAlignment: TextAlign.start,
+//                   maxLines: 1,
+//                   overflow: TextOverflow.ellipsis,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
+
+
+
 class UserBarcodeScreen extends StatelessWidget {
   final UserBarcodeController controller = Get.put(UserBarcodeController());
+  final BookingListController bookingController = Get.put(BookingListController());
 
-  final BookingListController bookingController =
-  Get.put(BookingListController());
+  final int bookingIndex = Get.arguments as int;
 
-  UserBarcodeScreen({super.key});
+  UserBarcodeScreen({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +324,6 @@ class UserBarcodeScreen extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            // Get.offAll(UserBottomNav());
             Get.back();
           },
           icon: const Icon(Icons.close),
@@ -59,8 +352,8 @@ class UserBarcodeScreen extends StatelessWidget {
                   ),
                   const SpaceWidget(spaceHeight: 8),
                   const TextWidget(
-                    text: 'You have successfully reserved your Service!'
-                        'Please scan the barcode to proceed with your request'
+                    text: 'You have successfully reserved your Service! '
+                        'Please scan the barcode to proceed with your request '
                         'and access the service seamlessly.',
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
@@ -68,62 +361,37 @@ class UserBarcodeScreen extends StatelessWidget {
                     textAlignment: TextAlign.start,
                   ),
                   const SpaceWidget(spaceHeight: 24),
+
                   _buildDetailRow(
                     leftLabel: 'Name',
                     rightLabel: 'Offer',
-                    leftValue: bookingController.bookingList[0].businessName,
-                    rightValue: bookingController.bookingList[0].offerTitle,
+                    leftValue: bookingController.bookingList[bookingIndex].businessName,
+                    rightValue: bookingController.bookingList[bookingIndex].offerTitle,
                   ),
                   const SpaceWidget(spaceHeight: 14),
                   _buildDetailRow(
                     leftLabel: 'Service Name',
                     rightLabel: 'Type of Service',
-                    leftValue: bookingController.bookingList[0].categoryTitle,
-                    rightValue:bookingController.bookingList[0].subCategories.toString(),
+                    leftValue: bookingController.bookingList[bookingIndex].categoryTitle,
+                    rightValue: bookingController.bookingList[bookingIndex].subCategories.toString(),
                   ),
-
-
-
                   const SpaceWidget(spaceHeight: 14),
                   _buildDetailRow(
                     leftLabel:'Location' ,
                     rightLabel: 'Date',
-                    leftValue: bookingController.bookingList[0].address,
-                    rightValue: (DateTime.tryParse(bookingController.bookingList[0].createdAt.toString()) ??
-                        DateTime.now())
-                        .date,
+                    leftValue: bookingController.bookingList[bookingIndex].address,
+                    rightValue: (DateTime.tryParse(bookingController.bookingList[bookingIndex].createdAt.toString()) ??
+                        DateTime.now()).date,
                   ),
                   const SpaceWidget(spaceHeight: 14),
                   _buildDetailRow(
                     leftLabel: 'Time',
-                    leftValue: (DateTime.tryParse(bookingController.bookingList[0].createdAt.toString()) ??
-                        DateTime.now())
-                        .time,
+                    leftValue: (DateTime.tryParse(bookingController.bookingList[bookingIndex].createdAt.toString()) ??
+                        DateTime.now()).time,
                   ),
-
                   const SpaceWidget(spaceHeight: 36),
-                ///bar-code
-                /*  Obx(() => Center(
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: AppColors.white,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: BarcodeWidget(
-                            barcode: Barcode.code128(),
-                            data: controller.barcodeNumber.value,
-                            width: 200,
-                            height: 100,
-                            drawText: true,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.grey700,
-                            ),
-                          ),
-                        ),
-                      )),*/
+
+                  /// barcode (optional if needed later)
 
                   Center(
                     child: RichText(
@@ -138,7 +406,7 @@ class UserBarcodeScreen extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: bookingController.bookingList[0].bookingCode,
+                            text: bookingController.bookingList[bookingIndex].bookingCode,
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -149,8 +417,6 @@ class UserBarcodeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
-
 
                   const SpaceWidget(spaceHeight: 36),
                   const TextWidget(
@@ -166,71 +432,14 @@ class UserBarcodeScreen extends StatelessWidget {
           ],
         ),
       ),
-
-     /// cancel button
-     /* bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: ButtonWidget(
-          onPressed: () {
-            showCustomPopup(
-              context,
-              [
-                const SpaceWidget(spaceHeight: 34),
-                const TextWidget(
-                  text: AppStrings.areYouSure,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  fontColor: AppColors.grey700,
-                  textAlignment: TextAlign.center,
-                ),
-                const SpaceWidget(spaceHeight: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ButtonWidget(
-                      label: AppStrings.no,
-                      onPressed: () => Navigator.pop(context),
-                      buttonHeight: 36,
-                      buttonWidth: 71,
-                      backgroundColor: AppColors.white,
-                      borderColor: AppColors.red,
-                      textColor: AppColors.red,
-                      fontSize: 12,
-                    ),
-                    const SpaceWidget(spaceWidth: 24),
-                    ButtonWidget(
-                      label: AppStrings.yes,
-                      onPressed: () => Navigator.pop(context),
-                      buttonHeight: 36,
-                      buttonWidth: 71,
-                      backgroundColor: AppColors.red,
-                      textColor: AppColors.white,
-                      fontSize: 12,
-                    ),
-                  ],
-                ),
-                const SpaceWidget(spaceHeight: 24),
-              ],
-            );
-          },
-          backgroundColor: AppColors.red.withAlpha(70),
-          label: AppStrings.cancelBooking,
-          buttonHeight: 52,
-          buttonWidth: double.infinity,
-          fontSize: 16,
-          textColor: AppColors.red,
-          fontWeight: FontWeight.w500,
-        ),
-      ),*/
-
     );
   }
 
   Widget _buildDetailRow({
-     String? leftLabel,
-     String? rightLabel,
-     String? leftValue,
-     String? rightValue,
+    String? leftLabel,
+    String? rightLabel,
+    String? leftValue,
+    String? rightValue,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -304,3 +513,4 @@ class UserBarcodeScreen extends StatelessWidget {
     );
   }
 }
+

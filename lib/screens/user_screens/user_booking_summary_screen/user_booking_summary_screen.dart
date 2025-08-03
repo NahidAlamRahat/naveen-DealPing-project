@@ -60,21 +60,21 @@ class UserBookingSummaryScreen extends StatelessWidget {
               const SpaceWidget(spaceHeight: 12),
               _buildInfoRow('Bar Type', controller.barType.value),
 
-              const Divider(height: 30, color: AppColors.grey300),
+              // const Divider(height: 30, color: AppColors.grey300),
               const SpaceWidget(spaceHeight: 6),
 
-              // Date Selection
-              _buildDateSelection(),
+              /// Date Selection
+              // _buildDateSelection(),
 
               const SpaceWidget(spaceHeight: 20),
 
-              // Time Selection
-              _buildTimeSelection(),
+              /// Time Selection
+              // _buildTimeSelection(),
 
               const SpaceWidget(spaceHeight: 12),
 
-              // People Counter
-              _buildPeopleCounter(),
+              /// People Counter
+              // _buildPeopleCounter(),
             ],
           ),
         ),
@@ -83,7 +83,7 @@ class UserBookingSummaryScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: ButtonWidget(
           onPressed: () {
-            controller.confirmBooking();
+            controller.confirmBooking(index: );
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Booking Confirmed!'),
@@ -123,7 +123,7 @@ class UserBookingSummaryScreen extends StatelessWidget {
     );
   }
 
-  // Date Selection Widget
+ /* // Date Selection Widget
   Widget _buildDateSelection() {
     return Obx(() => Column(
           children: [
@@ -346,5 +346,8 @@ class UserBookingSummaryScreen extends StatelessWidget {
             ),
           ],
         ));
-  }
+  }*/
+
+
+
 }

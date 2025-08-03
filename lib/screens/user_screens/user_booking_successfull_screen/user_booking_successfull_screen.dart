@@ -10,12 +10,18 @@ import '../../../routes/app_routes.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
+import '../user_bookings_screen/controller/booking_list_api_caller.dart';
 
-class UserBookingSuccessfullScreen extends StatelessWidget {
-  const UserBookingSuccessfullScreen({super.key});
+class UserBookingSuccessFullScreen extends StatelessWidget {
+
+  final int index = Get.arguments as int;
+
+   UserBookingSuccessFullScreen({super.key, });
 
   @override
   Widget build(BuildContext context) {
+    final BookingListController bookingController = Get.put(BookingListController());
+
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: const AppbarWidget(
@@ -28,32 +34,32 @@ class UserBookingSuccessfullScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const SpaceWidget(spaceHeight: 0),
-            const Column(
+            Column(
               children: [
-                ImageWidget(
+                const ImageWidget(
                   imagePath: AppImagePath.bookingSuccessfulImage,
                   height: 150,
                   width: 150,
                 ),
-                SpaceWidget(spaceHeight: 20),
-                TextWidget(
+                const SpaceWidget(spaceHeight: 20),
+                const TextWidget(
                   text: AppStrings.bookingSuccessful,
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                   fontColor: AppColors.green500,
                 ),
-                SpaceWidget(spaceHeight: 8),
+                const SpaceWidget(spaceHeight: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextWidget(
+                    const TextWidget(
                       text: AppStrings.bookingId,
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
                       fontColor: AppColors.grey700,
                     ),
                     TextWidget(
-                      text: '#7554385',
+                      text: bookingController.bookingList[index].bookingCode,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       fontColor: AppColors.grey700,
@@ -66,7 +72,7 @@ class UserBookingSuccessfullScreen extends StatelessWidget {
               children: [
                 ButtonWidget(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.userBarcodeScreen);
+                    Get.toNamed(AppRoutes.userBarcodeScreen, arguments:index );
                   },
                   label: AppStrings.viewBarcode,
                   buttonWidth: double.infinity,

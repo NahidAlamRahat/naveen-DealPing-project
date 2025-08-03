@@ -99,6 +99,8 @@ class UserChatListScreen extends StatelessWidget {
                       onTap: () {
                         Get.toNamed(
                           AppRoutes.userChatListProposalScreen,
+                           arguments: request,
+
                         );
                       },
                       title: TextWidget(
