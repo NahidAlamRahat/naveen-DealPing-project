@@ -3,6 +3,7 @@ import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/models/notification_model.dart';
 import 'package:deal_ping/screens/user_screens/user_bottom_nav/controller/user_bottom_nav_controller.dart';
 import 'package:deal_ping/utils/app_size.dart';
+import 'package:deal_ping/utils/extension.dart';
 import 'package:deal_ping/widgets/appbar_widget/appbar_widget.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:deal_ping/widgets/image_widget/image_widget.dart';
@@ -59,7 +60,7 @@ class UserNotificationScreen extends StatelessWidget {
             // ),
             body: Obx(() {
               if (controller.isLoading.value) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               }
               return SingleChildScrollView(
                 controller: controller.scrollController,
@@ -152,8 +153,11 @@ class NotificationItem extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
                 const SpaceWidget(spaceHeight: 4),
+
                 TextWidget(
-                  text: notification.createdAt,
+                  text: (DateTime.tryParse(notification.createdAt.toString()) ??
+                      DateTime.now())
+                      .date ,
                   fontColor: AppColors.grey200,
                   fontSize: 12,
                   fontWeight: FontWeight.w400,

@@ -114,7 +114,7 @@ class BookingsList extends StatelessWidget {
               return BookingCard(
                 title: booking.businessName,
                 location: booking.createdAt,
-                distance: booking.bookingCode ?? '',
+                distance: booking.bookingCode ?? '', index: index,
               );
             },
           ),
@@ -154,6 +154,7 @@ class PastBookings extends StatelessWidget {
             itemBuilder: (context, index) {
               final booking = controller.bookingList[index];
               return BookingCard(
+                index: index,
                 title: booking.businessName,
                 location: booking.createdAt,
                 distance: booking.bookingCode ?? '',
@@ -171,13 +172,15 @@ class PastBookings extends StatelessWidget {
 class BookingCard extends StatelessWidget {
   final String title, location, distance;
   final bool isPastBooking;
+  final int index;
 
   const BookingCard({
     super.key,
+    required this.index,
     required this.title,
     required this.location,
     required this.distance,
-    this.isPastBooking = false, required
+    this.isPastBooking = false,
 
   });
 
@@ -231,13 +234,27 @@ class BookingCard extends StatelessWidget {
                   size: 24,
                   color: AppColors.green500,
                 )
-              : ButtonWidget(
-                  onPressed: () {},
+              : GetBuilder<BookingListController>(
+            builder: (controller) {
+              final booking = controller.bookingList[index];
+              final isLoading = controller.loadingBookingId == booking.id;
+
+              return Visibility(
+                visible: !isLoading,
+                replacement: const Center(child: CircularProgressIndicator()),
+                child: ButtonWidget(
+                  onPressed: () {
+                    controller.bookingSuccess(bookingId: booking.id);
+                  },
                   label: AppStrings.checkIn,
-                  buttonHeight: AppSize.height(value: 36) ,
-                  buttonWidth:AppSize.height(value: 90) ,
+                  buttonHeight: AppSize.height(value: 36),
+                  buttonWidth: AppSize.height(value: 90),
                   fontSize: 12,
                 ),
+              );
+            },
+          )
+
         ],
       ),
     );

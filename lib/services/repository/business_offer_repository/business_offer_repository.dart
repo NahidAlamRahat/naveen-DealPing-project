@@ -69,7 +69,7 @@ class BusinessOfferRepository {
     }
   }
 
-  Future<bool> deleteOffer(String offerId) async {
+  Future<bool> deleteOffer({required String offerId}) async {
     try {
       await ApiService.deleteApi(
         "${ApiUrls.deleteOffer}$offerId",

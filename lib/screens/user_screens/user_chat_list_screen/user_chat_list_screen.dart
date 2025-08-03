@@ -16,136 +16,111 @@ class UserChatListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<RequestListController>(
-      init: RequestListController()..onDataLoad(),
-      builder: (controller) {
-        return Scaffold(
-          backgroundColor: AppColors.white,
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SpaceWidget(spaceHeight: 20),
+    final RequestListController controller = Get.put(RequestListController());
 
-              // Search Field
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      body: Obx(() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SpaceWidget(spaceHeight: 20),
 
-             /* Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                child: TextFormField(
-                  controller: searchController,
-                  onChanged: (value) {
-                    controller.filterList(value);
-                  },
-                  style: const TextStyle(color: AppColors.grey700, fontSize: 14),
-                  decoration: InputDecoration(
-                    hintText: "Search Your Message",
-                    hintStyle: const TextStyle(color: AppColors.grey200),
-                    suffixIcon: const Icon(Icons.search, color: AppColors.grey300),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: AppColors.grey300),
-                    ),
-                  ),
+          // Search Field
+          SearchBarWidget(
+            controller: searchController,
+            onChanged: (value) {
+              controller.filterList(value);
+            },
+          ),
+
+          // Header Row
+          const Padding(
+            padding: EdgeInsets.only(left: 20, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextWidget(
+                  text: AppStrings.chatList,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  fontColor: AppColors.grey700,
+                  textAlignment: TextAlign.start,
                 ),
-              ),*/
+              ],
+            ),
+          ),
 
-              SearchBarWidget(
-                controller: searchController,
-                onChanged: (value) {
-                  controller.filterList(value);
-                },
-              ),
+          const SpaceWidget(spaceHeight: 6),
 
-        // Header Row
-              const Padding(
-                padding: EdgeInsets.only(left: 20, right: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextWidget(
-                      text: AppStrings.chatList,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      fontColor: AppColors.grey700,
-                      textAlignment: TextAlign.start,
+          // List Section
+          Expanded(
+            child: controller.isLoading.value
+                ? const Center(child: CircularProgressIndicator())
+                : controller.requestModelList.isEmpty
+                ? const Center(child: Text("No requests available."))
+                : RefreshIndicator(
+              onRefresh: () async {
+                await controller.refreshRequestList();
+              },
+              child: ListView.builder(
+                controller: controller.scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: controller.requestModelList.length +
+                    (controller.isPagination.value ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (index ==
+                      controller.requestModelList.length) {
+                    return const Padding(
+                      padding:
+                      EdgeInsets.symmetric(vertical: 16),
+                      child: Center(
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                              strokeWidth: 2),
+                        ),
+                      ),
+                    );
+                  }
+
+                  RequestModel request =
+                  controller.requestModelList[index];
+                  return Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 6),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                          color: AppColors.grey50, width: 1),
                     ),
-                  ],
-                ),
-              ),
-
-              const SpaceWidget(spaceHeight: 6),
-
-              // List Section
-              Expanded(
-                child: controller.isLoading.value
-                    ? const Center(child: CircularProgressIndicator())  // full screen spinner only on first load
-                    : controller.requestModelList.isEmpty
-                    ? const Center(child: Text("No requests available."))
-                    : RefreshIndicator(
-                  onRefresh: () async {
-                    await controller.refreshRequestList();
-                  },
-                  child: Obx(() {
-                    return ListView.builder(
-                      controller: controller.scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: controller.requestModelList.length + (controller.isPagination.value ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index == controller.requestModelList.length) {
-                          // Loader shown during pagination
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: Center(
-                              child: SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator(strokeWidth: 2),
-                              ),
-                            ),
-                          );
-                        }
-
-                        RequestModel request = controller.requestModelList[index];
-                        return Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: AppColors.grey50, width: 1),
-                          ),
-                          child: ListTile(
-                            onTap: () {
-                              int.tryParse(request.id);
-                              appLog('😢😢😢😢====>>>>>${request.id}');
-                              Get.toNamed(
-                                AppRoutes.userChatListProposalScreen,
-                                // arguments: request,
-                              );
-                            },
-                            title: TextWidget(
-                              text: request.message,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              fontColor: AppColors.grey300,
-                              textAlignment: TextAlign.start,
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16,
-                              color: Colors.green,
-                            ),
-                          ),
+                    child: ListTile(
+                      onTap: () {
+                        Get.toNamed(
+                          AppRoutes.userChatListProposalScreen,
                         );
                       },
-                    );
-                  }),
-
-                ),
+                      title: TextWidget(
+                        text: request.message,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        fontColor: AppColors.grey300,
+                        textAlignment: TextAlign.start,
+                      ),
+                      trailing: const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16,
+                        color: Colors.green,
+                      ),
+                    ),
+                  );
+                },
               ),
-
-            ],
+            ),
           ),
-        );
-      },
+        ],
+      )),
     );
   }
 }

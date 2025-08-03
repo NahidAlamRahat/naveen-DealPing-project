@@ -14,7 +14,7 @@ class BusinessPresetScreenController extends GetxController {
   // final RxInt discount = 0.obs;
   final RxBool isLoading = false.obs;
 
-  final RxList<AllOffers> getAllOffers = <AllOffers>[].obs;
+  final RxList<AllOffers> AllOffersList = <AllOffers>[].obs;
   final RxBool isLoadingOffers = false.obs;
 
   final Rx<AllOffers?> selectedOffer = Rx<AllOffers?>(null);
@@ -53,8 +53,8 @@ class BusinessPresetScreenController extends GetxController {
       );
 
       if (success) {
-        titleController.clear();
-        descriptionController.clear();
+        // titleController.clear();
+        // descriptionController.clear();
         // this.discount.value = 0;
         await fetchAllOffers();
       }
@@ -71,7 +71,7 @@ class BusinessPresetScreenController extends GetxController {
       List<AllOffers>? offersList =
           await _businessOfferRepository.getAllOffers();
       if (offersList != null) {
-        getAllOffers.assignAll(offersList);
+        AllOffersList.assignAll(offersList);
       }
     } catch (e) {
       AppSnackBar.error("An unexpected error occurred while fetching offers.");
@@ -128,10 +128,10 @@ class BusinessPresetScreenController extends GetxController {
     }
   }
 
-  Future<void> deleteOffer(String offerId) async {
+  Future<void> deleteOffer({required String offerId}) async {
     isLoading.value = true;
     try {
-      bool success = await _businessOfferRepository.deleteOffer(offerId);
+      bool success = await _businessOfferRepository.deleteOffer(offerId: offerId);
       if (success) {
         await fetchAllOffers();
       }
@@ -148,18 +148,18 @@ class BusinessPresetScreenController extends GetxController {
       bool success = await _businessOfferRepository.setDefaultOffer(offerId, isDefault);
       if (success) {
         // Step 1: Set all offers to default = false
-        for (int i = 0; i < getAllOffers.length; i++) {
-          getAllOffers[i] = getAllOffers[i].copyWith(datumDefault: false);
+        for (int i = 0; i < AllOffersList.length; i++) {
+          AllOffersList[i] = AllOffersList[i].copyWith(datumDefault: false);
         }
 
         // Step 2: Set selected offer to default = true
-        AllOffers selected = getAllOffers[index].copyWith(datumDefault: true);
+        AllOffers selected = AllOffersList[index].copyWith(datumDefault: true);
 
         // Step 3: Remove it from current position
-        getAllOffers.removeAt(index);
+        AllOffersList.removeAt(index);
 
         // Step 4: Insert at top
-        getAllOffers.insert(0, selected);
+        AllOffersList.insert(0, selected);
 
         update();
         AppSnackBar.success("Offer set as default.");

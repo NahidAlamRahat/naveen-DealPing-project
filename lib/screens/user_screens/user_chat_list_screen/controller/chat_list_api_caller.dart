@@ -98,49 +98,62 @@ class RequestListController extends GetxController {
 
   Future<void> onDataLoad() async {
     try {
-      if (isLast) {
-        isLoading.value = false;
-        isPagination.value = false;
-        return;
-      }
+      if (isLast) return;
 
       var responses = await commonRepository.getRequestList(currentPage);
+
+      // যদি response-এর ভিতরে meta থেকে totalPages পাওয়া যায়:
+      // if (meta.totalPages != null && currentPage > meta.totalPages) {
+      //   isLast = true;
+      //   return;
+      // }
+
       if (responses.isEmpty) {
         isLast = true;
       } else {
-        _originalRequestList.addAll(responses); // Add to original
-        requestModelList.addAll(responses);     // Add to observable list
+        _originalRequestList.addAll(responses);
+        requestModelList.addAll(responses);
+        currentPage++;
       }
-      currentPage++;
+
     } catch (e) {
       errorLog(e);
+    } finally {
+      isLoading.value = false;
+      isPagination.value = false;
     }
-    isLoading.value = false;
-    isPagination.value = false;
   }
 
+
+
   void filterList(String query) {
+    print('Query: $query');
     if (query.isEmpty) {
-      requestModelList.value = _originalRequestList; // reset
+      print('❤️❤️Resetting full list');
+      requestModelList.value = _originalRequestList;
     } else {
       final filtered = _originalRequestList.where((request) {
-        return request.message.toLowerCase().contains(query.toLowerCase());
+        print('Checking: ${request.message}');
+        return (request.message ?? '')
+            .toLowerCase()
+            .contains(query.toLowerCase());
       }).toList();
+      print('Filtered count: ${filtered.length}');
       requestModelList.value = filtered;
     }
   }
+
 
 
   void paginationData(){
     try{
       scrollController.addListener(() {
         if(scrollController.hasClients){
-          if(scrollController.position.pixels == scrollController.position.maxScrollExtent){
-            if(isPagination.value == false){
+          if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+            if (!isPagination.value && !isLast) {
               isPagination.value = true;
               onDataLoad();
             }
-
           }
         }
       },);
@@ -163,10 +176,18 @@ class RequestListController extends GetxController {
 
 
   Future<void> refreshRequestList() async {
-    _originalRequestList = [];
+    isLoading.value = true;
+
+    _originalRequestList.clear(); // মূল list clear
+    requestModelList.clear();     // UI list clear
+    currentPage = 1;              // প্রথম পেজ থেকে শুরু
+    isLast = false;               // যেন পেজ লোড হতে পারে
+
     await onDataLoad();
-    update();
+
+    isLoading.value = false;
   }
+
 
 
 

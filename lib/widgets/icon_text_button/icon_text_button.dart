@@ -40,9 +40,11 @@ class IconTextButton extends StatelessWidget {
           Text(
             text,
             style: TextStyle(
+
               color: textColor,
               fontWeight: textWeight,
               fontSize: ResponsiveUtils.width(fontSize),
+              overflow: TextOverflow.ellipsis
             ),
           ),
           const SizedBox(width: 5),

@@ -39,7 +39,7 @@ class CustomPopupWidget extends StatelessWidget {
 void showCustomPopup(BuildContext context, List<Widget> children) {
   showDialog(
     context: context,
-    barrierDismissible: false,
+    barrierDismissible: true,
     builder: (BuildContext context) {
       return CustomPopupWidget(children: children);
     },

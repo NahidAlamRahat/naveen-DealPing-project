@@ -455,11 +455,31 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                 ),
               ),
               const SizedBox(width: 5),
-              const Icon(
-                Icons.close,
-                size: 16,
-                color: Colors.black,
+              InkWell(
+
+                onTap: () {
+                  Get.defaultDialog(
+                    title: "Confirm Delete!",
+                    middleText: "Are you sure you want to delete this offer?",
+                    textCancel: "Cancel",
+                    textConfirm: "Delete",
+                    confirmTextColor: Colors.white,
+                    onConfirm: () {
+                      offerController.deleteOffer(
+                        offerId: offerController.AllOffersList[index].id,
+                      );
+                      Get.back();
+                    },
+                  );
+                },
+
+                child: const Icon(
+                  Icons.close,
+                  size: 16,
+                  color: Colors.black,
+                ),
               ),
+
             ],
           ),
         ),
@@ -473,9 +493,9 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
       height: 30,
       child: Obx(() => ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: offerController.getAllOffers.length,
+        itemCount: offerController.AllOffersList.length,
         itemBuilder: (context, index) {
-          final offer = offerController.getAllOffers[index];
+          final offer = offerController.AllOffersList[index];
           return _buildOfferButton(
             offerTitle: offer.title,
             offerDescription: offer.description,
@@ -485,6 +505,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
       )),
     );
   }
+
 
 }
 

@@ -235,7 +235,7 @@ class BusinessPresetScreenState extends State<BusinessPresetScreen> {
                   if (controller.isLoadingOffers.value) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  if (controller.getAllOffers.isEmpty) {
+                  if (controller.AllOffersList.isEmpty) {
                     return const Center(
                       child: TextWidget(
                         text: "No offers available.",
@@ -247,8 +247,8 @@ class BusinessPresetScreenState extends State<BusinessPresetScreen> {
 
                   return Column(
                     children: [
-                      ...List.generate(controller.getAllOffers.length, (index) {
-                        final offer = controller.getAllOffers[index];
+                      ...List.generate(controller.AllOffersList.length, (index) {
+                        final offer = controller.AllOffersList[index];
                         return OfferItem(
                           offerId: offer.id ,
                           itemIndex: index,
@@ -609,7 +609,7 @@ class _OfferItemState extends State<OfferItem> {
                       const SpaceWidget(spaceWidth: 4),
                       IconButtonWidget(
                         onTap: () {
-                          controller.deleteOffer(widget.offerId);
+                          controller.deleteOffer( offerId: widget.offerId);
                         },
                         icon: AppIconsPath.deleteIcon,
                         color: AppColors.grey300,
@@ -655,9 +655,9 @@ class _OfferItemState extends State<OfferItem> {
                       Transform.scale(
                         scale: 0.8,
                         child: Switch(
-                            value: controller.getAllOffers[widget.itemIndex].datumDefault,
+                            value: controller.AllOffersList[widget.itemIndex].datumDefault,
                             onChanged: (value) {
-                              if (!controller.getAllOffers[widget.itemIndex].datumDefault) {
+                              if (!controller.AllOffersList[widget.itemIndex].datumDefault) {
                                 widget.onToggleDefault(true, widget.itemIndex);
                               }
                               // else do nothing, user can't turn it OFF directly

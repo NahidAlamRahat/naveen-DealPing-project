@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../../../models/booking_list_model.dart';
 import '../../../../utils/app_log/app_log.dart';
+import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
 
 enum BookingStatus{upcoming, completed}
@@ -26,6 +27,9 @@ class BookingListController extends GetxController {
   List<BookingModel> get bookingList => _bookingList;
   bool get isLoading => _isLoading;
   bool get isInitialLoading => _isInitialLoading;
+  String? _loadingBookingId;
+  String? get loadingBookingId => _loadingBookingId;
+
 
 
 
@@ -42,8 +46,11 @@ class BookingListController extends GetxController {
     if (!_isInitialLoading) _isLoading = true;
     update();
 
-    final response = await ApiService.getApi(ApiUrls.bookingListUrl(longitude:  90.4125, latitude:  23.8103, status: bookingStatus), queryParams: {
-      'count': _perPageDataCount,
+    final response = await ApiService.getApi(
+        ApiUrls.bookingListUrl(
+            longitude: 90.4125, latitude: 23.8103, status: bookingStatus),
+        queryParams: {
+          'count': _perPageDataCount,
       'page': _currentPage,
     });
 
@@ -75,6 +82,32 @@ class BookingListController extends GetxController {
     update();
     return isSuccess;
   }
+
+
+
+  Future<void> bookingSuccess({required String bookingId}) async {
+    _loadingBookingId = bookingId;
+    update();
+
+    try {
+      final response = await ApiService.patchApi(
+        ApiUrls.bookingSuccessUrl(bookingId: bookingId),
+      );
+
+      if (response.statusCode == 200) {
+        AppSnackBar.success(response.message);
+      }
+    } catch (e) {
+      AppSnackBar.error("Error completing booking: ${e.toString()}");
+    } finally {
+      _loadingBookingId = null;
+      update();
+    }
+  }
+
+
+
+
 
   Future<bool> refreshList() async {
     _currentPage = 0;

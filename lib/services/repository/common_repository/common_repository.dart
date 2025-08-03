@@ -35,8 +35,6 @@ class CommonRepository {
     }
   }
 
-
-
   Future readNotification() async {
     try {
       var response = await ApiService.getApi(ApiUrls.readUserNotificationsUrl);
@@ -48,9 +46,6 @@ class CommonRepository {
     }
     return false;
   }
-
-
-
 
 
   Future<StaticPageModel?> fetchTermsAndConditions() async {
@@ -96,8 +91,6 @@ class CommonRepository {
   }
 
 
-
-
   Future<List<NotificationModel>> getNotificationData(int page) async {
     List<NotificationModel> notificationDataList = <NotificationModel>[];
     try {
@@ -119,84 +112,6 @@ class CommonRepository {
     }
     return notificationDataList;
   }
-
-
-
-
-
-
- /* class RequestListController extends GetxController {
-  bool _isLoading = false;
-  String? _errorMessage;
-
-  List<Request> _originalRequestList = [];
-  List<Request> _filteredRequestList = [];
-
-  bool get isLoading => _isLoading;
-  String? get errorMessage => _errorMessage;
-  List<Request> get requestList => _filteredRequestList;
-
-  Future<bool> fetchRequestList() async {
-  _isLoading = true;
-  update();
-
-  final response = await ApiService.getApi(
-  ApiUrls.chatListUrl,
-  header: {
-  'Authorization': 'Bearer ${LocalStorage.token}',
-  },
-  );
-
-  bool isSuccess = false;
-
-  if (response.statusCode == 200) {
-  try {
-  final List dataList = response.body['data']['data'];
-  _originalRequestList =
-  dataList.map((item) => Request.fromJson(item)).toList();
-  _filteredRequestList = _originalRequestList;
-  _errorMessage = null;
-  isSuccess = true;
-
-  if (_originalRequestList.isNotEmpty) {
-  Get.find<ChatController>().setId(_originalRequestList[0].id);
-  }
-  } catch (e) {
-  _errorMessage = "Data parsing error";
-  }
-  } else {
-  _errorMessage = response.message;
-  }
-
-  _isLoading = false;
-  update();
-  return isSuccess;
-  }
-
-  void filterList(String query) {
-  if (query.isEmpty) {
-  _filteredRequestList = _originalRequestList;
-  } else {
-  _filteredRequestList = _originalRequestList.where((request) {
-  return request.message.toLowerCase().contains(query.toLowerCase());
-  }).toList();
-  }
-  update();
-  }
-
-  Future<void> refreshRequestList() async {
-  _originalRequestList = [];
-  await fetchRequestList();
-  update();
-  }
-  }
-
-
-*/
-
-
-
-
 
 
   Future<List<RequestModel>> getRequestList(int page) async {
