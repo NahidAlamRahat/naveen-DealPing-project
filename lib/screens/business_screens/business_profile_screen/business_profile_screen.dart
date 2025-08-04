@@ -55,15 +55,17 @@ class BusinessProfileScreen extends StatelessWidget {
 
                   // Profile Section
                 Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: AppImage(
-                      height: AppSize.height(value: 120),
-                      width: AppSize.width(value: 120),
-                      url: controller.profile.value?.profile,
-                      fit: BoxFit.cover,
+                  child: Obx(() => Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: AppImage(
+                        height: AppSize.height(value: 120),
+                        width: AppSize.width(value: 120),
+                        url: '${controller.profile.value?.profile}?t=${DateTime.now().millisecondsSinceEpoch}',
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
+                  )),
                 ),
                   const SpaceWidget(spaceHeight: 16),
 

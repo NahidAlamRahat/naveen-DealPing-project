@@ -311,7 +311,6 @@ class UserBarcodeScreen extends StatelessWidget {
   final UserBarcodeController controller = Get.put(UserBarcodeController());
   final BookingListController bookingController = Get.put(BookingListController());
 
-  final int bookingIndex = Get.arguments as int;
 
   UserBarcodeScreen({super.key,});
 
@@ -365,28 +364,28 @@ class UserBarcodeScreen extends StatelessWidget {
                   _buildDetailRow(
                     leftLabel: 'Name',
                     rightLabel: 'Offer',
-                    leftValue: bookingController.bookingList[bookingIndex].businessName,
-                    rightValue: bookingController.bookingList[bookingIndex].offerTitle,
+                    leftValue: bookingController.bookingList[0].businessName,
+                    rightValue: bookingController.bookingList[0].offerTitle,
                   ),
                   const SpaceWidget(spaceHeight: 14),
                   _buildDetailRow(
                     leftLabel: 'Service Name',
                     rightLabel: 'Type of Service',
-                    leftValue: bookingController.bookingList[bookingIndex].categoryTitle,
-                    rightValue: bookingController.bookingList[bookingIndex].subCategories.toString(),
+                    leftValue: bookingController.bookingList[0].categoryTitle,
+                    rightValue: bookingController.bookingList[0].subCategories.toString(),
                   ),
                   const SpaceWidget(spaceHeight: 14),
                   _buildDetailRow(
                     leftLabel:'Location' ,
                     rightLabel: 'Date',
-                    leftValue: bookingController.bookingList[bookingIndex].address,
-                    rightValue: (DateTime.tryParse(bookingController.bookingList[bookingIndex].createdAt.toString()) ??
+                    leftValue: bookingController.bookingList[0].address,
+                    rightValue: (DateTime.tryParse(bookingController.bookingList[0].createdAt.toString()) ??
                         DateTime.now()).date,
                   ),
                   const SpaceWidget(spaceHeight: 14),
                   _buildDetailRow(
                     leftLabel: 'Time',
-                    leftValue: (DateTime.tryParse(bookingController.bookingList[bookingIndex].createdAt.toString()) ??
+                    leftValue: (DateTime.tryParse(bookingController.bookingList[0].createdAt.toString()) ??
                         DateTime.now()).time,
                   ),
                   const SpaceWidget(spaceHeight: 36),
@@ -406,7 +405,7 @@ class UserBarcodeScreen extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: bookingController.bookingList[bookingIndex].bookingCode,
+                            text: bookingController.bookingList[0].bookingCode,
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,

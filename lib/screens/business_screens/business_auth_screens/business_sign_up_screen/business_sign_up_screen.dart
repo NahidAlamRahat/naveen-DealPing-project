@@ -12,6 +12,8 @@ import '../../../../widgets/space_widget/space_widget.dart';
 import '../../../../widgets/text_button_widget/text_button_widget.dart';
 import '../../../../widgets/text_field_widget/text_field_widget.dart';
 import '../../../../widgets/text_widget/text_widgets.dart';
+import '../../../support_screen/controller/support_controller.dart';
+import '../../../support_screen/widget/dropdown_widget.dart';
 import 'controller/business_sign_up_controller.dart';
 
 class BusinessSignUpScreen extends StatelessWidget {
@@ -19,6 +21,8 @@ class BusinessSignUpScreen extends StatelessWidget {
 
   final BusinessSignUpController controller =
       Get.put(BusinessSignUpController());
+  final SupportController supportController =
+  Get.put(SupportController());
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +68,7 @@ class BusinessSignUpScreen extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
                 const SpaceWidget(spaceHeight: 4),
+
                 TextFieldWidget(
                   controller: controller.businessNameController,
                   hintText: 'Enter Business Name',
@@ -72,6 +77,76 @@ class BusinessSignUpScreen extends StatelessWidget {
                 ),
 
                 const SpaceWidget(spaceHeight: 12),
+
+
+                const TextWidget(
+                  text: "Category Name",
+                  fontColor: AppColors.green500,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+                const SpaceWidget(spaceHeight: 4),
+                Obx(() => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+                    // Render all form sections
+                    ...supportController.formSections.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final section = entry.value;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+
+                        key: ValueKey(index),
+                        children: [
+
+                          // Conditional Category/Subcategory fields
+                          Column(
+                            children: [
+                              // Category Dropdown
+                              CustomDropdown<String>(
+                                items: supportController.categories.map((e) => e.title ?? '').toList(),
+                                selectedValue: section.selectedCategory.value == "empty" ? null : section.selectedCategory.value,
+                                hint: "Select Category",
+                                onChanged: (value) => supportController.setFormSectionCategory(index, value ?? "empty"),
+                              ),
+
+
+
+                              // Subcategory selection
+                              if (section.selectedCategory.value != "empty")
+                                Wrap(
+                                  spacing: 8,
+                                  children: supportController.getSubcategoriesFor(section.selectedCategory.value)
+                                      .map((sub) => Obx(() => FilterChip(
+                                    label: Text(sub.title ?? ''),
+                                    selected: section.selectedSubCategories.contains(sub.id),
+                                    onSelected: (_) => supportController.toggleFormSectionSubCategory(index, sub.id ?? ''),
+                                  )))
+                                      .toList(),
+                                ),
+                            ],
+                          ),
+
+
+                          Obx(() => TextWidget(
+
+                            text: section .selectedType.value,
+                            fontColor: AppColors.grey500,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          )),
+
+                        ],
+                      );
+                    }).toList(),
+
+                  ],
+                )),
+
+
+                const SpaceWidget(spaceHeight: 4),
 
                 //EIIN Number
                 const TextWidget(
@@ -174,7 +249,7 @@ class BusinessSignUpScreen extends StatelessWidget {
                     const SpaceWidget(spaceWidth: 4),
                     TextButtonWidget(
                       onPressed: () {
-                        Get.offAllNamed(AppRoutes.userSignInScreen);
+                        Get.offAllNamed(AppRoutes.businessSignInScreen);
                       },
                       text: AppStrings.signInTitle,
                       textColor: AppColors.grey700,

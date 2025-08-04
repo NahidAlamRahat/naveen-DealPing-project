@@ -76,9 +76,11 @@ class UserChatController extends GetxController {
 
   }
 
+  Future<void> sendOffer ({
+    required String offerTitle,
+    required String offerDescription,
 
-
-  Future<void> sendOffer({required String offerTitle, required String offerDescription, })async {
+  }) async {
     try {
       isMessageSent = true;
       update();
@@ -86,7 +88,6 @@ class UserChatController extends GetxController {
           offerTitle: offerTitle,
           offerDescription:offerDescription,
           chatId: chatId);
-
     } catch (e) {
       errorLog("send Offer method ===>> $e");
     }

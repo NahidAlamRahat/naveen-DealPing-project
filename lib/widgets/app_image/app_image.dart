@@ -94,8 +94,16 @@ class AppImage extends StatelessWidget {
       width: width,
       height: height,
       color: color,
+      child: Icon(
+        Icons.image_not_supported,
+        color: iconColor ?? Colors.white,
+        size: width != null && height != null
+            ? (width! < height! ? width! * 0.5 : height! * 0.5)
+            : 24.0,
+      ),
     );
   }
+
 }
 
 class NetworkImageWithRetry extends StatefulWidget {

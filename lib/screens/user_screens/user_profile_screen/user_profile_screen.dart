@@ -26,12 +26,13 @@ class UserProfileScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Obx(() {
         final profileData = controller.profile.value;
-        String fullName = '${profileData?.name ?? ""} ${profileData?.lastName ?? ""}';
+        String fullName = '${profileData?.name ?? "Loading"} ${profileData?.lastName ?? ""}';
 
         return RefreshIndicator(
           onRefresh: () async {
             if (!controller.isLoading.value) {
               await controller.fetchUserProfile();
+
             }
           },
           child: SingleChildScrollView(
@@ -67,7 +68,7 @@ class UserProfileScreen extends StatelessWidget {
                   // Name and Username
                   Center(
                     child: TextWidget(
-                      text: fullName,
+                      text: fullName ,
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
                       fontColor: AppColors.green500,
@@ -75,7 +76,7 @@ class UserProfileScreen extends StatelessWidget {
                   ),
                   Center(
                     child: TextWidget(
-                      text: profileData?.email ?? "",
+                      text: profileData?.email ?? "Loading",
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       fontColor: AppColors.grey700,

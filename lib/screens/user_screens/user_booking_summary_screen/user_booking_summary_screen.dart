@@ -39,14 +39,14 @@ class UserBookingSummaryScreen extends StatelessWidget {
             children: [
               // Bar Info Card\
 
-              const BookingCardWidget(
-
-                imagePath: AppImagePath.bookingsImage,
-                title: 'Mirchi Dance Bar3',
-                location: 'Dhanmondi, Dhaka',
-                distance: '2.3 miles',
-                starCount: 5,
-              ),
+              // const BookingCardWidget(
+              //
+              //   imagePath: AppImagePath.bookingsImage,
+              //   title: 'Mirchi Dance Ba',
+              //   location: 'Dhanmondi, Dhaka',
+              //   distance: '2.3 miles',
+              //   starCount: 5,
+              // ),
               const SpaceWidget(spaceHeight: 16),
 
               // User Info
@@ -83,7 +83,7 @@ class UserBookingSummaryScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: ButtonWidget(
           onPressed: () {
-            controller.confirmBooking(index: );
+            controller.confirmBooking( );
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Booking Confirmed!'),

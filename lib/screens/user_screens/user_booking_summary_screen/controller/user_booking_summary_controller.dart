@@ -4,8 +4,10 @@ import 'package:intl/intl.dart';
 
 import '../../../../routes/app_routes.dart';
 import '../../../../utils/app_log/app_log.dart';
+import '../../user_profile_screen/controller/user_profile_controller.dart';
 
 class UserBookingSummaryController extends GetxController {
+
   // User Details
   final RxString name = "John Doe".obs;
   final RxString email = "johndoe67@gmail.com".obs;
@@ -69,10 +71,10 @@ class UserBookingSummaryController extends GetxController {
   }
 
   // Confirm Booking
-  void confirmBooking({required index}) {
+  void confirmBooking() {
     // Here you would typically add booking logic
     // For now, we'll just print the booking details
-    Get.toNamed(AppRoutes.userBookingSuccessfullScreen, arguments:index );
+    Get.toNamed(AppRoutes.userBookingSuccessfullScreen,);
     appLog('Booking Confirmed:');
     appLog('Date: ${DateFormat('dd MMM yyyy').format(selectedDate.value)}');
     appLog('Time: ${selectedTime.value.format(Get.context!)}');

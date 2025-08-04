@@ -14,7 +14,6 @@ import '../user_bookings_screen/controller/booking_list_api_caller.dart';
 
 class UserBookingSuccessFullScreen extends StatelessWidget {
 
-  final int index = Get.arguments as int;
 
    UserBookingSuccessFullScreen({super.key, });
 
@@ -59,7 +58,7 @@ class UserBookingSuccessFullScreen extends StatelessWidget {
                       fontColor: AppColors.grey700,
                     ),
                     TextWidget(
-                      text: bookingController.bookingList[index].bookingCode,
+                      text: bookingController.bookingList[0].bookingCode,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       fontColor: AppColors.grey700,
@@ -72,7 +71,7 @@ class UserBookingSuccessFullScreen extends StatelessWidget {
               children: [
                 ButtonWidget(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.userBarcodeScreen, arguments:index );
+                    Get.toNamed(AppRoutes.userBarcodeScreen,);
                   },
                   label: AppStrings.viewBarcode,
                   buttonWidth: double.infinity,

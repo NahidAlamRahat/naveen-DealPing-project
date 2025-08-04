@@ -24,8 +24,10 @@ import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
 import '../../common_widget/chat_message_widget.dart';
+import '../../user_screens/user_booking_summary_screen/controller/user_booking_summary_controller.dart';
 import '../../user_screens/user_chat_screen/widget/image_view.dart';
 import '../../user_screens/user_chat_screen/widget/network_image_grid.dart';
+import '../../user_screens/user_profile_screen/controller/user_profile_controller.dart';
 import '../business_preset_screen/controller/business_present_screen_controller.dart';
 
 class BusinessChatScreen extends StatefulWidget {
@@ -45,6 +47,8 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
 
   final BusinessPresetScreenController offerController =
   Get.put(BusinessPresetScreenController());
+  final userProfile = Get.put(UserProfileController()).profile.value;
+
 
 
   @override
@@ -210,12 +214,15 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                               onPressed: () {
                                 // Validate the form before proceeding
                                 if (_formKey.currentState!.validate()) {
+
                                   controller.sendOffer(
                                     offerTitle: offerController.titleController.text,
-                                    offerDescription: offerController.descriptionController.text,
+                                        offerDescription: offerController.descriptionController.text,
                                   );
+
                                   Get.back();
                                 }
+
                               },
                               label: AppStrings.sendRequest,
                               buttonWidth: double.infinity,
