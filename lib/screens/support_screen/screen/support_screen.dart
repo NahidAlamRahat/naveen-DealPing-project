@@ -1,3 +1,4 @@
+import 'package:deal_ping/screens/support_screen/widget/support_history_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../constants/app_colors.dart';
@@ -58,8 +59,7 @@ class SupportScreen extends StatelessWidget {
                     child: TabBarView(
                       children: [
                         SupportRequestWidget(),
-                        SupportRequestWidget(),
-
+                        PastBookings()
                       ],
                     ),
                   ),

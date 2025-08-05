@@ -1,12 +1,16 @@
 
 import 'package:deal_ping/services/api/api_services.dart';
+import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import '../../../../constants/api_urls.dart';
 import '../../../../models/notification_model.dart';
+import '../../../../services/sockets/app_socket_all_operation.dart';
 import '../../../../utils/app_log/app_log.dart';
+import '../../../../utils/app_log/error_log.dart';
 
+/*
 class NotificationApiCallerController extends GetxController {
 
   final int _perPageDataCount = 10;
@@ -16,6 +20,7 @@ class NotificationApiCallerController extends GetxController {
   bool _isLoading = false;
   List<NotificationModel> notificationList = [];
   String? _errorMessage;
+  AppSocketAllOperation appSocketAllOperation = AppSocketAllOperation.instance;
 
 
 
@@ -78,9 +83,34 @@ class NotificationApiCallerController extends GetxController {
     return getNotificationList();
   }
 
+
+  void notificationSocketHandler(dynamic getNotification) {
+    try {
+
+      getNotification.insert(
+          0, NotificationModel.fromJson(getNotification));
+      // chatMessages.add(ChatMessageResponseModel.fromJson(message));
+      getNotification.refresh();
+      appLog('rahat');
+    } catch (e) {
+      errorLog("notificationSocketHandler $e");
+    }
+  }
+
+
   Future<void> appOnInit() async {
     try {
       await getNotificationList();
+
+      appSocketAllOperation.readEvent(
+          event: "notification::${LocalStorage.userId}",
+          handler: (data) {
+
+            notificationSocketHandler(data);
+
+
+          });
+
     } catch (e) {
       debugPrint('error from ${e.toString()}');
     }
@@ -89,6 +119,7 @@ class NotificationApiCallerController extends GetxController {
   @override
   void onInit() {
     appOnInit();
+
     super.onInit();
   }
-}
+}*/

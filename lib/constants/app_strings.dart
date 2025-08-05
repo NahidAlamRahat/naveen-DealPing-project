@@ -16,6 +16,8 @@ class AppStrings {
   static const String signInTitle = "Sign In";
   static const String signInDescription = "Hello, Welcome back to our account!";
   static const String email = "Email";
+  static const String phone = "Mobile Number";
+
   static const String password = "Password";
   static const String forgetPassword = "Forget Password?";
   static const String orLogInWith = "Or Log in With";

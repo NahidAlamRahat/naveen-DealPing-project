@@ -5,20 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_icons_path.dart';
-import '../../constants/app_image_path.dart';
-import '../../constants/app_strings.dart';
-import '../../models/chat_message_responce_model.dart';
-import '../../routes/app_routes.dart';
-import '../../widgets/button_widget/button_widget.dart';
-import '../../widgets/icon_widget/icon_widget.dart';
-import '../../widgets/image_widget/image_widget.dart';
-import '../../widgets/space_widget/space_widget.dart';
-import '../../widgets/text_widget/text_widgets.dart';
-import '../user_screens/user_chat_screen/controller/user_chate_controller.dart';
-import '../user_screens/user_chat_screen/widget/image_view.dart';
-import '../user_screens/user_chat_screen/widget/network_image_grid.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_icons_path.dart';
+import '../../../constants/app_image_path.dart';
+import '../../../constants/app_strings.dart';
+import '../../../models/chat_message_responce_model.dart';
+import '../../../routes/app_routes.dart';
+import '../../../widgets/button_widget/button_widget.dart';
+import '../../../widgets/icon_widget/icon_widget.dart';
+import '../../../widgets/image_widget/image_widget.dart';
+import '../../../widgets/space_widget/space_widget.dart';
+import '../../../widgets/text_widget/text_widgets.dart';
+import '../../user_screens/user_chat_screen/controller/user_chate_controller.dart';
+import '../../user_screens/user_chat_screen/widget/image_view.dart';
+import '../../user_screens/user_chat_screen/widget/network_image_grid.dart';
 
 class ChatMessage extends StatelessWidget {
 

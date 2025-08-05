@@ -8,7 +8,6 @@ import '../../../../services/repository/common_repository/common_repository.dart
 import '../../../../services/sockets/app_socket_all_operation.dart';
 import '../../../../services/storage/storage_service.dart';
 import '../../../../utils/app_log/error_log.dart';
-import '../../../common_widget/chat_message_widget.dart';
 
 class UserChatController extends GetxController {
   AppSocketAllOperation appSocketAllOperation = AppSocketAllOperation.instance;

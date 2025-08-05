@@ -12,6 +12,7 @@ import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/image_widget/image_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
+import '../../user_screens/user_profile_screen/controller/user_profile_controller.dart';
 import 'controller/new_chat_list_api_caller.dart';
 
 class BusinessHomeScreen extends StatefulWidget {
@@ -23,6 +24,9 @@ class BusinessHomeScreen extends StatefulWidget {
 
 class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
   BusinessChatListApiController controller = Get.put(BusinessChatListApiController());
+  final userProfileController = Get.put(UserProfileController());
+
+
   List<Map<String, dynamic>> messages = List.generate(
       5,
       (index) => {
@@ -43,15 +47,15 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SpaceWidget(spaceHeight: 20),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: TextWidget(
-                text: "Hello, Cafe Rio!",
+             Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Obx(() => TextWidget(
+                text: "Hello, ${userProfileController.profile.value?.firstName}!",
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
                 fontColor: AppColors.grey700,
                 textAlignment: TextAlign.start,
-              ),
+              )),
             ),
             const SpaceWidget(spaceHeight: 4),
             const Padding(

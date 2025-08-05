@@ -20,11 +20,17 @@ class BusinessBottomNav extends StatelessWidget {
   final BusinessBottomNavController controller =
       Get.put(BusinessBottomNavController());
 
+
+
   @override
   Widget build(BuildContext context) {
+    // final UserNotificationController notificationController = Get.put(UserNotificationController());
+
     return GetBuilder(
         init: UserBottomNavController(),
-        builder: (context) {
+
+
+    builder: (context) {
         return Scaffold(
           backgroundColor: AppColors.white,
           appBar: AppBar(
@@ -44,15 +50,15 @@ class BusinessBottomNav extends StatelessWidget {
             actions: [
               GetBuilder<UserNotificationController>(
                   init: UserNotificationController(),
-                  builder: (notificationController) {
+                  builder: (controller) {
                     return IconButton(
                       tooltip: "Notifications",
                       onPressed: () {
                         Get.toNamed(AppRoutes.userNotificationScreen);
                       },
-                      icon:  Badge(
+                      icon: Obx(() =>  Badge(
                         isLabelVisible: true,
-                        label: Text(notificationController.unreadCount.toString()),
+                        label: Text(controller.unreadCount.toString()),
                         backgroundColor: AppColors.red,
                         child: const IconWidget(
                           icon: AppIconsPath.notificationIcon,
@@ -61,6 +67,7 @@ class BusinessBottomNav extends StatelessWidget {
                           color: AppColors.grey700,
                         ),
                       ),
+                      )
                     );
                   }
               ),

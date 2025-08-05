@@ -2,7 +2,7 @@ class Profile {
   Location? location;
   int? reportCount;
   String? sId;
-  String? name;
+  String? firstName;
   String? lastName;
   String? businessName;
   String? email;
@@ -29,7 +29,7 @@ class Profile {
     this.location,
     this.reportCount,
     this.sId,
-    this.name,
+    this.firstName,
     this.lastName,
     this.businessName,
     this.email,
@@ -58,7 +58,7 @@ class Profile {
       location: json['location'] != null ? Location.fromJson(json['location']) : null,
       reportCount: json['reportCount'] ?? 0,
       sId: json['_id'] ?? "",
-      name: json['name'] ?? "",
+      firstName: json['name'] ?? "",
       lastName: json['lastName'] ?? "",
       businessName: json['businessName'] ?? "",
       email: json['email'] ?? "",
@@ -92,7 +92,7 @@ class Profile {
     }
     data['reportCount'] = reportCount;
     data['_id'] = sId;
-    data['name'] = name;
+    data['name'] = firstName;
     data['lastName'] = lastName;
     data['businessName'] = businessName;
     data['email'] = email;

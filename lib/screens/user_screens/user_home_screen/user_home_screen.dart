@@ -48,7 +48,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 children: [
                   Obx(
                     () => Text(
-                      '${AppStrings.welcome} ${controller.profile.value?.name ?? ""} !',
+                      '${AppStrings.welcome} ${controller.profile.value?.firstName ?? ""} !',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,

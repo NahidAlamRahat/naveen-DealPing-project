@@ -1,32 +1,21 @@
 import 'dart:io';
-
 import 'package:deal_ping/constants/app_colors.dart';
-import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/screens/user_screens/user_chat_screen/controller/user_chate_controller.dart';
-import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:deal_ping/utils/extension.dart';
-import 'package:deal_ping/widgets/app_image/app_image.dart';
 import 'package:deal_ping/widgets/icon_text_button/icon_text_button.dart';
-import 'package:deal_ping/widgets/image_widget/image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
-import '../../../constants/app_icons_path.dart';
-import '../../../models/chat_message_responce_model.dart';
 import '../../../services/storage/storage_service.dart';
 import '../../../utils/app_size.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../../widgets/button_widget/button_widget.dart';
-import '../../../widgets/icon_widget/icon_widget.dart';
+
 import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
-import '../../common_widget/chat_message_widget.dart';
-import '../../user_screens/user_booking_summary_screen/controller/user_booking_summary_controller.dart';
-import '../../user_screens/user_chat_screen/widget/image_view.dart';
-import '../../user_screens/user_chat_screen/widget/network_image_grid.dart';
+import '../../common/common_widget/chat_message_widget.dart';
 import '../../user_screens/user_profile_screen/controller/user_profile_controller.dart';
 import '../business_preset_screen/controller/business_present_screen_controller.dart';
 

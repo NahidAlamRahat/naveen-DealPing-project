@@ -26,7 +26,7 @@ class UserProfileScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Obx(() {
         final profileData = controller.profile.value;
-        String fullName = '${profileData?.name ?? "Loading"} ${profileData?.lastName ?? ""}';
+        String fullName = '${profileData?.firstName ?? "Loading"} ${profileData?.lastName ?? ""}';
 
         return RefreshIndicator(
           onRefresh: () async {
@@ -89,7 +89,7 @@ class UserProfileScreen extends StatelessWidget {
                     child: ButtonWidget(
                       onPressed: () {
                         Get.to(() => const UserEditProfileScreen(), arguments: {
-                          'name': profileData?.name ?? "",
+                          'name': profileData?.firstName ?? "",
                           'lastName': profileData?.lastName,
                           'profileImage': profileData?.profile ?? "",
                         });

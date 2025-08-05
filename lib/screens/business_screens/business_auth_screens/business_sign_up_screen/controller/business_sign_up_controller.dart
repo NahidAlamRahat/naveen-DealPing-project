@@ -7,19 +7,29 @@ import '../../../../../services/repository/auth_repository/auth_repository.dart'
 import '../../../../../services/repository/auth_repository/sign_up_api_controller.dart';
 import '../../../../../utils/app_log/app_log.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
+import '../../../../common/common_controller/select_category_and_sub_category.dart';
 
 class BusinessSignUpController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController businessNameController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+
   final TextEditingController eiinNumberController = TextEditingController();
   final TextEditingController licenceNumberController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
   final SignUpApiController _signUpApiController =
       Get.put(SignUpApiController());
+
+  final SelectCategoryAndSubCategory selectCategoryController =
+  Get.put(SelectCategoryAndSubCategory());
+
 
   final RxBool isLoading = false.obs;
 
@@ -35,7 +45,32 @@ class BusinessSignUpController extends GetxController {
       return "Enter a valid name (letters and spaces only)";
     }
     return null;
-  } // Validate Name
+  }
+
+  // Validate user first Name
+  String? validateUserFirstName(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Enter Your First Name";
+    } else if (value.length < 3) {
+      return "Name should be at least 3 characters long";
+    } else if (!RegExp(r"^[a-zA-Z\s]+$").hasMatch(value)) {
+      return "Enter a valid name (letters and spaces only)";
+    }
+    return null;
+  }
+
+  // Validate user first Name
+  String? validateUserLastName(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Enter Your Last Name";
+    } else if (value.length < 3) {
+      return "Name should be at least 3 characters long";
+    } else if (!RegExp(r"^[a-zA-Z\s]+$").hasMatch(value)) {
+      return "Enter a valid name (letters and spaces only)";
+    }
+    return null;
+  }
+
 
   // Validate EIIN Number
   String? validateEiinNumber(String? value) {
@@ -69,6 +104,20 @@ class BusinessSignUpController extends GetxController {
     return null;
   }
 
+  // Validate Email
+  String? validateMobileNumber(String? value) {
+    bool emailValid =
+    RegExp(r'^\+?[0-9]{8,15}$')
+        .hasMatch(value ?? "");
+    if (value == null || value.isEmpty) {
+      return "Enter Email";
+    } else if (!emailValid) {
+      return "Enter a valid Email";
+    }
+
+    return null;
+  }
+
   // Validate Password
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
@@ -90,25 +139,51 @@ class BusinessSignUpController extends GetxController {
 
   // Sign Up Action
 
-
   Future<void> onTapBusinessSignUpButton() async {
     if (formKey.currentState!.validate()) {
-      BusinessSignUpModel businessSignUpModel = BusinessSignUpModel(
-          licenceNumber: licenceNumberController.text.trim(),
-          businessName: businessNameController.text.trim(),
-          eiinNumber: eiinNumberController.text.trim(),
-          email: emailController.text.trim(),
-          password: passwordController.text,
-          confirmPassword: confirmPasswordController.text,
-          role: 'business');
+      final selectedCategory = selectCategoryController.selectedCategory.value;
+      final selectedSubCategories = selectCategoryController.selectedSubCategories;
 
-      final bool isSuccess =
-          await _signUpApiController.userSignUp(businessSignUpModel);
+      if (selectedCategory == 'empty') {
+        AppSnackBar.message('Please select a category.');
+        return;
+      }
+
+      if (selectedSubCategories.isEmpty) {
+        AppSnackBar.message('Please select at least one subcategory.');
+        return;
+      }
+
+      final categoryId = selectCategoryController.getCategoryIdByTitle(selectedCategory);
+      appLog('selected category 😊😊😎==>>>>  $categoryId');
+      if (categoryId == null) {
+        AppSnackBar.message('Invalid category selected.');
+        return;
+      }
+
+      final subCategoryIds = selectedSubCategories;
+      appLog('selected subCategoryIds 😊😊😎==>>>>  $subCategoryIds');
+
+
+      BusinessSignUpModel businessSignUpModel = BusinessSignUpModel(
+        licenceNumber: licenceNumberController.text.trim(),
+        businessName: businessNameController.text.trim(),
+        eiinNumber: eiinNumberController.text.trim(),
+        email: emailController.text.trim(),
+        password: passwordController.text,
+        confirmPassword: confirmPasswordController.text,
+        role: 'business',
+        firstName: firstNameController.text.trim(),
+        lastName: lastNameController.text.trim(),
+        phone: phoneController.text.trim(),
+        category: categoryId,
+        subCategories: subCategoryIds,
+      );
+
+      final bool isSuccess = await _signUpApiController.userSignUp(businessSignUpModel);
       _signUpApiController.signUpInProgress == true;
 
       if (isSuccess) {
-        _signUpApiController.signUpInProgress == false;
-
         AppSnackBar.success(
             _signUpApiController.successfullyMessage ?? 'Successful!');
         appLog('success message => ${_signUpApiController.successfullyMessage}');
@@ -118,13 +193,13 @@ class BusinessSignUpController extends GetxController {
           arguments: {'email': emailController.text},
         );
       } else {
-        _signUpApiController.signUpInProgress == false;
-        // error message
         AppSnackBar.message('${_signUpApiController.errorMessage}');
         appLog('error message => ${_signUpApiController.errorMessage}');
       }
     }
   }
+
+
 
   @override
   void onClose() {

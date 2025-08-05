@@ -1,7 +1,7 @@
 class NotificationModel {
   final String id;
   final String businessName;
-  final bool isRead;
+   bool isRead;
   final String body;
   final String userProfileImage;
   final String createdAt;

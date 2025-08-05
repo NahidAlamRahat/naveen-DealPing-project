@@ -164,11 +164,6 @@ class SupportRequestWidget extends StatelessWidget {
                                   ),
 
 
-
-
-
-
-
                                 const SpaceWidget(spaceHeight: 40),
 
                                 Obx(() => TextWidget(

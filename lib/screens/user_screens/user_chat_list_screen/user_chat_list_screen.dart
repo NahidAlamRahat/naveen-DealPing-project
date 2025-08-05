@@ -5,10 +5,11 @@ import 'package:get/get.dart';
 import '../../../constants/app_strings.dart';
 import '../../../models/request_list_model.dart';
 import '../../../routes/app_routes.dart';
-import '../../../utils/app_log/app_log.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
-import '../../common_widget/search_bar_widget.dart';
+import '../../common/common_widget/search_bar_widget.dart';
 import 'controller/chat_list_api_caller.dart';
+
+
 class UserChatListScreen extends StatelessWidget {
   final searchController = TextEditingController();
 

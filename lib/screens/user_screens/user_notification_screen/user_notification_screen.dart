@@ -29,6 +29,7 @@ class UserNotificationScreen extends StatelessWidget {
               text: AppStrings.notification,
               backgroundColor: Colors.white,
               centerTitle: true,
+
               action: PopupMenuButton<int>(
                 constraints:
                     const BoxConstraints.expand(width: 150, height: 60),
@@ -45,6 +46,7 @@ class UserNotificationScreen extends StatelessWidget {
                 color: AppColors.white,
                 elevation: 2,
               ),
+
             ),
             //   body: LazyListView.builder(
             //     onLoad: controller.onAppInitialDataLoad(),
@@ -58,42 +60,58 @@ class UserNotificationScreen extends StatelessWidget {
             //     );
             //   },
             // ),
-            body: Obx(() {
-              if (controller.isLoading.value) {
-                return const CircularProgressIndicator();
-              }
-              return SingleChildScrollView(
-                controller: controller.scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Column(
+              body: Obx(() {
+                return Stack(
                   children: [
-                    ...List.generate(
-                      controller.notifications.length,
-                      (index) {
-                        var item = controller.notifications[index];
-                        return NotificationItem(
-                          notification: item,
-                          isNew: !item.isRead,
-                          networkImageUrl: item.userProfileImage,
-                        );
-                      },
+                    // Main content: list of notifications
+                    SingleChildScrollView(
+                      controller: controller.scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        children: [
+                          ...List.generate(
+                            controller.notificationsList.length,
+                                (index) {
+                              var item = controller.notificationsList[index];
+                              return NotificationItem(
+                                notification: item,
+                                isNew: !item.isRead,
+                                networkImageUrl: item.userProfileImage,
+                              );
+                            },
+                          ),
+                          if (controller.isPagination.value)
+                            Padding(
+                              padding: EdgeInsets.all(AppSize.width(value: 10)),
+                              child: Align(
+                                child: SizedBox(
+                                  width: AppSize.width(value: 20),
+                                  height: AppSize.width(value: 20),
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
-                    if (controller.isPagination.value)
-                      Padding(
-                        padding:
-                            EdgeInsetsGeometry.all(AppSize.width(value: 10)),
-                        child: Align(
-                          child: SizedBox(
-                            width: AppSize.width(value: 20),
-                            height: AppSize.width(value: 20),
-                            child: CircularProgressIndicator(),
+
+                    // Overlay loader (only visible while loading)
+                    if (controller.isLoading.value)
+                      const Positioned.fill(
+                        child: IgnorePointer(
+                          child: Center(
+                            child: SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(),
+                            ),
                           ),
                         ),
-                      )
+                      ),
                   ],
-                ),
-              );
-            }),
+                );
+              }),
+
           );
         });
   }
@@ -157,7 +175,7 @@ class NotificationItem extends StatelessWidget {
                 TextWidget(
                   text: (DateTime.tryParse(notification.createdAt.toString()) ??
                       DateTime.now())
-                      .date ,
+                      .time ,
                   fontColor: AppColors.grey200,
                   fontSize: 12,
                   fontWeight: FontWeight.w400,

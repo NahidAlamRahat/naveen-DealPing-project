@@ -2,15 +2,13 @@
 import 'dart:io';
 
 import 'package:deal_ping/services/storage/storage_service.dart';
-import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:deal_ping/utils/app_size.dart';
 import 'package:deal_ping/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
-import '../../business_screens/business_chat_screen/business_chat_screen.dart';
-import '../../common_widget/chat_message_widget.dart';
+import '../../common/common_widget/chat_message_widget.dart';
 import 'controller/user_chate_controller.dart';
 
 
