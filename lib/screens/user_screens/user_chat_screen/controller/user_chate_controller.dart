@@ -25,7 +25,7 @@ class UserChatController extends GetxController {
 
   String chatId = '';
 
-  RxList<ChatMessageResponseModel> chatMessages =
+  RxList<ChatMessageResponseModel> chatMessagesList =
       <ChatMessageResponseModel>[].obs;
 
   int currentPage = 1;
@@ -39,7 +39,7 @@ class UserChatController extends GetxController {
 
   void checkIfUserReplied() {
     try {
-      bool anyUserMessage = chatMessages.any(
+      bool anyUserMessage = chatMessagesList.any(
             (msg) => msg.sender?.id != LocalStorage.userId,
       );
       hasUserReplied.value = anyUserMessage;
@@ -61,8 +61,8 @@ class UserChatController extends GetxController {
       final data = await commonRepository.getChatMessage(page: currentPage, chatId: chatId);
 
       if (data.isNotEmpty) {
-        chatMessages.addAll(data);
-        chatMessages.refresh();
+        chatMessagesList.addAll(data);
+        chatMessagesList.refresh();
       }else {
         isLast = true;
       }
@@ -154,10 +154,10 @@ class UserChatController extends GetxController {
   void chatMessageSocketHandler(dynamic message) {
     try {
 
-      chatMessages.insert(
+      chatMessagesList.insert(
           0, ChatMessageResponseModel.fromJson(message));
       // chatMessages.add(ChatMessageResponseModel.fromJson(message));
-      chatMessages.refresh();
+      chatMessagesList.refresh();
       appLog('rahat');
     } catch (e) {
       errorLog("chatMessageSocketHandler $e");
@@ -190,7 +190,7 @@ class UserChatController extends GetxController {
         scrollController = ScrollController();
         messageController = TextEditingController();
 
-        chatMessages.clear();
+        chatMessagesList.clear();
         currentPage = 1;
         await fetchChatMessages();
 

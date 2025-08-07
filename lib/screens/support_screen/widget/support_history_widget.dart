@@ -53,8 +53,8 @@ class BookingsList extends StatelessWidget {
 */
 
 
-class PastBookings extends StatelessWidget {
-  const PastBookings({super.key});
+class BookingHistoryWidget extends StatelessWidget {
+  const BookingHistoryWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -124,47 +124,49 @@ class BookingCard extends StatelessWidget {
           width: 1,
         ),
       ),
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start, // Helps with long text too
         children: [
-          Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextWidget(
-                    text: title,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    fontColor: AppColors.grey700,
-                  ),
-                  const SpaceWidget(spaceHeight: 4),
-                  TextWidget(
-                    text: location,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w400,
-                    fontColor: AppColors.grey700,
-                  ),
-                  const SpaceWidget(spaceHeight: 2),
-                  TextWidget(
-                    text: distance,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    fontColor: AppColors.green500,
-                  ),
-                ],
-              ),
-            ],
+          // LEFT SIDE
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextWidget(
+                  text: 'past Category name > latest Category name',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  fontColor: AppColors.grey700,
+                ),
+                SpaceWidget(spaceHeight: 4),
+                TextWidget(
+                  text: '',
+                  fontSize: 10,
+                  fontWeight: FontWeight.w400,
+                  fontColor: AppColors.grey700,
+                ),
+                SpaceWidget(spaceHeight: 2),
+                TextWidget(
+                  text: '',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  fontColor: AppColors.green500,
+                ),
+              ],
+            ),
           ),
-          isPastBooking
-              ? const Icon(
-            Icons.check,
-            size: 24,
-            color: AppColors.green500,
-          )
-              :
-              const TextWidget(text: 'pending')
 
+          // RIGHT SIDE (status)
+          SizedBox(width: 8), // give some space before status
+          Center(
+            child: TextWidget(
+              text: 'pending',
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              fontColor: Colors.orange,
+            ),
+          )
         ],
       ),
     );

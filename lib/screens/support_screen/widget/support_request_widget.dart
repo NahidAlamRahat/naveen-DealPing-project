@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -123,8 +124,35 @@ class SupportRequestWidget extends StatelessWidget {
 
                                 const SpaceWidget(spaceHeight: 8),
 
-                                // Conditional Category/Subcategory fields
-                                if (section.selectedType.value.contains('Category'))
+
+
+                                if (section.selectedType.value == 'Change Sub Category Name')
+                                  Obx(() => CustomDropdown(
+                                    items: controller.profileSubCategoryList
+                                        .map((e) => e['title'] ?? '')
+                                        .toList(),
+                                    selectedValue: section.selectedSubCategories.isEmpty
+                                        ? null
+                                        : controller.profileSubCategoryList
+                                        .firstWhere(
+                                          (e) => e['id'] == section.selectedSubCategories.first,
+                                      orElse: () => {'title': ''},
+                                    )['title'],
+                                    hint: 'Select Subcategory',
+                                    onChanged: (value) {
+                                      // Find the corresponding ID from title
+                                      final matchedItem = controller.profileSubCategoryList.firstWhere(
+                                            (e) => e['title'] == value,
+                                        orElse: () => {'id': 'empty'},
+                                      );
+                                      controller.setFormSectionSubCategory(index, matchedItem['id']!);
+                                    },
+                                  )),
+
+
+
+
+                                if (section.selectedType.value == 'Changed Category Name')
                                   Column(
                                     children: [
                                       // Category Dropdown
@@ -134,8 +162,6 @@ class SupportRequestWidget extends StatelessWidget {
                                         hint: "Select Category",
                                         onChanged: (value) => controller.setFormSectionCategory(index, value ?? "empty"),
                                       ),
-
-
                                       const SpaceWidget(spaceHeight: 20),
 
                                       // Subcategory selection
@@ -152,6 +178,10 @@ class SupportRequestWidget extends StatelessWidget {
                                         ),
                                     ],
                                   ),
+
+
+
+
 
                                 if (['Other', 'Eiin Number', 'Business Name'].contains(section.selectedType.value))
                                   Padding(

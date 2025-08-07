@@ -117,6 +117,8 @@ class AppStrings {
   static const String editProfile = "Edit Profile";
   static const String saveAndChange = "Save & Change";
   static const String aboutUs = "About Us";
+  static const String viewCategory = "View Category";
+
   static const String termsCondition = "Terms and Conditions";
   static const String faq = "FAQ";
   static const String logout = "Log Out";

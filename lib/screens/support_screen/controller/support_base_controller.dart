@@ -30,6 +30,33 @@ class SupportBaseController extends GetxController{
     }
   }
 
+
+  RxList<Map<String, String>> profileSubCategoryList = <Map<String, String>>[].obs;
+
+
+  subCategoryShow() {
+    final args = Get.arguments;
+    if (args != null && args['subcategories'] != null) {
+      final List<dynamic> subCatMap = args['subcategories'];
+      profileSubCategoryList.value = subCatMap.map((e) {
+        final id = e['id']?.toString() ?? '';
+        final title = e['title']?.toString() ?? '';
+        return {
+          'id': id,
+          'title': title,
+        };
+      }).toList();
+    }
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    subCategoryShow();
+    super.onInit();
+  }
+
+
   // Validation for adding more sections
   bool get canAddMoreSections {
     final selectedTypes = formSections
@@ -60,6 +87,11 @@ class SupportBaseController extends GetxController{
     formSections[index].selectedSubCategories.clear();
   }
 
+  void setFormSectionSubCategory(int index, String value) {
+    formSections[index].selectedSubCategories.clear();
+    formSections[index].selectedSubCategories.add(value);
+  }
+
   void toggleFormSectionSubCategory(int index, String subCategoryId) {
     if (formSections[index].selectedSubCategories.contains(subCategoryId)) {
       formSections[index].selectedSubCategories.remove(subCategoryId);
@@ -78,6 +110,7 @@ class SupportBaseController extends GetxController{
 
 
   /// Support Request Submission Logic
+
   Future<void> onTapSubmitSupportRequests() async {
     try {
       // Validate all sections
@@ -96,19 +129,22 @@ class SupportBaseController extends GetxController{
         String? categoryId;
         List<String>? subCategoryList;
 
-        if (section.selectedCategory.value != "empty") {
+        // If support type is NOT "Change Sub Category Name", set categoryId normally
+        if (section.selectedType.value != "Change Sub Category Name" &&
+            section.selectedCategory.value != "empty") {
           categoryId = _getCategoryIdByTitle(section.selectedCategory.value);
           if (categoryId == null) {
             throw "Invalid Category ID: ${section.selectedCategory.value}";
           }
         }
 
+        // Always send subcategories if any selected
         subCategoryList = section.selectedSubCategories.isNotEmpty
             ? section.selectedSubCategories
             : null;
 
         SupportRequestModel model = SupportRequestModel(
-          category: categoryId,
+          category: categoryId,  // will be null if support type is "Change Sub Category Name"
           subcategories: subCategoryList,
           businessName: section.selectedType.value == 'Business Name'
               ? section.problemController.text.trim()
@@ -117,6 +153,14 @@ class SupportBaseController extends GetxController{
               ? section.problemController.text.trim()
               : null,
         );
+
+        // Debug prints to check what is sent to API
+        appLog('Sending SupportRequestModel to API:');
+        appLog('Support Type: ${section.selectedType.value}');
+        appLog('Category ID: $categoryId');
+        appLog('Subcategory IDs: $subCategoryList');
+        appLog('Business Name: ${model.businessName}');
+        appLog('Eiin Number: ${model.eiin}');
 
         await _requestApiController.sentRequest(model.toJson());
       }

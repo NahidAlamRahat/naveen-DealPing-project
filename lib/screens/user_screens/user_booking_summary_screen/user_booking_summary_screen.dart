@@ -1,22 +1,21 @@
 import 'package:deal_ping/constants/app_colors.dart';
-import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
-import 'package:deal_ping/screens/user_screens/user_booking_summary_screen/widgets/booking_card_widget.dart';
+import 'package:deal_ping/screens/user_screens/user_chat_screen/controller/user_chate_controller.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:deal_ping/widgets/space_widget/space_widget.dart';
 import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-
 import '../../../widgets/appbar_widget/appbar_widget.dart';
 import 'controller/user_booking_summary_controller.dart';
 
 class UserBookingSummaryScreen extends StatelessWidget {
   UserBookingSummaryScreen({super.key});
 
-  final UserBookingSummaryController controller =
-      Get.put(UserBookingSummaryController());
+  // final UserBookingSummaryController controller =
+  //     Get.put(UserBookingSummaryController());
+
+  UserChatController controller = Get.find<UserChatController>();
 
 
 
@@ -50,15 +49,15 @@ class UserBookingSummaryScreen extends StatelessWidget {
               const SpaceWidget(spaceHeight: 16),
 
               // User Info
-              _buildInfoRow('Name', controller.name.value),
+              _buildInfoRow('Name', controller.chatMessagesList[0].sender!.name.toString()),
               const SpaceWidget(spaceHeight: 12),
-              _buildInfoRow('E-mail', controller.email.value),
+              _buildInfoRow('E-mail', controller.chatMessagesList[0].sender!.email.toString()),
+              // const SpaceWidget(spaceHeight: 12),
+              // _buildInfoRow('Phone', controller.chatMessagesList[0].sender!.phone.toString()),
               const SpaceWidget(spaceHeight: 12),
-              _buildInfoRow('Phone', controller.phone.value),
+              _buildInfoRow('Location', controller.chatMessagesList[0].sender!.address.toString()),
               const SpaceWidget(spaceHeight: 12),
-              _buildInfoRow('Location', controller.location.value),
-              const SpaceWidget(spaceHeight: 12),
-              _buildInfoRow('Bar Type', controller.barType.value),
+              _buildInfoRow('Bar Type', controller.chatMessagesList[0].sender!.category.toString()),
 
               // const Divider(height: 30, color: AppColors.grey300),
               const SpaceWidget(spaceHeight: 6),
@@ -83,7 +82,7 @@ class UserBookingSummaryScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: ButtonWidget(
           onPressed: () {
-            controller.confirmBooking( );
+            // controller.;
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Booking Confirmed!'),

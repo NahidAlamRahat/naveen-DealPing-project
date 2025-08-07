@@ -17,6 +17,7 @@ import '../screens/business_screens/business_home_screen/business_home_screen.da
 import '../screens/business_screens/business_my_report_screen/business_my_report_screen.dart';
 import '../screens/business_screens/business_preset_screen/business_preset_screen.dart';
 import '../screens/business_screens/business_profile_screen/business_profile_screen.dart';
+import '../screens/category_view_screen.dart';
 import '../screens/faq_screen/faq_screen.dart';
 import '../screens/onboarding_screen/onboarding_screen.dart';
 import '../screens/splash_screen/splash_screen.dart';
@@ -61,12 +62,12 @@ class RouteManager {
         page: () => OnboardingScreen(),
         // binding: GeneralBindings(),
       ),
+
       GetPage(
-        name: AppRoutes.aboutUsScreen,
-        page: () => const AboutUsScreen(),
+        name: AppRoutes.viewCategoryScreen,
+        page: () => const CategoryViewScreen(),
         // binding: GeneralBindings(),
       ),
-
       GetPage(
         name: AppRoutes.supportScreen,
         page: () => const SupportScreen(),

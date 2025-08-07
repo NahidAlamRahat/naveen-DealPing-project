@@ -14,6 +14,8 @@ import '../../../utils/app_size.dart';
 import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
+import '../../category_view_screen.dart';
+import '../../support_screen/screen/support_screen.dart';
 import '../../user_screens/user_edit_profile_screen/user_edit_profile_screen.dart';
 import '../../user_screens/user_profile_screen/controller/user_profile_controller.dart';
 
@@ -123,12 +125,36 @@ class BusinessProfileScreen extends StatelessWidget {
                   // Menu Options
                   _buildMenuItem(
                     context,
+                    icon: AppIconsPath.categoryViewIcon,
+                    title: AppStrings.viewCategory,
+                    onTap: () {
+
+                      Get.to(() => const CategoryViewScreen(), arguments: {
+                        'category': controller.profile.value?.category?.title ?? '',
+                        'subcategories': controller.profile.value?.subCategories
+                            ?.map((e) => e.title ?? '')
+                            .where((name) => name.isNotEmpty)
+                            .toList(),
+                      });
+
+                    },
+                  ),
+
+
+                  const SpaceWidget(spaceHeight: 16),
+
+                  // Menu Options
+                  _buildMenuItem(
+                    context,
                     icon: AppIconsPath.aboutUsIcon,
                     title: AppStrings.aboutUs,
                     onTap: () {
                       Get.toNamed(AppRoutes.aboutUsScreen);
                     },
                   ),
+
+
+
                   const SpaceWidget(spaceHeight: 16),
                   _buildMenuItem(
                     context,
@@ -167,7 +193,19 @@ class BusinessProfileScreen extends StatelessWidget {
                     icon: AppIconsPath.supportIcon,
                     title: AppStrings.supportRequestScreen,
                     onTap: () {
-                      Get.toNamed(AppRoutes.supportScreen);
+                      Get.to(() => const SupportScreen(), arguments: {
+                        'subcategories': controller.profile.value?.subCategories
+                            ?.where((e) => (e.sId?.isNotEmpty ?? false) && (e.title?.isNotEmpty ?? false))
+                            .map((e) => {
+                          'id': e.sId!,
+                          'title': e.title!,
+                        })
+                            .toList(),
+                      });
+
+
+
+
                     },
                   ),
 

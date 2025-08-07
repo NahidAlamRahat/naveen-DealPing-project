@@ -4,6 +4,7 @@ class SupportRequestModel {
   final String? businessName;
   final String? eiin;
 
+
   SupportRequestModel({
     this.category,
     this.subcategories,

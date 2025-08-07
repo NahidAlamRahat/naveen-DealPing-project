@@ -15,6 +15,9 @@ class SupportController extends SupportBaseController {
 
   // Main form fields
   final UserHomeRepository _repository = UserHomeRepository();
+  RxList<String> profileSubCategoryIds = <String>[].obs;
+
+  RxList<Map<String, String>> profileSubCategoryList = <Map<String, String>>[].obs;
 
 
 
@@ -29,20 +32,34 @@ class SupportController extends SupportBaseController {
   // Form management
   RxBool isLoading = true.obs;
 
+
+
   @override
   void onInit() {
-    super.onInit();
-    fetchCategories();
+    subCategoryShow();
+       fetchCategories();
+       super.onInit();
   }
 
 
-  // Status tab change handler
   void onStatusChange(int index) {
     selectedStatusIndex = index;
     appLog('Selected Status: ${changeStatus[selectedStatusIndex]}');
     update();
   }
 
+  void subCategoryShow() {
+    final args = Get.arguments;
+    if (args != null && args['subcategories'] != null) {
+      final List<dynamic> subCatMap = args['subcategories'];
+      profileSubCategoryList.value = subCatMap
+          .map((e) => {
+        'id': e['id']?.toString() ?? '',
+        'title': e['title']?.toString() ?? '',
+      })
+          .toList();
+    }
+  }
 
 
   // Category and subcategory management

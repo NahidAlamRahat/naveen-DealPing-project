@@ -137,9 +137,9 @@ class UserChatScreen extends StatelessWidget{
             appBar: AppbarWidget(
               textWidget: Obx(() {
                 final index = controller.selectedChatIndex.value;
-                final name = controller.chatMessages.isNotEmpty &&
-                    index < controller.chatMessages.length
-                    ? controller.chatMessages[index].sender?.name
+                final name = controller.chatMessagesList.isNotEmpty &&
+                    index < controller.chatMessagesList.length
+                    ? controller.chatMessagesList[index].sender?.name
                     : null;
 
                 if (name == null) {
@@ -159,7 +159,7 @@ class UserChatScreen extends StatelessWidget{
                 return const Center(child: CircularProgressIndicator()); // Initial loading
               }
 
-              if (controller.chatMessages.isEmpty) {
+              if (controller.chatMessagesList.isEmpty) {
                 return const Center(child: Text('No messages available')); // No messages
               }
 
@@ -168,17 +168,17 @@ class UserChatScreen extends StatelessWidget{
                 controller: controller.scrollController,
                 padding: const EdgeInsets.all(16),
                 physics: const ClampingScrollPhysics(),
-                itemCount: controller.chatMessages.length +
+                itemCount: controller.chatMessagesList.length +
                     (controller.isLoading.value ? 1 : 0),
                 itemBuilder: (context, index) {
-                  if (index == controller.chatMessages.length) {
+                  if (index == controller.chatMessagesList.length) {
                     return const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: CircularProgressIndicator(), // pagination loading
                     );
                   }
 
-                  final message = controller.chatMessages[index];
+                  final message = controller.chatMessagesList[index];
 
                   return
                     ChatMessage(
@@ -190,7 +190,7 @@ class UserChatScreen extends StatelessWidget{
                           .time,
                       image: message.images,
                       showButton: message.type ?? 'text',
-                      message: controller.chatMessages[index],
+                      message: controller.chatMessagesList[index],
 
                     );
 

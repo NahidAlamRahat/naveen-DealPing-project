@@ -50,8 +50,8 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
           ,
           appBar: AppbarWidget(
             textWidget: Obx(() {
-              final name = controller.chatMessages.isNotEmpty
-                  ? controller.chatMessages[0].receiver?.name
+              final name = controller.chatMessagesList.isNotEmpty
+                  ? controller.chatMessagesList[0].receiver?.name
                   : null;
 
               if (name == null) {
@@ -367,7 +367,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
               return const Center(child: CircularProgressIndicator()); // Initial loading
             }
 
-            if (controller.chatMessages.isEmpty) {
+            if (controller.chatMessagesList.isEmpty) {
               return const Center(child: Text('No messages available')); // No messages
             }
 
@@ -376,17 +376,17 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
               controller: controller.scrollController,
               padding: const EdgeInsets.all(16),
               physics: const ClampingScrollPhysics(),
-              itemCount: controller.chatMessages.length +
+              itemCount: controller.chatMessagesList.length +
                   (controller.isLoading.value ? 1 : 0),
               itemBuilder: (context, index) {
-                if (index == controller.chatMessages.length) {
+                if (index == controller.chatMessagesList.length) {
                   return const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: CircularProgressIndicator(), // pagination loading
                   );
                 }
 
-                final message = controller.chatMessages[index];
+                final message = controller.chatMessagesList[index];
 
                 return
                   ChatMessage(
@@ -397,7 +397,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                         .time,
                     image: message.images,
                     showButton: message.type ?? 'text',
-                    message: controller.chatMessages[index],
+                    message: controller.chatMessagesList[index],
 
                   );
 

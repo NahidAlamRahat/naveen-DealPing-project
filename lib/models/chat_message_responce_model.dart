@@ -117,25 +117,34 @@ class ChatMessageResponseModel {
 class Sender {
   String? id;
   String? name;
+  String? email;
   String? address;
   String? profile;
   double? rating;
+  int? ratingCount;
+  String? category;
 
   Sender({
     this.id,
     this.name,
+    this.email,
     this.address,
     this.profile,
     this.rating,
+    this.ratingCount,
+    this.category,
   });
 
   factory Sender.fromJson(Map<String, dynamic> json) {
     return Sender(
       id: json['_id'],
       name: json['name'],
+      email: json['email'],
       address: json['address'],
       profile: json['profile'],
-      rating: (json['rating'] != null) ? json['rating'].toDouble() : null,
+      rating: json['rating'] != null ? (json['rating'] as num).toDouble() : null,
+      ratingCount: json['ratingCount'],
+      category: json['category'],
     );
   }
 
@@ -143,9 +152,12 @@ class Sender {
     return Sender(
       id: map['_id'],
       name: map['name'],
+      email: map['email'],
       address: map['address'],
       profile: map['profile'],
-      rating: (map['rating'] != null) ? map['rating'].toDouble() : null,
+      rating: map['rating'] != null ? (map['rating'] as num).toDouble() : null,
+      ratingCount: map['ratingCount'],
+      category: map['category'],
     );
   }
 
@@ -153,48 +165,75 @@ class Sender {
     return {
       '_id': id,
       'name': name,
+      'email': email,
       'address': address,
       'profile': profile,
       'rating': rating,
+      'ratingCount': ratingCount,
+      'category': category,
     };
   }
 }
+
 
 class Receiver {
   String? id;
   String? name;
+  String? email;
+  String? address;
   String? profile;
+  double? rating;
+  int? ratingCount;
+  String? category;
 
   Receiver({
     this.id,
     this.name,
+    this.email,
+    this.address,
     this.profile,
+    this.rating,
+    this.ratingCount,
+    this.category,
   });
 
-  // Factory method for creating an instance from JSON
   factory Receiver.fromJson(Map<String, dynamic> json) {
     return Receiver(
       id: json['_id'],
       name: json['name'],
+      email: json['email'],
+      address: json['address'],
       profile: json['profile'],
+      rating: json['rating'] != null ? (json['rating'] as num).toDouble() : null,
+      ratingCount: json['ratingCount'],
+      category: json['category'],
     );
   }
 
-  // fromMap method to handle a Map<String, dynamic> (generic use case)
   factory Receiver.fromMap(Map<String, dynamic> map) {
     return Receiver(
       id: map['_id'],
       name: map['name'],
+      email: map['email'],
+      address: map['address'],
       profile: map['profile'],
+      rating: map['rating'] != null ? (map['rating'] as num).toDouble() : null,
+      ratingCount: map['ratingCount'],
+      category: map['category'],
     );
   }
 
-  // Method to convert the object to JSON for API or serialization
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
       'name': name,
+      'email': email,
+      'address': address,
       'profile': profile,
+      'rating': rating,
+      'ratingCount': ratingCount,
+      'category': category,
     };
   }
 }
+
