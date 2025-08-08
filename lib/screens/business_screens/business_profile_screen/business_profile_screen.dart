@@ -140,7 +140,6 @@ class BusinessProfileScreen extends StatelessWidget {
                     },
                   ),
 
-
                   const SpaceWidget(spaceHeight: 16),
 
                   // Menu Options
@@ -202,9 +201,6 @@ class BusinessProfileScreen extends StatelessWidget {
                         })
                             .toList(),
                       });
-
-
-
 
                     },
                   ),

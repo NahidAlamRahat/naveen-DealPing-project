@@ -59,7 +59,7 @@ class SupportScreen extends StatelessWidget {
                     child: TabBarView(
                       children: [
                         SupportRequestWidget(),
-                        BookingHistoryWidget()
+                        SupportHistoryWidget()
                       ],
                     ),
                   ),

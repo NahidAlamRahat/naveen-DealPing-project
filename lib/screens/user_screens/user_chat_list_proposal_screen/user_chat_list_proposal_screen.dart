@@ -176,12 +176,6 @@ class UserChatListProposalScreen extends StatelessWidget {
     ChatController chatController = Get.put(ChatController());
 
 
-    @override
-    void didPopNext() {
-      chatController.fetchChatData(id: chatController.id);
-        }
-
-
     return Scaffold(
       appBar: AppbarWidget(text: chatController.request.value?.message ?? ''),
 
@@ -245,7 +239,7 @@ class UserChatListProposalScreen extends StatelessWidget {
                       return InkWell(
                         onTap: () {
                           // Navigate to the chat screen
-                          Get.toNamed(AppRoutes.userChatScreen,arguments: chat.chatId.toString());
+                          Get.toNamed(AppRoutes.userChatScreen,arguments: chat.chatId.toString(),);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 8),

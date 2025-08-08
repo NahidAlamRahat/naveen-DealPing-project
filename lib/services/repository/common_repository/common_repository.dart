@@ -1,6 +1,8 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'package:deal_ping/models/support_history_model.dart';
+import 'package:deal_ping/screens/support_screen/model/request_model.dart';
 import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
@@ -111,6 +113,29 @@ class CommonRepository {
       errorLog(e);
     }
     return notificationDataList;
+  }
+
+
+  Future<List<SupportHistoryModel>> getSupportHistoryData(int page) async {
+    List<SupportHistoryModel> supportHistoryDataList = <SupportHistoryModel>[];
+    try {
+      Map<String, dynamic> queryParameters = {"page": page};
+      var response = await apiServices.apiGetServices("/support/?status=pending",
+          queryParameters: queryParameters);
+      if (response != null) {
+        if (response["data"] != null && response["data"] is Map) {
+          var data = response["data"];
+          if (data["data"] != null && data["data"] is List) {
+            for (var item in data["data"]) {
+              supportHistoryDataList.add(SupportHistoryModel.fromJson(item));
+            }
+          }
+        }
+      }
+    } catch (e) {
+      errorLog(e);
+    }
+    return supportHistoryDataList;
   }
 
 

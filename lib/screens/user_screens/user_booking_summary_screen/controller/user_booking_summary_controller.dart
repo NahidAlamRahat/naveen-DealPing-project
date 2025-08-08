@@ -1,19 +1,19 @@
+import 'package:deal_ping/models/booking_create_model.dart';
+import 'package:deal_ping/screens/user_screens/user_bookings_screen/controller/booking_list_api_caller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../routes/app_routes.dart';
+import '../../../../services/repository/booking_repository/booking_confirm_repository.dart';
 import '../../../../utils/app_log/app_log.dart';
+import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
+import '../../user_chat_list_proposal_screen/controller.dart';
 import '../../user_profile_screen/controller/user_profile_controller.dart';
 
 class UserBookingSummaryController extends GetxController {
 
-  // User Details
-  final RxString name = "John Doe".obs;
-  final RxString email = "johndoe67@gmail.com".obs;
-  final RxString phone = "+7208974308485".obs;
-  final RxString location = "Buffalo, The USA".obs;
-  final RxString barType = "Dance Bar".obs;
+  BookingConfirmRepository bookingConfirmRepository  = BookingConfirmRepository();
 
   // Date and Time Selection
   final Rx<DateTime> selectedDate = DateTime.now().obs;
@@ -70,14 +70,49 @@ class UserBookingSummaryController extends GetxController {
     }
   }
 
+
+
+  ChatController chatController = ChatController();
+
+
+
+
+
   // Confirm Booking
-  void confirmBooking() {
-    // Here you would typically add booking logic
-    // For now, we'll just print the booking details
-    Get.toNamed(AppRoutes.userBookingSuccessfullScreen,);
-    appLog('Booking Confirmed:');
-    appLog('Date: ${DateFormat('dd MMM yyyy').format(selectedDate.value)}');
-    appLog('Time: ${selectedTime.value.format(Get.context!)}');
-    appLog('People: ${numberOfPeople.value}');
+  void confirmBooking() async{
+    appLog("Request ID: ${chatController.request.value?.requestId}");
+
+    BookingCreateModel bookingCreateModel = BookingCreateModel(
+        offerTitle: "offerTitle",
+        offerDescription: "offerDescription",
+
+        category: chatController.request.value?.category ?? 'category null',
+        subCategories:  chatController.request.value?.subCategories ?? [],
+        business: '',
+        request: chatController.request.value?.requestId ??''
+    );
+
+      final bool isSuccess =
+          await bookingConfirmRepository.bookingCreate(bookingCreateModel);
+      bookingConfirmRepository.inProgress == true;
+
+      if (isSuccess) {
+        bookingConfirmRepository.inProgress == false;
+
+        AppSnackBar.success(
+            bookingConfirmRepository.successfullyMessage ?? 'Successful!');
+        appLog(
+            'success message => ${bookingConfirmRepository.successfullyMessage}');
+
+        Get.toNamed(AppRoutes.userBookingSuccessfullScreen,);
+
+      } else {
+        bookingConfirmRepository.inProgress == false;
+        // error message
+        AppSnackBar.message('${bookingConfirmRepository.errorMessage}');
+        appLog('error message => ${bookingConfirmRepository.errorMessage}');
+      }
+
+
   }
 }

@@ -1,92 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
-
 import '../../../constants/app_colors.dart';
-import '../../../constants/app_strings.dart';
-import '../../../utils/app_size.dart';
-import '../../../widgets/button_widget/button_widget.dart';
+import '../../../models/category_model.dart';
+import '../../../models/support_history_model.dart' hide Category;
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
-import '../../user_screens/user_bookings_screen/controller/booking_list_api_caller.dart';
-
-/*
-class BookingsList extends StatelessWidget {
-  const BookingsList({super.key});
+import '../controller/support_history_controller.dart';
+class SupportHistoryWidget extends StatelessWidget {
+  const SupportHistoryWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<BookingListController>(
+    return GetX<SupportHistoryController>(
+      init: SupportHistoryController(),
       builder: (controller) {
-        if (controller.isInitialLoading) {
+        // Loading state
+        if (controller.isLoading.value && controller.supportHistoryModelList.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (controller.errorMessage != null) {
-          return Center(child: Text(controller.errorMessage!));
+        // Empty state
+        if (!controller.isLoading.value && controller.supportHistoryModelList.isEmpty) {
+          return const Center(child: Text("No support history found"));
         }
 
         return NotificationListener<ScrollNotification>(
           onNotification: (scrollNotification) {
             if (scrollNotification.metrics.pixels ==
                 scrollNotification.metrics.maxScrollExtent) {
-              controller.getBookingList(); // Load more on scroll bottom
+              if (!controller.isPagination.value && !controller.isLast) {
+                controller.onDataLoad(); // Load more data
+              }
             }
             return false;
           },
           child: ListView.builder(
+            controller: controller.scrollController,
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: controller.bookingList.length,
+            itemCount: controller.supportHistoryModelList.length +
+                (controller.isPagination.value ? 1 : 0),
             itemBuilder: (context, index) {
-              final booking = controller.bookingList[index];
-              return BookingCard(
-                title: booking.businessName,
-                location: booking.createdAt,
-                distance: booking.bookingCode ?? '', index: index,
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-}
-*/
+              if (index == controller.supportHistoryModelList.length) {
+                // Pagination loader
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
 
-
-class BookingHistoryWidget extends StatelessWidget {
-  const BookingHistoryWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder<BookingListController>(
-      builder: (controller) {
-        if (controller.isInitialLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (controller.errorMessage != null) {
-          return Center(child: Text(controller.errorMessage!));
-        }
-
-        return NotificationListener<ScrollNotification>(
-          onNotification: (scrollNotification) {
-            if (scrollNotification.metrics.pixels ==
-                scrollNotification.metrics.maxScrollExtent) {
-              controller.getBookingList(); // Load more on scroll bottom
-            }
-            return false;
-          },
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: controller.bookingList.length,
-            itemBuilder: (context, index) {
-              final booking = controller.bookingList[index];
+              final supportItem = controller.supportHistoryModelList[index];
               return BookingCard(
                 index: index,
-                title: booking.businessName,
-                location: booking.createdAt,
-                distance: booking.bookingCode ?? '',
-                isPastBooking: true,
+                title: "${supportItem.category?.title} > ${supportItem.prevCategory?.title}",
+                location: supportItem.createdAt ?? "",
+                distance: supportItem.status ?? '',
+                status: supportItem.status ?? 'pending',
+                subcategories: supportItem.subcategories,
               );
             },
           ),
@@ -98,9 +68,14 @@ class BookingHistoryWidget extends StatelessWidget {
 
 
 class BookingCard extends StatelessWidget {
-  final String title, location, distance;
+  final String title, location, distance, status;
   final bool isPastBooking;
   final int index;
+  final Category? category;
+  final Category? prevCategory;
+  final List<Subcategory>? subcategories;
+  final String? businessName;
+  final String? eiin;
 
   const BookingCard({
     super.key,
@@ -108,12 +83,29 @@ class BookingCard extends StatelessWidget {
     required this.title,
     required this.location,
     required this.distance,
+    required this.status,
     this.isPastBooking = false,
-
+    this.category,
+    this.prevCategory,
+    this.subcategories,
+    this.businessName,
+    this.eiin,
   });
 
   @override
   Widget build(BuildContext context) {
+    List<String> displayTitle = [];
+
+    // Dynamically add titles based on available data
+    if (category != null) displayTitle.add("Category: ${category?.title}");
+    if (prevCategory != null) displayTitle.add("Prev Category: ${prevCategory?.title}");
+    if (businessName != null) displayTitle.add("Business Name: $businessName");
+    if (eiin != null) displayTitle.add("EIIN: $eiin");
+    if (subcategories != null && subcategories!.isNotEmpty) {
+      displayTitle.add("Subcategories: ");
+      displayTitle.addAll(subcategories!.map((subcategory) => subcategory.title ?? "").toList());
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(8),
@@ -124,31 +116,51 @@ class BookingCard extends StatelessWidget {
           width: 1,
         ),
       ),
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start, // Helps with long text too
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // LEFT SIDE
+          // LEFT SIDE (Title information, dynamically filled)
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Title (Display the titles as per the available data)
                 TextWidget(
-                  text: 'past Category name > latest Category name',
+                  text: title,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   fontColor: AppColors.grey700,
                 ),
-                SpaceWidget(spaceHeight: 4),
+                const SpaceWidget(spaceHeight: 4),
+
+                // Location (Created at date)
                 TextWidget(
-                  text: '',
+                  text: location,
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
                   fontColor: AppColors.grey700,
                 ),
-                SpaceWidget(spaceHeight: 2),
+                const SpaceWidget(spaceHeight: 4),
+
+                // Dynamically display the different available data (Category, Business Name, EIIN, Subcategories)
+                ...displayTitle.map((text) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: TextWidget(
+                      text: text,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontColor: AppColors.grey700,
+                    ),
+                  );
+                }).toList(),
+
+                const SpaceWidget(spaceHeight: 8),
+
+                // Status (Distance, or Pending Status)
                 TextWidget(
-                  text: '',
+                  text: distance,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   fontColor: AppColors.green500,
@@ -157,18 +169,22 @@ class BookingCard extends StatelessWidget {
             ),
           ),
 
-          // RIGHT SIDE (status)
-          SizedBox(width: 8), // give some space before status
+          // RIGHT SIDE (Status)
+          const SizedBox(width: 8),
           Center(
             child: TextWidget(
-              text: 'pending',
+              text: status,
               fontSize: 12,
               fontWeight: FontWeight.w500,
-              fontColor: Colors.orange,
+              fontColor: status.toLowerCase() == 'pending'
+                  ? Colors.orange
+                  : AppColors.green500,
             ),
-          )
+          ),
         ],
       ),
     );
   }
 }
+
+

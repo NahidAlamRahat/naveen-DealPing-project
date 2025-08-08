@@ -1,6 +1,6 @@
 class RequestModel {
-  final String id;
-  final String user;
+  final String requestId;
+  final String userId;
   final String category;
   final List<String> subCategories;
   final String message;
@@ -10,8 +10,8 @@ class RequestModel {
   final String updatedAt;
 
   RequestModel({
-    required this.id,
-    required this.user,
+    required this.requestId,
+    required this.userId,
     required this.category,
     required this.subCategories,
     required this.message,
@@ -23,8 +23,8 @@ class RequestModel {
 
   factory RequestModel.fromJson(Map<String, dynamic> json) {
     return RequestModel(
-      id: json['_id'],
-      user: json['user'],
+      requestId: json['_id'],
+      userId: json['user'],
       category: json['category'],
       subCategories: List<String>.from(json['subCategories']),
       message: json['message'],

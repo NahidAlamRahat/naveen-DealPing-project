@@ -1,5 +1,6 @@
 
 import 'package:deal_ping/services/api/api_services.dart';
+import 'package:deal_ping/widgets/app_snack_bar/app_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
@@ -10,78 +11,6 @@ import '../../../../services/storage/storage_service.dart';
 import '../../../../utils/app_log/app_log.dart';
 import '../../../../utils/app_log/error_log.dart';
 import '../../user_chat_list_proposal_screen/controller.dart';
-
-/*
-class RequestListController extends GetxController {
-  bool _isLoading = false;
-  String? _errorMessage;
-
-  List<Request> _originalRequestList = [];
-  List<Request> _filteredRequestList = [];
-
-  bool get isLoading => _isLoading;
-  String? get errorMessage => _errorMessage;
-  List<Request> get requestList => _filteredRequestList;
-
-  Future<bool> fetchRequestList() async {
-    _isLoading = true;
-    update();
-
-    final response = await ApiService.getApi(
-      ApiUrls.chatListUrl,
-      header: {
-        'Authorization': 'Bearer ${LocalStorage.token}',
-      },
-    );
-
-    bool isSuccess = false;
-
-    if (response.statusCode == 200) {
-      try {
-        final List dataList = response.body['data']['data'];
-        _originalRequestList =
-            dataList.map((item) => Request.fromJson(item)).toList();
-        _filteredRequestList = _originalRequestList;
-        _errorMessage = null;
-        isSuccess = true;
-
-        if (_originalRequestList.isNotEmpty) {
-          Get.find<ChatController>().setId(_originalRequestList[0].id);
-        }
-      } catch (e) {
-        _errorMessage = "Data parsing error";
-      }
-    } else {
-      _errorMessage = response.message;
-    }
-
-    _isLoading = false;
-    update();
-    return isSuccess;
-  }
-
-  void filterList(String query) {
-    if (query.isEmpty) {
-      _filteredRequestList = _originalRequestList;
-    } else {
-      _filteredRequestList = _originalRequestList.where((request) {
-        return request.message.toLowerCase().contains(query.toLowerCase());
-      }).toList();
-    }
-    update();
-  }
-
-  Future<void> refreshRequestList() async {
-    _originalRequestList = [];
-    await fetchRequestList();
-    update();
-  }
-}
-*/
-
-
-
-
 
 class RequestListController extends GetxController {
   ScrollController scrollController = ScrollController();
@@ -102,11 +31,6 @@ class RequestListController extends GetxController {
 
       var responses = await commonRepository.getRequestList(currentPage);
 
-      // যদি response-এর ভিতরে meta থেকে totalPages পাওয়া যায়:
-      // if (meta.totalPages != null && currentPage > meta.totalPages) {
-      //   isLast = true;
-      //   return;
-      // }
 
       if (responses.isEmpty) {
         isLast = true;
@@ -178,10 +102,10 @@ class RequestListController extends GetxController {
   Future<void> refreshRequestList() async {
     isLoading.value = true;
 
-    _originalRequestList.clear(); // মূল list clear
-    requestModelList.clear();     // UI list clear
-    currentPage = 1;              // প্রথম পেজ থেকে শুরু
-    isLast = false;               // যেন পেজ লোড হতে পারে
+    _originalRequestList.clear();
+    requestModelList.clear();
+    currentPage = 1;
+    isLast = false;
 
     await onDataLoad();
 

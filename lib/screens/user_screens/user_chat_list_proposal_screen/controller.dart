@@ -59,7 +59,7 @@ class ChatController extends GetxController {
       final argData = Get.arguments;
       if(argData != null && argData is RequestModel){
         request.value = argData;
-        id = request.value?.id ?? "";
+        id = request.value?.requestId ?? "";
         debugPrint('😎😎😎😎😎=====>>>${request.value?.message}');
           await fetchChatData(id: id);
       }

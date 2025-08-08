@@ -16,6 +16,7 @@ import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/image_widget/image_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
+import '../../user_screens/user_chat_list_screen/controller/chat_list_api_caller.dart';
 import '../../user_screens/user_chat_screen/controller/user_chate_controller.dart';
 import '../../user_screens/user_chat_screen/widget/image_view.dart';
 import '../../user_screens/user_chat_screen/widget/network_image_grid.dart';
@@ -208,19 +209,27 @@ class ChatMessage extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  Get.toNamed(AppRoutes.userBookingSummaryScreen);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Table booked successfully!')),
+                              GetBuilder<RequestListController>(
+                                builder: (controller) {
+                                  return Visibility(
+                                    visible: controller.isLoading.value == false,
+                                    replacement: const Center(child: CircularProgressIndicator(),),
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        await controller.onDataLoad(); // ডেটা শেষ হলে পরের স্ক্রিনে যাওয়া
+                                        Get.toNamed(AppRoutes.userBookingSummaryScreen);
+
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      child: const Text('Accept'),
+                                    ),
                                   );
-                                },                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                child: const Text('Accept'),
+                                }
                               ),
 
                               const SizedBox(width: 8),
