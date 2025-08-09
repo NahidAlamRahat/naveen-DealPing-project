@@ -54,15 +54,15 @@ class UserBookingSummaryScreen extends StatelessWidget {
               const SpaceWidget(spaceHeight: 16),
 
               // User Info
-              _buildInfoRow('Name', controller.chatMessagesList[0].sender!.name.toString()),
+              _buildInfoRow('Name', bBontroller.message.sender?.name ?? '--'),
               const SpaceWidget(spaceHeight: 12),
-              _buildInfoRow('E-mail', controller.chatMessagesList[0].sender!.email.toString()),
+              _buildInfoRow('E-mail',bBontroller.message.sender?.email ?? '--'),
               // const SpaceWidget(spaceHeight: 12),
               // _buildInfoRow('Phone', controller.chatMessagesList[0].sender!.phone.toString()),
               const SpaceWidget(spaceHeight: 12),
-              _buildInfoRow('Location', controller.chatMessagesList[0].sender!.address.toString()),
+              _buildInfoRow('Location',bBontroller.message.sender?.address ?? '--'),
               const SpaceWidget(spaceHeight: 12),
-              _buildInfoRow('Bar Type', controller.chatMessagesList[0].sender!.category.toString()),
+              _buildInfoRow('Bar Type',bBontroller.message.sender?.category ?? '--'),
 
               // const Divider(height: 30, color: AppColors.grey300),
               const SpaceWidget(spaceHeight: 6),
@@ -87,18 +87,7 @@ class UserBookingSummaryScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: ButtonWidget(
           onPressed: () {
-            //Api call
-            BookingCreateModel bookingCreateModel = BookingCreateModel(
-                offerTitle: "offerTitle",
-                offerDescription: "offerDescription",
-                category: chatController.request.value?.userId ?? '',
-
-                subCategories: chatController.request.value?.subCategories ?? [],
-                business: chatController.request.value?.userId ?? '',
-                request: chatController.request.value?.requestId ?? '',
-            );
-            bookingConfirmRepository.bookingCreate(bookingCreateModel);
-            AppSnackBar.message("${bookingConfirmRepository.successfullyMessage}");
+           bBontroller.confirmBooking();
           },
           backgroundColor: AppColors.green500,
           label: AppStrings.confirmYourBooking,

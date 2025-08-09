@@ -109,6 +109,7 @@ class BookingsList extends StatelessWidget {
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             itemCount: controller.bookingList.length,
+
             itemBuilder: (context, index) {
               final booking = controller.bookingList[index];
               return BookingCard(

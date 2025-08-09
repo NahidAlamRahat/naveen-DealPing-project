@@ -52,8 +52,12 @@ class SupportHistoryWidget extends StatelessWidget {
               final supportItem = controller.supportHistoryModelList[index];
               return BookingCard(
                 index: index,
-                title: "${supportItem.category?.title} > ${supportItem.prevCategory?.title}",
+                // title: "${supportItem.category?.title ?? ""} ${(supportItem.category?.title != null && supportItem.prevCategory?.title != null ) ? ">" : ""} ${supportItem.prevCategory?.title ?? ""}",
+
+                title:  _nameFinder(supportItem),
                 location: supportItem.createdAt ?? "",
+
+
                 distance: supportItem.status ?? '',
                 status: supportItem.status ?? 'pending',
                 subcategories: supportItem.subcategories,
@@ -66,6 +70,45 @@ class SupportHistoryWidget extends StatelessWidget {
   }
 }
 
+String _nameFinder(SupportHistoryModel item){
+  String name = "";
+try{
+  if(item.types.isNotEmpty){
+    for(var i in item.types){
+      if(i.toString().toLowerCase() == "eiin".toLowerCase()){
+        name = "Eiin Number : ${item.prevEiin} > ${item.eiin}";
+      }
+
+      if(i.toString().toLowerCase() == "businessName".toLowerCase()){
+        name = "${item.prevBusinessName} > ${item.businessName}";
+      }
+
+      if(i.toString().toLowerCase() == "category".toLowerCase()){
+        name = "${item.prevCategory?.title} > ${item.category?.title}";
+      }
+
+      if (i.toString().toLowerCase() == "subcategories".toLowerCase()) {
+        // পুরানো subcategories
+        String prevSub = (item.prevSubcategories ?? [])
+            .map((sub) => sub.title ?? "")
+            .join("\n");
+
+        // নতুন subcategories
+        String newSub = (item.subcategories ?? [])
+            .map((sub) => sub.title ?? "")
+            .join("\n");
+
+        // ফরম্যাট: একটার নিচে একটা, আলাদা হেডিং সহ
+        // name = "Old Subcategories:\n$prevSub\n\nNew Subcategories:\n$newSub";
+        name = "${newSub}";
+
+      }
+
+    }
+  }
+}catch(e){}
+  return name;
+}
 
 class BookingCard extends StatelessWidget {
   final String title, location, distance, status;
@@ -102,7 +145,7 @@ class BookingCard extends StatelessWidget {
     if (businessName != null) displayTitle.add("Business Name: $businessName");
     if (eiin != null) displayTitle.add("EIIN: $eiin");
     if (subcategories != null && subcategories!.isNotEmpty) {
-      displayTitle.add("Subcategories: ");
+      displayTitle.add("SubCategories: ");
       displayTitle.addAll(subcategories!.map((subcategory) => subcategory.title ?? "").toList());
     }
 
@@ -159,12 +202,7 @@ class BookingCard extends StatelessWidget {
                 const SpaceWidget(spaceHeight: 8),
 
                 // Status (Distance, or Pending Status)
-                TextWidget(
-                  text: distance,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  fontColor: AppColors.green500,
-                ),
+
               ],
             ),
           ),
@@ -172,13 +210,11 @@ class BookingCard extends StatelessWidget {
           // RIGHT SIDE (Status)
           const SizedBox(width: 8),
           Center(
-            child: TextWidget(
-              text: status,
-              fontSize: 12,
+            child:  TextWidget(
+              text: distance,
+              fontSize: 14,
               fontWeight: FontWeight.w500,
-              fontColor: status.toLowerCase() == 'pending'
-                  ? Colors.orange
-                  : AppColors.green500,
+              fontColor: AppColors.green500,
             ),
           ),
         ],

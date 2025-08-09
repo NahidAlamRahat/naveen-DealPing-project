@@ -11,6 +11,7 @@ import 'package:mime/mime.dart';
 
 
 import '../../../constants/api_urls.dart';
+import '../../../models/booking_list_model.dart';
 import '../../../models/chat_message_responce_model.dart';
 import '../../../models/faq_model.dart';
 import '../../../models/notification_model.dart';
@@ -114,6 +115,33 @@ class CommonRepository {
     }
     return notificationDataList;
   }
+
+  Future<List<BookingModel>> getBookingList(
+      {required int page, required  bookingStatus}) async {
+    List<BookingModel> bookingModelDataList = <BookingModel>[];
+    try {
+      Map<String, dynamic> queryParameters = {"page": page};
+
+      var response = await apiServices.apiGetServices(ApiUrls.bookingListUrl(
+          longitude: 90.4125, latitude: 23.8103, status: bookingStatus),
+          queryParameters: queryParameters);
+
+      if (response != null) {
+        if (response["data"] != null && response["data"] is Map) {
+          var data = response["data"];
+          if (data["data"] != null && data["data"] is List) {
+            for (var item in data["data"]) {
+              bookingModelDataList.add(BookingModel.fromJson(item));
+            }
+          }
+        }
+      }
+    } catch (e) {
+      errorLog(e);
+    }
+    return bookingModelDataList;
+  }
+
 
 
   Future<List<SupportHistoryModel>> getSupportHistoryData(int page) async {

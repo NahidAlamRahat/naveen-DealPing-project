@@ -1,5 +1,6 @@
 import 'package:deal_ping/models/request_list_model.dart';
 import 'package:deal_ping/services/api/api_services.dart';
+import 'package:deal_ping/widgets/app_snack_bar/app_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../../constants/api_urls.dart';
@@ -41,6 +42,7 @@ class ChatController extends GetxController {
 
         chatList.assignAll(chats); // Update the observable list with fetched chats
         errorMessage.value = ''; // Clear previous error message
+        AppSnackBar.message(response.message);
       } else {
         errorMessage.value = 'Failed to load chats';
       }

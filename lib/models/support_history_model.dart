@@ -9,6 +9,8 @@ class SupportHistoryModel {
   final Category? category;
   final List<String> types;
   final String? status;
+  final String? prevEiin;
+  final String? eiin;
   final String? createdAt;
   final String? updatedAt;
   final int? v;
@@ -27,6 +29,8 @@ class SupportHistoryModel {
     this.createdAt,
     this.updatedAt,
     this.v,
+    this.eiin,
+    this.prevEiin,
   });
 
   factory SupportHistoryModel.fromJson(Map<String, dynamic> json) {
@@ -52,6 +56,8 @@ class SupportHistoryModel {
       status: json['status'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
+      prevEiin: json['prevEiin'],
+      eiin: json['eiin'],
       v: json['__v'],
     );
   }
@@ -140,18 +146,18 @@ class Subcategory {
 }
 
 class Category {
-  final String? id;
-  final String? title;
+  final String id;
+  final String title;
 
   Category({
-    this.id,
-    this.title,
+    this.id = "",
+    this.title = "",
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
-      id: json['_id'],
-      title: json['title'],
+      id: json['_id'] != null &&  json['_id'] is String  ?  json['_id'] : "" ,
+      title: json['title'] != null && json['title'] is String ? json['title'] : "",
     );
   }
 

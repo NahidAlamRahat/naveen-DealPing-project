@@ -1,3 +1,4 @@
+import 'package:deal_ping/screens/user_screens/user_chat_list_proposal_screen/controller.dart';
 import 'package:deal_ping/services/repository/common_repository/common_repository.dart';
 import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:deal_ping/utils/app_log/app_log.dart';
@@ -209,16 +210,14 @@ class ChatMessage extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              GetBuilder<RequestListController>(
-                                builder: (controller) {
-                                  return Visibility(
-                                    visible: controller.isLoading.value == false,
-                                    replacement: const Center(child: CircularProgressIndicator(),),
-                                    child: ElevatedButton(
-                                      onPressed: () async {
-                                        await controller.onDataLoad(); // ডেটা শেষ হলে পরের স্ক্রিনে যাওয়া
-                                        Get.toNamed(AppRoutes.userBookingSummaryScreen);
 
+                              ElevatedButton(
+                                      onPressed: () async {
+                                        /// get message by chat id api call
+
+                                        // await commonRepository.messageEnable(chatId: chatId.toString()); // ডেটা শেষ হলে পরের স্ক্রিনে যাওয়া
+                                        Get.toNamed(AppRoutes.userBookingSummaryScreen, arguments: message);
+                                          appLog("👌👌👌👌d${message!.id}");
                                       },
                                       style: ElevatedButton.styleFrom(
                                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -228,9 +227,8 @@ class ChatMessage extends StatelessWidget {
                                       ),
                                       child: const Text('Accept'),
                                     ),
-                                  );
-                                }
-                              ),
+
+
 
                               const SizedBox(width: 8),
                               ElevatedButton(

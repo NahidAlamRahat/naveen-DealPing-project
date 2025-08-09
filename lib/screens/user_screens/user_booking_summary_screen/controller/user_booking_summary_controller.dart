@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../models/chat_message_responce_model.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../services/repository/booking_repository/booking_confirm_repository.dart';
 import '../../../../utils/app_log/app_log.dart';
@@ -14,6 +15,11 @@ import '../../user_profile_screen/controller/user_profile_controller.dart';
 class UserBookingSummaryController extends GetxController {
 
   BookingConfirmRepository bookingConfirmRepository  = BookingConfirmRepository();
+  // শুধু কোড রাখার জন্য
+  String? bookingCode;
+
+  // এখানে রিসিভড মেসেজ রাখবো
+  late ChatMessageResponseModel message;
 
   // Date and Time Selection
   final Rx<DateTime> selectedDate = DateTime.now().obs;
@@ -79,40 +85,45 @@ class UserBookingSummaryController extends GetxController {
 
 
   // Confirm Booking
-  void confirmBooking() async{
-    appLog("Request ID: ${chatController.request.value?.requestId}");
-
+  void confirmBooking() async {
     BookingCreateModel bookingCreateModel = BookingCreateModel(
-        offerTitle: "offerTitle",
-        offerDescription: "offerDescription",
-
-        category: chatController.request.value?.category ?? 'category null',
-        subCategories:  chatController.request.value?.subCategories ?? [],
-        business: '',
-        request: chatController.request.value?.requestId ??''
+      offerTitle: message.offerTitle!,
+      offerDescription: message.offerDescription!,
+      category: message.sender?.category ?? 'category null',
+      subCategories: ['686c9a44dad115a94f52bbcc'],
+      business: message.sender!.id.toString(),
+      request: message.id!,
     );
 
-      final bool isSuccess =
-          await bookingConfirmRepository.bookingCreate(bookingCreateModel);
-      bookingConfirmRepository.inProgress == true;
+    final responseData = await bookingConfirmRepository.bookingCreate(bookingCreateModel);
 
-      if (isSuccess) {
-        bookingConfirmRepository.inProgress == false;
+    if (responseData != null && responseData['code'] != null) {
+      String bookingCode = responseData['code'];
+      appLog("📌 Booking Code: $bookingCode");
 
-        AppSnackBar.success(
-            bookingConfirmRepository.successfullyMessage ?? 'Successful!');
-        appLog(
-            'success message => ${bookingConfirmRepository.successfullyMessage}');
+      AppSnackBar.success(
+        bookingConfirmRepository.successfullyMessage ?? 'Successful!',
+      );
 
-        Get.toNamed(AppRoutes.userBookingSuccessfullScreen,);
-
-      } else {
-        bookingConfirmRepository.inProgress == false;
-        // error message
-        AppSnackBar.message('${bookingConfirmRepository.errorMessage}');
-        appLog('error message => ${bookingConfirmRepository.errorMessage}');
-      }
-
-
+    } else {
+      AppSnackBar.message('${bookingConfirmRepository.errorMessage}');
+    }
   }
+
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    // Argument receive + type casting
+    message = Get.arguments as ChatMessageResponseModel;
+
+    appLog("✅ Received Offer Title: ${message.offerTitle}");
+    appLog("✅ Received Offer Description: ${message.offerDescription}");
+    appLog("✅ Sender Name: ${message.sender?.name}");
+    appLog("✅ Request ID: ${message.id}");
+    appLog("✅ Sender ID: ${message.sender?.id}");
+    appLog("✅ Category : ${message.sender?.category}");
+  }
+
 }

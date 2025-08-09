@@ -19,7 +19,8 @@ class UserBookingSuccessFullScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BookingListController bookingController = Get.put(BookingListController());
+    // final BookingListController bookingController = Get.put(BookingListController());
+    var apiResponce = Get.arguments;
 
     return Scaffold(
       backgroundColor: AppColors.white,
@@ -58,7 +59,7 @@ class UserBookingSuccessFullScreen extends StatelessWidget {
                       fontColor: AppColors.grey700,
                     ),
                     TextWidget(
-                      text: bookingController.bookingList[0].bookingCode,
+                      text: apiResponce.toString(),
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       fontColor: AppColors.grey700,

@@ -50,6 +50,8 @@ class UserChatController extends GetxController {
 
 
 
+
+
   Future<void> fetchChatMessages() async {
     try {
       if(isLast){
@@ -203,6 +205,7 @@ class UserChatController extends GetxController {
 
 
             });
+
         paginationData();
       }else{
         appLog("chat id not found");
