@@ -63,6 +63,7 @@ class ApiUrls {
   static const String termsAndCondition = "/public/terms-and-condition";
   static const String about = "/public/about-us";
 
+
   static const String createRequest = "$baseUrl/request/create-request";
   static const String getRequestUrl = "$baseUrl/request";
 
@@ -70,6 +71,10 @@ class ApiUrls {
                         => "$baseUrl/booking/?longitude=$longitude&latitude=$latitude&status=${status.name}";
 
   static String  bookingSuccessUrl ({required String bookingId}) => "$baseUrl/booking/$bookingId";
+
+  static String  bookingGrowthUrl ({required String status}) => "$baseUrl/booking/conversion-growth?$status-${DateTime.now().year}";
+
+  static String  userGrowthUrl ({required String status}) => "$baseUrl/booking/growth?$status-${DateTime.now().year}";
 
  static String  userChatUrl({required String requestId}) => "$baseUrl/chat/user/$requestId";
 

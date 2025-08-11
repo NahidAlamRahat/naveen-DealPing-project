@@ -9,6 +9,7 @@ import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
 import '../../user_screens/user_bookings_screen/controller/booking_list_api_caller.dart';
 
+/*
 class BusinessBookingsScreen extends StatelessWidget {
   BusinessBookingsScreen({super.key}) {
     // Controller initialization
@@ -261,3 +262,289 @@ class BookingCard extends StatelessWidget {
     );
   }
 }
+*/
+
+
+class BusinessBookingsScreen extends StatelessWidget {
+  BusinessBookingsScreen({super.key}) {
+    if (!Get.isRegistered<BookingListController>()) {
+      Get.put(BookingListController());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<BookingListController>();
+
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        appBar: AppBar(
+          backgroundColor: AppColors.white,
+          title: const TextWidget(
+            text: AppStrings.bookings,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+            fontColor: AppColors.grey700,
+          ),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(50),
+            child: Container(
+              height: AppSize.height(value: 50),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: AppColors.green50,
+              ),
+              child: TabBar(
+                indicatorColor: AppColors.green500,
+                labelColor: AppColors.white,
+                unselectedLabelColor: AppColors.green500,
+                dividerColor: Colors.transparent,
+                indicatorSize: TabBarIndicatorSize.tab,
+                onTap: controller.onBookingStatusChange,
+                indicator: BoxDecoration(
+                  color: AppColors.green500,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                tabs: BookingStatus.values
+                    .map(
+                      (chat) => Tab(
+                    child: Text(
+                      chat.name,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ),
+                )
+                    .toList(),
+              ),
+            ),
+          ),
+        ),
+        body: const TabBarView(
+          children: [
+            BookingsList(),
+            PastBookings(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BookingsList extends StatelessWidget {
+  const BookingsList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<BookingListController>();
+
+    return Obx(() {
+      if (controller.isLoading.value && controller.bookingList.isEmpty) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      if (controller.bookingList.isEmpty) {
+        return const Center(child: Text("No bookings found"));
+      }
+
+      return NotificationListener<ScrollNotification>(
+        onNotification: (scrollNotification) {
+          if (scrollNotification.metrics.pixels >=
+              scrollNotification.metrics.maxScrollExtent - 100) {
+            if (!controller.isPagination.value &&
+                !controller.isLoading.value &&
+                !controller.isLast) {
+              controller.isPagination.value = true;
+              controller.onDataLoad();
+            }
+          }
+          return false;
+        },
+        child: ListView.builder(
+          controller: controller.scrollController,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          itemCount:
+          controller.bookingList.length + (controller.isPagination.value ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (index == controller.bookingList.length) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Center(
+                  child: SizedBox(
+                    width: AppSize.width(value: 20),
+                    height: AppSize.height(value: 20),
+                    child: const CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                ),
+              );
+            }
+
+            final booking = controller.bookingList[index];
+            return BookingCard(
+              title: booking.businessName,
+              location: booking.createdAt,
+              distance: booking.bookingCode ?? '',
+              index: index,
+            );
+          },
+        ),
+      );
+    });
+  }
+}
+
+class PastBookings extends StatelessWidget {
+  const PastBookings({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<BookingListController>();
+
+    return Obx(() {
+      if (controller.isLoading.value && controller.bookingList.isEmpty) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      if (controller.bookingList.isEmpty) {
+        return const Center(child: Text("No bookings found"));
+      }
+
+      return NotificationListener<ScrollNotification>(
+        onNotification: (scrollNotification) {
+          if (scrollNotification.metrics.pixels >=
+              scrollNotification.metrics.maxScrollExtent - 100) {
+            if (!controller.isPagination.value &&
+                !controller.isLoading.value &&
+                !controller.isLast) {
+              controller.isPagination.value = true;
+              controller.onDataLoad();
+            }
+          }
+          return false;
+        },
+        child: ListView.builder(
+          controller: controller.scrollController,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          itemCount:
+          controller.bookingList.length + (controller.isPagination.value ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (index == controller.bookingList.length) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Center(
+                  child: SizedBox(
+                    width: AppSize.width(value: 20),
+                    height: AppSize.height(value: 20),
+                    child: const CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                ),
+              );
+            }
+            final booking = controller.bookingList[index];
+            return BookingCard(
+              title: booking.businessName,
+              location: booking.createdAt,
+              distance: booking.bookingCode ?? '',
+              isPastBooking: true,
+              index: index,
+            );
+          },
+        ),
+      );
+    });
+  }
+}
+
+class BookingCard extends StatelessWidget {
+  final int index;
+  final String title, location, distance;
+  final bool isPastBooking;
+
+  const BookingCard({
+    super.key,
+    required this.index,
+    required this.title,
+    required this.location,
+    required this.distance,
+    this.isPastBooking = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: AppColors.grey50,
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextWidget(
+                    text: title,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontColor: AppColors.grey700,
+                  ),
+                  const SpaceWidget(spaceHeight: 4),
+                  TextWidget(
+                    text: location,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400,
+                    fontColor: AppColors.grey700,
+                  ),
+                  const SpaceWidget(spaceHeight: 2),
+                  TextWidget(
+                    text: distance,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontColor: AppColors.green500,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          isPastBooking
+              ? const Icon(
+            Icons.check,
+            size: 24,
+            color: AppColors.green500,
+          )
+              : GetBuilder<BookingListController>(
+            builder: (controller) {
+              final booking = controller.bookingList[index];
+              final isLoading = controller.loadingBookingId == booking.id;
+
+              return Visibility(
+                visible: !isLoading,
+                replacement: const Center(child: CircularProgressIndicator()),
+                child: ButtonWidget(
+                  onPressed: () {
+                    controller.bookingSuccess(bookingId: booking.id);
+                  },
+                  label: AppStrings.checkIn,
+                  buttonHeight: AppSize.height(value: 36),
+                  buttonWidth: AppSize.height(value: 90),
+                  fontSize: 12,
+                ),
+              );
+            },
+          )
+        ],
+      ),
+    );
+  }
+}
+

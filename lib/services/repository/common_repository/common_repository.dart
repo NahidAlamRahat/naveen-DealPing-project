@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:deal_ping/models/support_history_model.dart';
+import 'package:deal_ping/models/user-growth.dart';
 import 'package:deal_ping/screens/support_screen/model/request_model.dart';
 import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:dio/dio.dart';
@@ -17,6 +18,7 @@ import '../../../models/faq_model.dart';
 import '../../../models/notification_model.dart';
 import '../../../models/request_list_model.dart';
 import '../../../models/terms_and_conditions_model.dart';
+import '../../../models/booking-growth.dart';
 import '../../../utils/app_log/error_log.dart';
 import '../../../widgets/app_snack_bar/app_snack_bar.dart';
 import '../../api/api_services.dart';
@@ -75,6 +77,10 @@ class CommonRepository {
       return null;
     }
   }
+
+
+
+
 
 
 
@@ -144,6 +150,57 @@ class CommonRepository {
 
 
 
+
+
+  Future<BookingStatsResponse?> bookingGrowth({
+    required String status,
+  }) async {
+    try {
+      var response = await apiServices.apiGetServices(
+        ApiUrls.bookingGrowthUrl(status: status),
+      );
+      appLog('bookingGrowthUrl👌 ==>> $response');
+
+      if (response != null) {
+        if (response["data"] != null && response["data"] is Map) {
+          return BookingStatsResponse.fromJson(response["data"]);
+        } else {
+          appLog('Error: bookingGrowth data is not a Map');
+        }
+      }
+    } catch (e) {
+      errorLog(e);
+    }
+    return null;
+  }
+
+
+
+  Future<UserGrowthResponse?> userGrowth({
+    required String status,
+  }) async {
+    try {
+      var response = await apiServices.apiGetServices(
+        ApiUrls.userGrowthUrl(status: status),
+      );
+      appLog('user growth url ❤️ ==>> $response');
+
+      if (response != null) {
+        if (response["data"] != null && response["data"] is Map) {
+          return UserGrowthResponse.fromJson(response["data"]);
+        } else {
+          appLog('Error: bookingGrowth data is not a Map');
+        }
+      }
+    } catch (e) {
+      errorLog(e);
+    }
+    return null;
+  }
+
+
+
+
   Future<List<SupportHistoryModel>> getSupportHistoryData(int page) async {
     List<SupportHistoryModel> supportHistoryDataList = <SupportHistoryModel>[];
     try {
@@ -189,30 +246,30 @@ class CommonRepository {
     return requestDataList;
   }
 
-
-
-  Future<List<ChatMessageResponseModel>> getChatMessage({ required int page,  required String chatId})async{
-    List<ChatMessageResponseModel> chatMessageResponseModelList = <ChatMessageResponseModel>[];
-    try{
-      Map<String, dynamic> queryParameters = {"page": page,"limit":20};
+  Future<List<ChatMessageResponseModel>> getChatMessage(
+      {required int page, required String chatId}) async {
+    List<ChatMessageResponseModel> chatMessageResponseModelList =
+        <ChatMessageResponseModel>[];
+    try {
+      Map<String, dynamic> queryParameters = {"page": page, "limit": 20};
       appLog('current page😒😒 ====>>> $page');
       appLog('chat ID😒😪😒 ====>>> $chatId');
 
-      var response = await  apiServices.apiGetServices("${ApiUrls.baseUrl}/message/$chatId", queryParameters:queryParameters );
-      if(response != null){
-        if(response["data"] != null && response["data"] is Map){
+      var response = await apiServices.apiGetServices(
+          "${ApiUrls.baseUrl}/message/$chatId",
+          queryParameters: queryParameters);
+      if (response != null) {
+        if (response["data"] != null && response["data"] is Map) {
           var data = response["data"];
-          if(data["data"] != null && data["data"] is List){
-            for(var item in data["data"]){
-              chatMessageResponseModelList.add(ChatMessageResponseModel.fromJson(item));
+          if (data["data"] != null && data["data"] is List) {
+            for (var item in data["data"]) {
+              chatMessageResponseModelList
+                  .add(ChatMessageResponseModel.fromJson(item));
             }
           }
-
         }
       }
-
-    }catch(e){
-
+    } catch (e) {
       errorLog('getChatMessage======>>>  $e');
     }
     return chatMessageResponseModelList;
