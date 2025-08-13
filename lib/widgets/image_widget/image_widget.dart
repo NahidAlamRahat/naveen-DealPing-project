@@ -1,3 +1,4 @@
+import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/app_size.dart';
@@ -78,11 +79,17 @@ class NetworkImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     ResponsiveUtils.initialize(context);
 
-    bool isNetworkUrl = networkImageUrl.startsWith('http');
+    // Step 1: http থাকলে https এ কনভার্ট
+    String finalUrl = networkImageUrl.replaceFirst('http://', 'https://');
+
+    // Step 2: চেক করা এটা নেটওয়ার্ক URL কিনা
+    bool isNetworkUrl = finalUrl.startsWith('http');
+
+    appLog('finalUrl ==>>> $finalUrl');
 
     return isNetworkUrl
         ? Image.network(
-      networkImageUrl,
+      finalUrl,
       height: ResponsiveUtils.width(height),
       width: ResponsiveUtils.width(width),
       fit: fit,
@@ -92,6 +99,7 @@ class NetworkImageWidget extends StatelessWidget {
     )
         : _buildProfileIcon();
   }
+
 
   Widget _buildProfileIcon() {
     return Container(

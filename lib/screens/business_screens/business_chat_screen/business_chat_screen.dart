@@ -105,7 +105,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-
+                      /// offer sent
                       Form(
                         key: _formKey,
                         child: Column(
@@ -174,6 +174,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                       _buildOfferButtonsRow(),
                       const SizedBox(height: 18),
 
+                      /// oofer save
                       Align(
                         alignment: Alignment.centerRight,
                         child: IconTextButton(
@@ -344,7 +345,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                           replacement:
                           const Center(child: CircularProgressIndicator()),
                           child: FloatingActionButton(
-                            onPressed: controller.hasUserReplied.value ? controller.sendMessage : null,
+                            onPressed: () =>  controller.sendMessage(),
 
                             backgroundColor: AppColors.green500,
                             child: const Icon(Icons.send_rounded, color: AppColors.white),
@@ -462,7 +463,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                     confirmTextColor: Colors.white,
                     onConfirm: () {
                       offerController.deleteOffer(
-                        offerId: offerController.AllOffersList[index].id,
+                        offerId: offerController.allOffersList[index].id,
                       );
                       Get.back();
                     },
@@ -489,9 +490,9 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
       height: 30,
       child: Obx(() => ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: offerController.AllOffersList.length,
+        itemCount: offerController.allOffersList.length,
         itemBuilder: (context, index) {
-          final offer = offerController.AllOffersList[index];
+          final offer = offerController.allOffersList[index];
           return _buildOfferButton(
             offerTitle: offer.title,
             offerDescription: offer.description,

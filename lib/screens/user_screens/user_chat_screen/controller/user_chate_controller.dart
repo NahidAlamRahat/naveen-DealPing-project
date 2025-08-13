@@ -23,7 +23,7 @@ class UserChatController extends GetxController {
 
 
 
-  String chatId = '';
+  String requestId = '';
 
   RxList<ChatMessageResponseModel> chatMessagesList =
       <ChatMessageResponseModel>[].obs;
@@ -60,7 +60,7 @@ class UserChatController extends GetxController {
         return;
       }
 
-      final data = await commonRepository.getChatMessage(page: currentPage, chatId: chatId);
+      final data = await commonRepository.getChatMessage(page: currentPage, chatId: requestId);
 
       if (data.isNotEmpty) {
         chatMessagesList.addAll(data);
@@ -88,7 +88,8 @@ class UserChatController extends GetxController {
       await commonRepository.sendOffer(
           offerTitle: offerTitle,
           offerDescription:offerDescription,
-          chatId: chatId);
+          chatId: requestId);
+      appLog('//////////$requestId');
     } catch (e) {
       errorLog("send Offer method ===>> $e");
     }
@@ -105,11 +106,14 @@ class UserChatController extends GetxController {
       isMessageSent = true;
       update();
 
+
       var response = await commonRepository.sendMessage(
         message: messageController.text.trim(),
-        chatId: chatId,
+        requestId: requestId,
         imageUrl: images,
       );
+
+
 
       if (response != null) {
         messageController.clear();
@@ -188,7 +192,8 @@ class UserChatController extends GetxController {
 
       final argData  = Get.arguments;
       if(argData != null && argData is String){
-        chatId = argData;
+        requestId = argData;
+        appLog('request id😥😥😥 ===>> $requestId');
         scrollController = ScrollController();
         messageController = TextEditingController();
 
@@ -198,7 +203,7 @@ class UserChatController extends GetxController {
 
 
         appSocketAllOperation.readEvent(
-            event: "message::$chatId",
+            event: "message::$requestId",
             handler: (data) {
 
               chatMessageSocketHandler(data);

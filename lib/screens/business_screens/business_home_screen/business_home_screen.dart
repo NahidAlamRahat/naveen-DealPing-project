@@ -12,6 +12,7 @@ import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/image_widget/image_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
+import '../../common/common_widget/search_bar_widget.dart';
 import '../../user_screens/user_profile_screen/controller/user_profile_controller.dart';
 import 'controller/new_chat_list_api_caller.dart';
 
@@ -25,6 +26,8 @@ class BusinessHomeScreen extends StatefulWidget {
 class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
   BusinessChatListApiController controller = Get.put(BusinessChatListApiController());
   final userProfileController = Get.put(UserProfileController());
+  final searchController = TextEditingController();
+
 
 
   List<Map<String, dynamic>> messages = List.generate(
@@ -107,27 +110,15 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
               ),
             ),
             const SpaceWidget(spaceHeight: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Search Your message",
-                  hintStyle: const TextStyle(
-                    color: AppColors.grey300,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  suffixIcon: const Icon(
-                    Icons.search,
-                    color: AppColors.grey300,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: AppColors.grey300),
-                  ),
-                ),
-              ),
+            // Search Field
+            SearchBarWidget(
+              controller: searchController,
+              hintText: 'Search Your Offer',
+              onChanged: (value) {
+                controller.filterList(value);
+              },
             ),
+
             const SpaceWidget(spaceHeight: 16),
             Expanded(
               child: GetBuilder<BusinessChatListApiController>(

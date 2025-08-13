@@ -10,6 +10,7 @@ import '../../../constants/app_colors.dart';
 import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
+import '../../common/common_widget/search_bar_widget.dart';
 import 'controller/business_present_screen_controller.dart';
 
 class BusinessPresetScreen extends StatefulWidget {
@@ -24,6 +25,8 @@ class BusinessPresetScreenState extends State<BusinessPresetScreen> {
   Get.put(BusinessPresetScreenController());
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+  final searchController = TextEditingController();
+
 
 
   @override
@@ -62,6 +65,11 @@ class BusinessPresetScreenState extends State<BusinessPresetScreen> {
                           color: AppColors.grey700,
                         ),
                       ),
+
+
+
+
+
                       PopupMenuButton<int>(
                         onSelected: (value) {
                           if (value == 1) {
@@ -158,6 +166,7 @@ class BusinessPresetScreenState extends State<BusinessPresetScreen> {
                                                 selectedPercentage;
                                           });
                                         }),*/
+
                                         const SizedBox(height: 18),
                                         Row(
                                           mainAxisAlignment:
@@ -235,7 +244,7 @@ class BusinessPresetScreenState extends State<BusinessPresetScreen> {
                   if (controller.isLoadingOffers.value) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  if (controller.AllOffersList.isEmpty) {
+                  if (controller.allOffersList.isEmpty) {
                     return const Center(
                       child: TextWidget(
                         text: "No offers available.",
@@ -247,8 +256,19 @@ class BusinessPresetScreenState extends State<BusinessPresetScreen> {
 
                   return Column(
                     children: [
-                      ...List.generate(controller.AllOffersList.length, (index) {
-                        final offer = controller.AllOffersList[index];
+
+                      // Search Field
+                      SearchBarWidget(
+                        controller: searchController,
+                        hintText: 'Search Your Offer',
+                        onChanged: (value) {
+                          controller.filterList(value);
+                        },
+                      ),
+
+                      ///Offer List
+                      ...List.generate(controller.allOffersList.length, (index) {
+                        final offer = controller.allOffersList[index];
                         return OfferItem(
                           offerId: offer.id ,
                           itemIndex: index,
@@ -264,7 +284,9 @@ class BusinessPresetScreenState extends State<BusinessPresetScreen> {
                     ],
                   );
                 }),
-                const SizedBox(height: 16),
+
+              ///view more button
+              /*  const SizedBox(height: 16),
                 Center(
                   child: ButtonWidget(
                     onPressed: () {
@@ -275,7 +297,7 @@ class BusinessPresetScreenState extends State<BusinessPresetScreen> {
                     buttonWidth: 110,
                     fontSize: 12,
                   ),
-                ),
+                ),*/
               ],
             ),
           ),
@@ -655,9 +677,9 @@ class _OfferItemState extends State<OfferItem> {
                       Transform.scale(
                         scale: 0.8,
                         child: Switch(
-                            value: controller.AllOffersList[widget.itemIndex].datumDefault,
+                            value: controller.allOffersList[widget.itemIndex].datumDefault,
                             onChanged: (value) {
-                              if (!controller.AllOffersList[widget.itemIndex].datumDefault) {
+                              if (!controller.allOffersList[widget.itemIndex].datumDefault) {
                                 widget.onToggleDefault(true, widget.itemIndex);
                               }
                               // else do nothing, user can't turn it OFF directly

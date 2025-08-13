@@ -255,6 +255,8 @@ class CommonRepository {
       appLog('current page😒😒 ====>>> $page');
       appLog('chat ID😒😪😒 ====>>> $chatId');
 
+
+
       var response = await apiServices.apiGetServices(
           "${ApiUrls.baseUrl}/message/$chatId",
           queryParameters: queryParameters);
@@ -278,12 +280,14 @@ class CommonRepository {
   ///
   Future<ChatMessageResponseModel?> sendMessage(
       {required String message,
-        required String chatId,
+        // required String chatId,
+        required String requestId ,
         required List<XFile> imageUrl}) async{
 
     FormData formData = FormData.fromMap({
       "data": '''{
-        "message": "$message"
+        "message": "$message",
+        "request": ""
       }''',
     });
     if(imageUrl.isNotEmpty){
@@ -292,14 +296,25 @@ class CommonRepository {
         formData.files.add(MapEntry("image", await MultipartFile.fromFile(i.path, filename: i.path.split("/").last, contentType: MediaType.parse(mimeType ?? "application/octet-stream"))));
       }
     }
+    appLog("------sendMessage id-----------------$requestId");
 
-    var response =await  ApiService.postApi('${ApiUrls.baseUrl}/message/$chatId', formData);
-    appLog("------sendMessage-----------------${ApiService.postApi('${ApiUrls.baseUrl}/message/$chatId', formData)}");
+    String cleanRequestId = requestId.replaceAll(RegExp(r'[^\x00-\x7F]'), '');
+    String url = '${ApiUrls.baseUrl}/message/$cleanRequestId';
+
+
+    appLog("------sendMessage url-----------------$url");
+
+    appLog("--------${requestId.codeUnits}"); // BOM থাকলে প্রথমে 65279 দেখাবে
+
+    var response =await  ApiService.postApi(url, formData);
+    appLog("------sendMessage responce-----------------$response");
+
     appLog(response.body);
     if(response.statusCode == 200){
       return ChatMessageResponseModel.fromJson(response.body['data']);
     }else{
       AppSnackBar.error('sendMessage=====>> ${response.message}');
+      appLog(' sendMessage error message ==>>> ${response.message}');
       return null;
     }
   }

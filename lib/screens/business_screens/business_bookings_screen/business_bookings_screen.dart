@@ -532,7 +532,7 @@ class BookingCard extends StatelessWidget {
                 replacement: const Center(child: CircularProgressIndicator()),
                 child: ButtonWidget(
                   onPressed: () {
-                    controller.bookingSuccess(bookingId: booking.id);
+                    controller.bookingSuccess(bookingRequestId: booking.requestId);
                   },
                   label: AppStrings.checkIn,
                   buttonHeight: AppSize.height(value: 36),

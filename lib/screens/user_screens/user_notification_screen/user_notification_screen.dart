@@ -1,7 +1,9 @@
+import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/models/notification_model.dart';
 import 'package:deal_ping/screens/user_screens/user_bottom_nav/controller/user_bottom_nav_controller.dart';
+import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:deal_ping/utils/app_size.dart';
 import 'package:deal_ping/utils/extension.dart';
 import 'package:deal_ping/widgets/appbar_widget/appbar_widget.dart';
@@ -12,6 +14,7 @@ import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lazy_scroll_view/lazy_scroll_view.dart';
+import '../../../constants/app_image_path.dart';
 import '../../business_screens/business_notification_screen/controller/business_notification_api_caller_controller.dart';
 import 'controller/user_notification_controller.dart';
 
@@ -73,10 +76,11 @@ class UserNotificationScreen extends StatelessWidget {
                             controller.notificationsList.length,
                                 (index) {
                               var item = controller.notificationsList[index];
+                              appLog('image==>.😪😪 ${ApiUrls.imageUrl}/${item.userProfileImage}');
                               return NotificationItem(
                                 notification: item,
                                 isNew: !item.isRead,
-                                networkImageUrl: item.userProfileImage,
+                                networkImageUrl: '${ApiUrls.baseUrl}/${item.userProfileImage}',
                               );
                             },
                           ),
@@ -118,6 +122,7 @@ class UserNotificationScreen extends StatelessWidget {
 }
 
 class NotificationItem extends StatelessWidget {
+
   final NotificationModel notification;
   final bool isNew;
   final String networkImageUrl;
@@ -131,6 +136,8 @@ class NotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    appLog("NotificationItem image URL: $networkImageUrl"); // এখানে URL লগ হবে
+
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
@@ -149,7 +156,7 @@ class NotificationItem extends StatelessWidget {
               fit: BoxFit.cover,
               height: AppSize.height(value: 40),
               width: AppSize.height(value: 40),
-              networkImageUrl: networkImageUrl,
+              networkImageUrl: "${AppImagePath.imageUrl}$networkImageUrl",
             ),
           ),
           const SpaceWidget(spaceWidth: 12),

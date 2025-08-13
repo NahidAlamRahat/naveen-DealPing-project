@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import '../../../../constants/app_colors.dart';
 import '../../../../constants/app_icons_path.dart';
 import '../../../../constants/app_strings.dart';
+import '../../../../services/repository/auth_repository/sign_in_api_controller.dart';
 import '../../../../widgets/button_widget/button_widget.dart';
 import '../../../../widgets/space_widget/space_widget.dart';
 import '../../../../widgets/text_button_widget/text_button_widget.dart';
@@ -98,12 +99,21 @@ class BusinessSignInScreen extends StatelessWidget {
                   ),
                 ),
                 const SpaceWidget(spaceHeight: 12),
-                ButtonWidget(
-                  onPressed: controller.onTapSignInButton,
-                  label: AppStrings.signInTitle,
-                  buttonWidth: double.infinity,
-                  buttonRadius: const BorderRadius.all(Radius.circular(8)),
-                ),
+
+                GetBuilder<SignInApiController>(builder: (apiControllers) {
+                  return Visibility(
+                    visible: apiControllers.inProgress == false,
+                    replacement:
+                    const Center(child: CircularProgressIndicator()),
+                    child: ButtonWidget(
+                      onPressed: controller.onTapSignInButton,
+                      label: AppStrings.signInTitle,
+                      buttonWidth: double.infinity,
+                      buttonRadius: const BorderRadius.all(Radius.circular(8)),
+                    ),
+                  );
+                }),
+
                 const SpaceWidget(spaceHeight: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -37,7 +37,17 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
   final ReportController controller = Get.put(ReportController());
 
   @override
+  void initState() {
+    super.initState();
+    // Initial API calls for both user growth & booking growth
+    controller.changeUserFilterType(controller.userFilterType.value);
+    controller.changeBookingFilterType(controller.bookingFilterType.value);
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+
 
     return Scaffold(
       backgroundColor: AppColors.white,

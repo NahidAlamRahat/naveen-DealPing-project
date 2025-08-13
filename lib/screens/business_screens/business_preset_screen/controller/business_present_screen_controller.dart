@@ -11,10 +11,13 @@ class BusinessPresetScreenController extends GetxController {
 
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+
   // final RxInt discount = 0.obs;
   final RxBool isLoading = false.obs;
 
-  final RxList<AllOffers> AllOffersList = <AllOffers>[].obs;
+  final RxList<AllOffers> allOffersList = <AllOffers>[].obs;
+  List<AllOffers> _originalRequestList = [];
+
   final RxBool isLoadingOffers = false.obs;
 
   final Rx<AllOffers?> selectedOffer = Rx<AllOffers?>(null);
@@ -33,6 +36,25 @@ class BusinessPresetScreenController extends GetxController {
     descriptionController.dispose();
     super.onClose();
   }
+
+
+  void filterList(String query) {
+    print('Query: $query');
+    if (query.isEmpty) {
+      print('❤️❤️Resetting full list');
+      allOffersList.value = _originalRequestList;
+    } else {
+      final filtered = _originalRequestList.where((request) {
+        print('Checking: ${request.title}');
+        return (request.title ?? '')
+            .toLowerCase()
+            .contains(query.toLowerCase());
+      }).toList();
+      print('Filtered count: ${filtered.length}');
+      allOffersList.value = filtered;
+    }
+  }
+
 
   Future<void> postOffer({
     required String title,
@@ -68,10 +90,13 @@ class BusinessPresetScreenController extends GetxController {
   Future<void> fetchAllOffers() async {
     isLoadingOffers.value = true;
     try {
-      List<AllOffers>? offersList =
+      List<AllOffers>? response =
           await _businessOfferRepository.getAllOffers();
-      if (offersList != null) {
-        AllOffersList.assignAll(offersList);
+      if (response != null) {
+
+        allOffersList.assignAll(response);
+        _originalRequestList.addAll(response);
+
       }
     } catch (e) {
       AppSnackBar.error("An unexpected error occurred while fetching offers.");
@@ -148,18 +173,18 @@ class BusinessPresetScreenController extends GetxController {
       bool success = await _businessOfferRepository.setDefaultOffer(offerId, isDefault);
       if (success) {
         // Step 1: Set all offers to default = false
-        for (int i = 0; i < AllOffersList.length; i++) {
-          AllOffersList[i] = AllOffersList[i].copyWith(datumDefault: false);
+        for (int i = 0; i < allOffersList.length; i++) {
+          allOffersList[i] = allOffersList[i].copyWith(datumDefault: false);
         }
 
         // Step 2: Set selected offer to default = true
-        AllOffers selected = AllOffersList[index].copyWith(datumDefault: true);
+        AllOffers selected = allOffersList[index].copyWith(datumDefault: true);
 
         // Step 3: Remove it from current position
-        AllOffersList.removeAt(index);
+        allOffersList.removeAt(index);
 
         // Step 4: Insert at top
-        AllOffersList.insert(0, selected);
+        allOffersList.insert(0, selected);
 
         update();
         AppSnackBar.success("Offer set as default.");

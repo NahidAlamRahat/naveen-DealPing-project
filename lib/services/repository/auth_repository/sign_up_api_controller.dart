@@ -37,8 +37,8 @@ class SignUpApiController extends GetxController {
 
       appLog(
           'Success message *==> ${_successfullyMessage = response.message} <===*');
-      debugPrint('_successfullyMessage ==> $_successfullyMessage');
-      debugPrint('SrrorMessage ==> $successfullyMessage <==');
+      appLog('_successfullyMessage ==> $_successfullyMessage');
+      appLog('errorMessage ==> $errorMessage <==');
 
       _signUpInProgress = false;
       isSuccess = true;

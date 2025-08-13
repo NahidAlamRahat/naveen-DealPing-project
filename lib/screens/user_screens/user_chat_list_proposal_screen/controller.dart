@@ -1,5 +1,6 @@
 import 'package:deal_ping/models/request_list_model.dart';
 import 'package:deal_ping/services/api/api_services.dart';
+import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:deal_ping/widgets/app_snack_bar/app_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,6 @@ class ChatController extends GetxController {
 
     id = newId;
 
-    debugPrint('chat id😎😎😎😎😎=====>>>${chatList[0].chatId}');
 
     fetchChatData(id: id); // Re-fetch data when ID changes
   }
@@ -40,9 +40,11 @@ class ChatController extends GetxController {
             .map((item) => ChatModel.fromJson(item))
             .toList();
 
-        chatList.assignAll(chats); // Update the observable list with fetched chats
+        chatList.assignAll(chats);
+        for(int i=0;i<chatList.length;i++){
+          appLog("================chat id $i============${chatList[i].requestId}");
+        }// Update the observable list with fetched chats
         errorMessage.value = ''; // Clear previous error message
-        AppSnackBar.message(response.message);
       } else {
         errorMessage.value = 'Failed to load chats';
       }

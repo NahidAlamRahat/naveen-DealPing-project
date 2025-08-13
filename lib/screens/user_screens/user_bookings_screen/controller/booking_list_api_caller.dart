@@ -98,13 +98,13 @@ class BookingListController extends GetxController {
   }
 
 
-  Future<void> bookingSuccess({required String bookingId}) async {
-    loadingBookingId = bookingId;
+  Future<void> bookingSuccess({required String bookingRequestId}) async {
+    loadingBookingId = bookingRequestId;
     update();
 
     try {
       final response = await ApiService.patchApi(
-        ApiUrls.bookingSuccessUrl(bookingId: bookingId),
+        ApiUrls.bookingSuccessUrl(bookingId: bookingRequestId),
       );
 
       if (response.statusCode == 200) {

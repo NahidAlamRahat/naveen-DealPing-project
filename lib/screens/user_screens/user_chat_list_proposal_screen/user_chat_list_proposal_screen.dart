@@ -156,11 +156,13 @@ library;
 
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:deal_ping/utils/app_size.dart';
 import 'package:deal_ping/utils/extension.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../constants/app_image_path.dart';
 import '../../../routes/app_routes.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../../widgets/image_widget/image_widget.dart';
@@ -238,8 +240,9 @@ class UserChatListProposalScreen extends StatelessWidget {
 
                       return InkWell(
                         onTap: () {
+                          appLog("==============================rhtrhtrjrjychat id:${chat.requestId}");
                           // Navigate to the chat screen
-                          Get.toNamed(AppRoutes.userChatScreen,arguments: chat.chatId.toString(),);
+                          Get.toNamed(AppRoutes.userChatScreen,arguments: chat.requestId.toString(),);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -254,7 +257,7 @@ class UserChatListProposalScreen extends StatelessWidget {
                                       child: NetworkImageWidget(
                                         height: AppSize.height(value: 40),
                                         width: AppSize.width(value: 40),
-                                        networkImageUrl: chat.participantProfile,
+                                        networkImageUrl: "${AppImagePath.imageUrl}${chat.participantProfile}",
                                       )),
                                   const SpaceWidget(spaceWidth: 8),
                                   Column(

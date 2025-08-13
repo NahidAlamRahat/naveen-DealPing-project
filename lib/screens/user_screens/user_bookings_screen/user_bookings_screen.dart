@@ -104,12 +104,12 @@ class BookingsList extends StatelessWidget {
           // ✅ Loader Item
           if (index == controller.bookingList.length) {
             return  Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: Center(
                 child: SizedBox(
                   width: AppSize.width(value: 20) ,
                   height: AppSize.height(value: 20),
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                  child: const CircularProgressIndicator(strokeWidth: 2),
                 ),
               ),
             );
@@ -120,7 +120,7 @@ class BookingsList extends StatelessWidget {
             title: booking.businessName,
             location: booking.address,
             distance: "${booking.distance.toStringAsFixed(2)} miles",
-            networkImageUrl: '${AppImagePath.imageUrl}${booking.userProfileImage}',
+            networkImageUrl: '${AppImagePath.imageUrl}${booking.businessProfile}',
             rating: booking.rating,
             index: index,
           );
@@ -158,7 +158,8 @@ class PastBookings extends StatelessWidget {
             location: booking.address,
             distance: "${booking.distance.toStringAsFixed(2)} miles",
             networkImageUrl:
-            '${AppImagePath.imageUrl}${booking.userProfileImage}',
+            '${AppImagePath.imageUrl}${booking.businessProfile}',
+
             isPastBooking: true,
             rating: booking.rating,
             index: index,
@@ -211,7 +212,7 @@ class BookingCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: NetworkImageWidget(
-                    networkImageUrl: networkImageUrl,
+                    networkImageUrl: "${AppImagePath.imageUrl}$networkImageUrl",
                     width: AppSize.width(value: 99),
                     height: AppSize.width(value: 59),
                   ),
@@ -287,7 +288,9 @@ class BookingCard extends StatelessWidget {
                 )
               : ButtonWidget(
                   onPressed: () {
+                    appLog('View index😪😪 ==== $index');
                     Get.toNamed(AppRoutes.userBarcodeScreen,arguments: index);
+                    
                   },
                   label: AppStrings.view,
                   buttonHeight: 36,

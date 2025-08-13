@@ -1,11 +1,13 @@
 class BookingModel {
   final String id;
+  final String requestId;
   final String offerTitle;
   final String offerDescription;
   final String categoryTitle;
   final List<String> subCategories;
   final String userName;
   final String userProfileImage;
+  final String businessProfile;
   final String businessName;
   final String address;
   final double rating;
@@ -15,6 +17,7 @@ class BookingModel {
 
   BookingModel({
     required this.id,
+    required this.requestId,
     required this.offerTitle,
     required this.offerDescription,
     required this.categoryTitle,
@@ -27,6 +30,7 @@ class BookingModel {
     required this.distance,
     required this.bookingCode,
     required this.createdAt,
+    required this.businessProfile
   });
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
@@ -35,11 +39,15 @@ class BookingModel {
       offerTitle: json['offerTitle'] ?? '',
       offerDescription: json['offerDescription'] ?? '',
       categoryTitle: json['category']?['title'] ?? '',
+      businessProfile: json['business']?['profile'] ?? '',
+
       subCategories: (json['subCategories'] as List<dynamic>?)
           ?.map((e) => e['title']?.toString() ?? '')
           .toList() ??
           [],
       userName: json['user']?['name'] ?? '',
+      requestId: json['request']?['_id'] ?? '',
+
       userProfileImage: json['user']?['profile'] ?? '',
       businessName: json['business']?['businessName'] ?? '',
       address: json['business']?['address'] ?? '',

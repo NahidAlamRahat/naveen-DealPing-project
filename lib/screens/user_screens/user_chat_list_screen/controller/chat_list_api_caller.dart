@@ -35,6 +35,7 @@ class RequestListController extends GetxController {
       if (responses.isEmpty) {
         isLast = true;
       } else {
+
         _originalRequestList.addAll(responses);
         requestModelList.addAll(responses);
         currentPage++;

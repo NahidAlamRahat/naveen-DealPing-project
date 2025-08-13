@@ -15,7 +15,9 @@ class BusinessChatListApiController extends GetxController {
   int? _totalPage;
   bool _isInitialLoading = true;
   bool _isLoading = false;
-  final List<BusinessesChatListModel> _businessChatList = [];
+  late List<BusinessesChatListModel> _businessChatList = [];
+  List<BusinessesChatListModel> _originalRequestList = [];
+
   String? _errorMessage;
 
   String? get errorMessage => _errorMessage;
@@ -28,6 +30,25 @@ class BusinessChatListApiController extends GetxController {
     selectedChatType = ChatType.values.elementAt(index);
     update();
   }
+
+
+  void filterList(String query) {
+    print('Query: $query');
+    if (query.isEmpty) {
+      print('❤️❤️Resetting full list');
+      _businessChatList = _originalRequestList;
+    } else {
+      final filtered = _originalRequestList.where((request) {
+        print('Checking: ${request.name}');
+        return (request.name ?? '')
+            .toLowerCase()
+            .contains(query.toLowerCase());
+      }).toList();
+      print('Filtered count: ${filtered.length}');
+      _businessChatList = filtered;
+    }
+  }
+
 
   Future<bool> getChatList() async {
     if (_totalPage != null && _currentPage > _totalPage!) return true;
@@ -62,6 +83,8 @@ class BusinessChatListApiController extends GetxController {
       }
 
       _businessChatList.addAll(list);
+      _originalRequestList.addAll(list);
+
       _totalPage = body['meta']['totalPages']; // ✅ Corrected
       _errorMessage = null;
       isSuccess = true;
