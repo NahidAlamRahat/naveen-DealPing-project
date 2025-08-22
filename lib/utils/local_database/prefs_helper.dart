@@ -1,3 +1,4 @@
+import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
@@ -43,8 +44,8 @@ class PrefsHelper {
         preferences.getString("localizationLanguageCode") ?? "en";
 
     if (kDebugMode) {
-      print(accessToken);
-      print(isLogIn);
+      appLog('accessToken =-==-==-=>> $accessToken');
+      appLog(isLogIn);
     }
   }
 

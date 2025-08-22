@@ -2,7 +2,6 @@ import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/category_widget.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/home_screen_input_widget.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/sub_category_view_widget.dart';
-import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/sub_category_widget.dart';
 import 'package:deal_ping/utils/app_size.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -57,29 +57,36 @@ class UserChatListScreen extends StatelessWidget {
           Expanded(
             child: controller.isLoading.value
                 ? const Center(child: CircularProgressIndicator())
-                : controller.requestModelList.isEmpty
-                ? const Center(child: Text("No requests available."))
                 : RefreshIndicator(
               onRefresh: () async {
                 await controller.refreshRequestList();
               },
-              child: ListView.builder(
+              child: controller.requestModelList.isEmpty
+                  ? ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    child: const Center(
+                      child: Text("No requests available."),
+                    ),
+                  ),
+                ],
+              )
+                  : ListView.builder(
                 controller: controller.scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: controller.requestModelList.length +
                     (controller.isPagination.value ? 1 : 0),
                 itemBuilder: (context, index) {
-                  if (index ==
-                      controller.requestModelList.length) {
+                  if (index == controller.requestModelList.length) {
                     return const Padding(
-                      padding:
-                      EdgeInsets.symmetric(vertical: 16),
+                      padding: EdgeInsets.symmetric(vertical: 16),
                       child: Center(
                         child: SizedBox(
                           width: 24,
                           height: 24,
-                          child: CircularProgressIndicator(
-                              strokeWidth: 2),
+                          child: CircularProgressIndicator(strokeWidth: 2),
                         ),
                       ),
                     );
@@ -93,15 +100,13 @@ class UserChatListScreen extends StatelessWidget {
                         horizontal: 20, vertical: 6),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                          color: AppColors.grey50, width: 1),
+                      border: Border.all(color: AppColors.grey50, width: 1),
                     ),
                     child: ListTile(
                       onTap: () {
                         Get.toNamed(
                           AppRoutes.userChatListProposalScreen,
-                           arguments: request,
-
+                          arguments: request,
                         );
                       },
                       title: TextWidget(
@@ -122,6 +127,7 @@ class UserChatListScreen extends StatelessWidget {
               ),
             ),
           ),
+
         ],
       )),
     );

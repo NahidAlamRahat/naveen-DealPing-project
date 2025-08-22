@@ -1,41 +1,35 @@
+// offer_model.dart
+
 class BookingCreateModel {
-  String offerTitle;
-  String offerDescription;
-  String category;
-  List<String> subCategories;
-  String business;
-  String request;
+  final String offerTitle;
+  final String offerDescription;
+  final String business;
+  final String request;
+  final String chat;
 
   BookingCreateModel({
     required this.offerTitle,
     required this.offerDescription,
-    required this.category,
-    required this.subCategories,
     required this.business,
     required this.request,
+    required this.chat,
   });
 
-  // JSON থেকে ডেটা নিতে চাইলে
   factory BookingCreateModel.fromJson(Map<String, dynamic> json) {
     return BookingCreateModel(
-      offerTitle: json['offerTitle'],
-      offerDescription: json['offerDescription'],
-      category: json['category'],
-      subCategories: List<String>.from(json['subCategories']),
-      business: json['business'],
-      request: json['request'],
+      offerTitle: json['offerTitle'] as String? ?? '',
+      offerDescription: json['offerDescription'] as String? ?? '',
+      business: json['business'] as String? ?? '',
+      request: json['request'] as String? ?? '',
+      chat: json['chat'] as String? ?? '',
     );
   }
 
-  // API-তে পাঠানোর জন্য JSON তৈরি
-  Map<String, dynamic> toJson() {
-    return {
-      "offerTitle": offerTitle,
-      "offerDescription": offerDescription,
-      "category": category,
-      "subCategories": subCategories,
-      "business": business,
-      "request": request,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    'offerTitle': offerTitle,
+    'offerDescription': offerDescription,
+    'business': business,
+    'request': request,
+    'chat': chat,
+  };
 }

@@ -2,6 +2,7 @@ import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_icons_path.dart';
 import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/models/booking_list_model.dart';
 import 'package:deal_ping/routes/app_routes.dart';
 import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:deal_ping/utils/app_size.dart';
@@ -122,7 +123,7 @@ class BookingsList extends StatelessWidget {
             distance: "${booking.distance.toStringAsFixed(2)} miles",
             networkImageUrl: '${AppImagePath.imageUrl}${booking.businessProfile}',
             rating: booking.rating,
-            index: index,
+            bookingModel: controller.bookingList[index],
           );
         },
       );
@@ -162,7 +163,7 @@ class PastBookings extends StatelessWidget {
 
             isPastBooking: true,
             rating: booking.rating,
-            index: index,
+            bookingModel: controller.bookingList[index],
           );
         },
       );
@@ -172,7 +173,7 @@ class PastBookings extends StatelessWidget {
 
 
 class BookingCard extends StatelessWidget {
-  final int index;
+  final BookingModel bookingModel;
   final String title, location, distance, networkImageUrl;
   final bool isPastBooking;
   final rating;
@@ -185,7 +186,7 @@ class BookingCard extends StatelessWidget {
     required this.networkImageUrl,
     this.isPastBooking = false,
     required this.rating,
-    required this.index,
+    required this.bookingModel,
   });
 
   @override
@@ -288,8 +289,7 @@ class BookingCard extends StatelessWidget {
                 )
               : ButtonWidget(
                   onPressed: () {
-                    appLog('View index😪😪 ==== $index');
-                    Get.toNamed(AppRoutes.userBarcodeScreen,arguments: index);
+                    Get.toNamed(AppRoutes.userBarcodeScreen,arguments: {"booking":bookingModel});
                     
                   },
                   label: AppStrings.view,

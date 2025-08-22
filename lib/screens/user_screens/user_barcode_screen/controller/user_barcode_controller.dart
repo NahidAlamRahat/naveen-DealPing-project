@@ -1,15 +1,11 @@
+import 'package:deal_ping/models/booking_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class UserBarcodeController extends GetxController {
   // Booking Details
-  final RxString name = "John Doe".obs;
-  final RxString offer = "Special Discount".obs;
-  final RxString serviceName = "Dance Bar Experience".obs;
-  final RxString typeOfService = "Entertainment".obs;
-  final RxString location = "Mirchi Dance Bar, Dhanmondi".obs;
-  final RxInt numberOfPeople = 4.obs;
+  BookingModel? bookingModel;
 
   // Date and Time
   final Rx<DateTime> selectedDate = DateTime.now().obs;
@@ -24,6 +20,7 @@ class UserBarcodeController extends GetxController {
 
   @override
   void onInit() {
+    bookingModel = Get.arguments["booking"];
     super.onInit();
     updateFormattedDateTime();
   }

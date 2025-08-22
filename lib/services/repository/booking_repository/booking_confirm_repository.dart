@@ -1,11 +1,8 @@
 import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/services/api/api_services.dart';
-import 'package:deal_ping/widgets/app_snack_bar/app_snack_bar.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../../../models/booking_create_responce_model.dart';
 import '../../../routes/app_routes.dart';
-import '../../../utils/app_log/app_log.dart';
 
 class BookingConfirmRepository extends GetxController {
   bool _inProgress = false;
@@ -18,7 +15,7 @@ class BookingConfirmRepository extends GetxController {
   String? get successfullyMessage => _successfullyMessage;
 
   /// এখন এই মেথড Future<Map<String, dynamic>?> রিটার্ন করবে
-  Future<Map?> bookingCreate(var bookingCreateModel) async {
+  Future<BookingResponseModel?> bookingCreate(var bookingCreateModel) async {
     _inProgress = true;
     update();
 
@@ -28,24 +25,18 @@ class BookingConfirmRepository extends GetxController {
         bookingCreateModel,
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         _successfullyMessage = response.message;
-        // _errorMessage = null;
-        await Get.toNamed(AppRoutes.userBookingSuccessfullScreen,
-            arguments: response.body['data']['code']);
-        
         _inProgress = false;
         update();
 
-        // response.data ধরে নিচ্ছি Map<String, dynamic>
-        return response.body;  // এখানে পুরো ডেটা রিটার্ন করলাম
+        // পুরো data কে model হিসেবে parse করি
+        return BookingResponseModel.fromJson(response.body['data']);
       } else {
         _errorMessage = response.message;
         _successfullyMessage = null;
-
         _inProgress = false;
         update();
-
         return null;
       }
     } catch (e) {
@@ -53,8 +44,8 @@ class BookingConfirmRepository extends GetxController {
       _successfullyMessage = null;
       _inProgress = false;
       update();
-
       return null;
     }
   }
+
 }

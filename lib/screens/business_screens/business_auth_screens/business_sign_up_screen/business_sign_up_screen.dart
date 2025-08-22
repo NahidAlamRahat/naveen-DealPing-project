@@ -16,6 +16,7 @@ import '../../../common/common_widget/select_category.dart';
 import '../../../support_screen/controller/support_controller.dart';
 import 'controller/business_sign_up_controller.dart';
 
+
 class BusinessSignUpScreen extends StatelessWidget {
   BusinessSignUpScreen({super.key});
 

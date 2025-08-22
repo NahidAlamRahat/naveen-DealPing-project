@@ -2,20 +2,16 @@ import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/models/notification_model.dart';
-import 'package:deal_ping/screens/user_screens/user_bottom_nav/controller/user_bottom_nav_controller.dart';
 import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:deal_ping/utils/app_size.dart';
 import 'package:deal_ping/utils/extension.dart';
 import 'package:deal_ping/widgets/appbar_widget/appbar_widget.dart';
-import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:deal_ping/widgets/image_widget/image_widget.dart';
 import 'package:deal_ping/widgets/space_widget/space_widget.dart';
 import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lazy_scroll_view/lazy_scroll_view.dart';
 import '../../../constants/app_image_path.dart';
-import '../../business_screens/business_notification_screen/controller/business_notification_api_caller_controller.dart';
 import 'controller/user_notification_controller.dart';
 
 class UserNotificationScreen extends StatelessWidget {
@@ -91,7 +87,7 @@ class UserNotificationScreen extends StatelessWidget {
                                 child: SizedBox(
                                   width: AppSize.width(value: 20),
                                   height: AppSize.width(value: 20),
-                                  child: CircularProgressIndicator(),
+                                  child: const CircularProgressIndicator(),
                                 ),
                               ),
                             ),

@@ -1,7 +1,6 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_icons_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
-import 'package:deal_ping/screens/business_screens/business_profile_screen/controller/business_profile_controller.dart';
 import 'package:deal_ping/widgets/app_image/app_image.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:deal_ping/widgets/text_widget/text_widgets.dart';

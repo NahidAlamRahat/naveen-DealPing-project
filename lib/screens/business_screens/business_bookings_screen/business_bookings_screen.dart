@@ -386,7 +386,7 @@ class BookingsList extends StatelessWidget {
             return BookingCard(
               title: booking.businessName,
               location: booking.createdAt,
-              distance: booking.bookingCode ?? '',
+              distance: booking.bookingCode,
               index: index,
             );
           },
@@ -447,7 +447,7 @@ class PastBookings extends StatelessWidget {
             return BookingCard(
               title: booking.businessName,
               location: booking.createdAt,
-              distance: booking.bookingCode ?? '',
+              distance: booking.bookingCode ,
               isPastBooking: true,
               index: index,
             );

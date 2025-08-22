@@ -1,12 +1,10 @@
 import 'package:deal_ping/constants/app_colors.dart';
-import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:deal_ping/utils/utils.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../constants/app_strings.dart';
-import '../../../models/booking-growth.dart';
 import '../../../models/user-growth.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
@@ -367,7 +365,7 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
                       ),
                       child:Obx(() {
                         final userGrowth = controller.bookingStats.value;
-                        final selectedIndex = controller.bookingSelectedTabIndex.value;
+                        // final selectedIndex = controller.bookingSelectedTabIndex.value;
                         if (userGrowth == null) {
                           return const Center(child: CircularProgressIndicator());
                         }

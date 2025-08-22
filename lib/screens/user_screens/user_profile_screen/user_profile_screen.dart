@@ -1,5 +1,6 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_icons_path.dart';
+import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:deal_ping/utils/app_size.dart';
@@ -56,13 +57,17 @@ class UserProfileScreen extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: AppImage(
+                        key: ValueKey("${controller.profile.value?.profile}-${DateTime.now().millisecondsSinceEpoch}"),
                         height: AppSize.height(value: 120),
                         width: AppSize.width(value: 120),
-                        url: controller.profile.value?.profile,
+                        url: controller.profile.value?.profile != null
+                            ? "${controller.profile.value!.profile}?t=${DateTime.now().millisecondsSinceEpoch}"
+                            : null,
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
+
                   const SpaceWidget(spaceHeight: 16),
 
                   // Name and Username
@@ -76,7 +81,7 @@ class UserProfileScreen extends StatelessWidget {
                   ),
                   Center(
                     child: TextWidget(
-                      text: profileData?.email ?? "Loading",
+                      text: profileData?.email ?? "null",
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       fontColor: AppColors.grey700,

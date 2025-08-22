@@ -6,7 +6,6 @@ import 'package:deal_ping/utils/extension.dart';
 import 'package:deal_ping/widgets/icon_text_button/icon_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import '../../../services/storage/storage_service.dart';
 import '../../../utils/app_size.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
@@ -18,6 +17,7 @@ import '../../../widgets/text_widget/text_widgets.dart';
 import '../../common/common_widget/chat_message_widget.dart';
 import '../../user_screens/user_profile_screen/controller/user_profile_controller.dart';
 import '../business_preset_screen/controller/business_present_screen_controller.dart';
+import 'controller/business_chat_controller.dart';
 
 class BusinessChatScreen extends StatefulWidget {
   const BusinessChatScreen({super.key});
@@ -27,8 +27,8 @@ class BusinessChatScreen extends StatefulWidget {
 }
 
 class _BusinessChatScreenState extends State<BusinessChatScreen> {
-  final TextEditingController _controller = TextEditingController();
-  final ImagePicker _picker = ImagePicker();
+  // final TextEditingController _controller = TextEditingController();
+  // final ImagePicker _picker = ImagePicker();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 
@@ -36,22 +36,22 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
 
   final BusinessPresetScreenController offerController =
   Get.put(BusinessPresetScreenController());
-  final userProfile = Get.put(UserProfileController()).profile.value;
+  // final userProfile = Get.put(UserProfileController()).profile.value;
 
 
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init:  UserChatController(),
-      builder: (controller) {
+      init:  BusinessChatController(),
+      builder: (businessChatController) {
         return Scaffold(
           backgroundColor: AppColors.white
           ,
           appBar: AppbarWidget(
             textWidget: Obx(() {
-              final name = controller.chatMessagesList.isNotEmpty
-                  ? controller.chatMessagesList[0].receiver?.name
+              final name = businessChatController.chatMessagesList.isNotEmpty
+                  ? businessChatController.chatMessagesList[0].receiver?.name
                   : null;
 
               if (name == null) {
@@ -106,6 +106,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                       ),
                       const SizedBox(height: 8),
                       /// offer sent
+
                       Form(
                         key: _formKey,
                         child: Column(
@@ -193,6 +194,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                           iconSize: 16,
                         ),
                       ),
+
                       const SizedBox(height: 12),
 
                       GetBuilder<UserChatController>(
@@ -227,6 +229,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                   );
                 }
               },
+
               itemBuilder: (context) => [
                 const PopupMenuItem(
                   value: 2,
@@ -244,6 +247,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                   ),
                 ),
               ],
+
               color: AppColors.white,
               elevation: 2,
             )
@@ -263,12 +267,12 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
 
                 //  Image preview chips
                 Obx((){
-                  if (controller.images.isEmpty) return const SizedBox();
+                  if (businessChatController.images.isEmpty) return const SizedBox();
                   return SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: List.generate(controller.images.length, (index) {
-                        final image = controller.images[index];
+                      children: List.generate(businessChatController.images.length, (index) {
+                        final image = businessChatController.images[index];
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4),
                           child: Stack(
@@ -287,8 +291,8 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                                 right: 0,
                                 child: InkWell(
                                   onTap: () {
-                                    controller.images.removeAt(index);
-                                    controller.update();
+                                    businessChatController.images.removeAt(index);
+                                    businessChatController.update();
                                   },
                                   child: Container(
                                     decoration: const BoxDecoration(
@@ -314,11 +318,11 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.image, color: Colors.green, size: 32),
-                      onPressed: controller.pickImage,
+                      onPressed: businessChatController.pickImage,
                     ),
                     Expanded(
                       child: TextField(
-                        controller: controller.messageController,
+                        controller: businessChatController.messageController,
                         decoration: InputDecoration(
                           hintText: 'Type a message...',
                           hintStyle: const TextStyle(
@@ -345,7 +349,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                           replacement:
                           const Center(child: CircularProgressIndicator()),
                           child: FloatingActionButton(
-                            onPressed: () =>  controller.sendMessage(),
+                            onPressed: () =>  businessChatController.sendMessage(),
 
                             backgroundColor: AppColors.green500,
                             child: const Icon(Icons.send_rounded, color: AppColors.white),
@@ -364,30 +368,30 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
 
           ///new body
           body: Obx(() {
-            if (controller.isLoading.value) {
+            if (businessChatController.isLoading.value) {
               return const Center(child: CircularProgressIndicator()); // Initial loading
             }
 
-            if (controller.chatMessagesList.isEmpty) {
+            if (businessChatController.chatMessagesList.isEmpty) {
               return const Center(child: Text('No messages available')); // No messages
             }
 
             return ListView.builder(
               reverse: true,
-              controller: controller.scrollController,
+              controller: businessChatController.scrollController,
               padding: const EdgeInsets.all(16),
               physics: const ClampingScrollPhysics(),
-              itemCount: controller.chatMessagesList.length +
-                  (controller.isLoading.value ? 1 : 0),
+              itemCount: businessChatController.chatMessagesList.length +
+                  (businessChatController.isLoading.value ? 1 : 0),
               itemBuilder: (context, index) {
-                if (index == controller.chatMessagesList.length) {
+                if (index == businessChatController.chatMessagesList.length) {
                   return const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: CircularProgressIndicator(), // pagination loading
                   );
                 }
 
-                final message = controller.chatMessagesList[index];
+                final message = businessChatController.chatMessagesList[index];
 
                 return
                   ChatMessage(
@@ -398,7 +402,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                         .time,
                     image: message.images,
                     showButton: message.type ?? 'text',
-                    message: controller.chatMessagesList[index],
+                    chatMessageResponseModelList: businessChatController.chatMessagesList[index],
 
                   );
 

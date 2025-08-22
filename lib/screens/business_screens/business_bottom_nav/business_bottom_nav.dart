@@ -11,7 +11,6 @@ import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/image_widget/image_widget.dart';
 import '../../user_screens/user_bottom_nav/controller/user_bottom_nav_controller.dart';
 import '../../user_screens/user_notification_screen/controller/user_notification_controller.dart';
-import '../../user_screens/user_notification_screen/user_notification_screen.dart';
 import 'controller/business_bottom_nav_controller.dart';
 
 class BusinessBottomNav extends StatelessWidget {

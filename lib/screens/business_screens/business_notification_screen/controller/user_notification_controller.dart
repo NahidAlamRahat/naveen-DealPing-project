@@ -1,6 +1,6 @@
-import 'package:get/get.dart';
-
-import '../../../../models/notification_model.dart';
+// import 'package:get/get.dart';
+//
+// import '../../../../models/notification_model.dart';
 
 // class BusinessNotificationController extends GetxController {
 //   var notifications = <NotificationModel>[].obs;

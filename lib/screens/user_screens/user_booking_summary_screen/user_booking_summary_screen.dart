@@ -1,14 +1,11 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
-import 'package:deal_ping/models/booking_create_model.dart';
 import 'package:deal_ping/screens/user_screens/user_chat_screen/controller/user_chate_controller.dart';
-import 'package:deal_ping/widgets/app_snack_bar/app_snack_bar.dart';
 import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:deal_ping/widgets/space_widget/space_widget.dart';
 import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../models/request_list_model.dart';
 import '../../../services/repository/booking_repository/booking_confirm_repository.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
 import '../user_chat_list_proposal_screen/controller.dart';

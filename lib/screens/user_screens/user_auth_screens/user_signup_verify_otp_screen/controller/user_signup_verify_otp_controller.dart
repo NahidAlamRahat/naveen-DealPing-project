@@ -8,6 +8,8 @@ import '../../../../../models/verify_otp_model.dart';
 import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/auth_repository.dart';
 import '../../../../../services/repository/auth_repository/common_repository_controller/verify_otp_controller.dart';
+import '../../../../../services/storage/storage_key.dart';
+import '../../../../../services/storage/storage_service.dart';
 import '../../../../../utils/app_log/app_log.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
@@ -108,9 +110,13 @@ class UserSignupVerifyAccountController extends GetxController {
     );
 
     if (response != false && response['success'] == true) {
+
+
       AppSnackBar.success('${_verifyOtpController.successfullyMessage}');
       Get.offAllNamed(AppRoutes.userBottomNav);
-      appLog('success message => ${_verifyOtpController.errorMessage}');
+      appLog('success message => ${_verifyOtpController.successfullyMessage}');
+
+
     } else {
       AppSnackBar.message('${_verifyOtpController.errorMessage}');
       appLog('error message => ${_verifyOtpController.errorMessage}');

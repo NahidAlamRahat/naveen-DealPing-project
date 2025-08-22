@@ -1,4 +1,3 @@
-import 'package:deal_ping/utils/app_log/app_log.dart';
 
 class AllOffers {
   final String id;

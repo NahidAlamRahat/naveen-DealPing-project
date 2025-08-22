@@ -32,13 +32,13 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
 
   List<Map<String, dynamic>> messages = List.generate(
       5,
-      (index) => {
-            "name": "John Doe12",
-            "message": "Hi! I'd love to book a table for 4 tonight.",
-            "time": "01:42",
-            "unread": 2,
-            "image": AppImagePath.profileImage,
-          });
+          (index) => {
+        "name": "John Doe12",
+        "message": "Hi! I'd love to book a table for 4 tonight.",
+        "time": "01:42",
+        "unread": 2,
+        "image": AppImagePath.profileImage,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SpaceWidget(spaceHeight: 20),
-             Padding(
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Obx(() => TextWidget(
                 text: "Hello, ${userProfileController.profile.value?.firstName}!",
@@ -65,7 +65,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: TextWidget(
                 text:
-                    "Boost your bookings and attract more customers with limited-time deals!",
+                "Boost your bookings and attract more customers with limited-time deals!",
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
                 fontColor: AppColors.grey300,
@@ -159,7 +159,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
                                     child: NetworkImageWidget(
-                                      networkImageUrl: "${AppImagePath.imageUrl}${item.profileImage}",
+                                      networkImageUrl: "${AppImagePath.imageUrl}${item.participant.profile}",
                                       width: 40,
                                       height: 40,
                                     ),
@@ -169,7 +169,7 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       TextWidget(
-                                        text: item.name,
+                                        text: item.participant.name,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
                                         fontColor: AppColors.green500,
@@ -231,12 +231,12 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
 class BookingsList extends StatelessWidget {
   final List<Map<String, String>> bookings = List.generate(
       5,
-      (index) => {
-            'title': 'Mirchi Dance Bar',
-            'location': 'Dhanmondi, Dhaka',
-            'distance': '2.3 miles',
-            'image': AppImagePath.bookingsImage,
-          });
+          (index) => {
+        'title': 'Mirchi Dance Bar',
+        'location': 'Dhanmondi, Dhaka',
+        'distance': '2.3 miles',
+        'image': AppImagePath.bookingsImage,
+      });
 
   BookingsList({super.key});
 
@@ -261,12 +261,12 @@ class BookingsList extends StatelessWidget {
 class PastBookings extends StatelessWidget {
   final List<Map<String, String>> bookings = List.generate(
       5,
-      (index) => {
-            'title': 'Mirchi Dance Bar',
-            'location': 'Dhanmondi, Dhaka',
-            'distance': '2.3 miles',
-            'image': AppImagePath.bookingsImage,
-          });
+          (index) => {
+        'title': 'Mirchi Dance Bar',
+        'location': 'Dhanmondi, Dhaka',
+        'distance': '2.3 miles',
+        'image': AppImagePath.bookingsImage,
+      });
 
   PastBookings({super.key});
 
@@ -341,7 +341,7 @@ class BookingCard extends StatelessWidget {
                   Row(
                     children: List.generate(
                       5,
-                      (index) => const Icon(
+                          (index) => const Icon(
                         Icons.star,
                         color: AppColors.yellow,
                         size: 12,
@@ -378,17 +378,17 @@ class BookingCard extends StatelessWidget {
           ),
           isPastBooking
               ? const Icon(
-                  Icons.check,
-                  size: 24,
-                  color: AppColors.green500,
-                )
+            Icons.check,
+            size: 24,
+            color: AppColors.green500,
+          )
               : ButtonWidget(
-                  onPressed: () {},
-                  label: AppStrings.view,
-                  buttonHeight: 36,
-                  buttonWidth: 72,
-                  fontSize: 12,
-                ),
+            onPressed: () {},
+            label: AppStrings.view,
+            buttonHeight: 36,
+            buttonWidth: 72,
+            fontSize: 12,
+          ),
         ],
       ),
     );

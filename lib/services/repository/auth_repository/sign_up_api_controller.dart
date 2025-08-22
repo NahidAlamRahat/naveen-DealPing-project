@@ -1,8 +1,6 @@
 import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/services/api/api_services.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../utils/app_log/app_log.dart';
 
 class SignUpApiController extends GetxController {

@@ -1,47 +1,44 @@
-import 'package:deal_ping/screens/user_screens/user_chat_list_proposal_screen/controller.dart';
 import 'package:deal_ping/services/repository/common_repository/common_repository.dart';
 import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_icons_path.dart';
 import '../../../constants/app_image_path.dart';
-import '../../../constants/app_strings.dart';
 import '../../../models/chat_message_responce_model.dart';
 import '../../../routes/app_routes.dart';
-import '../../../widgets/button_widget/button_widget.dart';
 import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/image_widget/image_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
-import '../../user_screens/user_chat_list_screen/controller/chat_list_api_caller.dart';
-import '../../user_screens/user_chat_screen/controller/user_chate_controller.dart';
 import '../../user_screens/user_chat_screen/widget/image_view.dart';
 import '../../user_screens/user_chat_screen/widget/network_image_grid.dart';
 
 class ChatMessage extends StatelessWidget {
 
-  final ChatMessageResponseModel? message;
+  final ChatMessageResponseModel? chatMessageResponseModelList;
   final String? text;
   final List<String> ? image;
   final bool isSent;
   final String time;
   final String showButton;
+  final String? requestId;
   final String? chatId;
+
 
   const ChatMessage({
 
     super.key,
-    this.chatId,
+    this.requestId,
+
     this.text,
     this.image,
-    this.message,
+    this.chatMessageResponseModelList,
     required this.isSent,
     required this.time,
     this.showButton = 'text',
+    this.chatId,
   }
 
 
@@ -86,14 +83,33 @@ class ChatMessage extends StatelessWidget {
                   Column(
 
                     children: [
-                      NetworkImageGrid(
-                        images: image,
-                        onTap: (index) {
-                          final imagePath = image?[index];
-                          Get.to(() => FullScreenImageView(imagePath: imagePath ??''));
-                        },
+                      // Image + fallback icon
+                      if (image != null && image!.isNotEmpty)
+                        NetworkImageGrid(
+                          images: image!,
+                          onTap: (index) {
+                            final imagePath = image![index];
+                            if (imagePath.isNotEmpty) {
+                              Get.to(() => FullScreenImageView(imagePath: imagePath));
+                            }
+                          },
+                        )
+                      else
+                      // Fallback icon when no image
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.grey200, // background color for icon
+                          ),
+                          child: const Icon(
+                            Icons.image_not_supported,
+                            color: AppColors.grey500,
+                            size: 30,
+                          ),
+                        ),
 
-                      ),
 
                       if (text != null && text!.isNotEmpty)
                         const SizedBox(height: 8),
@@ -121,7 +137,7 @@ class ChatMessage extends StatelessWidget {
 
 
                 // বুকিং UI
-                if (showButton=='offer') ...[
+                if (showButton == 'offer') ...[
                   const SizedBox(height: 10.0),
                   Container(
                     padding: const EdgeInsets.all(8.0),
@@ -133,55 +149,64 @@ class ChatMessage extends StatelessWidget {
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-
                           children: [
+                            // Gift card icon instead of dev image
                             ClipRRect(
                               borderRadius: BorderRadius.circular(6),
-                              child: const ImageWidget(
+                              child: Container(
                                 height: 53,
                                 width: 106,
-                                imagePath: AppImagePath.bookingsImage,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade300,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: const Icon(
+                                  Icons.card_giftcard,
+                                  color: Colors.green,
+                                  size: 32,
+                                ),
                               ),
-
                             ),
                             const SpaceWidget(spaceWidth: 8),
 
+                            // Text section wrapped with Expanded
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   TextWidget(
-                                    text: message?.offerTitle?.toString() ?? '',
-
+                                    text: chatMessageResponseModelList?.offerTitle ?? '',
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                     fontColor: AppColors.white,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
                                   ),
 
+                                  // Star rating
                                   Row(
                                     children: List.generate(5, (index) {
-                                      final rating = message?.sender?.rating ?? 0.0;
-
+                                      final rating = chatMessageResponseModelList?.sender?.rating ?? 0.0;
                                       if (index < rating.floor()) {
-                                        return const Icon(Icons.star, color: AppColors.yellow, size: 12); // Full star
+                                        return const Icon(Icons.star, color: AppColors.yellow, size: 12);
                                       } else if (index < rating && rating - index >= 0.5) {
-                                        return const Icon(Icons.star_half, color: AppColors.yellow, size: 12); // Half star
+                                        return const Icon(Icons.star_half, color: AppColors.yellow, size: 12);
                                       } else {
-                                        return const Icon(Icons.star_border, color: AppColors.yellow, size: 12); // Empty star
+                                        return const Icon(Icons.star_border, color: AppColors.yellow, size: 12);
                                       }
                                     }),
                                   ),
 
+                                  // Address
                                   TextWidget(
-
-                                    text: message?.sender?.address?.toString() ?? '',
+                                    text: chatMessageResponseModelList?.sender?.address ?? '',
                                     fontSize: 10,
                                     fontWeight: FontWeight.w400,
                                     fontColor: AppColors.white,
                                     overflow: TextOverflow.ellipsis,
                                   ),
 
-                                  ///miles
+                                  // Miles
                                   const Row(
                                     children: [
                                       IconWidget(
@@ -189,7 +214,7 @@ class ChatMessage extends StatelessWidget {
                                         width: 12,
                                         height: 12,
                                       ),
-                                      const SpaceWidget(spaceWidth: 4),
+                                      SpaceWidget(spaceWidth: 4),
                                       TextWidget(
                                         text: "0 miles",
                                         fontSize: 10,
@@ -198,37 +223,42 @@ class ChatMessage extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-
                                 ],
                               ),
                             ),
                           ],
                         ),
 
+                        // Accept & Message buttons
                         if (LocalStorage.myRole == 'user') ...[
                           const SizedBox(height: 10.0),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-
                               ElevatedButton(
-                                      onPressed: () async {
-                                        /// get message by chat id api call
+                                onPressed: () async {
+                                  Get.toNamed(
+                                    AppRoutes.userBookingSummaryScreen,
+                                    arguments: {
+                                      "chatMessage": chatMessageResponseModelList,
+                                      "requestId": requestId,
+                                      "chatId": chatId,
+                                    },
+                                  );
 
-                                        // await commonRepository.messageEnable(chatId: chatId.toString()); // ডেটা শেষ হলে পরের স্ক্রিনে যাওয়া
-                                        Get.toNamed(AppRoutes.userBookingSummaryScreen, arguments: message);
-                                          appLog("👌👌👌👌d${message!.id}");
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                      ),
-                                      child: const Text('Accept'),
-                                    ),
+                                  appLog("👌👌👌👌d${requestId}");
+                                  appLog("👌👌👌👌d${chatId}");
 
 
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: const Text('Accept'),
+                              ),
 
                               const SizedBox(width: 8),
                               ElevatedButton(
@@ -247,11 +277,12 @@ class ChatMessage extends StatelessWidget {
                             ],
                           )
                         ],
-
                       ],
                     ),
                   ),
                 ],
+
+
 
               ],
             ),

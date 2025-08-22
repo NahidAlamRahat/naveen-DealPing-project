@@ -1,8 +1,7 @@
+import 'package:deal_ping/screens/about_us_screen/about_us_screen.dart';
 import 'package:deal_ping/screens/business_screens/business_change_password_screen/business_change_password_screen.dart';
 import 'package:deal_ping/screens/user_screens/user_auth_screens/user_signup_verify_otp_screen/user_signup_verify_otp_screen.dart';
 import 'package:get/get.dart';
-
-import '../screens/about_us_screen/about_us_screen.dart';
 import '../screens/business_screens/business_auth_screens/business_forgot_password_screen/business_forgot_password_screen.dart';
 import '../screens/business_screens/business_auth_screens/business_forgot_verify_otp_screen/business_forgot_verify_otp_screen.dart';
 import '../screens/business_screens/business_auth_screens/business_reset_password_screen/business_reset_password_screen.dart';
@@ -79,6 +78,13 @@ class RouteManager {
         page: () => const TermsAndConditionsScreen(),
         // binding: GeneralBindings(),
       ),
+
+      GetPage(
+        name: AppRoutes.aboutUsScreen,
+        page: () => const AboutUsScreen(),
+        // binding: GeneralBindings(),
+      ),
+
       GetPage(
         name: AppRoutes.faqScreen,
         page: () => const FAQScreen(),

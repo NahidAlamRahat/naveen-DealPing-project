@@ -1,16 +1,12 @@
 
 import 'dart:async';
-import 'dart:convert';
 import 'package:deal_ping/models/support_history_model.dart';
 import 'package:deal_ping/models/user-growth.dart';
-import 'package:deal_ping/screens/support_screen/model/request_model.dart';
 import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
-
-
 import '../../../constants/api_urls.dart';
 import '../../../models/booking_list_model.dart';
 import '../../../models/chat_message_responce_model.dart';
@@ -246,20 +242,33 @@ class CommonRepository {
     return requestDataList;
   }
 
-  Future<List<ChatMessageResponseModel>> getChatMessage(
-      {required int page, required String chatId}) async {
-    List<ChatMessageResponseModel> chatMessageResponseModelList =
-        <ChatMessageResponseModel>[];
+  Future<List<ChatMessageResponseModel>> getChatMessage({
+    required int page,
+    required String chatId,
+     String? requestId,
+
+  }) async {
+    List<ChatMessageResponseModel> chatMessageResponseModelList = [];
+
     try {
       Map<String, dynamic> queryParameters = {"page": page, "limit": 20};
       appLog('current page😒😒 ====>>> $page');
       appLog('chat ID😒😪😒 ====>>> $chatId');
+      appLog('request ID8-)8-)8-)>.<>.< ====>>> $requestId');
 
+      // ✅ ensure it's clean single ID, not list
+      String cleanRequestId = requestId?.replaceAll(RegExp(r'[\[\]\s]'), '') ??'';
 
+      String url =
+          "${ApiUrls.baseUrl}/message/$chatId?requestId=$cleanRequestId";
+
+      appLog("getChatMessage Url===>> $url");
 
       var response = await apiServices.apiGetServices(
-          "${ApiUrls.baseUrl}/message/$chatId",
-          queryParameters: queryParameters);
+        url,
+        queryParameters: queryParameters,
+      );
+
       if (response != null) {
         if (response["data"] != null && response["data"] is Map) {
           var data = response["data"];
@@ -277,47 +286,116 @@ class CommonRepository {
     return chatMessageResponseModelList;
   }
 
+
+
+
+
+  Future<List<ChatMessageResponseModel>> getBusinessChatMessage({
+    required int page,
+    required String chatId,
+    required String status
+  }) async {
+    List<ChatMessageResponseModel> chatMessageResponseModelList = [];
+
+    try {
+      Map<String, dynamic> queryParameters = {"page": page, "limit": 20};
+      appLog('current page😒😒 ====>>> $page');
+      appLog('chat ID😒😪😒 ====>>> $chatId');
+      appLog(''
+          'status ID8-)8-)8-)>.<>.< ====>>> $status');
+
+      String url =
+          "${ApiUrls.baseUrl}/message/$chatId?status=$status";
+
+      appLog("getChatMessage Url===>> $url");
+
+      var response = await apiServices.apiGetServices(
+        url,
+        queryParameters: queryParameters,
+      );
+
+      if (response != null) {
+        if (response["data"] != null && response["data"] is Map) {
+          var data = response["data"];
+          if (data["data"] != null && data["data"] is List) {
+            for (var item in data["data"]) {
+              chatMessageResponseModelList
+                  .add(ChatMessageResponseModel.fromJson(item));
+            }
+          }
+        }
+      }
+    } catch (e) {
+      errorLog('getChatMessage======>>>  $e');
+    }
+    return chatMessageResponseModelList;
+  }
+
+
+
+
+
+
+
   ///
-  Future<ChatMessageResponseModel?> sendMessage(
-      {required String message,
-        // required String chatId,
-        required String requestId ,
-        required List<XFile> imageUrl}) async{
+  Future<ChatMessageResponseModel?> sendMessage({
+    required String message,
+    required String requestId,
+    required String chatId,
+    required List<XFile> imageUrl,
+  }) async {
+    // Clean requestId properly (remove [] and spaces if any)
+    String cleanRequestId = requestId.replaceAll(RegExp(r'[\[\]\s]'), '');
+
+    String cleanChatId = chatId.replaceAll(RegExp(r'[\[\]\s]'), '');
+
 
     FormData formData = FormData.fromMap({
       "data": '''{
-        "message": "$message",
-        "request": ""
-      }''',
+      "message": "$message",
+      "request": "$cleanRequestId"
+    }''',
     });
-    if(imageUrl.isNotEmpty){
-      for(var i in imageUrl){
+
+    if (imageUrl.isNotEmpty) {
+      for (var i in imageUrl) {
         var mimeType = lookupMimeType(i.path);
-        formData.files.add(MapEntry("image", await MultipartFile.fromFile(i.path, filename: i.path.split("/").last, contentType: MediaType.parse(mimeType ?? "application/octet-stream"))));
+        formData.files.add(
+          MapEntry(
+            "image",
+            await MultipartFile.fromFile(
+              i.path,
+              filename: i.path.split("/").last,
+              contentType: MediaType.parse(mimeType ?? "application/octet-stream"),
+            ),
+          ),
+        );
       }
     }
-    appLog("------sendMessage id-----------------$requestId");
 
-    String cleanRequestId = requestId.replaceAll(RegExp(r'[^\x00-\x7F]'), '');
-    String url = '${ApiUrls.baseUrl}/message/$cleanRequestId';
+    appLog("------sendMessage id----------------- $requestId");
+    appLog("------cleanRequestId----------------- $cleanRequestId");
 
+    appLog("------cleanRequestId----------------- $cleanChatId");
 
-    appLog("------sendMessage url-----------------$url");
+    String url = '${ApiUrls.baseUrl}/message/$cleanChatId';
+    appLog("------sendMessage url----------------- $url");
 
-    appLog("--------${requestId.codeUnits}"); // BOM থাকলে প্রথমে 65279 দেখাবে
+    var response = await ApiService.postApi(url, formData);
 
-    var response =await  ApiService.postApi(url, formData);
-    appLog("------sendMessage responce-----------------$response");
-
+    appLog("------sendMessage response----------------- $response");
     appLog(response.body);
-    if(response.statusCode == 200){
+
+    if (response.statusCode == 200) {
       return ChatMessageResponseModel.fromJson(response.body['data']);
-    }else{
-      AppSnackBar.error('sendMessage=====>> ${response.message}');
+    } else {
+      AppSnackBar.error(response.message);
       appLog(' sendMessage error message ==>>> ${response.message}');
       return null;
     }
   }
+
+
 
 
 

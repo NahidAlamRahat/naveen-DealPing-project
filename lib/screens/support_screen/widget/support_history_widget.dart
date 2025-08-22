@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
 import '../../../constants/app_colors.dart';
 import '../../../models/category_model.dart';
 import '../../../models/support_history_model.dart' hide Category;
@@ -89,9 +88,9 @@ try{
 
       if (i.toString().toLowerCase() == "subcategories".toLowerCase()) {
         // পুরানো subcategories
-        String prevSub = (item.prevSubcategories ?? [])
-            .map((sub) => sub.title ?? "")
-            .join("\n");
+        // String prevSub = (item.prevSubcategories ?? [])
+        //     .map((sub) => sub.title ?? "")
+        //     .join("\n");
 
         // নতুন subcategories
         String newSub = (item.subcategories ?? [])

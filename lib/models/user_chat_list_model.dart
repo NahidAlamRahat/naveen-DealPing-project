@@ -1,6 +1,8 @@
+import 'dart:io';
+
 class ChatModel {
   final String chatId; //main
-  final String requestId;
+  final List<String> requestId;
   late final String latestMessage;
   final String latestMessageTime;
   // final String createdAt;
@@ -30,7 +32,11 @@ class ChatModel {
 
     return ChatModel(
       chatId: json['_id'] ?? '',
-      requestId: json['request'] ?? '',
+
+      requestId: (json['requests'] as List<dynamic>?)
+          ?.map((e) => e.toString())
+          .toList() ?? [],
+
       latestMessage: json['latestMessage'] ?? '',
       latestMessageTime: json['latestMessageTime'] ?? '',
       // createdAt: json['createdAt'] ?? '',

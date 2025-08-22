@@ -10,7 +10,6 @@ import '../../../routes/app_routes.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
-import '../user_bookings_screen/controller/booking_list_api_caller.dart';
 
 class UserBookingSuccessFullScreen extends StatelessWidget {
 
@@ -20,7 +19,7 @@ class UserBookingSuccessFullScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final BookingListController bookingController = Get.put(BookingListController());
-    var apiResponce = Get.arguments;
+    var apiResponce = Get.arguments is int;
 
     return Scaffold(
       backgroundColor: AppColors.white,
@@ -72,7 +71,7 @@ class UserBookingSuccessFullScreen extends StatelessWidget {
               children: [
                 ButtonWidget(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.userBarcodeScreen,);
+                    Get.toNamed(AppRoutes.userBarcodeScreen,  );
                   },
                   label: AppStrings.viewBarcode,
                   buttonWidth: double.infinity,

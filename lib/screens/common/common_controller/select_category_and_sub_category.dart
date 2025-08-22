@@ -1,12 +1,9 @@
-import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
-
 import '../../../models/category_model.dart';
 import '../../../services/repository/user_home_repository/user_home_repository.dart';
 import '../../../utils/app_log/app_log.dart';
 import '../../../widgets/app_snack_bar/app_snack_bar.dart';
-import '../../support_screen/widget/support_form_section.dart';
 
 class SelectCategoryAndSubCategory extends GetxController {
   final RxList<Category> categories = <Category>[].obs;

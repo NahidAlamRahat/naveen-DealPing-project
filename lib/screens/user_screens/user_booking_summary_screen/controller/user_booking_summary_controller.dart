@@ -1,8 +1,6 @@
 import 'package:deal_ping/models/booking_create_model.dart';
-import 'package:deal_ping/screens/user_screens/user_bookings_screen/controller/booking_list_api_caller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../models/chat_message_responce_model.dart';
 import '../../../../routes/app_routes.dart';
@@ -10,16 +8,18 @@ import '../../../../services/repository/booking_repository/booking_confirm_repos
 import '../../../../utils/app_log/app_log.dart';
 import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
 import '../../user_chat_list_proposal_screen/controller.dart';
-import '../../user_profile_screen/controller/user_profile_controller.dart';
 
 class UserBookingSummaryController extends GetxController {
 
   BookingConfirmRepository bookingConfirmRepository  = BookingConfirmRepository();
   // শুধু কোড রাখার জন্য
-  String? bookingCode;
+  // String? bookingCode;
 
   // এখানে রিসিভড মেসেজ রাখবো
   late ChatMessageResponseModel message;
+
+  String? requestId;
+  String? chatId;
 
   // Date and Time Selection
   final Rx<DateTime> selectedDate = DateTime.now().obs;
@@ -83,47 +83,69 @@ class UserBookingSummaryController extends GetxController {
 
 
 
+  String? get cleanRequestId {
+    if (requestId == null) return null;
+    return requestId!.replaceAll(RegExp(r'[\[\]\s]'), '');
+  }
 
   // Confirm Booking
   void confirmBooking() async {
     BookingCreateModel bookingCreateModel = BookingCreateModel(
-      offerTitle: message.offerTitle!,
-      offerDescription: message.offerDescription!,
-      category: message.sender?.category ?? 'category null',
-      subCategories: ['686c9a44dad115a94f52bbcc'],
-      business: message.sender!.id.toString(),
-      request: message.id!,
+      offerTitle: message.offerTitle ?? '',
+      offerDescription: message.offerDescription ?? '',
+      business: message.sender?.id ?? '',
+      request: cleanRequestId ?? '',
+      chat: chatId ?? '',
     );
 
-    final responseData = await bookingConfirmRepository.bookingCreate(bookingCreateModel);
+    final bookingData = await bookingConfirmRepository.bookingCreate(bookingCreateModel);
 
-    if (responseData != null && responseData['code'] != null) {
-      String bookingCode = responseData['code'];
-      appLog("📌 Booking Code: $bookingCode");
+    if (bookingData != null) {
+      appLog("📌 Booking Code: ${bookingData.code}");
 
       AppSnackBar.success(
         bookingConfirmRepository.successfullyMessage ?? 'Successful!',
       );
 
+      // Screen-এ argument হিসেবে পাঠানো
+      await Get.toNamed(
+        AppRoutes.userBookingSuccessfullScreen,
+        arguments: bookingData, // পুরো model পাঠানো
+      );
     } else {
       AppSnackBar.message('${bookingConfirmRepository.errorMessage}');
     }
   }
 
 
+
   @override
   void onInit() {
     super.onInit();
 
-    // Argument receive + type casting
-    message = Get.arguments as ChatMessageResponseModel;
+    // Argument receive as Map
+    final args = Get.arguments as Map<String, dynamic>;
 
+    // Extract values
+    message = args["chatMessage"] as ChatMessageResponseModel;
+
+    // requestId check -> যদি list আসে, তাহলে প্রথম element নাও
+    var req = args["requestId"];
+    if (req is List && req.isNotEmpty) {
+      requestId = req.first.toString();   // String আকারে রাখলাম
+    } else {
+      requestId = req?.toString();        // String হলে সরাসরি
+    }
+
+    chatId = args["chatId"]?.toString();
+
+    // Debug logs
     appLog("✅ Received Offer Title: ${message.offerTitle}");
-    appLog("✅ Received Offer Description: ${message.offerDescription}");
-    appLog("✅ Sender Name: ${message.sender?.name}");
-    appLog("✅ Request ID: ${message.id}");
-    appLog("✅ Sender ID: ${message.sender?.id}");
-    appLog("✅ Category : ${message.sender?.category}");
+    appLog("✅ Request ID (final): $requestId");
+    appLog("✅ Chat ID: $chatId");
   }
+
+
+
 
 }

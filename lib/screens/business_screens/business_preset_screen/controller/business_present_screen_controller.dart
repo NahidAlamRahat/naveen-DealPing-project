@@ -46,7 +46,7 @@ class BusinessPresetScreenController extends GetxController {
     } else {
       final filtered = _originalRequestList.where((request) {
         print('Checking: ${request.title}');
-        return (request.title ?? '')
+        return (request.title )
             .toLowerCase()
             .contains(query.toLowerCase());
       }).toList();

@@ -19,7 +19,7 @@ class SplashController extends GetxController {
     appLog("Access Token: $accessToken");
     appLog("Role: $role");
 
-    if (accessToken != null && accessToken.isNotEmpty) {
+    if (accessToken.isNotEmpty) {
       appLog("accessToken.isNotEmpty : ${accessToken.isNotEmpty}");
 
       if (role == "user") {

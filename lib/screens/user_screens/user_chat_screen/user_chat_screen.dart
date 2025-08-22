@@ -2,15 +2,13 @@
 import 'dart:io';
 
 import 'package:deal_ping/services/storage/storage_service.dart';
+import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:deal_ping/utils/app_size.dart';
 import 'package:deal_ping/utils/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
-import '../../../constants/app_strings.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
-import '../../../widgets/button_widget/button_widget.dart';
-import '../../../widgets/text_widget/text_widgets.dart';
 import '../../common/common_widget/chat_message_widget.dart';
 import 'controller/user_chate_controller.dart';
 
@@ -29,7 +27,7 @@ class UserChatScreen extends StatelessWidget{
 
             bottomNavigationBar: Padding(
               padding: EdgeInsets.all(AppSize.width(value: 8)).copyWith(
-                bottom: MediaQuery.of(context).viewInsets.bottom + AppSize.width(value: 10),
+                  bottom: MediaQuery.of(context).viewInsets.bottom + AppSize.width(value: 10),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -183,10 +181,12 @@ class UserChatScreen extends StatelessWidget{
                   }
 
                   final message = controller.chatMessagesList[index];
+                  appLog('-----===================----------${message.chatId}');
 
                   return
                     ChatMessage(
-                      chatId: controller.requestId,
+                      requestId: controller.requestId,
+                      chatId:  controller.chatId,
                       text: message.message,
                       isSent: message.sender?.id == LocalStorage.userId,
                       time: (DateTime.tryParse(message.createdAt.toString()) ??
@@ -194,7 +194,7 @@ class UserChatScreen extends StatelessWidget{
                           .time,
                       image: message.images,
                       showButton: message.type ?? 'text',
-                      message: controller.chatMessagesList[index],
+                      chatMessageResponseModelList: controller.chatMessagesList[index],
 
                     );
 

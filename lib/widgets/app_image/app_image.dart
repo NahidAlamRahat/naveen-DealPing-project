@@ -6,6 +6,7 @@ import '../../constants/api_urls.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_image_path.dart';
 import '../../utils/app_log/error_log.dart';
+import 'app_image_circular.dart';
 
 class AppImage extends StatelessWidget {
   const AppImage({
@@ -105,7 +106,6 @@ class AppImage extends StatelessWidget {
   }
 
 }
-
 class NetworkImageWithRetry extends StatefulWidget {
   final String imageUrl;
   final double? width;
@@ -163,32 +163,33 @@ class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> {
   @override
   Widget build(BuildContext context) {
     HttpOverrides.global = CustomHttpClient();
-    return FadeInImage(
-      placeholder: const AssetImage(AppImagePath.placeholderImage),
-      // placeholder: AssetImage(AssetsIconsPath.profile), // Replace with your placeholder image
-      image: NetworkImage(_image ?? ""),
-      height: widget.height,
-      width: widget.width,
-      fit: widget.fit,
-      imageErrorBuilder: (context, error, stackTrace) {
-        errorLog(
-          stackTrace,
-          source: "Error loading network image:",
-        );
-        return GestureDetector(
-          onTap: _retry,
-          child: Container(
-            width: widget.width,
-            height: widget.height,
-            color: AppColors.grey,
-            child: const Center(
-              child: Icon(Icons.refresh, color: Colors.white),
+    return ClipOval( // 🔹 Circular shape
+      child: FadeInImage(
+        placeholder: const AssetImage(AppImagePath.placeholderImage),
+        image: NetworkImage(_image ?? ""),
+        height: widget.height,
+        width: widget.width,
+        fit: widget.fit,
+        imageErrorBuilder: (context, error, stackTrace) {
+          errorLog(
+            stackTrace,
+            source: "Error loading network image:",
+          );
+          return GestureDetector(
+            onTap: _retry,
+            child: Container(
+              width: widget.width,
+              height: widget.height,
+              color: AppColors.grey,
+              child: const Center(
+                child: Icon(Icons.person, color: Colors.white, size: 50),
+              ),
             ),
-          ),
-        );
-      },
-      fadeInDuration: const Duration(milliseconds: 300),
-      fadeOutDuration: const Duration(milliseconds: 300),
+          );
+        },
+        fadeInDuration: const Duration(milliseconds: 300),
+        fadeOutDuration: const Duration(milliseconds: 300),
+      ),
     );
   }
 }
@@ -201,3 +202,4 @@ class CustomHttpClient extends HttpOverrides {
           (X509Certificate cert, String host, int port) => true;
   }
 }
+

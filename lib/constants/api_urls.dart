@@ -1,24 +1,22 @@
 
 import 'package:deal_ping/screens/user_screens/user_bookings_screen/controller/booking_list_api_caller.dart';
-import 'package:flutter/foundation.dart';
 
-import '../utils/app_log/error_log.dart';
 
-String _getDomain() {
-  String serverDomain =
-      "https://divx-rare-realtor-immune.trycloudflare.com"; //////////// live server
-  String localDomain = "https://divx-rare-realtor-immune.trycloudflare.com"; ///////// local server
-  try {
-    if (kReleaseMode) {
-      return serverDomain;
-    } else {
-      return localDomain;
-    }
-  } catch (e) {
-    errorLog("_getDomain",);
-    return serverDomain;
-  }
-}
+// String _getDomain() {
+//   String serverDomain =
+//       "https://divx-rare-realtor-immune.trycloudflare.com"; //////////// live server
+//   String localDomain = "https://divx-rare-realtor-immune.trycloudflare.com"; ///////// local server
+//   try {
+//     if (kReleaseMode) {
+//       return serverDomain;
+//     } else {
+//       return localDomain;
+//     }
+//   } catch (e) {
+//     errorLog("_getDomain",);
+//     return serverDomain;
+//   }
+// }
 
 
 class ApiUrls {

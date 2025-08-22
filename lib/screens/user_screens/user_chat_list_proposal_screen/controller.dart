@@ -1,7 +1,6 @@
 import 'package:deal_ping/models/request_list_model.dart';
 import 'package:deal_ping/services/api/api_services.dart';
 import 'package:deal_ping/utils/app_log/app_log.dart';
-import 'package:deal_ping/widgets/app_snack_bar/app_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../../constants/api_urls.dart';
@@ -9,7 +8,7 @@ import '../../../models/user_chat_list_model.dart';
 
 class ChatController extends GetxController {
   Rxn<RequestModel> request = Rxn<RequestModel>();
-  final ApiUrls _apiUrls = ApiUrls();
+  // final ApiUrls _apiUrls = ApiUrls();
   RxList<ChatModel> chatList = <ChatModel>[].obs;
   var isLoading = true.obs;
   var errorMessage = ''.obs;
@@ -41,8 +40,11 @@ class ChatController extends GetxController {
             .toList();
 
         chatList.assignAll(chats);
+
+
+
         for(int i=0;i<chatList.length;i++){
-          appLog("================chat id $i============${chatList[i].requestId}");
+          appLog("================request id❤️fgff❤️ $i============${chatList[i].requestId}");
         }// Update the observable list with fetched chats
         errorMessage.value = ''; // Clear previous error message
       } else {
@@ -64,7 +66,7 @@ class ChatController extends GetxController {
       if(argData != null && argData is RequestModel){
         request.value = argData;
         id = request.value?.requestId ?? "";
-        debugPrint('😎😎😎😎😎=====>>>${request.value?.message}');
+        debugPrint('😎😎😎😎😎=====>>>$id');
           await fetchChatData(id: id);
       }
       // await fetchChatData();

@@ -1,3 +1,4 @@
+import 'package:deal_ping/models/user_chat_list_model.dart';
 import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,6 +25,8 @@ class UserChatController extends GetxController {
 
 
   String requestId = '';
+  String chatId = '';
+
 
   RxList<ChatMessageResponseModel> chatMessagesList =
       <ChatMessageResponseModel>[].obs;
@@ -60,7 +63,8 @@ class UserChatController extends GetxController {
         return;
       }
 
-      final data = await commonRepository.getChatMessage(page: currentPage, chatId: requestId);
+      final data = await commonRepository.getChatMessage(
+          page: currentPage, chatId: chatId, requestId: requestId);
 
       if (data.isNotEmpty) {
         chatMessagesList.addAll(data);
@@ -111,6 +115,7 @@ class UserChatController extends GetxController {
         message: messageController.text.trim(),
         requestId: requestId,
         imageUrl: images,
+        chatId: chatId
       );
 
 
@@ -170,6 +175,8 @@ class UserChatController extends GetxController {
     }
   }
 
+
+
   void paginationData(){
     try{
       scrollController.addListener((){
@@ -191,9 +198,14 @@ class UserChatController extends GetxController {
 
 
       final argData  = Get.arguments;
-      if(argData != null && argData is String){
-        requestId = argData;
-        appLog('request id😥😥😥 ===>> $requestId');
+      if(argData != null && argData is ChatModel){
+
+        requestId = argData.requestId.toString();
+        appLog('request id👌👌→→→©© ===>> $requestId');
+
+        chatId = argData.chatId;
+        appLog('chat id😥😥😥 ===>> $chatId');
+
         scrollController = ScrollController();
         messageController = TextEditingController();
 
@@ -201,9 +213,12 @@ class UserChatController extends GetxController {
         currentPage = 1;
         await fetchChatMessages();
 
+        appLog("==========================chat Socket ============================");
+
+        appSocketAllOperation.initializeSocket();
 
         appSocketAllOperation.readEvent(
-            event: "message::$requestId",
+            event: "message::$chatId",
             handler: (data) {
 
               chatMessageSocketHandler(data);

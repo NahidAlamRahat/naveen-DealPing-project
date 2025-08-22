@@ -22,11 +22,12 @@ class UserProfileController extends GetxController {
   }
 
    fetchUserProfile() async {
+
     isLoading.value = true;
     try {
 
       var fetchedProfile = await _profileRepository.fetchProfile();
-      appLog('fetchProfile ==> $fetchedProfile');
+      appLog('fetchProfile ==> ${profile.value}');
       if (fetchedProfile != null) {
         profile.value = fetchedProfile;
         LocalStorage.userId = profile.value?.sId ?? '';

@@ -1,22 +1,16 @@
 
-import 'package:deal_ping/services/api/api_services.dart';
-import 'package:deal_ping/widgets/app_snack_bar/app_snack_bar.dart';
+import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/request/request.dart';
-import '../../../../constants/api_urls.dart';
 import '../../../../models/request_list_model.dart';
 import '../../../../services/repository/common_repository/common_repository.dart';
-import '../../../../services/storage/storage_service.dart';
-import '../../../../utils/app_log/app_log.dart';
 import '../../../../utils/app_log/error_log.dart';
-import '../../user_chat_list_proposal_screen/controller.dart';
 
 class RequestListController extends GetxController {
   ScrollController scrollController = ScrollController();
   CommonRepository commonRepository = CommonRepository();
 
-  List<RequestModel> _originalRequestList = [];
+  final List<RequestModel> _originalRequestList = [];
 
   RxList<RequestModel> requestModelList = <RequestModel>[].obs;
 
@@ -58,12 +52,12 @@ class RequestListController extends GetxController {
       requestModelList.value = _originalRequestList;
     } else {
       final filtered = _originalRequestList.where((request) {
-        print('Checking: ${request.message}');
-        return (request.message ?? '')
+        appLog('Checking: ${request.message}');
+        return (request.message)
             .toLowerCase()
             .contains(query.toLowerCase());
       }).toList();
-      print('Filtered count: ${filtered.length}');
+      appLog('Filtered count: ${filtered.length}');
       requestModelList.value = filtered;
     }
   }

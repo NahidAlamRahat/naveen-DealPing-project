@@ -1,4 +1,3 @@
-import 'category_model.dart';
 
 class BusinessSignUpModel {
   final String businessName;

@@ -1,28 +1,27 @@
-import 'package:barcode_widget/barcode_widget.dart';
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/utils/extension.dart';
 import 'package:deal_ping/widgets/appbar_widget/appbar_widget.dart';
-import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../user_bookings_screen/controller/booking_list_api_caller.dart';
 import 'controller/user_barcode_controller.dart';
 
 class UserBarcodeScreen extends StatelessWidget {
   final UserBarcodeController controller = Get.put(UserBarcodeController());
-  final BookingListController bookingController = Get.put(BookingListController());
+  // final BookingListController bookingController = Get.put(BookingListController());
 
   UserBarcodeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
 
-    final int index = Get.arguments as int;
+    // final index = Get.arguments;
+    // if (index == null || index is! int) {
+    //   return const Center(child: Text("Invalid booking index"));
+    // }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -72,27 +71,27 @@ class UserBarcodeScreen extends StatelessWidget {
                   _buildDetailRow(
                     leftLabel: 'Name',
                     rightLabel: 'Offer',
-                    leftValue: bookingController.bookingList[index].businessName,
-                    rightValue: bookingController.bookingList[index].offerTitle,
+                    leftValue: controller.bookingModel?.businessName??'',
+                    rightValue: controller.bookingModel?.offerTitle,
                   ),
                   const SpaceWidget(spaceHeight: 14),
                   _buildDetailRow(
                     leftLabel: 'Service Name',
                     rightLabel: 'Type of Service',
-                    leftValue: bookingController.bookingList[index].categoryTitle,
-                    rightValue: bookingController.bookingList[index].subCategories.toString(),
+                    leftValue: controller.bookingModel?.categoryTitle,
+                    rightValue: controller.bookingModel?.subCategories.toString(),
                   ),
                   const SpaceWidget(spaceHeight: 14),
                   _buildDetailRow(
                     leftLabel:'Location',
                     rightLabel: 'Date',
-                    leftValue: bookingController.bookingList[index].address,
-                    rightValue: (DateTime.tryParse(bookingController.bookingList[index].createdAt.toString()) ?? DateTime.now()).date,
+                    leftValue: controller.bookingModel?.address,
+                    rightValue: (DateTime.tryParse(controller.bookingModel!.createdAt.toString()) ?? DateTime.now()).date,
                   ),
                   const SpaceWidget(spaceHeight: 14),
                   _buildDetailRow(
                     leftLabel: 'Time',
-                    leftValue: (DateTime.tryParse(bookingController.bookingList[index].createdAt.toString()) ?? DateTime.now()).time,
+                    leftValue: (DateTime.tryParse(controller.bookingModel!.createdAt.toString()) ?? DateTime.now()).time,
                   ),
                   const SpaceWidget(spaceHeight: 36),
 
@@ -109,7 +108,7 @@ class UserBarcodeScreen extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: bookingController.bookingList[index].bookingCode,
+                            text: controller.bookingModel?.bookingCode,
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,

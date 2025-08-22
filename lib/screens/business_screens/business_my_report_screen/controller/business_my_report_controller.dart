@@ -9,6 +9,7 @@ class ReportController extends GetxController {
   CommonRepository commonRepository = CommonRepository();
 
   // আলাদা filterType দুইটার জন্য
+
   RxString userFilterType = "Month".obs;
   RxString bookingFilterType = "Month".obs;
 
