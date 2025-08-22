@@ -144,8 +144,18 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                       final item = list[index];
                       return InkWell(
                         onTap: () {
-                          Get.toNamed(AppRoutes.businessChatScreen,arguments: controller.businessChatList[index].id);
-                        },
+                          final chatItem = controller.businessChatList[index];
+
+                          // Create proper navigation arguments
+                          final navigationArgs = {
+                            'chatData': chatItem,
+                            'chatType': controller.selectedChatType,
+                          };
+
+                          Get.toNamed(
+                            AppRoutes.businessChatScreen,
+                            arguments: navigationArgs,
+                          );                        },
                         highlightColor: Colors.transparent,
                         splashColor: Colors.transparent,
                         child: Container(

@@ -401,18 +401,21 @@ class CommonRepository {
 
   Future<ChatMessageResponseModel?> sendOffer(
       {required String offerTitle,
-        required String offerDescription,
+        // required String offerDescription,
         required String chatId,
+        required String requestId,
        }) async{
 
     FormData formData = FormData.fromMap({
       "data": ''' {
   "offerTitle": "$offerTitle",
-  "offerDescription": "$offerDescription"
+    "request": "$requestId"
+
   }''',
     });
 
     var response =await  ApiService.postApi('${ApiUrls.baseUrl}/message/$chatId', formData);
+
     appLog("------sendMessage-----------------${ApiService.postApi('${ApiUrls.baseUrl}/message/$chatId', formData)}");
     appLog(response.body);
     if(response.statusCode == 200){

@@ -265,6 +265,7 @@ class BookingCard extends StatelessWidget {
 */
 
 
+
 class BusinessBookingsScreen extends StatelessWidget {
   BusinessBookingsScreen({super.key}) {
     if (!Get.isRegistered<BookingListController>()) {

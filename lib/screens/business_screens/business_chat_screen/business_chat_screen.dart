@@ -197,7 +197,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
 
                       const SizedBox(height: 12),
 
-                      GetBuilder<UserChatController>(
+                      GetBuilder<BusinessChatController>(
                         builder: (controller) {
                           return Visibility(
                             visible: controller.isMessageSent == false,
@@ -343,7 +343,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child:
-                      GetBuilder<UserChatController>(builder: (controllers) {
+                      GetBuilder<BusinessChatController>(builder: (controllers) {
                         return Visibility(
                           visible: controllers.isMessageSent == false,
                           replacement:

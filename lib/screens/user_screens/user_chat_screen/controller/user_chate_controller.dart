@@ -81,26 +81,6 @@ class UserChatController extends GetxController {
 
   }
 
-  Future<void> sendOffer ({
-    required String offerTitle,
-    required String offerDescription,
-
-  }) async {
-    try {
-      isMessageSent = true;
-      update();
-      await commonRepository.sendOffer(
-          offerTitle: offerTitle,
-          offerDescription:offerDescription,
-          chatId: requestId);
-      appLog('//////////$requestId');
-    } catch (e) {
-      errorLog("send Offer method ===>> $e");
-    }
-    isMessageSent = false;
-    update();
-
-  }
 
 
   Future<void> sendMessage() async {

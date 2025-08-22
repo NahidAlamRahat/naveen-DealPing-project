@@ -1,4 +1,5 @@
 import 'package:deal_ping/models/user_chat_list_model.dart';
+import 'package:deal_ping/screens/business_screens/business_home_screen/model/business_chat_list_model.dart';
 import 'package:deal_ping/utils/app_log/app_log.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,7 @@ import '../../../../services/repository/common_repository/common_repository.dart
 import '../../../../services/sockets/app_socket_all_operation.dart';
 import '../../../../services/storage/storage_service.dart';
 import '../../../../utils/app_log/error_log.dart';
+import '../../business_home_screen/controller/new_chat_list_api_caller.dart';
 //
 // class BusinessChatController extends GetxController {
 //   AppSocketAllOperation appSocketAllOperation = AppSocketAllOperation.instance;
@@ -294,6 +296,7 @@ class BusinessChatController extends GetxController {
 
   String requestId = '';
   String chatId = '';
+  ChatType? currentChatType; // ✅ Add this to store current chat type
 
   RxList<ChatMessageResponseModel> chatMessagesList =
       <ChatMessageResponseModel>[].obs;
@@ -316,6 +319,20 @@ class BusinessChatController extends GetxController {
     }
   }
 
+  // ✅ Helper method to get status string from ChatType
+  String getChatTypeStatus(ChatType? chatType) {
+    switch (chatType) {
+      case ChatType.New:
+        return 'new';
+      case ChatType.Ongoing:
+        return 'ongoing';
+      case ChatType.Completed:
+        return 'completed';
+      default:
+        return 'new'; // Default fallback
+    }
+  }
+
   Future<void> fetchChatMessages() async {
     try {
       if (isLast) {
@@ -324,11 +341,11 @@ class BusinessChatController extends GetxController {
         return;
       }
 
-      // ✅ Fixed: Pass 'new' as string, not as a variable
+      // ✅ Fixed: Use chatType to determine status
       final data = await commonRepository.getBusinessChatMessage(
           page: currentPage,
           chatId: chatId,
-          status: 'new' // ✅ Fixed: Use string literal
+          status: getChatTypeStatus(currentChatType) // ✅ Use the helper method
       );
 
       if (data.isNotEmpty) {
@@ -354,10 +371,13 @@ class BusinessChatController extends GetxController {
       update();
       await commonRepository.sendOffer(
         offerTitle: offerTitle,
-        offerDescription: offerDescription,
-        chatId: requestId, // ✅ Make sure this should be requestId or chatId
+        // offerDescription: offerDescription,
+        chatId: chatId,
+        requestId: requestId,
       );
-      appLog('Offer sent for: $requestId');
+      appLog('Offer sent for requestId: $requestId');
+      appLog('Offer sent for chatId: $chatId');
+
     } catch (e) {
       errorLog("send Offer method ===>> $e");
     }
@@ -454,26 +474,74 @@ class BusinessChatController extends GetxController {
       isPagination.value = false;
 
       final argData = Get.arguments;
+      appLog('Received arguments: $argData');
 
-      // ✅ Fixed: Handle different argument types
       if (argData != null) {
-        if (argData is ChatModel) {
-          requestId = argData.requestId.toString();
-          chatId = argData.chatId;
+        BusinessesChatListModel? chatData;
+        ChatType? chatType;
+
+        // Handle new argument structure
+        if (argData is Map<String, dynamic>) {
+          chatData = argData['chatData'] as BusinessesChatListModel?;
+          chatType = argData['chatType'] as ChatType?;
+
+          // ✅ Store chatType for later use
+          currentChatType = chatType;
+
+          if (chatData != null) {
+            chatId = chatData.id;
+
+            // Smart request ID selection based on chat type
+            if (chatData.requests.isNotEmpty) {
+              switch (chatType) {
+                case ChatType.New:
+                // For new chats, prefer the request from latestStatusMessage
+                  requestId = chatData.latestStatusMessage?.request ?? chatData.requests.last;
+                  break;
+                case ChatType.Ongoing:
+                // For ongoing, use the most recent request
+                  requestId = chatData.requests.last;
+                  break;
+                case ChatType.Completed:
+                // For completed, use the first request
+                  requestId = chatData.requests.first;
+                  break;
+                default:
+                  requestId = chatData.requests.last;
+              }
+            } else {
+              requestId = chatId; // Fallback
+            }
+
+            appLog('Navigation Details:');
+            appLog('- Chat Type: $chatType');
+            appLog('- Chat Type Status: ${getChatTypeStatus(chatType)}'); // ✅ Log status string
+            appLog('- Chat ID: $chatId');
+            appLog('- Request ID: $requestId');
+            appLog('- Available requests: ${chatData.requests}');
+            appLog('- Latest status message request: ${chatData.latestStatusMessage?.request}');
+          }
+        }
+        // Keep existing fallback logic for backward compatibility
+        else if (argData is BusinessesChatListModel) {
+          requestId = argData.latestStatusMessage?.request ?? '';
+          chatId = argData.id;
+          currentChatType = ChatType.New; // ✅ Default fallback
+          appLog('Fallback: BusinessesChatListModel used');
         } else if (argData is String) {
-          // ✅ Handle case where only chatId is passed
           chatId = argData;
-          requestId = argData; // Use same for both if only one is provided
+          requestId = argData;
+          currentChatType = ChatType.New; // ✅ Default fallback
+          appLog('Fallback: String used');
         } else if (argData is Map) {
           chatId = argData['chatId'] ?? '';
           requestId = argData['requestId'] ?? argData['chatId'] ?? '';
+          currentChatType = ChatType.New; // ✅ Default fallback
+          appLog('Fallback: Map used');
         }
 
-        appLog('Request ID: $requestId');
-        appLog('Chat ID: $chatId');
-
         if (chatId.isNotEmpty) {
-          // ✅ Reset controllers
+          // Reset controllers
           scrollController = ScrollController();
           messageController = TextEditingController();
 
@@ -483,7 +551,7 @@ class BusinessChatController extends GetxController {
 
           await fetchChatMessages();
 
-          // ✅ Setup socket listener
+          // Setup socket listener
           appLog("Setting up socket for: message::$chatId");
           appSocketAllOperation.readEvent(
             event: "message::$chatId",
@@ -492,14 +560,20 @@ class BusinessChatController extends GetxController {
             },
           );
 
-          // ✅ Setup pagination
+          appSocketAllOperation.readEvent(
+            event: "chat::${LocalStorage.userId}",
+            handler: (data) {
+              chatMessageSocketHandler(data);
+            },
+          );
+
+          // Setup pagination
           paginationData();
 
-          // ✅ Check if user has replied
+          // Check if user has replied
           checkIfUserReplied();
         } else {
           errorLog("Chat ID is empty or invalid");
-          // ✅ Navigate back if invalid
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Get.back();
           });
