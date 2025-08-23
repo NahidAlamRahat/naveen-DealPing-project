@@ -90,8 +90,11 @@ class UserChatListProposalScreen extends StatelessWidget {
 
                           appLog("==============╰(*°▽°*)╯—→chat id:${chat.chatId}");
 
+                          appLog("==============╰(*°▽°*)╯—→request 1===== id:${controller.id}");
+
+
                           // Navigate to the chat screen
-                          Get.toNamed(AppRoutes.userChatScreen,arguments: chat,);
+                          Get.toNamed(AppRoutes.userChatScreen,arguments: {'chat':chat, 'requestId': controller.id},);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 8),

@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 import '../../../../routes/app_routes.dart';
 import '../../../../utils/app_log/app_log.dart';
-import '../../../../widgets/app_snack_bar/app_snack_bar.dart';
 import '../../../storage/storage_key.dart';
 import '../../../storage/storage_service.dart';
 

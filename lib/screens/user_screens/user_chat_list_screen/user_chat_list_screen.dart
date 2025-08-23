@@ -94,6 +94,7 @@ class UserChatListScreen extends StatelessWidget {
 
                   RequestModel request =
                   controller.requestModelList[index];
+
                   return Container(
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(

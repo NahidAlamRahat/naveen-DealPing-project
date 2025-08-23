@@ -6,7 +6,6 @@ import '../../constants/api_urls.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_image_path.dart';
 import '../../utils/app_log/error_log.dart';
-import 'app_image_circular.dart';
 
 class AppImage extends StatelessWidget {
   const AppImage({

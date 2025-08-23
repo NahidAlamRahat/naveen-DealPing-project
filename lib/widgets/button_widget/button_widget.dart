@@ -18,10 +18,11 @@ class ButtonWidget extends StatelessWidget {
   final Color? backgroundColor;
   final Color? borderColor;
   final FontWeight? fontWeight;
+  final bool isLoading; // ✅ নতুন property
 
   const ButtonWidget({
     super.key,
-     this.label,
+    this.label,
     this.icon,
     this.iconHeight,
     this.iconWidth,
@@ -35,6 +36,7 @@ class ButtonWidget extends StatelessWidget {
     this.backgroundColor,
     this.borderColor,
     this.fontWeight,
+    this.isLoading = false, // ✅ default false
   });
 
   @override
@@ -51,11 +53,20 @@ class ButtonWidget extends StatelessWidget {
             : null,
       ),
       child: MaterialButton(
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed, // ✅ লোডিং হলে disable হবে
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         padding: padding,
         shape: RoundedRectangleBorder(borderRadius: buttonRadius),
-        child: label != null
+        child: isLoading
+            ? const SizedBox(
+          height: 22,
+          width: 22,
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            color: Colors.white,
+          ),
+        )
+            : label != null
             ? Text(
           label!,
           style: TextStyle(
@@ -65,11 +76,7 @@ class ButtonWidget extends StatelessWidget {
           ),
         )
             : (icon != null
-            ? SizedBox(
-          // height: iconHeight,
-          // width: iconWidth,
-          child: icon,
-        )
+            ? SizedBox(child: icon)
             : const SizedBox()),
       ),
     );

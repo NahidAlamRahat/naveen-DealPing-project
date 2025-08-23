@@ -2,7 +2,6 @@ import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/services/api/api_services.dart';
 import 'package:get/get.dart';
 import '../../../models/booking_create_responce_model.dart';
-import '../../../routes/app_routes.dart';
 
 class BookingConfirmRepository extends GetxController {
   bool _inProgress = false;

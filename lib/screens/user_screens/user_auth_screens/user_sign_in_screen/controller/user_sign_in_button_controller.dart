@@ -49,7 +49,7 @@ class UserSignInButtonController extends GetxController {
         );
 
         final bool isSuccess =
-        await _signInController.signInApiCall(signInModel: signInModel);
+        await _signInController.signInApiCall(signInModel: signInModel, email: emailController.text.trim());
 
         // Hide loading
         _signInController.inProgress == false;

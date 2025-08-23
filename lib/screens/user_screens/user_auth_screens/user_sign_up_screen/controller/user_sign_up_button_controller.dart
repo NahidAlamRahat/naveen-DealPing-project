@@ -18,13 +18,11 @@ class UserSignUpButtonController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController rePasswordController = TextEditingController();
   final SignUpApiController _userSignUpApiController =
-      Get.find<SignUpApiController>();
+  Get.find<SignUpApiController>();
 
-  final RxBool isLoading = false.obs;
+  bool isLoading = false;
 
-  // final AuthRepository authRepository = AuthRepository();
-
-  // Validate Name
+  // Validate First Name
   String? validateFirstName(String? value) {
     if (value == null || value.isEmpty) {
       return "Enter Name";
@@ -36,6 +34,7 @@ class UserSignUpButtonController extends GetxController {
     return null;
   }
 
+  // Validate Last Name
   String? validateLastName(String? value) {
     if (value == null || value.isEmpty) {
       return "Enter Name";
@@ -50,8 +49,8 @@ class UserSignUpButtonController extends GetxController {
   // Validate Email
   String? validateEmail(String? value) {
     bool emailValid =
-        RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
-            .hasMatch(value ?? "");
+    RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+        .hasMatch(value ?? "");
     if (value == null || value.isEmpty) {
       return "Enter Email";
     } else if (!emailValid) {
@@ -64,8 +63,8 @@ class UserSignUpButtonController extends GetxController {
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return "Enter Password";
-    } else if (value.length < 6) {
-      return "Password length should be more than 6 characters";
+    } else if (value.length < 8) {
+      return "Password length should be more than 8 characters";
     }
     return null;
   }
@@ -73,8 +72,8 @@ class UserSignUpButtonController extends GetxController {
   String? validateRePassword(String? value) {
     if (value == null || value.isEmpty) {
       return "Enter Password";
-    } else if (value.length < 6) {
-      return "Password length should be more than 6 characters";
+    } else if (value.length < 8) {
+      return "Password length should be more than 8 characters";
     }
     return null;
   }
@@ -82,20 +81,24 @@ class UserSignUpButtonController extends GetxController {
   Future<void> onTapSignUpButton() async {
     if (formKey.currentState!.validate()) {
       UserSignUpModel userSignUpModel = UserSignUpModel(
-          firstName: firstNameController.text.trim(),
-          lastName: lastNameController.text.trim(),
-          email: emailController.text.trim(),
-          password: passwordController.text,
-          confirmPassword: rePasswordController.text,
-          role: "user");
+        firstName: firstNameController.text.trim(),
+        lastName: lastNameController.text.trim(),
+        email: emailController.text.trim(),
+        password: passwordController.text,
+        confirmPassword: rePasswordController.text,
+        role: "user",
+      );
+
+      isLoading = true;
+      update(); // ✅ show loading
 
       final bool isSuccess =
-          await _userSignUpApiController.userSignUp(userSignUpModel);
-      _userSignUpApiController.signUpInProgress == true;
+      await _userSignUpApiController.userSignUp(userSignUpModel);
+
+      isLoading = false;
+      update(); // ✅ hide loading
 
       if (isSuccess) {
-        _userSignUpApiController.signUpInProgress == false;
-
         AppSnackBar.success(
             _userSignUpApiController.successfullyMessage ?? 'Successful!');
         appLog(
@@ -106,70 +109,11 @@ class UserSignUpButtonController extends GetxController {
           arguments: {'email': emailController.text},
         );
       } else {
-        _userSignUpApiController.signUpInProgress == false;
-        // error message
         AppSnackBar.message('${_userSignUpApiController.errorMessage}');
         appLog('error message => ${_userSignUpApiController.errorMessage}');
       }
     }
   }
-
-
-  RxList<SupportFormSection> formSections = <SupportFormSection>[SupportFormSection()].obs;
-
-
-
-  Future<void> onTapSubmitSupportRequests() async {
-    try {
-      // Step 1: Validate all form sections
-      for (int i = 0; i < formSections.length; i++) {
-        final section = formSections[i];
-
-        if (section.selectedType.value.isEmpty) {
-          throw "Section ${i + 1}: Please select a support type.";
-        }
-
-        if (section.problemController.text.trim().isEmpty) {
-          throw "Section ${i + 1}: Please describe your problem.";
-        }
-
-        // Optional: you can add type-specific validations here
-      }
-
-      // Step 2: Convert each form section to model and send to API
-      for (var section in formSections) {
-        String? categoryId =
-        section.selectedCategory.value != "empty" ? section.selectedCategory.value : null;
-        List<String>? subCategoryList = section.selectedSubCategories.isNotEmpty
-            ? section.selectedSubCategories
-            : null;
-
-        SupportRequestModel model = SupportRequestModel(
-          category: categoryId,
-          subcategories: subCategoryList,
-          businessName:
-          section.selectedType.value == 'Business Name' ? section.problemController.text.trim() : null,
-          eiin: section.selectedType.value == 'Eiin Number' ? section.problemController.text.trim() : null,
-        );
-
-        appLog("Submitting: ${model.toJson()}");
-
-        // TODO: call your repository API here, for example:
-        // await _repository.submitSupportRequest(model.toJson());
-      }
-
-      AppSnackBar.success("Support request(s) submitted successfully!");
-
-      // Optionally clear all sections
-      formSections.value = [SupportFormSection()];
-    } catch (e) {
-      AppSnackBar.error(e.toString());
-    }
-  }
-
-
-
-
 
   @override
   void onClose() {

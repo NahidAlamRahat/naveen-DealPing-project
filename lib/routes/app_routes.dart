@@ -28,6 +28,9 @@ class AppRoutes {
   static const userBookingSummaryScreen = '/userBookingSummaryScreen';
   static const userBookingSuccessfullScreen = '/userBookingSuccessfullScreen';
   static const userBarcodeScreen = '/userBarcodeScreen';
+  static const barcodeScreen = '/barcodeScreen';
+
+
   static const userBookingsScreen = '/userBookingsScreen';
   static const userProfileScreen = '/userProfileScreen';
   static const userEditProfileScreen = '/userEditProfileScreen';

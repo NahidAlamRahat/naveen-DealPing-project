@@ -4,7 +4,7 @@ import 'package:deal_ping/services/api/api_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import '../../../../models/chat_message_responce_model.dart';
+import '../../../../services/sockets/app_socket_all_operation.dart';
 import '../../../../utils/app_log/app_log.dart';
 
 enum ChatType{New, Ongoing, Completed}
@@ -18,6 +18,9 @@ class BusinessChatListApiController extends GetxController {
   bool _isLoading = false;
   late List<BusinessesChatListModel> _businessChatList = [];
   List<BusinessesChatListModel> _originalRequestList = [];
+
+  AppSocketAllOperation appSocketAllOperation = AppSocketAllOperation.instance;
+
 
   String? _errorMessage;
 
@@ -41,7 +44,7 @@ class BusinessChatListApiController extends GetxController {
     } else {
       final filtered = _originalRequestList.where((request) {
         print('Checking: ${request.participant.name}');
-        return (request.participant.name ?? '')
+        return (request.participant.name)
             .toLowerCase()
             .contains(query.toLowerCase());
       }).toList();

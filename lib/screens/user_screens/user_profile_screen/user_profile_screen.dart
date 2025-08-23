@@ -1,6 +1,5 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_icons_path.dart';
-import 'package:deal_ping/constants/app_image_path.dart';
 import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:deal_ping/utils/app_size.dart';

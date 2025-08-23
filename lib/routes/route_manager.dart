@@ -172,6 +172,14 @@ class RouteManager {
         page: () => UserBarcodeScreen(),
         // binding: GeneralBindings(),
       ),
+
+      GetPage(
+        name: AppRoutes.barcodeScreen,
+        page: () => BarcodeScreen(),
+        // binding: GeneralBindings(),
+      ),
+
+
       GetPage(
         name: AppRoutes.userBookingsScreen,
         page: () => const UserBookingsScreen(),

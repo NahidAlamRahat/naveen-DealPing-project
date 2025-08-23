@@ -1,3 +1,4 @@
+
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/utils/extension.dart';
@@ -6,7 +7,6 @@ import 'package:deal_ping/widgets/text_widget/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../widgets/space_widget/space_widget.dart';
-import '../user_bookings_screen/controller/booking_list_api_caller.dart';
 import 'controller/user_barcode_controller.dart';
 
 class UserBarcodeScreen extends StatelessWidget {
@@ -17,11 +17,6 @@ class UserBarcodeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    // final index = Get.arguments;
-    // if (index == null || index is! int) {
-    //   return const Center(child: Text("Invalid booking index"));
-    // }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -217,4 +212,3 @@ class UserBarcodeScreen extends StatelessWidget {
     );
   }
 }
-

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/constants/app_strings.dart';
-import 'package:deal_ping/screens/user_screens/user_chat_screen/controller/user_chate_controller.dart';
 import 'package:deal_ping/utils/extension.dart';
 import 'package:deal_ping/widgets/icon_text_button/icon_text_button.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
 import '../../common/common_widget/chat_message_widget.dart';
-import '../../user_screens/user_profile_screen/controller/user_profile_controller.dart';
 import '../business_preset_screen/controller/business_present_screen_controller.dart';
 import 'controller/business_chat_controller.dart';
 
