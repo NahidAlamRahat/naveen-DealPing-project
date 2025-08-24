@@ -12,6 +12,7 @@ import '../../../routes/app_routes.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
+import '../user_bookings_screen/controller/booking_list_api_caller.dart';
 
 class UserBookingSuccessFullScreen extends StatelessWidget {
 
@@ -79,7 +80,7 @@ class UserBookingSuccessFullScreen extends StatelessWidget {
                   buttonWidth: double.infinity,
                 ),
                 const SpaceWidget(spaceHeight: 12),
-                ButtonWidget(
+            /*    ButtonWidget(
                   onPressed: () {
                     Get.toNamed(AppRoutes.userBookingsScreen);
                   },
@@ -88,7 +89,23 @@ class UserBookingSuccessFullScreen extends StatelessWidget {
                   backgroundColor: AppColors.white,
                   textColor: AppColors.grey300,
                   borderColor: AppColors.grey300,
+                ),*/
+
+                ButtonWidget(
+                  onPressed: () async {
+                    // user bookings screen এ যাওয়ার আগে refresh করানো যায়
+                    final controller = Get.put(BookingListController());
+                    await controller.refreshBookingList();
+                    Get.toNamed(AppRoutes.userBookingsScreen);
+                  },
+                  label: AppStrings.viewBookings,
+                  buttonWidth: double.infinity,
+                  backgroundColor: AppColors.white,
+                  textColor: AppColors.grey300,
+                  borderColor: AppColors.grey300,
                 ),
+
+
               ],
             ),
           ],

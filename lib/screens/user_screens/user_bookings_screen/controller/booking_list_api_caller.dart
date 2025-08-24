@@ -40,6 +40,7 @@ class BookingListController extends GetxController {
   bool isLast = false;
 
 
+/*
   void onDataLoad() async {
     try {
       if (isLast) {
@@ -67,6 +68,50 @@ class BookingListController extends GetxController {
       isPagination.value = false;
     }
   }
+*/
+
+
+  Future<void> onDataLoad() async {
+    try {
+      if (isLast) {
+        isLoading.value = false;
+        isPagination.value = false;
+        return;
+      }
+
+      var response = await commonRepository.getBookingList(
+        page: currentPage,
+        bookingStatus: bookingStatus,
+      );
+
+      if (response.isEmpty) {
+        isLast = true;
+      } else {
+        bookingList.addAll(response);
+        currentPage++;
+      }
+    } catch (e) {
+      errorLog(e);
+    } finally {
+      isLoading.value = false;
+      isPagination.value = false;
+    }
+  }
+
+
+
+  Future<void> refreshBookingList() async {
+    try {
+      currentPage = 1;
+      isLast = false;
+      bookingList.clear();
+      isLoading.value = true;
+      await onDataLoad();
+    } catch (e) {
+      errorLog(e);
+    }
+  }
+
 
   void paginationData() {
     try {

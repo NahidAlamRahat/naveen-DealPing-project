@@ -81,6 +81,7 @@ class UserBookingsScreen extends StatelessWidget {
   }
 }
 
+/*
 class BookingsList extends StatelessWidget {
   const BookingsList({super.key});
 
@@ -132,6 +133,58 @@ class BookingsList extends StatelessWidget {
     });
   }
 }
+*/
+
+
+class BookingsList extends StatelessWidget {
+  const BookingsList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<BookingListController>();
+
+    return Obx(() {
+      return RefreshIndicator(
+        onRefresh: controller.refreshBookingList, // 🔹 এখানে refresh call হবে
+        child: controller.isLoading.value && controller.bookingList.isEmpty
+            ? const Center(child: CircularProgressIndicator())
+            : controller.bookingList.isEmpty
+            ? const Center(child: Text("No bookings found"))
+            : ListView.builder(
+          controller: controller.scrollController,
+          physics: const AlwaysScrollableScrollPhysics(), // 🔹 ডেটা থাকলেও pull করা যাবে
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          itemCount: controller.bookingList.length + (controller.isPagination.value ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (index == controller.bookingList.length) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Center(
+                  child: SizedBox(
+                    width: AppSize.width(value: 20),
+                    height: AppSize.height(value: 20),
+                    child: const CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                ),
+              );
+            }
+
+            final booking = controller.bookingList[index];
+            return BookingCard(
+              title: booking.businessName,
+              location: booking.address,
+              distance: "${booking.distance.toStringAsFixed(2)} miles",
+              networkImageUrl: '${AppImagePath.imageUrl}${booking.businessProfile}',
+              rating: booking.rating,
+              bookingModel: booking,
+            );
+          },
+        ),
+      );
+    });
+  }
+}
+
 
 class PastBookings extends StatelessWidget {
   const PastBookings({super.key});

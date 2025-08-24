@@ -175,16 +175,17 @@ class UserChatController extends GetxController {
       isLoading.value = true;
       isPagination.value = false;
 
+      final argData = Get.arguments;
 
+      if (argData != null && argData is Map) {
+        final ChatModel chat = argData['chat'] as ChatModel; // এখানে cast করতে হবে
+        final String requestId = argData['requestId'].toString();
 
-      final argData  = Get.arguments;
-      if(argData != null && argData is ChatModel){
+        appLog('request id👌👌→→→===>> $requestId');
+        appLog('chat data😥😥😥 ===>> ${chat.chatId}'); // debug করলে ভালো দেখা যাবে
 
-        requestId = argData.requestId.toString();
-        appLog('request id👌👌→→→©© ===>> $requestId');
-
-        chatId = argData.chatId;
-        appLog('chat id😥😥😥 ===>> $chatId');
+        chatId = chat.chatId;   // এখন ChatModel থেকে access করা যাবে
+        this.requestId = requestId;
 
         scrollController = ScrollController();
         messageController = TextEditingController();
@@ -198,16 +199,15 @@ class UserChatController extends GetxController {
         appSocketAllOperation.initializeSocket();
 
         appSocketAllOperation.readEvent(
-            event: "message::$chatId",
-            handler: (data) {
-
-              chatMessageSocketHandler(data);
-
-
-            });
+          event: "message::$chatId",
+          handler: (data) {
+            chatMessageSocketHandler(data);
+          },
+        );
 
         paginationData();
-      }else{
+      }
+      else{
         appLog("chat id not found");
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           // Get.offAndToNamed(AppRoutes.n)

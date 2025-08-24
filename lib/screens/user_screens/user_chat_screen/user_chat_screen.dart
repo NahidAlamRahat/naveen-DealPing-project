@@ -14,7 +14,9 @@ import 'controller/user_chate_controller.dart';
 
 
 class UserChatScreen extends StatelessWidget{
-  const UserChatScreen({super.key,});
+   UserChatScreen({super.key,});
+
+  UserChatController userChatController = Get.put(UserChatController());
 
   @override
   Widget build(BuildContext context) {

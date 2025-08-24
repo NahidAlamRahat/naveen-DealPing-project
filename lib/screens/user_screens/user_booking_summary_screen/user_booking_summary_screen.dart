@@ -33,6 +33,7 @@ class UserBookingSummaryScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
