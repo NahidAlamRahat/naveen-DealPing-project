@@ -26,16 +26,18 @@ class BusinessProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final UserProfileController controller = Get.put(UserProfileController());
 
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Obx(() {
         final profileData = controller.profile.value;
-        String fullName = '${profileData?.firstName ?? ""} ${profileData?.lastName ?? ""}';
+        String fullName = '${profileData?.firstName ?? "Loading"} ${profileData?.lastName ?? ""}';
 
         return RefreshIndicator(
           onRefresh: () async {
             if (!controller.isLoading.value) {
               await controller.fetchUserProfile();
+
             }
           },
           child: SingleChildScrollView(
@@ -55,25 +57,27 @@ class BusinessProfileScreen extends StatelessWidget {
                   const SpaceWidget(spaceHeight: 24),
 
                   // Profile Section
-                Center(
-                  child: Obx(() => Center(
+                  Center(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: AppImage(
+                        key: ValueKey("${controller.profile.value?.profile}-${DateTime.now().millisecondsSinceEpoch}"),
                         height: AppSize.height(value: 120),
                         width: AppSize.width(value: 120),
-                        url: '${controller.profile.value?.profile}?t=${DateTime.now().millisecondsSinceEpoch}',
+                        url: controller.profile.value?.profile != null
+                            ? "${controller.profile.value!.profile}?t=${DateTime.now().millisecondsSinceEpoch}"
+                            : null,
                         fit: BoxFit.cover,
                       ),
                     ),
-                  )),
-                ),
+                  ),
+
                   const SpaceWidget(spaceHeight: 16),
 
                   // Name and Username
                   Center(
                     child: TextWidget(
-                      text: fullName,
+                      text: fullName ,
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
                       fontColor: AppColors.green500,
@@ -81,7 +85,7 @@ class BusinessProfileScreen extends StatelessWidget {
                   ),
                   Center(
                     child: TextWidget(
-                      text: profileData?.email ?? "",
+                      text: profileData?.email ?? "null",
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       fontColor: AppColors.grey700,

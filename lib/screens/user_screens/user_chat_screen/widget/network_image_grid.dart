@@ -60,9 +60,12 @@ class NetworkImageGrid extends StatelessWidget {
             flex: 2,
             child: GestureDetector(
               onTap: () => onTap?.call(0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: AppImage(url: images![0], fit: BoxFit.cover),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: AppImage(url: images![0], fit: BoxFit.cover),
+                ),
               ),
             ),
           ),
@@ -102,7 +105,7 @@ class NetworkImageGrid extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 4,
+          crossAxisSpacing: 2,
           mainAxisSpacing: 4,
         ),
         itemCount: 4,

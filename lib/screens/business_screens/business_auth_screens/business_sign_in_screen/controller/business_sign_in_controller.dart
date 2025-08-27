@@ -13,13 +13,13 @@ class BusinessSignInController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
   final SignInApiController _signInController = Get.put(SignInApiController());
 
-  bool get inProgress => _signInController.inProgress == false;
+  bool inProgress = false;
 
   // Validate Email
   String? validateEmail(String? value) {
     bool emailValid =
-        RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
-            .hasMatch(value ?? "");
+    RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+        .hasMatch(value ?? "");
     if (value == null || value.isEmpty) {
       return "Enter Email";
     } else if (!emailValid) {
@@ -33,47 +33,88 @@ class BusinessSignInController extends GetxController {
     if (value == null || value.isEmpty) {
       return "Enter Password";
     } else if (value.length < 6) {
-      return "Password length should be more than 8 characters";
+      return "Password length should be more than 6 characters";
     }
     return null;
   }
 
-
   Future<void> onTapSignInButton() async {
     if (formKey.currentState!.validate()) {
       try {
-        // Show loading
-        _signInController.inProgress == true;
-
+        inProgress = true;
+        update(); // Update UI for GetBuilder
 
         SignInModel signInModel = SignInModel(
           email: emailController.text.trim(),
           password: passwordController.text,
         );
 
-        final bool isSuccess =
-        await _signInController.signInApiCall(signInModel: signInModel);
+        appLog('Attempting login for: ${emailController.text.trim()}');
 
-        // Hide loading
-        _signInController.inProgress == false;
+        final int statusCode = await _signInController.signInApiCall(
+          signInModel: signInModel,
+          email: emailController.text.trim(),
+        );
 
-        if (isSuccess) {
+        inProgress = false;
+        update(); // Update UI for GetBuilder
+
+        appLog('Login response status code: $statusCode');
+
+        if (statusCode == 200) {
+          // ✅ Success
+          appLog('Login successful, navigating to business bottom nav');
+
           AppSnackBar.success(
-              _signInController.successfullyMessage ?? 'Login Successful!');
-          appLog('success message => ${_signInController.successfullyMessage}');
+              _signInController.successfullyMessage.isNotEmpty
+                  ? _signInController.successfullyMessage
+                  : 'Login Successful!');
+
+          // Clear form
+          emailController.clear();
+          passwordController.clear();
+
+          // Navigate to business dashboard
           Get.offAllNamed(AppRoutes.businessBottomNav);
+
+        } else if (statusCode == 407) {
+          // 🚀 Special Case - OTP verification required
+          appLog('OTP verification required');
+
+          AppSnackBar.message(_signInController.errorMessage.isNotEmpty
+              ? _signInController.errorMessage
+              : "OTP verification required.");
+
+          Get.toNamed(
+            AppRoutes.businessSignupVerifyOtpScreen,
+            arguments: {'email': emailController.text.trim()},
+          );
+
         } else {
-          AppSnackBar.message('${_signInController.errorMessage}');
-          debugPrint('error message => ${_signInController.errorMessage}');
+          // ❌ Other errors
+          appLog('Login failed with status code: $statusCode');
+
+          AppSnackBar.message(_signInController.errorMessage.isNotEmpty
+              ? _signInController.errorMessage
+              : "Login failed. Please try again.");
         }
+
       } catch (e, stackTrace) {
-        _signInController.inProgress == false;
+        inProgress = false;
+        update(); // Update UI for GetBuilder
+
+        appLog('Exception in SignIn: $e');
+        appLog('StackTrace: $stackTrace');
+
         AppSnackBar.message('Something went wrong. Please try again.');
-        debugPrint('Exception in SignIn: $e');
-        debugPrint('StackTrace: $stackTrace');
       }
     }
   }
 
-
+  @override
+  void onClose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.onClose();
+  }
 }

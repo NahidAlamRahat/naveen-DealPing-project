@@ -21,6 +21,8 @@ class BusinessSignupVerifyAccountController extends GetxController {
   var otpTextEditingController5 = TextEditingController();
   var otpTextEditingController6 = TextEditingController();
 
+  bool isLoading = false;
+
   final VerifyOtpController _verifyOtpController =
       Get.find<VerifyOtpController>();
 
@@ -91,8 +93,9 @@ class BusinessSignupVerifyAccountController extends GetxController {
   }
 
 
-
   Future<void> onTapVerifyButton() async {
+    if (isLoading) return; // ✅ prevent multiple taps
+
     String otp = otpTextEditingController1.text +
         otpTextEditingController2.text +
         otpTextEditingController3.text +
@@ -103,18 +106,35 @@ class BusinessSignupVerifyAccountController extends GetxController {
     VerifyOtpModel verifyOtpModel = VerifyOtpModel(email: email, otp: otp);
     appLog(email);
 
-    var response = await _verifyOtpController.verifyOtp(
-      verifyOtpModel: verifyOtpModel,
-      url: ApiUrls.verifyEmail,
-    );
+    try {
+      isLoading = true;
+      update(); // ✅ show loading
 
-    if (response != false && response['success'] == true) {
-      AppSnackBar.success('${_verifyOtpController.successfullyMessage}');
-      Get.offAllNamed(AppRoutes.businessBottomNav);
-      appLog('success message => ${_verifyOtpController.errorMessage}');
-    } else {
-      AppSnackBar.message('${_verifyOtpController.errorMessage}');
-      appLog('error message => ${_verifyOtpController.errorMessage}');
+      var response = await _verifyOtpController.verifyOtp(
+        verifyOtpModel: verifyOtpModel,
+        url: ApiUrls.verifyEmail,
+      );
+
+      if (response != false && response['success'] == true) {
+        AppSnackBar.success('${_verifyOtpController.successfullyMessage}');
+        Get.offAllNamed(AppRoutes.businessBottomNav);
+        appLog('success message => ${_verifyOtpController.successfullyMessage}');
+      } else {
+        AppSnackBar.message('${_verifyOtpController.errorMessage}');
+        appLog('error message => ${_verifyOtpController.errorMessage}');
+      }
+    } catch (e) {
+      AppSnackBar.error("Something went wrong!");
+      appLog("Verify error: $e");
+    } finally {
+      isLoading = false;
+      update(); // ✅ hide loading
     }
   }
+
+
+
+
+
+
 }

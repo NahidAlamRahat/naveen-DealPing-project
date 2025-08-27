@@ -7,82 +7,80 @@ import '../../storage/storage_key.dart';
 import '../../storage/storage_service.dart';
 
 class SignInApiController extends GetxController {
-  late bool _inProgress = false;
-
-  // UserProfileController userProfileController = Get.put(UserProfileController());
-  // BusinessProfileController businessProfileController = Get.put(BusinessProfileController());
-
-
+  bool _inProgress = false;
   bool get inProgress => _inProgress;
 
-  String? _errorMessage;
+  String _errorMessage = '';
+  String get errorMessage => _errorMessage;
 
-  String? get errorMessage => _errorMessage;
+  String _successfullyMessage = '';
+  String get successfullyMessage => _successfullyMessage;
 
-  String? _successfullyMessage;
-
-  String? get successfullyMessage => _successfullyMessage;
-
-/*
-  Future<bool> signInApiCall({required signInModel , String? email}) async {
+  // Return status code instead of bool for better handling
+  Future<int> signInApiCall({required signInModel, String? email}) async {
     _inProgress = true;
-    _errorMessage = null;
-    _successfullyMessage = null;
-    update();
+    _errorMessage = '';
+    _successfullyMessage = '';
+    update(); // Update UI for GetBuilder
 
-    final response = await ApiService.postApi(
-      ApiUrls.login,
-      signInModel,
-    );
-
-    _inProgress = false;
-
-    if (response.statusCode == 200) {
-      String accessToken = response.body['data']?['accessToken'] ?? "";
-      String refreshToken = response.body['data']?['refreshToken'] ?? "";
-      String role = response.body['data']?['role'] ?? "";
-
-      LocalStorage.token = accessToken;
-
-      LocalStorage.refreshToken = refreshToken;
-      LocalStorage.myRole = role;
-
-      // LocalStorage.userId =userProfileController. profile.value?.sId ?? '';
-
-
-      LocalStorage.setString(
-        LocalStorageKeys.token,
-        LocalStorage.token,
+    try {
+      final response = await ApiService.postApi(
+        ApiUrls.login,
+        signInModel,
       );
-      LocalStorage.setString(
-          LocalStorageKeys.refreshToken, LocalStorage.refreshToken);
-      LocalStorage.setString(LocalStorageKeys.myRole, LocalStorage.myRole);
 
-      _successfullyMessage = response.message;
       _inProgress = false;
 
-      update();
-      return true;
-    }
-    else if(response.statusCode == 407){
-      Get.toNamed(
-        AppRoutes.userSignupVerifyOtpScreen,
-        arguments: {'email': email},
+      if (response.statusCode == 200) {
+        String accessToken = response.body['data']?['accessToken'] ?? "";
+        String refreshToken = response.body['data']?['refreshToken'] ?? "";
+        String role = response.body['data']?['role'] ?? "";
 
-      );    }
-    else {
+        LocalStorage.token = accessToken;
+        LocalStorage.refreshToken = refreshToken;
+        LocalStorage.myRole = role;
+
+        LocalStorage.setString(
+          LocalStorageKeys.token,
+          LocalStorage.token,
+        );
+        LocalStorage.setString(
+            LocalStorageKeys.refreshToken, LocalStorage.refreshToken);
+        LocalStorage.setString(LocalStorageKeys.myRole, LocalStorage.myRole);
+
+        _successfullyMessage = response.message ?? "Login successful";
+
+        appLog('Login successful for role: $role');
+        update(); // Update UI for GetBuilder
+        return 200;
+      }
+      else if (response.statusCode == 407) {
+        _errorMessage = response.message ?? "OTP verification required";
+        appLog('OTP verification required');
+        update(); // Update UI for GetBuilder
+        return 407;
+      }
+      else {
+        _errorMessage = response.message ?? "Login failed";
+        appLog('Login failed - Status: ${response.statusCode}, Message: ${response.message}');
+        update(); // Update UI for GetBuilder
+        return response.statusCode;
+      }
+    } catch (e) {
       _inProgress = false;
-      appLog('Error message => ${response.message}');
-      _errorMessage = response.message;
-      update();
-      return false;
+      _errorMessage = "Network error occurred";
+      appLog('SignIn API Error: $e');
+      update(); // Update UI for GetBuilder
+      return 500; // Internal error
     }
   }
-*/
+}
 
 
 
-  Future<bool> signInApiCall({required signInModel, String? email}) async {
+// 🔹 Controller Method
+/*
+  Future<int> signInApiCall({required signInModel, String? email}) async {
     _inProgress = true;
     _errorMessage = null;
     _successfullyMessage = null;
@@ -111,28 +109,23 @@ class SignInApiController extends GetxController {
 
       _successfullyMessage = response.message;
       update();
-      return true;
+      return 200; // success
 
     } else if (response.statusCode == 407) {
-      // 🚀 Custom handling for 407
-      appLog('Received 407 => Redirecting to special screen');
-      Get.toNamed(
-        AppRoutes.userSignupVerifyOtpScreen,
-        arguments: {'email': email},);
+      // 🚀 শুধু return করবো
       _errorMessage = response.message;
-      _inProgress = false;
       update();
-      return false;
+      return 407;
 
     } else {
       // ❌ Error case
       _errorMessage = response.message;
-      appLog('Error message => ${response.message}');
       update();
-      return false;
+      return response.statusCode ?? 500;
     }
   }
+*/
 
 
 
-}
+

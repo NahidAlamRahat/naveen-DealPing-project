@@ -237,12 +237,31 @@ class BusinessSignUpScreen extends StatelessWidget {
 
                 const SpaceWidget(spaceHeight: 24),
 
-                ButtonWidget(
+              /*  ButtonWidget(
                   onPressed: controller.onTapBusinessSignUpButton,
                   label: AppStrings.createYourAccount,
                   buttonWidth: double.infinity,
                   buttonRadius: const BorderRadius.all(Radius.circular(8)),
                 ),
+*/
+
+
+
+                GetBuilder<BusinessSignUpController>(
+                  builder: (signUpController) {
+                    return Visibility(
+                      visible: signUpController.isLoading == false,
+                      replacement: const Center(child: CircularProgressIndicator()),
+                      child: ButtonWidget(
+                        onPressed: signUpController.onTapBusinessSignUpButton, // ✅ নাম সঠিক করলাম
+                        label: AppStrings.createYourAccount,
+                        buttonWidth: double.infinity,
+                        buttonRadius: const BorderRadius.all(Radius.circular(8)),
+                      ),
+                    );
+                  },
+                ),
+
 
 
                 const SpaceWidget(spaceHeight: 24),

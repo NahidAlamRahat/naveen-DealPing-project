@@ -11,6 +11,7 @@ class ControllerBinders extends Bindings {
     Get.put(SignUpApiController());
     Get.put(SignInApiController());
     Get.put(VerifyOtpController());
+
     Get.lazyPut(UserNotificationController.new, fenix: true);
     Get.lazyPut(() =>  UserChatController(),);
   }

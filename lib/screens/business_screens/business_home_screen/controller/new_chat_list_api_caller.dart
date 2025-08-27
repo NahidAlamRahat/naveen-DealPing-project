@@ -5,7 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../../services/sockets/app_socket_all_operation.dart';
+import '../../../../services/storage/storage_service.dart';
 import '../../../../utils/app_log/app_log.dart';
+import '../../../../utils/app_log/error_log.dart';
 
 enum ChatType{New, Ongoing, Completed}
 
@@ -16,7 +18,7 @@ class BusinessChatListApiController extends GetxController {
   int? _totalPage;
   bool _isInitialLoading = true;
   bool _isLoading = false;
-  late List<BusinessesChatListModel> _businessChatList = [];
+  late RxList _businessChatList = [].obs;
   List<BusinessesChatListModel> _originalRequestList = [];
 
   AppSocketAllOperation appSocketAllOperation = AppSocketAllOperation.instance;
@@ -26,7 +28,7 @@ class BusinessChatListApiController extends GetxController {
 
   String? get errorMessage => _errorMessage;
   int? get totalPage => _totalPage;
-  List<BusinessesChatListModel> get businessChatList => _businessChatList;
+  RxList get businessChatList => _businessChatList;
   bool get isLoading => _isLoading;
   bool get isInitialLoading => _isInitialLoading;
 
@@ -40,7 +42,7 @@ class BusinessChatListApiController extends GetxController {
     print('Query: $query');
     if (query.isEmpty) {
       print('❤️❤️Resetting full list');
-      _businessChatList = _originalRequestList;
+      _businessChatList.value = _originalRequestList;
     } else {
       final filtered = _originalRequestList.where((request) {
         print('Checking: ${request.participant.name}');
@@ -49,7 +51,7 @@ class BusinessChatListApiController extends GetxController {
             .contains(query.toLowerCase());
       }).toList();
       print('Filtered count: ${filtered.length}');
-      _businessChatList = filtered;
+      _businessChatList.value = filtered;
     }
   }
 
@@ -106,6 +108,28 @@ class BusinessChatListApiController extends GetxController {
   }
 
 
+
+  void businessChatSocketHandler(dynamic data) {
+    try {
+      final businessesChatListModel = BusinessesChatListModel.fromJson(data);
+
+      if (businessesChatListModel.id.isEmpty ||
+          businessesChatListModel.participant.id.isEmpty) return;
+
+
+      businessChatList.insert(0, businessesChatListModel);
+      _businessChatList.refresh();
+    } catch (e) {
+      errorLog("notificationSocketHandler $e");
+    }
+  }
+
+
+
+
+
+
+
   Future<bool> refreshList() async {
     _currentPage = 0;
     _businessChatList.clear();
@@ -117,6 +141,20 @@ class BusinessChatListApiController extends GetxController {
   Future<void> appOnInit() async {
     try {
       await getChatList();
+
+      appSocketAllOperation.readEvent(
+          event: "newChat::${LocalStorage.userId}",
+          handler: (data) {
+
+            businessChatSocketHandler(data);
+
+            appLog('👌👌👌👌new business chat==>>> ${data}  ');
+
+
+          });
+
+
+
     } catch (e) {
       debugPrint('error from ${e.toString()}');
     }

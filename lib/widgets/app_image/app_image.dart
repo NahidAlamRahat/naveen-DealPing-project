@@ -18,6 +18,7 @@ class AppImage extends StatelessWidget {
     this.width,
     this.filePath,
     this.iconColor,
+    this.borderRadius = 8.0,
   });
 
   final String? path;
@@ -28,6 +29,7 @@ class AppImage extends StatelessWidget {
   final double? height;
   final Color color;
   final Color? iconColor;
+  final double borderRadius; // নতুন parameter
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +47,18 @@ class AppImage extends StatelessWidget {
 
   Widget _buildImage() {
     if (filePath != null) {
-      return Image.file(
-        File(filePath!),
-        width: width,
-        height: height,
-        fit: fit,
-        errorBuilder: (context, error, stackTrace) {
-          errorLog(error, source: "Error loading file image:");
-          return _buildPlaceholder();
-        },
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: Image.file(
+          File(filePath!),
+          width: width,
+          height: height,
+          fit: fit,
+          errorBuilder: (context, error, stackTrace) {
+            errorLog(error, source: "Error loading file image:");
+            return _buildPlaceholder();
+          },
+        ),
       );
     }
 
@@ -66,23 +71,27 @@ class AppImage extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
+        borderRadius: borderRadius, // parameter pass করা হলো
       );
     }
 
     if (path != null) {
-      return Image.asset(
-        path!,
-        width: width,
-        height: height,
-        fit: fit,
-        color: iconColor,
-        errorBuilder: (context, error, stackTrace) {
-          errorLog(
-            error,
-            source: "Error loading asset image:",
-          );
-          return _buildPlaceholder();
-        },
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: Image.asset(
+          path!,
+          width: width,
+          height: height,
+          fit: fit,
+          color: iconColor,
+          errorBuilder: (context, error, stackTrace) {
+            errorLog(
+              error,
+              source: "Error loading asset image:",
+            );
+            return _buildPlaceholder();
+          },
+        ),
       );
     }
 
@@ -90,26 +99,32 @@ class AppImage extends StatelessWidget {
   }
 
   Widget _buildPlaceholder() {
-    return Container(
-      width: width,
-      height: height,
-      color: color,
-      child: Icon(
-        Icons.image_not_supported,
-        color: iconColor ?? Colors.white,
-        size: width != null && height != null
-            ? (width! < height! ? width! * 0.5 : height! * 0.5)
-            : 24.0,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: Container(
+        width: width,
+        height: height,
+        color: color,
+        child: Icon(
+          Icons.image_not_supported,
+          color: iconColor ?? Colors.white,
+          size: width != null && height != null
+              ? (width! < height! ? width! * 0.5 : height! * 0.5)
+              : 24.0,
+        ),
       ),
     );
   }
-
 }
+
+
+
 class NetworkImageWithRetry extends StatefulWidget {
   final String imageUrl;
   final double? width;
   final double? height;
   final BoxFit fit;
+  final double borderRadius; // নতুন parameter
 
   const NetworkImageWithRetry({
     super.key,
@@ -117,6 +132,7 @@ class NetworkImageWithRetry extends StatefulWidget {
     this.fit = BoxFit.cover,
     this.height,
     this.width,
+    this.borderRadius = 8.0, // default value
   });
 
   @override
@@ -162,7 +178,9 @@ class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> {
   @override
   Widget build(BuildContext context) {
     HttpOverrides.global = CustomHttpClient();
-    return ClipOval( // 🔹 Circular shape
+    // ✅ ClipOval এর পরিবর্তে ClipRRect ব্যবহার করা হলো
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(widget.borderRadius),
       child: FadeInImage(
         placeholder: const AssetImage(AppImagePath.placeholderImage),
         image: NetworkImage(_image ?? ""),
@@ -201,4 +219,3 @@ class CustomHttpClient extends HttpOverrides {
           (X509Certificate cert, String host, int port) => true;
   }
 }
-

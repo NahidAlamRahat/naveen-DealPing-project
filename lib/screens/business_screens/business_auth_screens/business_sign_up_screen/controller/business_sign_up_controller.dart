@@ -31,7 +31,7 @@ class BusinessSignUpController extends GetxController {
   Get.put(SelectCategoryAndSubCategory());
 
 
-  final RxBool isLoading = false.obs;
+   bool isLoading = false;
 
   final AuthRepository authRepository = AuthRepository();
 
@@ -180,8 +180,14 @@ class BusinessSignUpController extends GetxController {
         subCategories: subCategoryIds,
       );
 
+      isLoading = true;
+      update(); // ✅ show loading
+
       final bool isSuccess = await _signUpApiController.userSignUp(businessSignUpModel);
       _signUpApiController.signUpInProgress == true;
+
+      isLoading = false;
+      update(); // ✅ hide loading
 
       if (isSuccess) {
         AppSnackBar.success(
@@ -198,6 +204,11 @@ class BusinessSignUpController extends GetxController {
       }
     }
   }
+
+
+
+
+
 
 
 

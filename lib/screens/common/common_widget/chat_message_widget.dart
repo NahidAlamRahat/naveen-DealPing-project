@@ -98,7 +98,6 @@ class ChatMessage extends StatelessWidget {
                           width: 50,
                           height: 50,
                           decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
                             color: AppColors.grey200, // background color for icon
                           ),
                           child: const Icon(

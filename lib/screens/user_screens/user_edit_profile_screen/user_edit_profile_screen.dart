@@ -52,6 +52,7 @@ class UserEditProfileScreen extends StatelessWidget {
                             : controller.profileImageUrl.value.isNotEmpty
                                 ? ClipOval(
                                     child: AppImage(
+                                      borderRadius: 100,
                                       height: 120,
                                       width: 120,
                                       url: controller.profileImageUrl.value,
@@ -59,6 +60,7 @@ class UserEditProfileScreen extends StatelessWidget {
                                     ),
                                   )
                                 : const AppImage(
+                                    borderRadius: 100,
                                     height: 120,
                                     width: 120,
                                     url: AppImagePath.profileImage,
