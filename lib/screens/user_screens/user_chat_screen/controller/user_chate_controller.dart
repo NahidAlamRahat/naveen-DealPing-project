@@ -545,14 +545,15 @@ class UserChatController extends GetxController {
     try {
 
       chatMessagesList.insert(
-          0, ChatMessageResponseModel.fromJson(message));
-      // chatMessages.add(ChatMessageResponseModel.fromJson(message));
+        0, ChatMessageResponseModel.fromJson(message['data']));
+      // chatMessagesList.add(ChatMessageResponseModel.fromJson(message));
       chatMessagesList.refresh();
       appLog('rahat');
     } catch (e) {
       errorLog("chatMessageSocketHandler $e");
     }
   }
+
 
 
 
@@ -604,6 +605,7 @@ class UserChatController extends GetxController {
 
           },
         );
+        await fetchChatMessages();
 
 
 

@@ -166,7 +166,7 @@ class UserChatScreen extends StatelessWidget {
 
             Expanded(
               child: ListView.builder(
-                reverse: true, // ✅ Latest message bottom এ
+                reverse: true,
                 controller: userChatController.scrollController,
                 padding: const EdgeInsets.all(16),
                 physics: const ClampingScrollPhysics(),
