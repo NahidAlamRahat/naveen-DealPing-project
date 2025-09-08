@@ -104,6 +104,8 @@ class UserNotificationScreen extends StatelessWidget {
   }
 }
 
+
+
 class NotificationItem extends StatelessWidget {
   final NotificationModel notification;
   final bool isNew;
