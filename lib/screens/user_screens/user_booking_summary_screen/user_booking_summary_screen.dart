@@ -41,14 +41,6 @@ class UserBookingSummaryScreen extends StatelessWidget {
             children: [
               // Bar Info Card\
 
-              // const BookingCardWidget(
-              //
-              //   imagePath: AppImagePath.bookingsImage,
-              //   title: 'Mirchi Dance Ba',
-              //   location: 'Dhanmondi, Dhaka',
-              //   distance: '2.3 miles',
-              //   starCount: 5,
-              // ),
               const SpaceWidget(spaceHeight: 16),
 
               // User Info

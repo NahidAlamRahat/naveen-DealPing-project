@@ -116,10 +116,13 @@ class BusinessBottomNav extends StatelessWidget {
                         ),
                         icon: Icons.home,
                       ),
+
+                      /// booking and offer
+
                       GButton(
-                        text: AppStrings.preset,
+                        text: AppStrings.myReport,
                         leading: IconWidget(
-                          icon: AppIconsPath.presetIcon,
+                          icon: AppIconsPath.myReportIcon,
                           width: 24,
                           height: 24,
                           color: controller.selectedIndex.value == 1
@@ -128,6 +131,9 @@ class BusinessBottomNav extends StatelessWidget {
                         ),
                         icon: Icons.home,
                       ),
+
+                      /*
+
                       GButton(
                         text: AppStrings.bookings,
                         leading: IconWidget(
@@ -139,7 +145,9 @@ class BusinessBottomNav extends StatelessWidget {
                               : AppColors.grey300,
                         ),
                         icon: Icons.home,
-                      ),
+                      ),*/
+
+
                       GButton(
                         text: AppStrings.profile,
                         leading: IconWidget(

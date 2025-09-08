@@ -18,7 +18,7 @@ class ButtonWidget extends StatelessWidget {
   final Color? backgroundColor;
   final Color? borderColor;
   final FontWeight? fontWeight;
-  final bool isLoading; // ✅ নতুন property
+  final bool isLoading; //
 
   const ButtonWidget({
     super.key,

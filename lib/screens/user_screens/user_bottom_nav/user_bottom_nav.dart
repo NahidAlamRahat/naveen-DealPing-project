@@ -121,7 +121,9 @@ const UserBottomNav({super.key});
                         ),
                         icon: Icons.home,
                       ),
-                      GButton(
+
+                      ///Booking
+                     /* GButton(
                         text: AppStrings.bookings,
                         leading: IconWidget(
                           icon: AppIconsPath.bookingsIcon,
@@ -133,13 +135,15 @@ const UserBottomNav({super.key});
                         ),
                         icon: Icons.home,
                       ),
+*/
+
                       GButton(
                         text: AppStrings.profile,
                         leading: IconWidget(
                           icon: AppIconsPath.profileIcon,
                           width: 24,
                           height: 24,
-                          color: controller.selectedIndex.value == 3
+                          color: controller.selectedIndex.value == 2
                               ? AppColors.white
                               : AppColors.grey300,
                         ),

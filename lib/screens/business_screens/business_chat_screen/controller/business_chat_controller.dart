@@ -90,6 +90,8 @@ class BusinessChatController extends GetxController {
     isPagination.value = false;
   }
 
+
+
   Future<void> sendOffer({
     required String offerTitle,
     required String offerDescription,
@@ -112,6 +114,8 @@ class BusinessChatController extends GetxController {
     isMessageSent = false;
     update();
   }
+
+
 
   Future<void> sendMessage() async {
     try {
@@ -141,6 +145,8 @@ class BusinessChatController extends GetxController {
     update();
   }
 
+
+
   Future<void> pickImage() async {
     final List<XFile> pickedImages = await _picker.pickMultiImage();
     if (pickedImages.isNotEmpty) {
@@ -150,6 +156,9 @@ class BusinessChatController extends GetxController {
       update();
     }
   }
+
+
+
 
   void scrollToBottom() {
     try {
@@ -165,18 +174,22 @@ class BusinessChatController extends GetxController {
     }
   }
 
+
+
   void chatMessageSocketHandler(dynamic message) {
     try {
-      chatMessagesList.insert(0, ChatMessageResponseModel.fromJson(message));
-      chatMessagesList.refresh();
-      appLog('New message received via socket');
 
-      // ✅ Check if user replied after receiving new message
-      checkIfUserReplied();
+      chatMessagesList.insert(
+          0, ChatMessageResponseModel.fromJson(message['data']));
+      // chatMessagesList.add(ChatMessageResponseModel.fromJson(message));
+      chatMessagesList.refresh();
+      appLog('rahat');
     } catch (e) {
       errorLog("chatMessageSocketHandler $e");
     }
   }
+
+
 
   void paginationData() {
     try {
@@ -195,6 +208,8 @@ class BusinessChatController extends GetxController {
       errorLog('paginationData error: $e');
     }
   }
+
+
 
   Future<void> onAppInitialDataLoad() async {
     try {
@@ -250,6 +265,8 @@ class BusinessChatController extends GetxController {
             appLog('- Latest status message request: ${chatData.latestStatusMessage?.request}');
           }
         }
+
+
         // Keep existing fallback logic for backward compatibility
         else if (argData is BusinessesChatListModel) {
           requestId = argData.latestStatusMessage?.request ?? '';
@@ -277,16 +294,22 @@ class BusinessChatController extends GetxController {
           currentPage = 1;
           isLast = false;
 
-          await fetchChatMessages();
 
           // Setup socket listener
-          appLog("Setting up socket for: message::$chatId");
+          await fetchChatMessages();
+
+          appLog("==========================chat Socket  ============================");
+
+
           appSocketAllOperation.readEvent(
             event: "message::$chatId",
             handler: (data) {
               chatMessageSocketHandler(data);
+              appLog('👌👌👌👌new chat==>>> ${data}  ');
+
             },
           );
+          await fetchChatMessages();
 
 
           // Setup pagination
@@ -329,6 +352,7 @@ class BusinessChatController extends GetxController {
   void onInit() {
     appLog('BusinessChatController onInit called');
     onAppInitialDataLoad();
+    scrollToBottom();
     super.onInit();
   }
 

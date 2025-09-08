@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../user_screens/user_notification_screen/controller/user_notification_controller.dart';
 import '../../business_bookings_screen/business_bookings_screen.dart';
 import '../../business_home_screen/business_home_screen.dart';
+import '../../business_my_report_screen/business_my_report_screen.dart';
 import '../../business_preset_screen/business_preset_screen.dart';
 import '../../business_profile_screen/business_profile_screen.dart';
 
@@ -17,8 +18,9 @@ class BusinessBottomNavController extends GetxController {
 
   final List<Widget> widgetOptions = [
     const BusinessHomeScreen(),
-    const BusinessPresetScreen(),
-    BusinessBookingsScreen(),
+    const BusinessMyReportScreen(),
+    /*const BusinessPresetScreen(),
+    BusinessBookingsScreen(),*/
     const BusinessProfileScreen(),
   ];
 

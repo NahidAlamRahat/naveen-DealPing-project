@@ -28,10 +28,9 @@ class UserNotificationScreen extends StatelessWidget {
               text: AppStrings.notification,
               backgroundColor: Colors.white,
               centerTitle: true,
-
               action: PopupMenuButton<int>(
                 constraints:
-                    const BoxConstraints.expand(width: 150, height: 60),
+                const BoxConstraints.expand(width: 150, height: 60),
                 onSelected: controller.onMarkAllRead,
                 itemBuilder: (context) => [
                   const PopupMenuItem(
@@ -45,80 +44,67 @@ class UserNotificationScreen extends StatelessWidget {
                 color: AppColors.white,
                 elevation: 2,
               ),
-
             ),
-            //   body: LazyListView.builder(
-            //     onLoad: controller.onAppInitialDataLoad(),
-            //   itemCount: controller.notifications.length,
-            //   itemBuilder: (context, index) {
-            //     final entry = controller.notifications.elementAt(index);
-            //     return NotificationItem(
-            //       notification: entry,
-            //       isNew: !entry.isRead,
-            //       networkImageUrl: entry.userProfileImage,
-            //     );
-            //   },
-            // ),
-              body: Obx(() {
-                return Stack(
-                  children: [
-                    // Main content: list of notifications
-                    SingleChildScrollView(
-                      controller: controller.scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        children: [
-                          ...List.generate(
-                            controller.notificationsList.length,
-                                (index) {
-                              var item = controller.notificationsList[index];
-                              appLog('image==>.😪😪 ${ApiUrls.imageUrl}/${item.userProfileImage}');
-                              return NotificationItem(
-                                notification: item,
-                                isNew: !item.isRead,
-                                networkImageUrl: '${ApiUrls.baseUrl}/${item.userProfileImage}',
-                              );
-                            },
-                          ),
-                          if (controller.isPagination.value)
-                            Padding(
-                              padding: EdgeInsets.all(AppSize.width(value: 10)),
-                              child: Align(
-                                child: SizedBox(
-                                  width: AppSize.width(value: 20),
-                                  height: AppSize.width(value: 20),
-                                  child: const CircularProgressIndicator(),
-                                ),
+            body: Obx(() {
+              return Stack(
+                children: [
+                  // Main content: list of notifications
+                  SingleChildScrollView(
+                    controller: controller.scrollController,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        ...List.generate(
+                          controller.notificationsList.length,
+                              (index) {
+                            var item = controller.notificationsList[index];
+                            appLog(
+                                'image==>.😪😪 ${ApiUrls.imageUrl}/${item.userProfileImage}');
+                            return NotificationItem(
+                              notification: item,
+                              isNew: !item.isRead,
+                              // Only pass the image path, not the full URL
+                              networkImageUrl: item.userProfileImage ?? '',
+                            );
+                          },
+                        ),
+                        if (controller.isPagination.value)
+                          Padding(
+                            padding: EdgeInsets.all(AppSize.width(value: 10)),
+                            child: Align(
+                              child: SizedBox(
+                                width: AppSize.width(value: 20),
+                                height: AppSize.width(value: 20),
+                                child: const CircularProgressIndicator(),
                               ),
                             ),
-                        ],
-                      ),
+                          ),
+                      ],
                     ),
+                  ),
 
-                    // Overlay loader (only visible while loading)
-                    if (controller.isLoading.value)
-                      const Positioned.fill(
-                        child: IgnorePointer(
-                          child: Center(
-                            child: SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(),
-                            ),
+                  // Overlay loader (only visible while loading)
+                  if (controller.isLoading.value)
+                    const Positioned.fill(
+                      child: IgnorePointer(
+                        child: Center(
+                          child: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(),
                           ),
                         ),
                       ),
-                  ],
-                );
-              }),
-
+                    ),
+                ],
+              );
+            }),
           );
         });
   }
 }
 
 class NotificationItem extends StatelessWidget {
-
   final NotificationModel notification;
   final bool isNew;
   final String networkImageUrl;
@@ -132,7 +118,13 @@ class NotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    appLog("NotificationItem image URL: $networkImageUrl"); // এখানে URL লগ হবে
+    // Construct the full URL here if image exists
+    String? fullImageUrl;
+    if (networkImageUrl.isNotEmpty) {
+      fullImageUrl = '${AppImagePath.imageUrl}/$networkImageUrl';
+    }
+
+    appLog("NotificationItem image URL: $fullImageUrl");
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -148,11 +140,25 @@ class NotificationItem extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(AppSize.width(value: 200)),
-            child: NetworkImageWidget(
+            child: fullImageUrl != null && fullImageUrl.isNotEmpty
+                ? NetworkImageWidget(
               fit: BoxFit.cover,
               height: AppSize.height(value: 40),
               width: AppSize.height(value: 40),
-              networkImageUrl: "${AppImagePath.imageUrl}$networkImageUrl",
+              networkImageUrl: fullImageUrl,
+            )
+                : Container(
+              height: AppSize.height(value: 40),
+              width: AppSize.height(value: 40),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.person,
+                color: Colors.white,
+                size: 24,
+              ),
             ),
           ),
           const SpaceWidget(spaceWidth: 12),
@@ -174,11 +180,11 @@ class NotificationItem extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
                 const SpaceWidget(spaceHeight: 4),
-
                 TextWidget(
-                  text: (DateTime.tryParse(notification.createdAt.toString()) ??
+                  text:
+                  (DateTime.tryParse(notification.createdAt.toString()) ??
                       DateTime.now())
-                      .time ,
+                      .time,
                   fontColor: AppColors.grey200,
                   fontSize: 12,
                   fontWeight: FontWeight.w400,

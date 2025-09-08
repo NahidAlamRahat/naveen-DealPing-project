@@ -42,11 +42,8 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
     controller.changeBookingFilterType(controller.bookingFilterType.value);
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: const AppbarWidget(
@@ -55,6 +52,7 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
+          padding: const EdgeInsets.only(bottom: 20), // Add bottom padding
           child: Column(
             children: [
               // Line Chart Section (unchanged)
@@ -73,7 +71,6 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
                   const SpaceWidget(spaceHeight: 12),
 
                   ///user
-
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Obx(() {
@@ -128,7 +125,6 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
                           ),
                         ],
                       );
-
                     }),
                   ),
 
@@ -149,17 +145,16 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
                               value: e,
                               child: Text(e,
                                   style: const TextStyle(
-                                      color: AppColors.grey300, fontSize: 12)),
+                                      color: AppColors.grey300,
+                                      fontSize: 12)),
                             ))
                                 .toList(),
                             onChanged: controller.changeUserFilterType,
                           ),
-                        )
-                        ,
+                        ),
                       ],
                     ),
                   ),
-
 
                   ///user
                   AspectRatio(
@@ -171,108 +166,45 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
                         top: 24,
                         bottom: 12,
                       ),
-                      child:Obx(() {
+                      child: Obx(() {
                         final userGrowth = controller.userStats.value;
-                        final selectedIndex = controller.userSelectedTabIndex.value;
+                        final selectedIndex =
+                            controller.userSelectedTabIndex.value;
                         if (userGrowth == null) {
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
-                        return LineChart(getMainData(userGrowth, selectedIndex));
+                        return LineChart(
+                            getMainData(userGrowth, selectedIndex));
                       }),
-
                     ),
                   ),
-
                 ],
               ),
 
-
               const SpaceWidget(spaceHeight: 26),
 
-              // Bar Chart Section
-          AspectRatio(
-            aspectRatio: 1, // Width:Height = 1:1
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const TextWidget(
-                    text: 'Booking Ratio',
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    fontColor: AppColors.green500,
-                  ),
+              // Bar Chart Section - Fixed overflow issue
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const TextWidget(
+                      text: 'Booking Ratio',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      fontColor: AppColors.green500,
+                    ),
+                    const SpaceWidget(spaceHeight: 12),
 
-                  const SpaceWidget(spaceHeight: 12),
-
-                /*  const Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 6,
-                        backgroundColor: AppColors.green50,
-                      ),
-                      SpaceWidget(spaceWidth: 8),
-                      TextWidget(
-                        text: 'Booking Confirmation',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        fontColor: AppColors.grey700,
-                      ),
-                      SpaceWidget(spaceWidth: 20),
-                    ],
-                  ),
-                  const SpaceWidget(spaceHeight: 2),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 6,
-                            backgroundColor: AppColors.green500,
-                          ),
-                          SpaceWidget(spaceWidth: 8),
-                          TextWidget(
-                            text: 'Checked In Confirmation',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            fontColor: AppColors.grey700,
-                          ),
-                        ],
-                      ),
-
-                      Flexible(
-                        child: Obx(
-                              () => DropdownButton<String>(
-                            value: controller.userFilterType.value,
-                            underline: const SizedBox(),
-                            icon: const Icon(Icons.keyboard_arrow_down_rounded,
-                                color: AppColors.green500),
-                            items: ["Month", "Year"]
-                                .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(e,
-                                  style: const TextStyle(
-                                      color: AppColors.grey300, fontSize: 12)),
-                            ))
-                                .toList(),
-                            onChanged: controller.changeBookingFilterType,
-                          ),
-                        )
-                        ,
-                      ),
-                    ],
-                  ),
-*/
-
-                  ///Booking
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Obx(() {
-                      int selectedIndex = controller.bookingSelectedTabIndex.value;
+                    ///Booking
+                    Obx(() {
+                      int selectedIndex =
+                          controller.bookingSelectedTabIndex.value;
 
                       return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           GestureDetector(
                             onTap: () => controller.changeBookingSelectedTab(0),
@@ -296,8 +228,7 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
                               ],
                             ),
                           ),
-                          const SpaceWidget(spaceWidth: 20),
-
+                          const SpaceWidget(spaceHeight: 8),
                           GestureDetector(
                             onTap: () => controller.changeBookingSelectedTab(1),
                             child: Row(
@@ -322,13 +253,9 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
                           ),
                         ],
                       );
-
                     }),
-                  ),
 
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Obx(
@@ -342,60 +269,36 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
                               value: e,
                               child: Text(e,
                                   style: const TextStyle(
-                                      color: AppColors.grey300, fontSize: 12)),
+                                      color: AppColors.grey300,
+                                      fontSize: 12)),
                             ))
                                 .toList(),
                             onChanged: controller.changeBookingFilterType,
                           ),
-                        )
-                        ,
+                        ),
                       ],
                     ),
-                  ),
 
-
-                  AspectRatio(
-                    aspectRatio: 1.70,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 20,
-                        left: 20,
-                        top: 24,
-                        bottom: 12,
-                      ),
-                      child:Obx(() {
-                        final userGrowth = controller.bookingStats.value;
-                        // final selectedIndex = controller.bookingSelectedTabIndex.value;
-                        if (userGrowth == null) {
-                          return const Center(child: CircularProgressIndicator());
-                        }
-                        return SizedBox(
-                            height: 220,
-                            child: BarChart(mainBarData()));
-                      }),
-
-                    ),
-                  ),
-
-
-                  const SpaceWidget(spaceHeight: 12),
-
-                  // এখানে পরিবর্তন: Expanded এর বদলে SizedBox দিয়ে fixed height দিলাম
-               /*   SizedBox(
-                    height: 250,  // তোমার প্রয়োজনমতো adjust করো
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: BarChart(mainBarData()),
-                    ),
-                  ),*/
-
-                  const SizedBox(height: 12),
-                ],
+                    // Bar chart with fixed height
+                    Obx(() {
+                      final userGrowth = controller.bookingStats.value;
+                      if (userGrowth == null) {
+                        return const Center(
+                            child: CircularProgressIndicator());
+                      }
+                      return Container(
+                        height: 220, // Fixed height for bar chart
+                        padding: const EdgeInsets.only(
+                          right: 4,
+                          top: 24,
+                          bottom: 12,
+                        ),
+                        child: BarChart(mainBarData()),
+                      );
+                    }),
+                  ],
+                ),
               ),
-            ),
-          ),
-
-
             ],
           ),
         ),
@@ -430,7 +333,6 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
 
   Widget leftTitleWidgets(double value, TitleMeta meta,
       {required double minimum, required double maximum}) {
-    // appLog('===========================> $value');
     const style = TextStyle(
       fontWeight: FontWeight.w400,
       fontSize: 14,
@@ -439,10 +341,9 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
 
     String? text = getExactStepLabel(minimum, maximum, value, stepsCount: 5);
     if (text == null) return Container();
-    // appLog("❤️❤️❤️👌👌👌👌👌 $text");
     return SideTitleWidget(
       axisSide: meta.axisSide,
-      space: 8, // Axis থেকে gap
+      space: 8,
       child: Text(text, style: style),
     );
   }
@@ -458,8 +359,10 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
         gridData: const FlGridData(show: false),
         titlesData: FlTitlesData(
           show: true,
-          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles:
+          const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles:
+          const AxisTitles(sideTitles: SideTitles(showTitles: false)),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
@@ -472,8 +375,7 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
             sideTitles: SideTitles(
               showTitles: true,
               interval: 1,
-              getTitlesWidget: (value, meta) => leftTitleWidgets(
-                  value, meta,
+              getTitlesWidget: (value, meta) => leftTitleWidgets(value, meta,
                   minimum: minValue, maximum: maxValue),
               reservedSize: 42,
             ),
@@ -481,7 +383,8 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
         ),
         borderData: FlBorderData(show: false),
         minX: 0,
-        maxX: data.requests.isNotEmpty ? data.requests.last.day.toDouble() : 0,
+        maxX:
+        data.requests.isNotEmpty ? data.requests.last.day.toDouble() : 0,
         minY: 0,
         maxY: data.requests.isNotEmpty
             ? data.requests.map((e) => e.value).reduce((a, b) => a > b ? a : b)
@@ -517,8 +420,10 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
         gridData: const FlGridData(show: false),
         titlesData: FlTitlesData(
           show: true,
-          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles:
+          const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles:
+          const AxisTitles(sideTitles: SideTitles(showTitles: false)),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
@@ -531,8 +436,7 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
             sideTitles: SideTitles(
               showTitles: true,
               interval: 1,
-              getTitlesWidget: (value, meta) => leftTitleWidgets(
-                  value, meta,
+              getTitlesWidget: (value, meta) => leftTitleWidgets(value, meta,
                   minimum: minValue, maximum: maxValue),
               reservedSize: 42,
             ),
@@ -540,7 +444,8 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
         ),
         borderData: FlBorderData(show: false),
         minX: 0,
-        maxX: data.bookings.isNotEmpty ? data.bookings.last.day.toDouble() : 0,
+        maxX:
+        data.bookings.isNotEmpty ? data.bookings.last.day.toDouble() : 0,
         minY: 0,
         maxY: data.bookings.isNotEmpty
             ? data.bookings.map((e) => e.value).reduce((a, b) => a > b ? a : b)
@@ -569,14 +474,12 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
     }
   }
 
-
-
   // Bar Chart Helper Methods
   BarChartGroupData _makeGroupData(
       int x,
       double y1, // First value (e.g., active calories)
       double y2, // Second value (e.g., passive calories)
-      {bool isTouched = false}) {
+          {bool isTouched = false}) {
     return BarChartGroupData(
       x: x,
       barRods: [
@@ -622,13 +525,11 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
     });
   }
 
-
-
-
-   mainBarData() {
-
-     double maxValue =( controller.bookingStats.value?.placed.map((e)=> e.value).toList() ?? [])
-         .reduce((a, b) => a > b ? a : b);
+  mainBarData() {
+    double maxValue =
+    (controller.bookingStats.value?.placed.map((e) => e.value).toList() ??
+        [])
+        .reduce((a, b) => a > b ? a : b);
     return BarChartData(
       alignment: BarChartAlignment.center,
       barTouchData: BarTouchData(
@@ -667,13 +568,14 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
           ),
         ),
         rightTitles:
-            const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles:
+        const AxisTitles(sideTitles: SideTitles(showTitles: false)),
       ),
       borderData: FlBorderData(show: false),
       barGroups: _generateBarData(),
       gridData: const FlGridData(show: true, drawVerticalLine: false),
-      maxY: maxValue +16, // Adjust based on your max stacked value
+      maxY: maxValue + 16, // Adjust based on your max stacked value
     );
   }
 
@@ -695,14 +597,10 @@ class _BusinessMyReportScreenState extends State<BusinessMyReportScreen> {
     );
   }
 
-
-
   int dayOfWeekFromDayNumber(int dayNumber) {
-    DateTime date = DateTime(DateTime.now().year, DateTime.now().month, dayNumber);
-
+    DateTime date =
+    DateTime(DateTime.now().year, DateTime.now().month, dayNumber);
 
     return date.weekday % 7; // Sunday -> 0, Monday ->1 ... Saturday -> 6
   }
-
-
 }

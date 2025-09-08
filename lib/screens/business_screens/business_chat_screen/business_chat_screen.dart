@@ -37,11 +37,11 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
   // final userProfile = Get.put(UserProfileController()).profile.value;
 
 
-
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
-      init:  BusinessChatController(),
+    return GetBuilder<BusinessChatController>(
+      init: BusinessChatController(),
+
       builder: (businessChatController) {
         return Scaffold(
           backgroundColor: AppColors.white
@@ -61,6 +61,8 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
               }
             }),
 
+            ///offer section
+            /*
             action: PopupMenuButton<int>(
               onSelected: (value) {
                 if (value == 1) {
@@ -249,6 +251,7 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
               color: AppColors.white,
               elevation: 2,
             )
+*/
 
 
           ),

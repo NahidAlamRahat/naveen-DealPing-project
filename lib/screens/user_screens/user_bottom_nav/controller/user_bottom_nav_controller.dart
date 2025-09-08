@@ -21,7 +21,7 @@ class UserBottomNavController extends GetxController {
   final List<Widget> widgetOptions = [
     const UserHomeScreen(),
     UserChatListScreen(),
-    const UserBookingsScreen(),
+    // const UserBookingsScreen(),
     const UserProfileScreen(),
   ];
 
