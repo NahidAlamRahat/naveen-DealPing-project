@@ -28,17 +28,11 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
   final userProfileController = Get.put(UserProfileController());
   final searchController = TextEditingController();
 
-
-
-  List<Map<String, dynamic>> messages = List.generate(
-      5,
-          (index) => {
-        "name": "John Doe12",
-        "message": "Hi! I'd love to book a table for 4 tonight.",
-        "time": "01:42",
-        "unread": 2,
-        "image": AppImagePath.profileImage,
-      });
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,8 +82,12 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                   fontSize: 14,
                 ),
                 onTap: (index) async {
-                  controller.onChatTypeChange(index); // tab select change
-                  await controller.refreshList();     // new data fetch
+                  // Clear search when changing tabs
+                  searchController.clear();
+                  controller.clearSearch();
+
+                  controller.onChatTypeChange(index);
+                  await controller.refreshList();
                 },
 
                 unselectedLabelColor: AppColors.green500,
@@ -100,7 +98,6 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 tabs: ChatType.values.map((chat)=> Tab(
-                  // text: "New\nmessage",
                   child: Text(
                     chat.name,
                     textAlign: TextAlign.center,
@@ -110,127 +107,159 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
               ),
             ),
             const SpaceWidget(spaceHeight: 16),
-            // Search Field
-            SearchBarWidget(
-              controller: searchController,
-              hintText: 'Search Your Offer',
-              onChanged: (value) {
-                controller.filterList(value);
-              },
+            // Search Field with clear button
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  controller.filterList(value);
+                },
+                decoration: InputDecoration(
+                  hintText: 'Search Your Offer',
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: searchController.text.isNotEmpty
+                      ? IconButton(
+                    onPressed: () {
+                      searchController.clear();
+                      controller.clearSearch();
+                    },
+                    icon: const Icon(Icons.clear),
+                  )
+                      : null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: AppColors.grey200),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: AppColors.green500),
+                  ),
+                ),
+              ),
             ),
 
             const SpaceWidget(spaceHeight: 16),
             Expanded(
               child: GetBuilder<BusinessChatListApiController>(
                 builder: (controller) {
-                  final list = controller.businessChatList;
+                  // Use Obx for reactive updates
+                  return Obx(() {
+                    final list = controller.businessChatList;
 
-                  if (controller.isInitialLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+                    if (controller.isInitialLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                  if (controller.errorMessage != null) {
-                    return Center(child: Text(controller.errorMessage!));
-                  }
+                    if (controller.errorMessage != null) {
+                      return Center(child: Text(controller.errorMessage!));
+                    }
 
-                  if (list.isEmpty) {
-                    return const Center(child: Text("No chats available"));
-                  }
+                    if (list.isEmpty) {
+                      return const Center(child: Text("No chats available"));
+                    }
 
-                  return ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    itemCount: list.length,
-                    itemBuilder: (context, index) {
-                      final item = list[index];
-                      return InkWell(
-                        onTap: () {
-                          final chatItem = controller.businessChatList[index];
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        searchController.clear();
+                        controller.clearSearch();
+                        await controller.refreshList();
+                      },
+                      child: ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        itemCount: list.length,
+                        itemBuilder: (context, index) {
+                          final item = list[index];
+                          return InkWell(
+                            onTap: () {
+                              final chatItem = controller.businessChatList[index];
 
-                          // Create proper navigation arguments
-                          final navigationArgs = {
-                            'chatData': chatItem,
-                            'chatType': controller.selectedChatType,
-                          };
+                              final navigationArgs = {
+                                'chatData': chatItem,
+                                'chatType': controller.selectedChatType,
+                              };
 
-                          Get.toNamed(
-                            AppRoutes.businessChatScreen,
-                            arguments: navigationArgs,
-                          );                        },
-                        highlightColor: Colors.transparent,
-                        splashColor: Colors.transparent,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
+                              Get.toNamed(
+                                AppRoutes.businessChatScreen,
+                                arguments: navigationArgs,
+                              );
+                            },
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              margin: const EdgeInsets.only(bottom: 12),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: NetworkImageWidget(
-                                      networkImageUrl: "${AppImagePath.imageUrl}${item.participant.profile}",
-                                      width: 40,
-                                      height: 40,
-                                    ),
-                                  ),
-                                  const SpaceWidget(spaceWidth: 8),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                  Row(
                                     children: [
-                                      TextWidget(
-                                        text: item.participant.name,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                        fontColor: AppColors.green500,
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(100),
+                                        child: NetworkImageWidget(
+                                          networkImageUrl: "${AppImagePath.imageUrl}${item.participant.profile}",
+                                          width: 40,
+                                          height: 40,
+                                        ),
                                       ),
+                                      const SpaceWidget(spaceWidth: 8),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          TextWidget(
+                                            text: item.participant.name,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            fontColor: AppColors.green500,
+                                          ),
+                                          TextWidget(
+                                            text: item.latestMessage,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                            fontColor: AppColors.grey700,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      if (item.unreadMessageCount > 0)
+                                        CircleAvatar(
+                                          radius: 9,
+                                          backgroundColor: AppColors.redisPink,
+                                          child: TextWidget(
+                                            text: item.unreadMessageCount.toString(),
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400,
+                                            fontColor: AppColors.white,
+                                          ),
+                                        ),
+                                      const SpaceWidget(spaceHeight: 2),
                                       TextWidget(
-                                        text: item.latestMessage,
-                                        fontSize: 12,
+                                        text: (DateTime.tryParse(
+                                            item.createdAt) ??
+                                            DateTime.now())
+                                            .time,
+                                        fontSize: 10,
                                         fontWeight: FontWeight.w400,
-                                        fontColor: AppColors.grey700,
+                                        fontColor: AppColors.grey300,
                                       ),
                                     ],
                                   ),
                                 ],
                               ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  if (item.unreadMessageCount > 0)
-                                    CircleAvatar(
-                                      radius: 9,
-                                      backgroundColor: AppColors.redisPink,
-                                      child: TextWidget(
-                                        text: item.unreadMessageCount.toString(),
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400,
-                                        fontColor: AppColors.white,
-                                      ),
-                                    ),
-                                  const SpaceWidget(spaceHeight: 2),
-                                  TextWidget(
-                                    text: (DateTime.tryParse(
-                                        item.createdAt) ??
-                                        DateTime.now())
-                                        .time,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w400,
-                                    fontColor: AppColors.grey300,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  });
                 },
               ),
             )
-
           ],
         ),
       ),
@@ -238,7 +267,10 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
   }
 }
 
-class BookingsList extends StatelessWidget {
+
+///Booking part
+
+/*class BookingsList extends StatelessWidget {
   final List<Map<String, String>> bookings = List.generate(
       5,
           (index) => {
@@ -297,8 +329,9 @@ class PastBookings extends StatelessWidget {
       },
     );
   }
-}
+}*/
 
+/*
 class BookingCard extends StatelessWidget {
   final String title, location, distance, imagePath;
   final bool isPastBooking;
@@ -403,4 +436,4 @@ class BookingCard extends StatelessWidget {
       ),
     );
   }
-}
+}*/

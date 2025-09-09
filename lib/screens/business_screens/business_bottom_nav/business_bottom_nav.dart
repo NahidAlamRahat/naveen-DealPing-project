@@ -3,14 +3,13 @@ import 'package:deal_ping/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_icons_path.dart';
 import '../../../constants/app_image_path.dart';
 import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/image_widget/image_widget.dart';
+import '../../notification_screen/controller/notification_controller.dart';
 import '../../user_screens/user_bottom_nav/controller/user_bottom_nav_controller.dart';
-import '../../user_screens/user_notification_screen/controller/user_notification_controller.dart';
 import 'controller/business_bottom_nav_controller.dart';
 
 class BusinessBottomNav extends StatelessWidget {
@@ -47,8 +46,8 @@ class BusinessBottomNav extends StatelessWidget {
               ),
             ),
             actions: [
-              GetBuilder<UserNotificationController>(
-                  init: UserNotificationController(),
+              GetBuilder<NotificationController>(
+                  init: NotificationController(),
                   builder: (controller) {
                     return IconButton(
                       tooltip: "Notifications",

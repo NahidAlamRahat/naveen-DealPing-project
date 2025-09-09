@@ -2,7 +2,7 @@
 // import 'package:get/get.dart';
 // import 'package:socket_io_client/socket_io_client.dart' as IO;
 //
-// import '../../screens/user_screens/user_notification_screen/controller/user_notification_controller.dart';
+// import '../../screens/user_screens/notification_screen/controller/notification_controller.dart';
 //
 //
 //

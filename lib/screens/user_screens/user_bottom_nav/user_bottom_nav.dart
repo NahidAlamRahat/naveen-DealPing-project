@@ -1,15 +1,14 @@
 import 'package:deal_ping/constants/app_strings.dart';
 import 'package:deal_ping/routes/app_routes.dart';
-import 'package:deal_ping/screens/user_screens/user_notification_screen/controller/user_notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_icons_path.dart';
 import '../../../constants/app_image_path.dart';
 import '../../../widgets/icon_widget/icon_widget.dart';
 import '../../../widgets/image_widget/image_widget.dart';
+import '../../notification_screen/controller/notification_controller.dart';
 import 'controller/user_bottom_nav_controller.dart';
 
 class UserBottomNav extends StatelessWidget {
@@ -38,8 +37,8 @@ const UserBottomNav({super.key});
               ),
             ),
             actions: [
-              GetBuilder<UserNotificationController>(
-                init: UserNotificationController(),
+              GetBuilder<NotificationController>(
+                init: NotificationController(),
                 builder: (notificationController) {
                   return IconButton(
                     tooltip: "Notifications",

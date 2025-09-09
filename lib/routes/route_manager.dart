@@ -18,6 +18,7 @@ import '../screens/business_screens/business_preset_screen/business_preset_scree
 import '../screens/business_screens/business_profile_screen/business_profile_screen.dart';
 import '../screens/category_view_screen.dart';
 import '../screens/faq_screen/faq_screen.dart';
+import '../screens/notification_screen/user_notification_screen.dart';
 import '../screens/onboarding_screen/onboarding_screen.dart';
 import '../screens/splash_screen/splash_screen.dart';
 import '../screens/support_screen/screen/support_screen.dart';
@@ -39,7 +40,6 @@ import '../screens/user_screens/user_chat_screen/user_chat_screen.dart';
 import '../screens/user_screens/user_edit_profile_screen/user_edit_profile_screen.dart';
 import '../screens/user_screens/user_home_screen/user_home_screen.dart';
 import '../screens/user_screens/user_location_screen/user_location_screen.dart';
-import '../screens/user_screens/user_notification_screen/user_notification_screen.dart';
 import '../screens/user_screens/user_profile_screen/user_profile_screen.dart';
 import 'app_routes.dart';
 
@@ -139,7 +139,7 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.userNotificationScreen,
-        page: () => UserNotificationScreen(),
+        page: () => const NotificationScreen(),
         // binding: GeneralBindings(),
       ),
       GetPage(
