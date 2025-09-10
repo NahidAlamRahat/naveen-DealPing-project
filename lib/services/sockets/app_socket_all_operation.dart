@@ -43,6 +43,7 @@ class AppSocketAllOperation {
     }
   }
 
+
   void _setupEventListener(String event, void Function(dynamic) handler) {
     appRootSocket?.off(event); // Remove existing listeners to avoid duplicates
     appRootSocket?.on(event, (data) {
@@ -52,12 +53,13 @@ class AppSocketAllOperation {
     });
   }
 
+
   void emitEvent(String event, dynamic data) {
     try {
       if (isConnected) {
         appRootSocket?.emit(event, data);
       } else {
-        // Queue the emit for when connection is established
+        // Queue the emit for wahen connection is established
         initializeSocket();
         _onceConnected(() {
           appRootSocket?.emit(event, data);

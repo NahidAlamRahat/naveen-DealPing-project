@@ -15,6 +15,7 @@ import '../../../widgets/text_widget/text_widgets.dart';
 import '../../common/common_widget/search_bar_widget.dart';
 import '../../user_screens/user_profile_screen/controller/user_profile_controller.dart';
 import 'controller/new_chat_list_api_caller.dart';
+/*
 
 class BusinessHomeScreen extends StatefulWidget {
   const BusinessHomeScreen({super.key});
@@ -266,6 +267,370 @@ class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
     );
   }
 }
+*/
+
+
+
+
+import 'package:deal_ping/constants/app_colors.dart';
+import 'package:deal_ping/constants/app_icons_path.dart';
+import 'package:deal_ping/constants/app_image_path.dart';
+import 'package:deal_ping/constants/app_strings.dart';
+import 'package:deal_ping/utils/extension.dart';
+import 'package:deal_ping/widgets/button_widget/button_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../routes/app_routes.dart';
+import '../../../widgets/icon_widget/icon_widget.dart';
+import '../../../widgets/image_widget/image_widget.dart';
+import '../../../widgets/space_widget/space_widget.dart';
+import '../../../widgets/text_widget/text_widgets.dart';
+import '../../common/common_widget/search_bar_widget.dart';
+import '../../user_screens/user_profile_screen/controller/user_profile_controller.dart';
+import 'controller/new_chat_list_api_caller.dart';
+
+class BusinessHomeScreen extends StatefulWidget {
+  const BusinessHomeScreen({super.key});
+
+  @override
+  State<BusinessHomeScreen> createState() => _BusinessHomeScreenState();
+}
+
+class _BusinessHomeScreenState extends State<BusinessHomeScreen> {
+  BusinessChatListApiController controller = Get.put(BusinessChatListApiController());
+  final userProfileController = Get.put(UserProfileController());
+  final searchController = TextEditingController();
+
+  // Add reactive variable for search field
+  RxBool isSearching = false.obs;
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen to search controller changes
+    searchController.addListener(() {
+      isSearching.value = searchController.text.isNotEmpty;
+    });
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SpaceWidget(spaceHeight: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Obx(() => TextWidget(
+                text: "Hello, ${userProfileController.profile.value?.firstName ?? 'User'}!",
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                fontColor: AppColors.grey700,
+                textAlignment: TextAlign.start,
+              )),
+            ),
+            const SpaceWidget(spaceHeight: 4),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: TextWidget(
+                text:
+                "Boost your bookings and attract more customers with limited-time deals!",
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                fontColor: AppColors.grey300,
+                textAlignment: TextAlign.start,
+              ),
+            ),
+            const SpaceWidget(spaceHeight: 10),
+            const SpaceWidget(spaceHeight: 16),
+            Container(
+              height: 50,
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: AppColors.green50),
+              child: TabBar(
+                indicatorColor: AppColors.green500,
+                labelColor: AppColors.white,
+                labelStyle: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+                onTap: (index) async {
+                  // Clear search when changing tabs
+                  searchController.clear();
+                  controller.clearSearch();
+
+                  controller.onChatTypeChange(index);
+                  await controller.refreshList();
+                },
+
+                unselectedLabelColor: AppColors.green500,
+                dividerColor: Colors.transparent,
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicator: BoxDecoration(
+                  color: AppColors.green500,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                tabs: ChatType.values.map((chat)=> Tab(
+                  child: Text(
+                    chat.name,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ), ).toList(),
+              ),
+            ),
+            const SpaceWidget(spaceHeight: 16),
+            // Search Field with clear button - Fixed Obx usage
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Obx(() => TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  controller.filterList(value);
+                },
+                decoration: InputDecoration(
+                  hintText: 'Search Your Offer',
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: isSearching.value // Use reactive variable instead
+                      ? IconButton(
+                    onPressed: () {
+                      searchController.clear();
+                      controller.clearSearch();
+                    },
+                    icon: const Icon(Icons.clear),
+                  )
+                      : null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: AppColors.grey200),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: AppColors.green500),
+                  ),
+                ),
+              )),
+            ),
+
+            const SpaceWidget(spaceHeight: 16),
+            Expanded(
+              child: GetBuilder<BusinessChatListApiController>(
+                builder: (controller) {
+                  // Show loading indicator during initial load
+                  if (controller.isInitialLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.green500,
+                      ),
+                    );
+                  }
+
+                  // Show error message if any
+                  if (controller.errorMessage != null) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            size: 48,
+                            color: AppColors.grey300,
+                          ),
+                          const SpaceWidget(spaceHeight: 16),
+                          TextWidget(
+                            text: controller.errorMessage!,
+                            fontSize: 14,
+                            fontColor: AppColors.grey300,
+                            textAlignment: TextAlign.center,
+                          ),
+                          const SpaceWidget(spaceHeight: 16),
+                          ButtonWidget(
+                            onPressed: () => controller.refreshList(),
+                            label: "Retry",
+                            buttonWidth: 100,
+                            buttonHeight: 36,
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  // Use Obx to watch the reactive list
+                  return Obx(() {
+                    final list = controller.businessChatList;
+
+                    // Show empty state
+                    if (list.isEmpty) {
+                      return const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.chat_bubble_outline,
+                              size: 48,
+                              color: AppColors.grey300,
+                            ),
+                            SpaceWidget(spaceHeight: 16),
+                            TextWidget(
+                              text: "No chats available",
+                              fontSize: 16,
+                              fontColor: AppColors.grey300,
+                              textAlignment: TextAlign.center,
+                            ),
+                            SpaceWidget(spaceHeight: 8),
+                            TextWidget(
+                              text: "Pull down to refresh",
+                              fontSize: 12,
+                              fontColor: AppColors.grey300,
+                              textAlignment: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    // Show the list with pull-to-refresh
+                    return RefreshIndicator(
+                      color: AppColors.green500,
+                      onRefresh: () async {
+                        searchController.clear();
+                        controller.clearSearch();
+                        await controller.refreshList();
+                      },
+                      child: ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        itemCount: list.length + (controller.isLoading ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          // Show loading indicator at bottom when loading more
+                          if (index == list.length && controller.isLoading) {
+                            return const Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.green500,
+                                ),
+                              ),
+                            );
+                          }
+
+                          final item = list[index];
+                          return InkWell(
+                            onTap: () {
+                              final chatItem = controller.businessChatList[index];
+
+                              final navigationArgs = {
+                                'chatData': chatItem,
+                                'chatType': controller.selectedChatType,
+                              };
+
+                              Get.toNamed(
+                                AppRoutes.businessChatScreen,
+                                arguments: navigationArgs,
+                              );
+                            },
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              margin: const EdgeInsets.only(bottom: 12),
+                              child: Row(
+                                children: [
+                                  // Profile Image
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: NetworkImageWidget(
+                                      networkImageUrl: "${AppImagePath.imageUrl}${item.participant.profile}",
+                                      width: 40,
+                                      height: 40,
+                                    ),
+                                  ),
+                                  const SpaceWidget(spaceWidth: 8),
+                                  // Name and Message Section
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        TextWidget(
+                                          text: item.participant.name,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          fontColor: AppColors.green500,
+                                          overflow: TextOverflow.ellipsis, // Fixed property name
+                                        ),
+                                        const SpaceWidget(spaceHeight: 2),
+                                        TextWidget(
+                                          text: item.latestMessage,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          fontColor: AppColors.grey700,
+                                          overflow: TextOverflow.ellipsis, // Fixed property name
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SpaceWidget(spaceWidth: 8),
+                                  // Time and Unread Count Section
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      TextWidget(
+                                        text: (DateTime.tryParse(item.createdAt) ?? DateTime.now()).time,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w400,
+                                        fontColor: AppColors.grey300,
+                                      ),
+                                      if (item.unreadMessageCount > 0) ...[
+                                        const SpaceWidget(spaceHeight: 4),
+                                        CircleAvatar(
+                                          radius: 9,
+                                          backgroundColor: AppColors.redisPink,
+                                          child: TextWidget(
+                                            text: item.unreadMessageCount > 99
+                                                ? '99+'
+                                                : item.unreadMessageCount.toString(),
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400,
+                                            fontColor: AppColors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  });
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
 
 
 ///Booking part

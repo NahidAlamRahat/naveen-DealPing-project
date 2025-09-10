@@ -200,6 +200,7 @@ class UserChatController extends GetxController {
 
           },
         );
+
         await fetchChatMessages();
 
 
