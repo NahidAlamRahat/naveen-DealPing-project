@@ -14,6 +14,7 @@ import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
 import '../../common/common_widget/chat_message_widget.dart';
+import '../business_home_screen/controller/new_chat_list_api_caller.dart';
 import '../business_preset_screen/controller/business_present_screen_controller.dart';
 import 'controller/business_chat_controller.dart';
 
@@ -257,112 +258,82 @@ class _BusinessChatScreenState extends State<BusinessChatScreen> {
           ),
 
 
-          bottomNavigationBar: Padding(
-            padding: EdgeInsets.all(AppSize.width(value: 8)).copyWith(
-              bottom: MediaQuery.of(context).viewInsets.bottom + AppSize.width(value: 10),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
 
-                //  Image preview chips
-                Obx((){
-                  if (businessChatController.images.isEmpty) return const SizedBox();
-                  return SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: List.generate(businessChatController.images.length, (index) {
-                        final image = businessChatController.images[index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.file(
-                                  File(image.path),
-                                  width: 80,
-                                  height: 80,
-                                  fit: BoxFit.cover,
+
+          bottomNavigationBar: GetBuilder<BusinessChatController>(
+            builder: (controller) {
+              final isDisabled = controller.currentChatType == ChatType.Ongoing ||
+                  controller.currentChatType == ChatType.Completed;
+
+              return AbsorbPointer(
+                absorbing: isDisabled, // ✅ Disable all touch events
+                child: Opacity(
+                  opacity: isDisabled ? 0.5 : 1.0, // ✅ Visual feedback
+                  child: Padding(
+                    padding: EdgeInsets.all(AppSize.width(value: 8)).copyWith(
+                      bottom: MediaQuery.of(context).viewInsets.bottom + AppSize.width(value: 10),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Your existing image preview code...
+
+                        // Message send Row
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                  Icons.image,
+                                  color: isDisabled ? Colors.grey : Colors.green,
+                                  size: 32
+                              ),
+                              onPressed: isDisabled ? null : controller.pickImage,
+                            ),
+                            Expanded(
+                              child: TextField(
+                                controller: controller.messageController,
+                                enabled: !isDisabled, // ✅ Disable TextField
+                                decoration: InputDecoration(
+                                  hintText: isDisabled
+                                      ? 'Chat is ${controller.currentChatType == ChatType.Completed ? "completed" : "ongoing"}'
+                                      : 'Type a message...',
+                                  hintStyle: TextStyle(
+                                    color: isDisabled ? AppColors.grey200 : AppColors.grey300,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                        color: isDisabled ? AppColors.grey200 : AppColors.grey300
+                                    ),
+                                  ),
+                                  filled: true,
+                                  fillColor: isDisabled ? AppColors.grey50 : AppColors.white,
                                 ),
                               ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: InkWell(
-                                  onTap: () {
-                                    businessChatController.images.removeAt(index);
-                                    businessChatController.update();
-                                  },
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      color: Colors.black54,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(Icons.close, size: 18, color: Colors.white),
-                                  ),
+                            ),
+                            const SizedBox(width: 8.0),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: FloatingActionButton(
+                                onPressed: isDisabled ? null : () => controller.sendMessage(),
+                                backgroundColor: isDisabled ? AppColors.grey300 : AppColors.green500,
+                                child: const Icon(
+                                    Icons.send_rounded,
+                                    color: AppColors.white
                                 ),
-                              )
-                            ],
-                          ),
-                        );
-                      }),
-                    ),
-                  );
-                },),
-
-                const SizedBox(height: 8),
-
-                // Message send Row
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.image, color: Colors.green, size: 32),
-                      onPressed: businessChatController.pickImage,
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: businessChatController.messageController,
-                        decoration: InputDecoration(
-                          hintText: 'Type a message...',
-                          hintStyle: const TextStyle(
-                            color: AppColors.grey300,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(color: AppColors.grey300),
-                          ),
-                          filled: true,
-                          fillColor: AppColors.white,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
+                      ],
                     ),
-                    const SizedBox(width: 8.0),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child:
-                      GetBuilder<BusinessChatController>(builder: (controllers) {
-                        return Visibility(
-                          visible: controllers.isMessageSent == false,
-                          replacement:
-                          const Center(child: CircularProgressIndicator()),
-                          child: FloatingActionButton(
-                            onPressed: () =>  businessChatController.sendMessage(),
-
-                            backgroundColor: AppColors.green500,
-                            child: const Icon(Icons.send_rounded, color: AppColors.white),
-                          ),
-                        );
-                      }),
-
-                    ),
-                  ],
+                  ),
                 ),
-              ],
-            ),
+              );
+            },
           ),
 
 
