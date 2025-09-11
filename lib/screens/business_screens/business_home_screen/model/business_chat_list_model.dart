@@ -1,64 +1,63 @@
-
 class BusinessesChatListModel {
-  String id;
-  List<String> requests;
-  String latestMessage;
-  String latestMessageTime;
-  bool isEnabled;
-  bool isMessageEnabled;
-  double distance;
-  bool isDeleted;
-  int v;
-  String createdAt;
-  String updatedAt;
-  Participant participant;
-  int unreadMessageCount;
+  String? id;
+  List<String>? requests;
+  String? latestMessage;
+  String? latestMessageTime;
+  bool? isEnabled;
+  bool? isMessageEnabled;
+  double? distance;
+  bool? isDeleted;
+  int? v;
+  String? createdAt;
+  String? updatedAt;
+  Participant? participant;
+  int? unreadMessageCount;
   LatestStatusMessage? latestStatusMessage;
-  int statusMessageCount;
+  int? statusMessageCount;
 
   BusinessesChatListModel({
-    required this.id,
-    required this.requests,
-    required this.latestMessage,
-    required this.latestMessageTime,
-    required this.isEnabled,
-    required this.isMessageEnabled,
-    required this.distance,
-    required this.isDeleted,
-    required this.v,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.participant,
-    required this.unreadMessageCount,
+    this.id,
+    this.requests,
+    this.latestMessage,
+    this.latestMessageTime,
+    this.isEnabled,
+    this.isMessageEnabled,
+    this.distance,
+    this.isDeleted,
+    this.v,
+    this.createdAt,
+    this.updatedAt,
+    this.participant,
+    this.unreadMessageCount,
     this.latestStatusMessage,
-    required this.statusMessageCount,
+    this.statusMessageCount,
   });
 
   factory BusinessesChatListModel.fromJson(Map<String, dynamic> json) {
     return BusinessesChatListModel(
-      id: json['_id'] ?? '',
+      id: json['_id'],
       requests: json['requests'] != null
           ? List<String>.from(json['requests'])
-          : [],
-      latestMessage: json['latestMessage'] ?? '',
-      latestMessageTime: json['latestMessageTime'] ?? '',
-      isEnabled: json['isEnabled'] ?? false,
-      isMessageEnabled: json['isMessageEnabled'] ?? false,
+          : null,
+      latestMessage: json['latestMessage'],
+      latestMessageTime: json['latestMessageTime'],
+      isEnabled: json['isEnabled'],
+      isMessageEnabled: json['isMessageEnabled'],
       distance: (json['distance'] != null)
           ? (json['distance'] as num).toDouble()
-          : 0.0,
-      isDeleted: json['isDeleted'] ?? false,
-      v: json['__v'] ?? 0,
-      createdAt: json['createdAt'] ?? '',
-      updatedAt: json['updatedAt'] ?? '',
+          : null,
+      isDeleted: json['isDeleted'],
+      v: json['__v'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
       participant: json['participant'] != null
           ? Participant.fromJson(json['participant'])
-          : Participant(id: '', name: 'Unknown', profile: ''),
-      unreadMessageCount: json['unreadMessageCount'] ?? 0,
+          : null,
+      unreadMessageCount: json['unreadMessageCount'],
       latestStatusMessage: json['latestStatusMessage'] != null
           ? LatestStatusMessage.fromJson(json['latestStatusMessage'])
           : null,
-      statusMessageCount: json['statusMessageCount'] ?? 0,
+      statusMessageCount: json['statusMessageCount'],
     );
   }
 
@@ -75,7 +74,7 @@ class BusinessesChatListModel {
       '__v': v,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
-      'participant': participant.toJson(),
+      'participant': participant?.toJson(),
       'unreadMessageCount': unreadMessageCount,
       'latestStatusMessage': latestStatusMessage?.toJson(),
       'statusMessageCount': statusMessageCount,
@@ -84,21 +83,21 @@ class BusinessesChatListModel {
 }
 
 class Participant {
-  String id;
-  String name;
-  String profile;
+  String? id;
+  String? name;
+  String? profile;
 
   Participant({
-    required this.id,
-    required this.name,
-    required this.profile,
+    this.id,
+    this.name,
+    this.profile,
   });
 
   factory Participant.fromJson(Map<String, dynamic> json) {
     return Participant(
-      id: json['_id'] ?? '',
-      name: json['name'] ?? 'Unknown',
-      profile: json['profile'] ?? '',
+      id: json['_id'],
+      name: json['name'],
+      profile: json['profile'],
     );
   }
 
@@ -112,27 +111,27 @@ class Participant {
 }
 
 class LatestStatusMessage {
-  String id;
-  String request;
-  String message;
-  String type;
-  String createdAt;
+  String? id;
+  String? request;
+  String? message;
+  String? type;
+  String? createdAt;
 
   LatestStatusMessage({
-    required this.id,
-    required this.request,
-    required this.message,
-    required this.type,
-    required this.createdAt,
+    this.id,
+    this.request,
+    this.message,
+    this.type,
+    this.createdAt,
   });
 
   factory LatestStatusMessage.fromJson(Map<String, dynamic> json) {
     return LatestStatusMessage(
-      id: json['_id'] ?? '',
-      request: json['request'] ?? '',
-      message: json['message'] ?? '',
-      type: json['type'] ?? 'text',
-      createdAt: json['createdAt'] ?? '',
+      id: json['_id'],
+      request: json['request'],
+      message: json['message'],
+      type: json['type'],
+      createdAt: json['createdAt'],
     );
   }
 
@@ -146,4 +145,3 @@ class LatestStatusMessage {
     };
   }
 }
-

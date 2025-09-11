@@ -3,7 +3,6 @@ import 'package:deal_ping/screens/business_screens/business_home_screen/model/bu
 import 'package:deal_ping/services/api/api_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-
 import '../../../../services/sockets/app_socket_all_operation.dart';
 import '../../../../services/storage/storage_service.dart';
 import '../../../../utils/app_log/app_log.dart';
@@ -50,8 +49,8 @@ class BusinessChatListApiController extends GetxController {
       _businessChatList.value = List.from(_originalRequestList); // Create new list
     } else {
       final filtered = _originalRequestList.where((request) {
-        print('Checking: ${request.participant.name}');
-        return (request.participant.name)
+        print('Checking: ${request.participant?.name}');
+        return (request.participant?.name??'')
             .toLowerCase()
             .contains(query.toLowerCase());
       }).toList();
@@ -116,27 +115,162 @@ class BusinessChatListApiController extends GetxController {
     return isSuccess;
   }
 
+  // ✅ NEW: Real-time message update handler for socket
+  void handleRealTimeMessageUpdate(dynamic messageData) {
+    try {
+      appLog('🚀 Real-time message update received: $messageData');
+
+      // Extract data from different possible socket structures
+      String chatId = '';
+      String newMessage = '';
+      String senderId = '';
+
+      // Handle different socket data structures
+      if (messageData is Map<String, dynamic>) {
+        // Check for nested 'data' object
+        final data = messageData['data'] ?? messageData;
+
+        chatId = data['chatId'] ??
+            data['chat_id'] ??
+            data['id'] ??
+            (data['chat'] != null ? data['chat']['id'] : '') ?? '';
+
+        newMessage = data['message'] ??
+            data['text'] ??
+            data['latestMessage'] ??
+            'New message';
+
+        senderId = data['sender']?['id'] ??
+            data['senderId'] ??
+            data['user_id'] ?? '';
+      }
+
+      if (chatId.isEmpty) {
+        appLog('❌ Chat ID not found in message data, trying to extract from structure');
+        appLog('Available keys: ${messageData.keys}');
+        return;
+      }
+
+      // Find existing chat in original list
+      int originalIndex = _originalRequestList.indexWhere(
+              (chat) => chat.id == chatId
+      );
+
+      if (originalIndex != -1) {
+        // ✅ Chat exists - update latest message and move to top
+        BusinessesChatListModel existingChat = _originalRequestList[originalIndex];
+
+        // Create updated chat model - you might need to adjust this based on your model constructor
+        BusinessesChatListModel updatedChat;
+        try {
+          updatedChat = BusinessesChatListModel(
+            id: existingChat.id,
+            participant: existingChat.participant,
+            latestMessage: newMessage,
+            createdAt: DateTime.now().toIso8601String(),
+            updatedAt: DateTime.now().toIso8601String(),
+            unreadMessageCount: senderId != LocalStorage.userId
+                ? existingChat.unreadMessageCount! + 1
+                : existingChat.unreadMessageCount,
+            requests: existingChat.requests,
+            latestStatusMessage: existingChat.latestStatusMessage,
+          );
+        } catch (e) {
+          // Fallback: create a copy with modified fields
+          updatedChat = existingChat;
+          // If your model has a copyWith method, use it:
+          // updatedChat = existingChat.copyWith(
+          //   latestMessage: newMessage,
+          //   updatedAt: DateTime.now().toIso8601String(),
+          // );
+        }
+
+        // Remove from current position and add to top of original list
+        _originalRequestList.removeAt(originalIndex);
+        _originalRequestList.insert(0, updatedChat);
+
+        // Update displayed list
+        int displayedIndex = _businessChatList.indexWhere(
+                (chat) => chat.id == chatId
+        );
+
+        if (displayedIndex != -1) {
+          _businessChatList.removeAt(displayedIndex);
+        }
+
+        // Apply current filter and add to top
+        if (_currentSearchQuery.isEmpty) {
+          _businessChatList.insert(0, updatedChat);
+        } else {
+          // Re-apply the current filter to include updated chat
+          filterList(_currentSearchQuery);
+        }
+
+        _businessChatList.refresh();
+        appLog('✅ Chat list updated real-time for chatId: $chatId');
+        appLog('✅ New latest message: $newMessage');
+        appLog('✅ Chat moved to top of list');
+      } else {
+        appLog('⚠️ Chat not found in list for real-time update: $chatId');
+        // Optionally refresh the entire list to get new chats
+        // refreshList();
+      }
+
+    } catch (e) {
+      errorLog("handleRealTimeMessageUpdate error: $e");
+    }
+  }
+
   void businessChatSocketHandler(dynamic data) {
     try {
       final businessesChatListModel = BusinessesChatListModel.fromJson(data);
 
-      if (businessesChatListModel.id.isEmpty ||
-          businessesChatListModel.participant.id.isEmpty) return;
+      if (businessesChatListModel.id!.isEmpty ||
+          businessesChatListModel.participant!.id!.isEmpty) return;
 
-      // Add to both lists
-      _originalRequestList.insert(0, businessesChatListModel);
+      // Check if chat already exists in the list
+      int existingIndex = _originalRequestList.indexWhere(
+              (chat) => chat.id == businessesChatListModel.id
+      );
 
-      // Apply filter if search is active
-      if (_currentSearchQuery.isEmpty) {
-        businessChatList.insert(0, businessesChatListModel);
+      if (existingIndex != -1) {
+        // ✅ Chat exists - update latest message and move to top
+        _originalRequestList.removeAt(existingIndex);
+        _originalRequestList.insert(0, businessesChatListModel);
+
+        // Update the displayed list as well
+        int displayedIndex = _businessChatList.indexWhere(
+                (chat) => chat.id == businessesChatListModel.id
+        );
+
+        if (displayedIndex != -1) {
+          _businessChatList.removeAt(displayedIndex);
+        }
+
+        // Apply filter if search is active
+        if (_currentSearchQuery.isEmpty) {
+          _businessChatList.insert(0, businessesChatListModel);
+        } else {
+          // Re-apply the current filter to include updated chat
+          filterList(_currentSearchQuery);
+        }
       } else {
-        // Re-apply the current filter
-        filterList(_currentSearchQuery);
+        // ✅ New chat - add to top of both lists
+        _originalRequestList.insert(0, businessesChatListModel);
+
+        // Apply filter if search is active
+        if (_currentSearchQuery.isEmpty) {
+          _businessChatList.insert(0, businessesChatListModel);
+        } else {
+          // Re-apply the current filter
+          filterList(_currentSearchQuery);
+        }
       }
 
       _businessChatList.refresh();
+      appLog('Chat updated/added: ${businessesChatListModel.participant?.name}');
     } catch (e) {
-      errorLog("notificationSocketHandler $e");
+      errorLog("businessChatSocketHandler $e");
     }
   }
 
@@ -163,12 +297,40 @@ class BusinessChatListApiController extends GetxController {
       appLog('socet busness user id  ==== ${LocalStorage.userId}');
       appLog('socet busness user token   ==== ${LocalStorage.token}');
 
+      // ✅ Listen for new chat events
       appSocketAllOperation.readEvent(
           event: "newChat::${LocalStorage.userId}",
           handler: (data) {
             appLog('socet data ==== $data');
             businessChatSocketHandler(data);
             appLog('👌👌👌👌new business chat==>>> ${data}  ');
+          });
+
+      // ✅ NEW: Listen for all message events to update latest message in real-time
+      appSocketAllOperation.readEvent(
+          event: "message::${LocalStorage.userId}",
+          handler: (data) {
+            appLog('🚀 Real-time message socket data: $data');
+            handleRealTimeMessageUpdate(data);
+            appLog('👌👌👌👌real-time message update: $data');
+          });
+
+      // ✅ NEW: Alternative event listener for user-specific messages
+      appSocketAllOperation.readEvent(
+          event: "userMessages::${LocalStorage.userId}",
+          handler: (data) {
+            appLog('🚀 User messages socket data: $data');
+            handleRealTimeMessageUpdate(data);
+            appLog('👌👌👌👌user messages update: $data');
+          });
+
+      // ✅ NEW: Listen for business-specific message updates
+      appSocketAllOperation.readEvent(
+          event: "businessMessageUpdate::${LocalStorage.userId}",
+          handler: (data) {
+            appLog('🚀 Business message update socket data: $data');
+            handleRealTimeMessageUpdate(data);
+            appLog('👌👌👌👌business message update: $data');
           });
 
     } catch (e) {

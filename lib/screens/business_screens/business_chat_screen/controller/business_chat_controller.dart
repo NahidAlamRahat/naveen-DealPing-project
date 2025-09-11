@@ -90,7 +90,40 @@ class BusinessChatController extends GetxController {
     isPagination.value = false;
   }
 
+  // ✅ NEW: Method to trigger real-time chat list update via socket
+  void _triggerChatListUpdate(String message) {
+    try {
+      final updateData = {
+        'chatId': chatId,
+        'message': message,
+        'senderId': LocalStorage.userId,
+        'timestamp': DateTime.now().toIso8601String(),
+        'type': 'message_update',
+        'data': {
+          'id': chatId,
+          'message': message,
+          'sender': {
+            'id': LocalStorage.userId,
+          },
+          'createdAt': DateTime.now().toIso8601String(),
+        }
+      };
 
+      appLog('🚀 Triggering chat list update via socket: $message');
+
+      // Emit socket event that the chat list controller will catch
+      appSocketAllOperation.emitEvent('messageUpdate::${LocalStorage.userId}', updateData);
+
+      // Also update local chat list controller if it exists
+      if (Get.isRegistered<BusinessChatListApiController>()) {
+        final chatListController = Get.find<BusinessChatListApiController>();
+        chatListController.handleRealTimeMessageUpdate(updateData);
+      }
+
+    } catch (e) {
+      errorLog("_triggerChatListUpdate error: $e");
+    }
+  }
 
   Future<void> sendOffer({
     required String offerTitle,
@@ -108,14 +141,15 @@ class BusinessChatController extends GetxController {
       appLog('Offer sent for requestId: $requestId');
       appLog('Offer sent for chatId: $chatId');
 
+      // ✅ NEW: Trigger real-time chat list update
+      _triggerChatListUpdate("📋 $offerTitle");
+
     } catch (e) {
       errorLog("send Offer method ===>> $e");
     }
     isMessageSent = false;
     update();
   }
-
-
 
   Future<void> sendMessage() async {
     try {
@@ -125,14 +159,30 @@ class BusinessChatController extends GetxController {
       isMessageSent = true;
       update();
 
+      // ✅ Store message for chat list update
+      String messageText = messageController.text.trim();
+      bool hasImages = images.isNotEmpty;
+
       var response = await commonRepository.sendMessage(
-        message: messageController.text.trim(),
+        message: messageText,
         requestId: requestId,
         imageUrl: images,
         chatId: chatId,
       );
 
       if (response != null) {
+        // Create display message for chat list
+        String displayMessage = messageText;
+        if (hasImages && messageText.isEmpty) {
+          displayMessage = "📷 Photo";
+        } else if (hasImages && messageText.isNotEmpty) {
+          displayMessage = "📷 $messageText";
+        }
+
+        // ✅ NEW: Trigger real-time chat list update
+        _triggerChatListUpdate(displayMessage);
+
+        // Clear inputs
         messageController.clear();
         images.clear();
         images.refresh();
@@ -145,8 +195,6 @@ class BusinessChatController extends GetxController {
     update();
   }
 
-
-
   Future<void> pickImage() async {
     final List<XFile> pickedImages = await _picker.pickMultiImage();
     if (pickedImages.isNotEmpty) {
@@ -156,9 +204,6 @@ class BusinessChatController extends GetxController {
       update();
     }
   }
-
-
-
 
   void scrollToBottom() {
     try {
@@ -174,22 +219,23 @@ class BusinessChatController extends GetxController {
     }
   }
 
-
-
   void chatMessageSocketHandler(dynamic message) {
     try {
-
       chatMessagesList.insert(
           0, ChatMessageResponseModel.fromJson(message['data']));
-      // chatMessagesList.add(ChatMessageResponseModel.fromJson(message));
       chatMessagesList.refresh();
-      appLog('rahat');
+
+      // ✅ NEW: If message is from someone else, update chat list
+      final newMessage = ChatMessageResponseModel.fromJson(message['data']);
+      if (newMessage.sender?.id != LocalStorage.userId) {
+        _triggerChatListUpdate(newMessage.message ?? "New message");
+      }
+
+      appLog('Message received and chat list updated');
     } catch (e) {
       errorLog("chatMessageSocketHandler $e");
     }
   }
-
-
 
   void paginationData() {
     try {
@@ -208,8 +254,6 @@ class BusinessChatController extends GetxController {
       errorLog('paginationData error: $e');
     }
   }
-
-
 
   Future<void> onAppInitialDataLoad() async {
     try {
@@ -232,25 +276,25 @@ class BusinessChatController extends GetxController {
           currentChatType = chatType;
 
           if (chatData != null) {
-            chatId = chatData.id;
+            chatId = chatData.id!;
 
             // Smart request ID selection based on chat type
-            if (chatData.requests.isNotEmpty) {
+            if (chatData.requests!.isNotEmpty) {
               switch (chatType) {
                 case ChatType.New:
                 // For new chats, prefer the request from latestStatusMessage
-                  requestId = chatData.latestStatusMessage?.request ?? chatData.requests.last;
+                  requestId = chatData.latestStatusMessage?.request ?? chatData.requests?.last??'';
                   break;
                 case ChatType.Ongoing:
                 // For ongoing, use the most recent request
-                  requestId = chatData.requests.last;
+                  requestId = chatData.requests?.last??'';
                   break;
                 case ChatType.Completed:
                 // For completed, use the first request
-                  requestId = chatData.requests.first;
+                  requestId = chatData.requests?.first??'';
                   break;
                 default:
-                  requestId = chatData.requests.last;
+                  requestId = chatData.requests?.last??"";
               }
             } else {
               requestId = chatId; // Fallback
@@ -266,11 +310,10 @@ class BusinessChatController extends GetxController {
           }
         }
 
-
         // Keep existing fallback logic for backward compatibility
         else if (argData is BusinessesChatListModel) {
           requestId = argData.latestStatusMessage?.request ?? '';
-          chatId = argData.id;
+          chatId = argData.id!;
           currentChatType = ChatType.New; // ✅ Default fallback
           appLog('Fallback: BusinessesChatListModel used');
         } else if (argData is String) {
@@ -294,23 +337,20 @@ class BusinessChatController extends GetxController {
           currentPage = 1;
           isLast = false;
 
-
           // Setup socket listener
           await fetchChatMessages();
 
           appLog("==========================chat Socket  ============================");
-
 
           appSocketAllOperation.readEvent(
             event: "message::$chatId",
             handler: (data) {
               chatMessageSocketHandler(data);
               appLog('👌👌👌👌new chat==>>> ${data}  ');
-
             },
           );
-          await fetchChatMessages();
 
+          await fetchChatMessages();
 
           // Setup pagination
           paginationData();

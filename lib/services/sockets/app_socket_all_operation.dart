@@ -1,8 +1,6 @@
-
 import 'package:deal_ping/constants/api_urls.dart';
 import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
-
 import '../../utils/app_log/app_log.dart';
 import '../../utils/app_log/error_log.dart';
 
@@ -43,7 +41,6 @@ class AppSocketAllOperation {
     }
   }
 
-
   void _setupEventListener(String event, void Function(dynamic) handler) {
     appRootSocket?.off(event); // Remove existing listeners to avoid duplicates
     appRootSocket?.on(event, (data) {
@@ -53,16 +50,17 @@ class AppSocketAllOperation {
     });
   }
 
-
   void emitEvent(String event, dynamic data) {
     try {
       if (isConnected) {
         appRootSocket?.emit(event, data);
+        appLog("✅ Emitted event: $event with data: $data"); // ✅ Added logging
       } else {
-        // Queue the emit for wahen connection is established
+        // Queue the emit for when connection is established
         initializeSocket();
         _onceConnected(() {
           appRootSocket?.emit(event, data);
+          appLog("✅ Emitted event after connection: $event with data: $data"); // ✅ Added logging
         });
       }
     } catch (e, stackTrace) {
@@ -88,9 +86,6 @@ class AppSocketAllOperation {
     appRootSocket?.on('connect', listener);
   }
 
-
-
-
   void _connectSocketToServer() {
     try {
       if (appRootSocket != null || _isConnecting) return;
@@ -112,6 +107,10 @@ class AppSocketAllOperation {
       appRootSocket?.onConnect((_) {
         _isConnecting = false;
         appLog("Socket connected");
+
+        // ✅ Join user-specific room for real-time updates
+        appRootSocket?.emit('join_user_room', LocalStorage.userId);
+        appLog("Joined user room: ${LocalStorage.userId}");
 
         // Re-establish all event listeners using for loops
         for (final entry in _eventHandlers.entries) {
@@ -140,6 +139,9 @@ class AppSocketAllOperation {
 
       appRootSocket?.onReconnect((_) {
         appLog("Socket reconnected");
+        // ✅ Rejoin user room on reconnect
+        appRootSocket?.emit('join_user_room', LocalStorage.userId);
+        appLog("Rejoined user room after reconnect: ${LocalStorage.userId}");
       });
 
       // Start the connection
