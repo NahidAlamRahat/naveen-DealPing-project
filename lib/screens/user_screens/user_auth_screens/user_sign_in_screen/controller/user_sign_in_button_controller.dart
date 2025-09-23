@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../models/sign_in_model.dart';
 import '../../../../../routes/app_routes.dart';
@@ -36,6 +37,15 @@ class UserSignInButtonController extends GetxController {
       return "Password length should be more than 8 characters";
     }
     return null;
+  }
+
+  loginWithGoogle()async{
+   await GoogleSignIn.instance.initialize(serverClientId: '124433252428-qd84ph7r175cpqbhglaisb0sj1mds99h.apps.googleusercontent.com');
+   final user = await GoogleSignIn.instance.authenticate(scopeHint: ['email', 'profile', 'openid']);
+   final idToken = user.authentication.idToken;
+   if(idToken == null) return;
+   appLog('idToken: $idToken');
+    // Get.offAllNamed(AppRoutes.userBottomNav);
   }
 
 
