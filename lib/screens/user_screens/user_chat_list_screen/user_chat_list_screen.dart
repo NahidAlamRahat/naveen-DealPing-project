@@ -1,4 +1,5 @@
 import 'package:deal_ping/constants/app_colors.dart';
+import 'package:deal_ping/utils/extension.dart';
 import 'package:deal_ping/widgets/space_widget/space_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -111,7 +112,7 @@ class UserChatListScreen extends StatelessWidget {
                         );
                       },
                       title: TextWidget(
-                        text: request.message,
+                        text: "${request.category}\n${(DateTime.tryParse(request.createdAt.toString()) ?? DateTime.now()).date}",
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                         fontColor: AppColors.grey300,
