@@ -2,6 +2,7 @@ import 'package:deal_ping/services/storage/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'firebase_options.dart';
 import 'main_app_entry.dart';
 /*
 
@@ -36,6 +37,9 @@ void main() async {
 
   // Initialize GetStorage before running the app
   await LocalStorage.getAllPrefData();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options:  DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MainApp());
 }
+
