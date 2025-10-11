@@ -1,4 +1,4 @@
-import 'package:deal_ping/models/reset_password_model.dart';
+  import 'package:deal_ping/models/reset_password_model.dart';
 import 'package:deal_ping/services/repository/auth_repository/user_reset_password_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

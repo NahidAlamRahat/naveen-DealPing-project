@@ -42,7 +42,7 @@ class AllOffers {
   }
 
   factory AllOffers.fromJson(Map<String, dynamic> json) {
-    // appLog("====================> ddddddddd ${json['default'] }");
+
     return AllOffers(
       id: json['_id'] ?? '',
       business: json['business'] ?? '',
