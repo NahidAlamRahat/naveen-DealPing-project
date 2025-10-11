@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "169457956060",
+    "project_id": "dealping-2025",
+    "storage_bucket": "dealping-2025.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169457956060:android:ef40cdaf903645a32d7019",
+        "android_client_info": {
+          "package_name": "com.naveen.dealping"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "169457956060-bqt2bj3pnha0gog354568ggt8h5pgdc1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzQ6jPc1UzxQpQeCN5OESNlA0zgoZkovc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "169457956060-bqt2bj3pnha0gog354568ggt8h5pgdc1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "169457956060-3rfi86f1erso5k82n5jhaslrtqg36am4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.dealPing"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
