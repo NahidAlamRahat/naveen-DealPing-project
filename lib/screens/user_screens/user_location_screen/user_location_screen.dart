@@ -133,6 +133,106 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
       body: SafeArea(
         child: Stack(
           children: [
+            // Location address display at top
+            Positioned(
+              top: 10,
+              left: 15,
+              right: 15,
+              child: GestureDetector(
+                onTap: () {
+                  if (currentAddress != null) {
+                    Navigator.pop(context, currentAddress);
+                  }
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.location_on, color: AppColors.green500),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: isLoading
+                          ? const Row(
+                              children: [
+                                SizedBox(width: 10),
+                                SizedBox(
+                                  width: 15,
+                                  height: 15,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: AppColors.green500,
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  "Getting location...",
+                                  style: TextStyle(
+                                    color: AppColors.grey300,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Text(
+                              currentAddress ?? "Tap on map to select location",
+                              style: const TextStyle(
+                                color: AppColors.contentColorBlack,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                      ),
+                      if (currentAddress != null)
+                        Row(
+                          children: [
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: AppColors.green300.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.touch_app,
+                                    color: AppColors.green500,
+                                    size: 14,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "Tap to select",
+                                    style: TextStyle(
+                                      color: AppColors.green500,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
             // Google Map
             GoogleMap(
               initialCameraPosition: CameraPosition(
@@ -149,6 +249,18 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
                     title: currentAddress ?? 'Your Location',
                     snippet: 'Tap to select this location',
                   ),
+                  // Add onTap handler for the marker itself
+                  onTap: () {
+                    // First show info window
+                    mapController?.showMarkerInfoWindow(const MarkerId('current_location'));
+                    
+                    // After a short delay, return to home screen with the selected location
+                    Future.delayed(const Duration(milliseconds: 800), () {
+                      if (mounted && currentAddress != null) {
+                        Navigator.pop(context, currentAddress);
+                      }
+                    });
+                  },
                 ),
               }
                   : {},
