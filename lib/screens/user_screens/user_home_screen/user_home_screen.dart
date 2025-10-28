@@ -1,6 +1,7 @@
 import 'package:deal_ping/constants/app_colors.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/category_widget.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/home_screen_input_widget.dart';
+import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/location_search_widget.dart';
 import 'package:deal_ping/screens/user_screens/user_home_screen/widgets/sub_category_view_widget.dart';
 import 'package:deal_ping/utils/app_size.dart';
 import 'package:flutter/material.dart';
@@ -87,10 +88,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   }),
 
                   // **Location and Distance Input**
-                  HomeScreenInputWidget(
+                  // Using LocationSearchWidget for location searching while maintaining the same UI style
+                  LocationSearchWidget(
                     controller: _controller.locationController,
                     hintText: "Location",
                     onLocationTap: _controller.navigateToLocationScreen,
+                    onPlaceSelected: _controller.onPlaceSelected,
+                    googleApiKey: "AIzaSyA-MGtSQ8650xB0WmwJejvDbbrvTYzL6us", // You should store this in a secure place in a real app
                   ),
 
                   const SpaceWidget(spaceHeight: 12),

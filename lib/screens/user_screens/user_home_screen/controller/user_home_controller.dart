@@ -95,6 +95,20 @@ class UserHomeController extends GetxController {
       locationController.text = selectedLocation;
     }
   }
+  
+  // Handle place selection from Google Places search
+  void onPlaceSelected(String placeName, double? latitude, double? longitude) {
+    if (latitude != null && longitude != null) {
+      // Update the location text
+      locationController.text = placeName;
+      
+      // Update the latLong coordinates for the request
+      latLong = [longitude, latitude];
+      
+      appLog('Selected location: $placeName');
+      appLog('Coordinates: $latitude, $longitude');
+    }
+  }
 
   Future<void> onTapRequestButton() async {
     // model call

@@ -97,7 +97,6 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
           children: [
             // Google Map
             GoogleMap(
-              onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(
                 target: dhakaBounds,
                 zoom: 12,
