@@ -4,6 +4,8 @@ import 'package:deal_ping/widgets/button_widget/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class UserLocationScreen extends StatefulWidget {
   const UserLocationScreen({super.key});
@@ -13,12 +15,39 @@ class UserLocationScreen extends StatefulWidget {
 }
 
 class _UserLocationScreenState extends State<UserLocationScreen> {
-  late GoogleMapController mapController;
+  GoogleMapController? mapController;
   LatLng? currentLocation;
   bool isLoading = false;
+  String? currentAddress; // Store the current location name
 
   // Dhaka coordinates
   final LatLng dhakaBounds = const LatLng(23.8103, 90.4125);
+  
+  // Google API key for geocoding
+  final String googleApiKey = "AIzaSyA-MGtSQ8650xB0WmwJejvDbbrvTYzL6us";
+  
+  // Get human-readable address from coordinates
+  Future<String> getAddressFromCoordinates(LatLng coordinates) async {
+    try {
+      final url = Uri.parse(
+          'https://maps.googleapis.com/maps/api/geocode/json'
+          '?latlng=${coordinates.latitude},${coordinates.longitude}'
+          '&key=$googleApiKey');
+
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['status'] == 'OK' && data['results'].isNotEmpty) {
+          // Use the most detailed address (first result)
+          return data['results'][0]['formatted_address'];
+        }
+      }
+      return "Unknown location"; // Fallback
+    } catch (e) {
+      return "Unknown location"; // Error fallback
+    }
+  }
 
   @override
   void initState() {
@@ -27,6 +56,9 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+    
+    // Now that controller is initialized, we can safely call _trackMyLocation
+    _trackMyLocation();
   }
 
   Future<void> _trackMyLocation() async {
@@ -47,20 +79,26 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
           desiredAccuracy: LocationAccuracy.best,
         );
 
+        final newLocation = LatLng(position.latitude, position.longitude);
+        
+        // Get address for this location
+        final address = await getAddressFromCoordinates(newLocation);
+        
         setState(() {
-          currentLocation = LatLng(position.latitude, position.longitude);
+          currentLocation = newLocation;
+          currentAddress = address;
         });
 
-        // Animate camera to current location
-        mapController.animateCamera(
+        // Update marker to the tapped location if controller is available
+        mapController?.animateCamera(
           CameraUpdate.newLatLngZoom(currentLocation!, 15),
         );
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Location found successfully'),
-              duration: Duration(seconds: 2),
+            SnackBar(
+              content: Text('Location found: $address'),
+              duration: const Duration(seconds: 2),
             ),
           );
         }
@@ -101,18 +139,40 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
                 target: dhakaBounds,
                 zoom: 12,
               ),
+              onMapCreated: _onMapCreated,
               markers: currentLocation != null
                   ? {
                 Marker(
                   markerId: const MarkerId('current_location'),
                   position: currentLocation!,
-                  infoWindow: const InfoWindow(
-                    title: 'Your Location',
+                  infoWindow: InfoWindow(
+                    title: currentAddress ?? 'Your Location',
+                    snippet: 'Tap to select this location',
                   ),
                 ),
               }
                   : {},
-              myLocationEnabled: false,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              onTap: (LatLng position) async {
+                setState(() {
+                  isLoading = true;
+                  currentLocation = position;
+                });
+                
+                // Get address for the tapped location
+                final address = await getAddressFromCoordinates(position);
+                
+                setState(() {
+                  currentAddress = address;
+                  isLoading = false;
+                });
+                
+                // Update marker to the tapped location
+                mapController?.animateCamera(
+                  CameraUpdate.newLatLngZoom(position, 15),
+                );
+              },
             ),
             // Button at bottom
             Positioned(
@@ -132,7 +192,7 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
 
   @override
   void dispose() {
-    mapController.dispose();
+    mapController?.dispose();
     super.dispose();
   }
 }
