@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:get/get.dart';
 
 class UserLocationScreen extends StatefulWidget {
   const UserLocationScreen({super.key});
@@ -19,6 +20,7 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
   LatLng? currentLocation;
   bool isLoading = false;
   String? currentAddress; // Store the current location name
+  double radius = 5.0; // Default radius in km
 
   // Dhaka coordinates
   final LatLng dhakaBounds = const LatLng(23.8103, 90.4125);
@@ -26,6 +28,18 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
   // Google API key for geocoding
   final String googleApiKey = "AIzaSyA-MGtSQ8650xB0WmwJejvDbbrvTYzL6us";
   
+  // Calculate appropriate zoom level based on radius
+  double _getZoomLevel(double radiusInKm) {
+    // Approximate zoom levels for different radius ranges
+    if (radiusInKm <= 1) return 14.5;
+    if (radiusInKm <= 2) return 13.5;
+    if (radiusInKm <= 5) return 12.5;
+    if (radiusInKm <= 10) return 11.5;
+    if (radiusInKm <= 20) return 10.5;
+    if (radiusInKm <= 50) return 9.5;
+    return 8.5;
+  }
+
   // Get human-readable address from coordinates
   Future<String> getAddressFromCoordinates(LatLng coordinates) async {
     try {
@@ -52,6 +66,11 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
   @override
   void initState() {
     super.initState();
+    // Get radius from arguments
+    final args = Get.arguments;
+    if (args != null && args['radius'] != null) {
+      radius = args['radius'] as double;
+    }
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -90,8 +109,9 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
         });
 
         // Update marker to the tapped location if controller is available
+        // Zoom based on radius so the circle is fully visible
         mapController?.animateCamera(
-          CameraUpdate.newLatLngZoom(currentLocation!, 15),
+          CameraUpdate.newLatLngZoom(currentLocation!, _getZoomLevel(radius)),
         );
 
         if (mounted) {
@@ -247,7 +267,7 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
                   position: currentLocation!,
                   infoWindow: InfoWindow(
                     title: currentAddress ?? 'Your Location',
-                    snippet: 'Tap to select this location',
+                    snippet: 'Radius: ${radius.toStringAsFixed(1)} km',
                   ),
                   // Add onTap handler for the marker itself
                   onTap: () {
@@ -261,6 +281,18 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
                       }
                     });
                   },
+                ),
+              }
+                  : {},
+              circles: currentLocation != null
+                  ? {
+                Circle(
+                  circleId: const CircleId('radius_circle'),
+                  center: currentLocation!,
+                  radius: radius * 1000, // Convert km to meters
+                  fillColor: Colors.blue.withOpacity(0.2),
+                  strokeColor: Colors.blue.withOpacity(0.7),
+                  strokeWidth: 3,
                 ),
               }
                   : {},
@@ -281,8 +313,9 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
                 });
                 
                 // Update marker to the tapped location
+                // Zoom based on radius so the circle is fully visible
                 mapController?.animateCamera(
-                  CameraUpdate.newLatLngZoom(position, 15),
+                  CameraUpdate.newLatLngZoom(position, _getZoomLevel(radius)),
                 );
               },
             ),

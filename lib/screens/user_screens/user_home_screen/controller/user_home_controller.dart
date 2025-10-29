@@ -90,7 +90,10 @@ class UserHomeController extends GetxController {
 
   // Navigate to Location Screen
   void navigateToLocationScreen() async {
-    final selectedLocation = await Get.toNamed('/userLocationScreen');
+    final selectedLocation = await Get.toNamed(
+      '/userLocationScreen',
+      arguments: {'radius': currentValue},
+    );
     if (selectedLocation != null) {
       locationController.text = selectedLocation;
     }

@@ -25,8 +25,12 @@ class RequestModel {
     return RequestModel(
       requestId: json['_id'],
       userId: json['user'],
-      category: json['category'],
-      subCategories: List<String>.from(json['subCategories']),
+      category: json['category'] is Map 
+          ? json['category']['title'] ?? '' 
+          : json['category'],
+      subCategories: (json['subCategories'] as List?)
+          ?.map((item) => item is Map ? item['title'] as String : item as String)
+          .toList() ?? [],
       message: json['message'],
       radius: (json['radius'] as num).toDouble(),
       coordinates:
