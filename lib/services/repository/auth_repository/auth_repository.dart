@@ -37,32 +37,39 @@ class AuthRepository {
     }
   }
 
-  // Future<bool> googleAndAppleLogin({
-  //   required String userId,
-  //   required String role,
-  // }) async {
-  //   try {
-  //     var response = await apiPostServices.apiPostServices(
-  //         url: ApiUrls.signIn,
-  //         body: {"appId": userId, "role": role, "type": "social"});
-  //     if (response != null) {
-  //       if (response["data"]["accessToken"].runtimeType != Null &&
-  //           response["data"]["refreshToken"].runtimeType != Null) {
-  //         await appAuthStorage
-  //             .setToken(response["data"]["accessToken"].toString());
-  //
-  //         await appAuthStorage
-  //             .setRefreshToken(response["data"]["refreshToken"].toString());
-  //
-  //         return true;
-  //       }
-  //     }
-  //     return false;
-  //   } catch (e) {
-  //     errorLog("sign in repo  function ", e);
-  //     return false;
-  //   }
-  // }
+  Future<bool> googleLogin({
+    required String appId,
+    String? deviceToken,
+  }) async {
+    try {
+      var response = await ApiService.postApi(
+        ApiUrls.googleLogin,
+        {
+          "appId": appId,
+          "deviceToken": deviceToken ?? "",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        String accessToken = response.body['data']?['accessToken'] ?? "";
+        String refreshToken = response.body['data']?['refreshToken'] ?? "";
+
+        LocalStorage.token = accessToken;
+        LocalStorage.refreshToken = refreshToken;
+
+        LocalStorage.setString(LocalStorageKeys.token, LocalStorage.token);
+        LocalStorage.setString(
+            LocalStorageKeys.refreshToken, LocalStorage.refreshToken);
+        
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      errorLog("google login repo function");
+      return false;
+    }
+  }
 
   ///chanage korte hobe
 

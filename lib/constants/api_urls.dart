@@ -37,6 +37,8 @@ class ApiUrls {
 
   // auth urls
   static String login = "$baseUrl/auth/login";
+  static String googleLogin = "$baseUrl/auth/social-login";
+
   static const String createUserAccount = "$baseUrl/user/create-user";
   static const String verifyEmail = "$baseUrl/auth/verify-account/";
   static const String resendOtp = "$baseUrl/auth/resend-otp";

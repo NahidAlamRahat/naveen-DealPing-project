@@ -1,4 +1,5 @@
 import 'package:deal_ping/services/storage/storage_service.dart';
+import 'package:deal_ping/services/firebase_messaging/firebase_messaging_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -40,6 +41,10 @@ void main() async {
   await Firebase.initializeApp(
     options:  DefaultFirebaseOptions.currentPlatform,
   );
+  
+  // Initialize Firebase Messaging
+  await FirebaseMessagingService.initialize();
+  
   runApp(MainApp());
 }
 

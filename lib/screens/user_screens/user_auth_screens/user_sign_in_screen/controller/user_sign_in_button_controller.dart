@@ -5,6 +5,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../../models/sign_in_model.dart';
 import '../../../../../routes/app_routes.dart';
 import '../../../../../services/repository/auth_repository/sign_in_api_controller.dart';
+import '../../../../../services/repository/auth_repository/google_login_api_controller.dart';
+import '../../../../../services/firebase_messaging/firebase_messaging_service.dart';
 import '../../../../../utils/app_log/app_log.dart';
 import '../../../../../widgets/app_snack_bar/app_snack_bar.dart';
 
@@ -13,6 +15,7 @@ class UserSignInButtonController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final SignInApiController _signInController = Get.find<SignInApiController>();
+  final GoogleLoginApiController _googleLoginController = Get.find<GoogleLoginApiController>();
 
   bool inProgress = false;
 
@@ -39,13 +42,81 @@ class UserSignInButtonController extends GetxController {
     return null;
   }
 
-  loginWithGoogle()async{
-   await GoogleSignIn.instance.initialize(serverClientId: '124433252428-qd84ph7r175cpqbhglaisb0sj1mds99h.apps.googleusercontent.com');
-   final user = await GoogleSignIn.instance.authenticate(scopeHint: ['email', 'profile', 'openid']);
-   final idToken = user.authentication.idToken;
-   if(idToken == null) return;
-   appLog('idToken: $idToken');
-    // Get.offAllNamed(AppRoutes.userBottomNav);
+  Future<void> loginWithGoogle() async {
+    try {
+      inProgress = true;
+      update();
+
+      // Initialize Google Sign In
+      await GoogleSignIn.instance.initialize(
+        serverClientId: '169457956060-bqt2bj3pnha0gog354568ggt8h5pgdc1.apps.googleusercontent.com',
+      );
+
+      // Authenticate with Google
+      final user = await GoogleSignIn.instance.authenticate(
+        scopeHint: ['email', 'profile', 'openid'],
+      );
+
+      final idToken = user.authentication.idToken;
+
+      if (idToken == null) {
+        inProgress = false;
+        update();
+        AppSnackBar.message('Failed to get Google ID token');
+        return;
+      }
+
+      appLog('Google ID Token: $idToken');
+
+      // Get device token
+      String? deviceToken = await FirebaseMessagingService.getToken();
+      appLog('Device Token: $deviceToken');
+
+      // Use placeholder if token is null (backend requires non-empty string)
+      String finalDeviceToken = deviceToken ?? "TEMP_TOKEN_${DateTime.now().millisecondsSinceEpoch}";
+
+      // Call Google Login API with idToken as appId
+      final int statusCode = await _googleLoginController.googleLoginApiCall(
+        appId: idToken,
+        deviceToken: finalDeviceToken,
+      );
+
+      inProgress = false;
+      update();
+
+      appLog('Google login response status code: $statusCode');
+
+      if (statusCode == 200) {
+        // ✅ Success
+        appLog('Google login successful, navigating to user bottom nav');
+
+        AppSnackBar.success(
+          _googleLoginController.successfullyMessage.isNotEmpty
+              ? _googleLoginController.successfullyMessage
+              : 'Google Login Successful!',
+        );
+
+        // Navigate to user dashboard
+        Get.offAllNamed(AppRoutes.userBottomNav);
+      } else {
+        // ❌ Error
+        appLog('Google login failed with status code: $statusCode');
+
+        AppSnackBar.message(
+          _googleLoginController.errorMessage.isNotEmpty
+              ? _googleLoginController.errorMessage
+              : "Google login failed. Please try again.",
+        );
+      }
+    } catch (e, stackTrace) {
+      inProgress = false;
+      update();
+
+      appLog('Exception in Google Login: $e');
+      appLog('StackTrace: $stackTrace');
+
+      AppSnackBar.message('Google login failed. Please try again.');
+    }
   }
 
 
