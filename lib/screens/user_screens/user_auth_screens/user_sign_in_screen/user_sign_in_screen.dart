@@ -118,10 +118,11 @@ class UserSignInScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      height: AppSize.height(value: 1),
-                      width: AppSize.width(value: 125),
-                      color: AppColors.grey300,
+                    Expanded(
+                      child: Container(
+                        height: AppSize.height(value: 1),
+                        color: AppColors.grey300,
+                      ),
                     ),
                     const SpaceWidget(spaceWidth: 8),
                     const TextWidget(
@@ -131,10 +132,11 @@ class UserSignInScreen extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                     ),
                     const SpaceWidget(spaceWidth: 8),
-                    Container(
-                      height: AppSize.height(value: 1),
-                      width: AppSize.width(value: 125),
-                      color: AppColors.grey300,
+                    Expanded(
+                      child: Container(
+                        height: AppSize.height(value: 1),
+                        color: AppColors.grey300,
+                      ),
                     ),
                   ],
                 ),
