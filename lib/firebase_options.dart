@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -51,7 +42,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBzQ6jPc1UzxQpQeCN5OESNlA0zgoZkovc',
-    appId: '1:169457956060:android:ef40cdaf903645a32d7019',
+    appId: '1:169457956060:android:351b88ce70c076932d7019',
     messagingSenderId: '169457956060',
     projectId: 'dealping-2025',
     storageBucket: 'dealping-2025.firebasestorage.app',
@@ -59,11 +50,42 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBpalU3E2yn1mG-0UqwRyVWqeoXzEKkZBI',
-    appId: '1:169457956060:ios:5f0476b3af968b692d7019',
+    appId: '1:169457956060:ios:2bb78421d72744222d7019',
     messagingSenderId: '169457956060',
     projectId: 'dealping-2025',
     storageBucket: 'dealping-2025.firebasestorage.app',
-    iosClientId: '169457956060-u7m4i1nthbivl34tbd9lq9eeoufnv54r.apps.googleusercontent.com',
+    iosClientId: '169457956060-0uqruapuddglo0c7k57nat19rat7qs1a.apps.googleusercontent.com',
     iosBundleId: 'com.naveen.dealping',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCs70MkYHHi19ZfWT5etDRnX0WThfTuRGw',
+    appId: '1:169457956060:web:483011ec70dbac262d7019',
+    messagingSenderId: '169457956060',
+    projectId: 'dealping-2025',
+    authDomain: 'dealping-2025.firebaseapp.com',
+    storageBucket: 'dealping-2025.firebasestorage.app',
+    measurementId: 'G-M6WBKW2V8D',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBpalU3E2yn1mG-0UqwRyVWqeoXzEKkZBI',
+    appId: '1:169457956060:ios:02d0f41fa227372f2d7019',
+    messagingSenderId: '169457956060',
+    projectId: 'dealping-2025',
+    storageBucket: 'dealping-2025.firebasestorage.app',
+    iosClientId: '169457956060-idltmoqbvfcstjn2blrjhbv2rkhmkn6q.apps.googleusercontent.com',
+    iosBundleId: 'com.example.dealPing',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyCs70MkYHHi19ZfWT5etDRnX0WThfTuRGw',
+    appId: '1:169457956060:web:423e29c654eff62b2d7019',
+    messagingSenderId: '169457956060',
+    projectId: 'dealping-2025',
+    authDomain: 'dealping-2025.firebaseapp.com',
+    storageBucket: 'dealping-2025.firebasestorage.app',
+    measurementId: 'G-3XCFYWR6JH',
+  );
+
 }

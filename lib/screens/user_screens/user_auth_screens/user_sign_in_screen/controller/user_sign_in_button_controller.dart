@@ -15,7 +15,8 @@ class UserSignInButtonController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final SignInApiController _signInController = Get.find<SignInApiController>();
-  final GoogleLoginApiController _googleLoginController = Get.find<GoogleLoginApiController>();
+  final GoogleLoginApiController _googleLoginController =
+      Get.find<GoogleLoginApiController>();
 
   bool inProgress = false;
 
@@ -47,79 +48,81 @@ class UserSignInButtonController extends GetxController {
       inProgress = true;
       update();
 
-      // Initialize Google Sign In
       await GoogleSignIn.instance.initialize(
-        serverClientId: '169457956060-bqt2bj3pnha0gog354568ggt8h5pgdc1.apps.googleusercontent.com',
-      );
+          serverClientId:
+              '169457956060-vkhv8vofqp7h6m93bdiicqdckvpsnfs5.apps.googleusercontent.com');
 
-      // Authenticate with Google
-      final user = await GoogleSignIn.instance.authenticate(
-        scopeHint: ['email', 'profile', 'openid'],
-      );
+      // Request authentication.
+      final user = await GoogleSignIn.instance.authenticate();
 
-      final idToken = user.authentication.idToken;
+      final authorization = await user.authorizationClient.authorizeScopes([
+        'email',
+        'profile',
+      ]);
 
-      if (idToken == null) {
+      final token = authorization.accessToken;
+
+      print('google login token ==>> $token');
+
+      if (token != null) {
+        // Get device token for push notifications
+        String? deviceToken;
+        try {
+          deviceToken = await FirebaseMessagingService.getToken();
+        } catch (e) {
+          appLog('Failed to get device token: $e');
+        }
+
+        // Call Google Login API
+        final int statusCode = await _googleLoginController.googleLoginApiCall(
+          appId: token,
+          deviceToken: deviceToken,
+        );
+
         inProgress = false;
         update();
-        AppSnackBar.message('Failed to get Google ID token');
-        return;
-      }
 
-      appLog('Google ID Token: $idToken');
+        if (statusCode == 200) {
+          // ✅ Success
+          appLog('Google login successful, navigating to user bottom nav');
 
-      // Get device token
-      String? deviceToken = await FirebaseMessagingService.getToken();
-      appLog('Device Token: $deviceToken');
+          AppSnackBar.success(
+              _googleLoginController.successfullyMessage.isNotEmpty
+                  ? _googleLoginController.successfullyMessage
+                  : 'Google Login Successful!');
 
-      // Use placeholder if token is null (backend requires non-empty string)
-      String finalDeviceToken = deviceToken ?? "TEMP_TOKEN_${DateTime.now().millisecondsSinceEpoch}";
+          // Navigate to user dashboard
+          Get.offAllNamed(AppRoutes.userBottomNav);
+        } else if (statusCode == 407) {
+          // 🚀 OTP verification required
+          appLog('OTP verification required for Google login');
 
-      // Call Google Login API with idToken as appId
-      final int statusCode = await _googleLoginController.googleLoginApiCall(
-        appId: idToken,
-        deviceToken: finalDeviceToken,
-      );
-
-      inProgress = false;
-      update();
-
-      appLog('Google login response status code: $statusCode');
-
-      if (statusCode == 200) {
-        // ✅ Success
-        appLog('Google login successful, navigating to user bottom nav');
-
-        AppSnackBar.success(
-          _googleLoginController.successfullyMessage.isNotEmpty
-              ? _googleLoginController.successfullyMessage
-              : 'Google Login Successful!',
-        );
-
-        // Navigate to user dashboard
-        Get.offAllNamed(AppRoutes.userBottomNav);
-      } else {
-        // ❌ Error
-        appLog('Google login failed with status code: $statusCode');
-
-        AppSnackBar.message(
-          _googleLoginController.errorMessage.isNotEmpty
+          AppSnackBar.message(_googleLoginController.errorMessage.isNotEmpty
               ? _googleLoginController.errorMessage
-              : "Google login failed. Please try again.",
-        );
+              : "OTP verification required.");
+        } else {
+          // ❌ Other errors
+          appLog('Google login failed with status code: $statusCode');
+
+          AppSnackBar.message(_googleLoginController.errorMessage.isNotEmpty
+              ? _googleLoginController.errorMessage
+              : "Google login failed. Please try again.");
+        }
+      } else {
+        inProgress = false;
+        update();
+        AppSnackBar.message('Failed to get Google access token.');
       }
     } catch (e, stackTrace) {
       inProgress = false;
       update();
 
-      appLog('Exception in Google Login: $e');
+      appLog('Exception in Google SignIn: $e');
       appLog('StackTrace: $stackTrace');
 
-      AppSnackBar.message('Google login failed. Please try again.');
+      AppSnackBar.message('Google sign in failed. Please try again.');
     }
   }
-
-
 
   Future<void> onTapSignInButton() async {
     if (formKey.currentState!.validate()) {
@@ -148,10 +151,9 @@ class UserSignInButtonController extends GetxController {
           // ✅ Success
           appLog('Login successful, navigating to business bottom nav');
 
-          AppSnackBar.success(
-              _signInController.successfullyMessage.isNotEmpty
-                  ? _signInController.successfullyMessage
-                  : 'Login Successful!');
+          AppSnackBar.success(_signInController.successfullyMessage.isNotEmpty
+              ? _signInController.successfullyMessage
+              : 'Login Successful!');
 
           // Clear form
           emailController.clear();
@@ -159,7 +161,6 @@ class UserSignInButtonController extends GetxController {
 
           // Navigate to business dashboard
           Get.offAllNamed(AppRoutes.userBottomNav);
-
         } else if (statusCode == 407) {
           // 🚀 Special Case - OTP verification required
           appLog('OTP verification required');
@@ -172,7 +173,6 @@ class UserSignInButtonController extends GetxController {
             AppRoutes.userSignupVerifyOtpScreen,
             arguments: {'email': emailController.text.trim()},
           );
-
         } else {
           // ❌ Other errors
           appLog('Login failed with status code: $statusCode');
@@ -181,7 +181,6 @@ class UserSignInButtonController extends GetxController {
               ? _signInController.errorMessage
               : "Login failed. Please try again.");
         }
-
       } catch (e, stackTrace) {
         inProgress = false;
         update(); // Update UI for GetBuilder
@@ -193,5 +192,4 @@ class UserSignInButtonController extends GetxController {
       }
     }
   }
-
 }
