@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../constants/app_colors.dart';
+import '../../../../utils/app_size.dart';
 import '../../../../widgets/app_image/app_image.dart';
 
 class CategoryWidget extends StatelessWidget {
@@ -24,7 +25,7 @@ class CategoryWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        padding: const EdgeInsets.symmetric( vertical: 5),
         margin: const EdgeInsets.symmetric(horizontal: 5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -46,12 +47,17 @@ class CategoryWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 2),
-            Text(
-              text,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: textWeight,
-                color: AppColors.contentColorBlack,
+            SizedBox(
+              width: AppSize.width(value: 110),
+              child: Center(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: textWeight,
+                    color: AppColors.contentColorBlack,
+                  ),
+                ),
               ),
             ),
           ],

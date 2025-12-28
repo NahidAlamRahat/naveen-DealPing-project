@@ -30,20 +30,38 @@ class UserHomeController extends GetxController {
   final selectedSubCategoryId = ''.obs;
   var subCategoryMap = <String, String>{}.obs;
 
+  // Rx strings for text inputs to trigger UI updates
+  var locationText = "".obs;
+  var messageText = "".obs;
+
+  bool get isFormValid =>
+      selectedCategoryId.value.isNotEmpty &&
+      selectedSubCategoryId.value.isNotEmpty &&
+      locationText.value.isNotEmpty &&
+      messageText.value.isNotEmpty;
+
   @override
   void onInit() {
     super.onInit();
     fetchCategories();
 
-
+    // Listen to text controllers to update Rx variables
+    locationController.addListener(() {
+      locationText.value = locationController.text;
+    });
+    messageController.addListener(() {
+      messageText.value = messageController.text;
+    });
   }
-
-
 
   void fetchCategories() async {
     isLoading.value = true;
     try {
       categories.value = await _repository.fetchCategories();
+      // Auto-select the first category if available
+      if (categories.isNotEmpty) {
+        selectCategory(categories.first.title ?? "");
+      }
     } catch (e) {
       AppSnackBar.error("An unexpected error occurred.");
     } finally {
@@ -56,11 +74,11 @@ class UserHomeController extends GetxController {
   void selectCategory(String categoryTitle) {
     selectedCategory.value = categoryTitle;
     selectedSubCategory.value = "";
+    selectedSubCategoryId.value = "";
 
     final selectedCategoryData = categories.firstWhere(
       (cat) => cat.title == categoryTitle,
       orElse: () => Category(),
-
     );
 
     selectedCategoryId.value = selectedCategoryData.id ?? '';
@@ -82,7 +100,7 @@ class UserHomeController extends GetxController {
 
     final subCategory = category.subCategories?.firstWhere(
       (sub) => sub.title == subCategoryTitle,
-      orElse: () =>SubCategory (),
+      orElse: () => SubCategory(),
     );
 
     selectedSubCategoryId.value = subCategory?.id ?? '';
@@ -98,16 +116,16 @@ class UserHomeController extends GetxController {
       locationController.text = selectedLocation;
     }
   }
-  
+
   // Handle place selection from Google Places search
   void onPlaceSelected(String placeName, double? latitude, double? longitude) {
     if (latitude != null && longitude != null) {
       // Update the location text
       locationController.text = placeName;
-      
+
       // Update the latLong coordinates for the request
       latLong = [longitude, latitude];
-      
+
       appLog('Selected location: $placeName');
       appLog('Coordinates: $latitude, $longitude');
     }
@@ -124,17 +142,13 @@ class UserHomeController extends GetxController {
 
     final bool isSuccess =
         await _sentRequestController.createRequest(requestModel);
-    _sentRequestController.inProgress == true;
 
     if (isSuccess) {
-      _sentRequestController.inProgress == false;
-
       AppSnackBar.success(
           _sentRequestController.successfullyMessage ?? 'Successful!');
-      appLog('success message => ${_sentRequestController.successfullyMessage}');
-
+      appLog(
+          'success message => ${_sentRequestController.successfullyMessage}');
     } else {
-      _sentRequestController.inProgress == false;
       // error message
       AppSnackBar.message('${_sentRequestController.errorMessage}');
       appLog('error message => ${_sentRequestController.errorMessage}');

@@ -30,7 +30,7 @@ class NotificationScreen extends StatelessWidget {
               centerTitle: true,
               action: PopupMenuButton<int>(
                 constraints:
-                const BoxConstraints.expand(width: 150, height: 60),
+                    const BoxConstraints.expand(width: 150, height: 60),
                 onSelected: controller.onMarkAllRead,
                 itemBuilder: (context) => [
                   const PopupMenuItem(
@@ -46,40 +46,70 @@ class NotificationScreen extends StatelessWidget {
               ),
             ),
             body: Obx(() {
+              if (controller.notificationsList.isEmpty &&
+                  !controller.isLoading.value) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.notifications_off_outlined,
+                        size: 64,
+                        color: AppColors.grey200,
+                      ),
+                      const SpaceWidget(spaceHeight: 16),
+                      TextWidget(
+                        text: "No notification available",
+                        fontColor: AppColors.grey300,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ],
+                  ),
+                );
+              }
               return Stack(
                 children: [
                   // Main content: list of notifications
-                  SingleChildScrollView(
-                    controller: controller.scrollController,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: Column(
-                      children: [
-                        ...List.generate(
-                          controller.notificationsList.length,
-                              (index) {
-                            var item = controller.notificationsList[index];
-                            appLog(
-                                'image==>.😪😪 ${ApiUrls.imageUrl}/${item.userProfileImage}');
-                            return NotificationItem(
-                              notification: item,
-                              isNew: !item.isRead,
-                              // Only pass the image path, not the full URL
-                              networkImageUrl: item.userProfileImage ?? '',
-                            );
-                          },
-                        ),
-                        if (controller.isPagination.value)
-                          Padding(
-                            padding: EdgeInsets.all(AppSize.width(value: 10)),
-                            child: Align(
-                              child: SizedBox(
-                                width: AppSize.width(value: 20),
-                                height: AppSize.width(value: 20),
-                                child: const CircularProgressIndicator(),
+                  RefreshIndicator(
+                    onRefresh: () async {
+                      controller.currentPage = 1;
+                      controller.isLast = false;
+                      controller.notificationsList.clear();
+                      await controller.onDataLoad();
+                    },
+                    child: SingleChildScrollView(
+                      controller: controller.scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        children: [
+                          ...List.generate(
+                            controller.notificationsList.length,
+                            (index) {
+                              var item = controller.notificationsList[index];
+                              appLog(
+                                  'image==>.😪😪 ${ApiUrls.imageUrl}/${item.userProfileImage}');
+                              return NotificationItem(
+                                notification: item,
+                                isNew: !item.isRead,
+                                // Only pass the image path, not the full URL
+                                networkImageUrl: item.userProfileImage ?? '',
+                              );
+                            },
+                          ),
+                          if (controller.isPagination.value)
+                            Padding(
+                              padding: EdgeInsets.all(AppSize.width(value: 10)),
+                              child: Align(
+                                child: SizedBox(
+                                  width: AppSize.width(value: 20),
+                                  height: AppSize.width(value: 20),
+                                  child: const CircularProgressIndicator(),
+                                ),
                               ),
                             ),
-                          ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
 
@@ -103,8 +133,6 @@ class NotificationScreen extends StatelessWidget {
         });
   }
 }
-
-
 
 class NotificationItem extends StatelessWidget {
   final NotificationModel notification;
@@ -144,24 +172,24 @@ class NotificationItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppSize.width(value: 200)),
             child: fullImageUrl != null && fullImageUrl.isNotEmpty
                 ? NetworkImageWidget(
-              fit: BoxFit.cover,
-              height: AppSize.height(value: 40),
-              width: AppSize.height(value: 40),
-              networkImageUrl: fullImageUrl,
-            )
+                    fit: BoxFit.cover,
+                    height: AppSize.height(value: 40),
+                    width: AppSize.height(value: 40),
+                    networkImageUrl: fullImageUrl,
+                  )
                 : Container(
-              height: AppSize.height(value: 40),
-              width: AppSize.height(value: 40),
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.person,
-                color: Colors.white,
-                size: 24,
-              ),
-            ),
+                    height: AppSize.height(value: 40),
+                    width: AppSize.height(value: 40),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
           ),
           const SpaceWidget(spaceWidth: 12),
           Expanded(
@@ -183,9 +211,8 @@ class NotificationItem extends StatelessWidget {
                 ),
                 const SpaceWidget(spaceHeight: 4),
                 TextWidget(
-                  text:
-                  (DateTime.tryParse(notification.createdAt.toString()) ??
-                      DateTime.now())
+                  text: (DateTime.tryParse(notification.createdAt.toString()) ??
+                          DateTime.now())
                       .time,
                   fontColor: AppColors.grey200,
                   fontSize: 12,

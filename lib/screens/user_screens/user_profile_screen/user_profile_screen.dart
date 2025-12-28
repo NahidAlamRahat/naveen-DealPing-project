@@ -15,6 +15,7 @@ import '../../../widgets/popup_widget/popup_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../user_edit_profile_screen/user_edit_profile_screen.dart';
 import 'controller/user_profile_controller.dart';
+
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({super.key});
 
@@ -26,13 +27,33 @@ class UserProfileScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Obx(() {
         final profileData = controller.profile.value;
-        String fullName = '${profileData?.firstName ?? "Loading"} ${profileData?.lastName ?? ""}';
+        final isLoading = controller.isLoading.value;
+
+        String fullName;
+        if (isLoading && profileData == null) {
+          fullName = "Loading Profile...";
+        } else if (profileData != null) {
+          final first = profileData.firstName ?? "";
+          final last = profileData.lastName ?? "";
+          fullName = "$first $last".trim();
+          if (fullName.isEmpty) fullName = "DealPing User";
+        } else {
+          fullName = "DealPing User";
+        }
+
+        String email;
+        if (isLoading && profileData == null) {
+          email = "Loading Email...";
+        } else {
+          email = (profileData?.email != null && profileData!.email!.isNotEmpty)
+              ? profileData.email!
+              : "No email address provided";
+        }
 
         return RefreshIndicator(
           onRefresh: () async {
             if (!controller.isLoading.value) {
               await controller.fetchUserProfile();
-
             }
           },
           child: SingleChildScrollView(
@@ -56,7 +77,8 @@ class UserProfileScreen extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: AppImage(
-                        key: ValueKey("${controller.profile.value?.profile}-${DateTime.now().millisecondsSinceEpoch}"),
+                        key: ValueKey(
+                            "${controller.profile.value?.profile}-${DateTime.now().millisecondsSinceEpoch}"),
                         height: AppSize.height(value: 120),
                         width: AppSize.width(value: 120),
                         url: controller.profile.value?.profile != null
@@ -72,7 +94,7 @@ class UserProfileScreen extends StatelessWidget {
                   // Name and Username
                   Center(
                     child: TextWidget(
-                      text: fullName ,
+                      text: fullName,
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
                       fontColor: AppColors.green500,
@@ -80,7 +102,7 @@ class UserProfileScreen extends StatelessWidget {
                   ),
                   Center(
                     child: TextWidget(
-                      text: profileData?.email ?? "null",
+                      text: email,
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       fontColor: AppColors.grey700,
@@ -101,7 +123,7 @@ class UserProfileScreen extends StatelessWidget {
                       backgroundColor: AppColors.green500,
                       label: AppStrings.editProfile,
                       buttonHeight: AppSize.width(value: 36),
-                      buttonWidth: AppSize.height(value: 100),
+                      buttonWidth: AppSize.height(value: 130),
                       fontSize: 12,
                       textColor: AppColors.white,
                       fontWeight: FontWeight.w400,
@@ -133,9 +155,10 @@ class UserProfileScreen extends StatelessWidget {
                     icon: AppIconsPath.passwordIcon,
                     title: AppStrings.password,
                     onTap: () {
-                      Get.toNamed(AppRoutes.userChangePasswordScreen, arguments: {
-                        'token': LocalStorage.token,
-                      });
+                      Get.toNamed(AppRoutes.userChangePasswordScreen,
+                          arguments: {
+                            'token': LocalStorage.token,
+                          });
                     },
                   ),
                   const SpaceWidget(spaceHeight: 16),
@@ -206,11 +229,11 @@ class UserProfileScreen extends StatelessWidget {
   }
 
   Widget _buildMenuItem(
-      BuildContext context, {
-        required String icon,
-        required String title,
-        required VoidCallback onTap,
-      }) {
+    BuildContext context, {
+    required String icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
       onTap: onTap,
       highlightColor: Colors.transparent,

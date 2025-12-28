@@ -6,22 +6,19 @@ import 'package:get/get.dart';
 import '../../../../utils/app_log/app_log.dart';
 
 class SentRequestController extends GetxController {
-  late bool _inProgress = false;
+  final _inProgress = false.obs;
+  bool get inProgress => _inProgress.value;
+  set inProgress(bool value) => _inProgress.value = value;
 
-  bool get inProgress => _inProgress;
+  final _errorMessage = RxnString();
+  String? get errorMessage => _errorMessage.value;
 
-  String? _errorMessage;
+  final _successfullyMessage = RxnString();
+  String? get successfullyMessage => _successfullyMessage.value;
 
-  String? get errorMessage => _errorMessage;
-
-  String? _successfullyMessage;
-
-  String? get successfullyMessage => _successfullyMessage;
-
-  createRequest(RequestModel requestModel) async {
+  Future<bool> createRequest(RequestModel requestModel) async {
     bool isSuccess = false;
-    _inProgress = true;
-    update();
+    inProgress = true;
 
     var response = await ApiService.postApi(
       ///Url
@@ -29,29 +26,16 @@ class SentRequestController extends GetxController {
       requestModel,
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      _successfullyMessage = response.message;
-
+      _successfullyMessage.value = response.message;
       appLog('response message => ${response.message}');
 
-      _successfullyMessage = response.message;
-
-      appLog(
-          'Success message *==> ${_successfullyMessage = response.message} <===*');
-      appLog('_successfullyMessage ==> $_successfullyMessage');
-      appLog('SrrorMessage ==> $successfullyMessage <==');
-
-      _inProgress = false;
+      inProgress = false;
       isSuccess = true;
-      update();
     } else {
-      _errorMessage = response.message;
-      _inProgress = false;
+      _errorMessage.value = response.message;
+      inProgress = false;
       isSuccess = false;
-      update();
     }
-
-    inProgress == false;
-    update();
 
     return isSuccess;
   }

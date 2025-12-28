@@ -25,6 +25,8 @@ class UserHomeScreen extends StatefulWidget {
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
   final UserHomeController _controller = Get.put(UserHomeController());
+  final SentRequestController _sentRequestController =
+      Get.find<SentRequestController>();
 
   // double currentValue = 5.0;
 
@@ -94,7 +96,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     hintText: "Location",
                     onLocationTap: _controller.navigateToLocationScreen,
                     onPlaceSelected: _controller.onPlaceSelected,
-                    googleApiKey: "AIzaSyA-MGtSQ8650xB0WmwJejvDbbrvTYzL6us", // You should store this in a secure place in a real app
+                    googleApiKey:
+                        "AIzaSyA-MGtSQ8650xB0WmwJejvDbbrvTYzL6us", // You should store this in a secure place in a real app
                   ),
 
                   const SpaceWidget(spaceHeight: 12),
@@ -147,31 +150,31 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
                   // **Send Button**
 
-                  GetBuilder<SentRequestController>(
-                    builder: (controller) {
-                      return Visibility(
-                        visible: controller.inProgress==false,
-                        replacement:
-                        const Center(child: CircularProgressIndicator()),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child:
-                              ButtonWidget(
-                                ///call
-                                onPressed: _controller.onTapRequestButton,
-                        
-                                buttonWidth: 80,
-                                buttonHeight: 36,
-                                label: AppStrings.send,
-                                fontSize: 14,
-                                buttonRadius: BorderRadius.circular(8),
-                              ),
+                  Obx(() {
+                    return Visibility(
+                      visible: _sentRequestController.inProgress == false,
+                      replacement:
+                          const Center(child: CircularProgressIndicator()),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: ButtonWidget(
+                          ///call
+                          onPressed: _controller.isFormValid
+                              ? _controller.onTapRequestButton
+                              : null,
 
+                          buttonWidth: 80,
+                          buttonHeight: 36,
+                          label: AppStrings.send,
+                          fontSize: 14,
+                          buttonRadius: BorderRadius.circular(8),
+                          backgroundColor: _controller.isFormValid
+                              ? null
+                              : Colors.grey, // Optional: add visual feedback
                         ),
-                      );
-                    }
-                  ),
-
+                      ),
+                    );
+                  }),
 
                   const SpaceWidget(spaceHeight: 24),
                 ],
